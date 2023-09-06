@@ -1,4 +1,4 @@
-package socialnetworkapi.finalproject2;
+package FS4.socialnetworkapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
