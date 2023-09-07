@@ -1,5 +1,7 @@
 # final_project_2
 
+A social media platform inspired by Twitter, designed to connect users and enable them to share thoughts, engage with content, and stay updated on various topics.
+
 ## Technologies Used
 
 ### Frontend
