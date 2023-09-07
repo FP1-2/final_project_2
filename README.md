@@ -2,6 +2,8 @@
 
 ## Technologies Used
 
+### Frontend
+
 - **React**: A JavaScript library for building user interfaces.
 - **Redux Toolkit**: A library for managing application state in a predictable way.
 - **Redux**: A state management library for JavaScript applications.
@@ -14,7 +16,17 @@
 - **Prettier**: An opinionated code formatter.
 - **Webpack**: A module bundler for JavaScript applications.
 - **Babel**: A JavaScript compiler that allows you to use the latest ECMAScript features.
-- **Styles**: 
+- **Material-UI**: A popular React UI framework for building elegant, responsive web applications.
+- **Jest**: A JavaScript testing framework for writing and running tests.
+
+### Backend
+
+- **Spring Boot**: A Java-based framework for building production-ready applications.
+- **Spring Security (JWT)**: Provides authentication and authorization for Spring applications using JSON Web Tokens (JWT).
+- **Spring Data JPA**: Part of the larger Spring Data project, it makes it easy to implement JPA-based repositories.
+- **PostgreSQL**: A powerful, open-source relational database system.
+- **ModelMapper**: A Java library for mapping objects to other objects.
+
 
 ## Installation
 
