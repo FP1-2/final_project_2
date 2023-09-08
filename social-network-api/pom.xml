@@ -85,7 +85,7 @@
 						<id>validate</id>
 						<phase>validate</phase>
 						<configuration>
-							<configLocation>./checkstyle_config.xml</configLocation>
+							<configLocation>checkstyle_config.xml</configLocation>
 							<encoding>utf-8</encoding>
 							<consoleOutput>true</consoleOutput>
 							<failsOnError>true</failsOnError>
@@ -116,6 +116,9 @@
 				<groupId>org.eluder.coveralls</groupId>
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>4.3.0</version>
+				<configuration>
+					<repoToken>a1isiTsfvCZTgTguKMcfIJDmCvlULqOaO</repoToken>
+				</configuration>
 			</plugin>
 
 		</plugins>
