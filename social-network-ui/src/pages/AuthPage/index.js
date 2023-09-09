@@ -103,7 +103,7 @@ const AuthPage = () => {
 						}}
 					>
 						<Link
-							href='/'
+							to='/'
 							style={{
 								marginBottom: '2rem',
 							}}
