@@ -1,25 +1,29 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
-import Header from './components/header'
 
 const AppRoutes = () => {
-	return (
-		<>
-		<Header/>
-		<Routes>
-			{/* Public Routes */}
-			<Route path='/' element={<HomePage />} />
+  return (
+    <Routes>
+      {/* Default Route */}
+      <Route path='/' element={<Navigate to='/home' />} />
 
-			{/* Auth Routes */}
+      {/* Public Routes */}
+      <Route path='/home' element={<HomePage />} />
+	  <Route path='/explore' element={<HomePage />} />
+	  <Route path='/notifications' element={<HomePage />} />
+	  <Route path='/messages' element={<HomePage />} />
+	  <Route path='/bookmarks' element={<HomePage />} />
+	  <Route path='/profile' element={<HomePage />} />
 
-			{/* Profile Routes */}
+      {/* Auth Routes */}
 
-			{/* Error Path */}
-			<Route path='*' element={<h1>error</h1>} />
-		</Routes>
-		</>
-	)
+      {/* Profile Routes */}
+
+      {/* Error Path */}
+      <Route path='*' element={<h1>error</h1>} />
+    </Routes>
+  )
 }
 
 export default AppRoutes
