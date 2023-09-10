@@ -2,14 +2,11 @@ language: java
 jdk:
   - openjdk17
 
-before_install:
-  - chmod +x mvnw
-
-install:
-  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+addons:
+  sonarcloud:
+    organization: "fp1-2"
+    token: ${SONAR_TOKEN}
 
 script:
-  - ./mvnw clean test jacoco:report coveralls:report
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  - mvn clean test jacoco:report coveralls:report
