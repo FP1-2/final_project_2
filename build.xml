@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="SocialNetworkAPI" default="compile" basedir=".">
+<project name="SocialNetworkAPI" default="compile" basedir="social-network-api">
     <!-- Define properties -->
     <property name="source.dir" value="src" />
     <property name="output.dir" value="target" />
 
     <target name="clean">
-        <delete dir="${output.dir}" />
+        <delete dir="social-network-api/target" />
     </target>
 
     <target name="compile" depends="clean">
-        <mkdir dir="${output.dir}" />
-        <javac srcdir="${source.dir}" destdir="${output.dir}" />
+        <mkdir dir="social-network-api/target" />
+        <javac srcdir="${source.dir}" destdir="social-network-api/target" />
     </target>
 
 </project>
