@@ -1,12 +1,14 @@
-import AppRoutes from "./AppRoutes";
-import React from "react";
+import AppRoutes from './AppRoutes'
+import React from 'react'
+import ModalWindow from './components/ModalWindow'
 
 function App() {
-  return (
-    <>
-      <AppRoutes />
-    </>
-  );
+	return (
+		<>
+			<AppRoutes />
+			<ModalWindow />
+		</>
+	)
 }
 
-export default App;
+export default App

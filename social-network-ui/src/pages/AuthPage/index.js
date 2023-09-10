@@ -10,6 +10,8 @@ import GoogleIcon from '@mui/icons-material/Google'
 import AppleIcon from '@mui/icons-material/Apple'
 import LinkText from '../../components/LinkText'
 import IconTwitter from '../../components/IconTwitter'
+import { useDispatch } from 'react-redux'
+import { openModal } from '../../redux/slices/modalSlice'
 
 const customPalette = {
 	primary: {
@@ -57,6 +59,14 @@ const theme = createTheme({
 })
 
 const AuthPage = () => {
+	const dispatch = useDispatch()
+	const handleModalOpen = content => {
+		if (content) {
+			return dispatch(openModal(content))
+		}
+		dispatch(openModal())
+	}
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Grid container component='main' sx={{ height: '100vh' }}>
@@ -124,6 +134,7 @@ const AuthPage = () => {
 									borderColor: 'rgb(29, 161, 242)',
 									textTransform: 'none',
 								}}
+								onClick={handleModalOpen}
 								startIcon={
 									<GoogleIcon
 										sx={{
@@ -135,6 +146,7 @@ const AuthPage = () => {
 								Sign up with Google
 							</Button>
 							<Button
+								onClick={handleModalOpen}
 								variant='outlined'
 								style={{
 									borderColor: 'rgb(29, 161, 242)',
@@ -156,6 +168,34 @@ const AuthPage = () => {
 									textTransform: 'none',
 								}}
 								variant='outlined'
+								onClick={() =>
+									handleModalOpen({
+										header: 'Create an account',
+										inputs: [
+											{
+												name: 'name',
+												type: 'text',
+												label: 'Name',
+												placeholder: 'Your Name',
+												autoComplete: 'name',
+											},
+											{
+												name: 'email',
+												type: 'text',
+												label: 'Email',
+												placeholder: 'Your email',
+												autoComplete: 'email',
+											},
+										],
+										mainInfo: {
+											title: 'Date of birth',
+											text: 'Facilisi sem pulvinar velit nunc, gravida scelerisque amet nibh sit. Quis bibendum ante phasellus metus, magna lacinia sed augue. Odio enim nascetur leo mauris vel eget. Pretium id ullamcorper blandit viverra dignissim eget tellus. Nibh mi massa in molestie a sit. Elit congue.',
+										},
+										buttton: {
+											text: 'Next',
+										},
+									})
+								}
 							>
 								Sign up with phone or email
 							</Button>
