@@ -1,17 +1,15 @@
 import * as React from 'react'
 
-import TwitterIcon from '@mui/icons-material/Twitter'
 import { Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import GoogleIcon from '@mui/icons-material/Google'
 import AppleIcon from '@mui/icons-material/Apple'
-import { Link } from 'react-router-dom'
 import LinkText from '../../components/LinkText'
+import IconTwitter from '../../components/IconTwitter'
 
 const customPalette = {
 	primary: {
@@ -102,16 +100,7 @@ const AuthPage = () => {
 							alignItems: 'flex-start',
 						}}
 					>
-						<Link
-							to='/'
-							style={{
-								marginBottom: '2rem',
-							}}
-						>
-							<TwitterIcon
-								sx={{ fontSize: '4rem', fill: 'rgb(29, 161, 242)' }}
-							/>
-						</Link>
+						<IconTwitter />
 
 						<Typography variant='h1' noWrap={true}>
 							Happening now
@@ -189,7 +178,7 @@ const AuthPage = () => {
 							}}
 						>
 							Already have an account?
-							<LinkText text=' Log in' />
+							<LinkText text=' Log in' link='/signIn' />
 						</Typography>
 					</Box>
 				</Grid>
