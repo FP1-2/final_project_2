@@ -5,6 +5,23 @@ spring:
   profiles:
     active:  local #prod
 
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: evgeniygalagurya@gmail.com # логин от учётки
+    password: krekvffymummwxvq # специальный пароль для приложения
+    test-connection: true # проверка подключения при старте приложения
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+    sender: # отправитель письма (его почта и имя)
+      email: 12345@gmail.com
+      text: no-reply
+
 # local profile
 ---
 spring:
@@ -57,3 +74,10 @@ spring:
     username: postgres
     password: postgres
     initialization-mode: always # never
+---
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=galaguryaevgeniy@gmail.com
+spring.mail.password=finalprojecttwitter
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
