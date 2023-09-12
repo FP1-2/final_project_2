@@ -12,35 +12,20 @@
   <div class="mx-auto border my-5 py-3 px-3 form">
     <form action="#" th:action="@{/login}" method="post">
       <div class="form-group">
-        <label for="username">Имя</label>
-        <input class="form-control" id="username" type="text" name="username">
+        <label for="email">Почта</label>
+        <input class="form-control" id="email" type="text" name="username">
       </div>
       <div class="form-group">
         <label for="password">Пароль</label>
         <input class="form-control" id="password" type="text" name="password">
       </div>
-      <!--      <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>-->
-      <input class="button" type="submit" value="Вход"/>
-      <div align="center">
+        <input class="button" type="submit" value="Вход"/>
         <a href="/login/google">Войти через Google</a>
+      <div align="center">
+      <a href="/registration">Регистрация нового пользователя</a>
       </div>
     </form>
   </div>
 </section>
-
-
-
-<!--<form method="post" th:action="@{/login.html}">-->
-
-<!--      <p>Имя:</p>      <input type="text" name="username"><br>-->
-<!--      <p>Пароль:</p>      <input type="text" name="password"><br>-->
-<!--      <input type="submit" value="Create">-->
-<!--&lt;!&ndash;      <input class="button" type="submit" value="Вход"/>&ndash;&gt;-->
-<!--      <div align="center">-->
-<!--        <a href="/login/google">Войти через Google</a>-->
-<!--      </div>-->
-<!--    </form>-->
-<!--  </div>-->
-<!--</section>-->
 </body>
 </html>

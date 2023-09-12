@@ -22,14 +22,6 @@ public class MailConfig {
     @Value("${spring.mail.password}")
     private String password;
 
-
-
-//    @Value("${spring.mail.protocol}")
-//    private String protocol;
-//
-//    @Value("${mail.debug}")
-//    private String debug;
-
     @Bean
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -39,10 +31,6 @@ public class MailConfig {
         mailSender.setUsername(username);
         mailSender.setPassword(password);
 
-//        Properties properties = mailSender.getJavaMailProperties();
-//
-//        properties.setProperty("mail.transport.protocol", protocol);
-//        properties.setProperty("mail.debug", debug);
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");

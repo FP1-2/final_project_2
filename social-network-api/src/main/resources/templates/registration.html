@@ -5,22 +5,36 @@
     <title>Регистрация</title>
 </head>
 <body>
-{{#message}}
-    {{message}}
-{{/message}}
+
 <section class="container">
   <div class="mx-auto border my-5 py-3 px-3 form">
     <form action="#" th:action="@{/registration}" method="post">
       <div class="form-group">
-        <label for="username">Имя</label>
-        <input class="form-control" id="username" type="text" name="username">
+        <label for="firstName">Имя</label>
+        <input class="form-control" id="firstName" type="text" name="firstName">
       </div>
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="lastName">Фамилия</label>
+        <input class="form-control" id="lastName" type="text" name="lastName">
+      </div>
+      <div class="form-group">
+        <label for="email">Почта</label>
         <input class="form-control" id="email" type="text" name="email">
       </div>
       <div class="form-group">
-        <label for="password">Пароль</label>
+        <label for="birthday">Дата рождения</label>
+        <input class="form-control" id="birthday" type="text" name="birthday">
+      </div>
+      <div class="form-group">
+        <label for="avatar">Загрузите аватар</label>
+        <input class="form-control" id="avatar" type="text" name="avatar">
+      </div>
+      <div class="form-group">
+        <label for="mainFoto">Загрузите фотографию</label>
+        <input class="form-control" id="mainFoto" type="text" name="mainFoto">
+      </div>
+      <div class="form-group">
+        <label for="password">Придумайте пароль</label>
         <input class="form-control" id="password" type="text" name="password">
       </div>
 <!--      <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>-->

@@ -33,7 +33,7 @@ public class UserService {
 //    }
 
     public boolean addUser(User user) {
-        User userFromDb = userRepo.findByUsername(user.getUsername());
+        User userFromDb = userRepo.findByEmail(user.getEmail());
 
         if (userFromDb != null) {
             return false;
@@ -49,7 +49,7 @@ public class UserService {
             String message = String.format(
                     "Hello, %s! \n" +
                             "Welcome to Twitter. Please, visit next link: http://localhost:5000/activate/%s",
-                    user.getUsername(),
+                    user.getEmail(),
                     user.getActivationCode()
             );
 

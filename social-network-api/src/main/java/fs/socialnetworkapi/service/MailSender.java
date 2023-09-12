@@ -11,14 +11,8 @@ public class MailSender {
     @Autowired
     private JavaMailSender mailSender;
 
-//    @Value("${spring.mail.username}")
-//    private String username;
-
     @Value("${spring.mail.sender.email}")
     private String senderEmail;
-
-
-
 
     public void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
