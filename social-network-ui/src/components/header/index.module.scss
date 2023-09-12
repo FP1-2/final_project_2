@@ -1,50 +1,50 @@
 .navlink {
-    text-decoration: none;
-    color: rgb(108, 101, 101);
-    font-weight: 700;
-    text-transform: capitalize;
-  }
-  
-  .logoutIcon {
-    width: 56px;
-    display: flex;
-    justify-content: left;
-  }
-  
-  .logoutIconMob {
-    color: white;
-    display: flex;
-    align-items: center;
-    svg {
-      font-size: 2rem;
-    }
-  }
-  
-  .logo {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    margin-top: 10px;
-    color: #1976d2;
-  }
-  
-  .link {
-    text-decoration: none;
-    color: white;
-    margin: 5px 0;
-    display: flex;
-    align-items: center;
-  }
-  
-  .toolbar {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    svg {
-      color: white;
-      font-size: 1.6rem;
-    }
-  }
-  
+  color: rgb(108, 101, 101);
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: capitalize;
+}
 
+.logoutIcon {
+  display: flex;
+  justify-content: left;
+  width: 56px;
+}
+
+.logoutIconMob {
+  display: flex;
+  align-items: center;
+  color: white;
+
+  svg {
+    font-size: 2rem;
+  }
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+  color: #1976d2;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  color: white;
+  text-decoration: none;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+
+  svg {
+    color: white;
+    font-size: 1.6rem;
+  }
+}
