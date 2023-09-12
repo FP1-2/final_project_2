@@ -1,0 +1,45 @@
+.root {
+  position: relative;
+
+  .input {
+    width: 100%;
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.15rem;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: .375rem;
+    outline: none;
+    font-size: 1.125rem;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, .6);
+    }
+
+    &:focus {
+      border: 1px solid rgb(13, 118, 184);
+    }
+  }
+
+  .error {
+    position: absolute;
+    top: 70%;
+    left: 0;
+    color: red;
+    font-size: .975rem;
+  }
+
+  .errorIcon {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.15rem;
+    color: rgba(255, 0, 0, .822);
+    font-size: 1.45rem;
+  }
+
+  .successIcon {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.15rem;
+    color: rgb(13, 118, 184);
+    font-size: 1.45rem;
+  }
+}

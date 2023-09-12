@@ -1,0 +1,9 @@
+.authLInks {
+  color: rgb(13, 118, 184);
+  text-decoration: none;
+
+  &:hover {
+    color: rgb(7, 82, 128);
+    text-decoration: underline;
+  }
+}
