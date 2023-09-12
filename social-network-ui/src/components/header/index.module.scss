@@ -2,7 +2,7 @@
     color: rgb(108, 101, 101);
     font-weight: 700;
     text-transform: capitalize;
-    text-decoration: none; /* Переміщено text-decoration сюди */
+    text-decoration: none;
   }
   
   .logoutIcon {
@@ -43,7 +43,7 @@
     align-items: center;
     svg {
       font-size: 1.6rem;
-      color: white; /* Переміщено color сюди */
+      color: white;
     }
     .active {
       svg {

@@ -10,5 +10,10 @@
 	},
 	"parserOptions": {
 		"requireConfigFile": false
-	}
+	},
+	"settings": {
+		  "react": {
+			"version": "detect"
+		  }
+		}
 }
