@@ -1,14 +1,14 @@
 .navlink {
+    text-decoration: none;
     color: rgb(108, 101, 101);
     font-weight: 700;
     text-transform: capitalize;
-    text-decoration: none;
   }
   
   .logoutIcon {
+    width: 56px;
     display: flex;
     justify-content: left;
-    width: 56px;
   }
   
   .logoutIconMob {
@@ -21,16 +21,16 @@
   }
   
   .logo {
-    width: 100%;
     display: flex;
+    width: 100%;
     justify-content: center;
     margin-top: 10px;
     color: #1976d2;
   }
   
   .link {
-    color: white;
     text-decoration: none;
+    color: white;
     margin: 5px 0;
     display: flex;
     align-items: center;
@@ -42,13 +42,9 @@
     justify-content: space-around;
     align-items: center;
     svg {
-      font-size: 1.6rem;
       color: white;
-    }
-    .active {
-      svg {
-        fill: red;
-      }
+      font-size: 1.6rem;
     }
   }
+  
 
