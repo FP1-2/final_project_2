@@ -1,55 +1,54 @@
 .navlink {
-    text-decoration: none;
     color: rgb(108, 101, 101);
     font-weight: 700;
     text-transform: capitalize;
-}
-
-.logoutIcon {
-    width: 56px;
+    text-decoration: none; /* Переміщено text-decoration сюди */
+  }
+  
+  .logoutIcon {
     display: flex;
     justify-content: left;
-}
-
-.logoutIconMob {
+    width: 56px;
+  }
+  
+  .logoutIconMob {
     color: white;
     display: flex;
     align-items: center;
     svg {
-        font-size: 2rem;
+      font-size: 2rem;
     }
-}
-
-.logo {
-    display: flex;
+  }
+  
+  .logo {
     width: 100%;
+    display: flex;
     justify-content: center;
     margin-top: 10px;
     color: #1976d2;
-}
-
-.link {
-    text-decoration: none;
+  }
+  
+  .link {
     color: white;
+    text-decoration: none;
     margin: 5px 0;
     display: flex;
     align-items: center;
-}
-
-.toolbar {
+  }
+  
+  .toolbar {
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     svg {
-        color: white;
-        font-size: 1.6rem;
+      font-size: 1.6rem;
+      color: white; /* Переміщено color сюди */
     }
     .active {
-        svg {
+      svg {
         fill: red;
-        }
+      }
     }
-    
-}
+  }
 
