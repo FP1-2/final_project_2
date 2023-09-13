@@ -11,11 +11,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-  @Autowired
+
   private final UserRepo userRepo;
 
-  @Autowired
-  private MailService mailSender;
+  private MailService mailService;
 
   public boolean addUser(User user) {
     User userFromDb = userRepo.findByEmail(user.getEmail());
@@ -37,7 +36,7 @@ public class UserService {
           user.getActivationCode()
       );
 
-      mailSender.send(user.getEmail(), "Activation code", message);
+      mailService.send(user.getEmail(), "Activation code", message);
     }
 
     return true;
