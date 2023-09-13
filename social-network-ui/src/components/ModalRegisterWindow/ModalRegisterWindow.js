@@ -1,14 +1,14 @@
-import * as React from 'react'
 import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 import Modal from '@mui/material/Modal'
+import * as React from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal } from '../../redux/slices/modalSlice'
-import CircularProgress from '@mui/material/CircularProgress'
-import IconTwitter from '../IconTwitter'
-import { useState } from 'react'
 import { resetRegisterData } from '../../redux/slices/registerSlice'
-import ModalRegisterWindowFrstStep from './ModalRegisterWindowFrstStep'
-import ModalRegisterWindowSecondStep from './ModalRegisterWindowSecondStep'
+import IconTwitter from '../IconTwitter/IconTwitter'
+import ModalRegisterWindowFrstStep from './ModalRegisterWindowFrstStep/ModalRegisterWindowFrstStep'
+import ModalRegisterWindowSecondStep from './ModalRegisterWindowSecondStep/ModalRegisterWindowSecondStep'
 
 const style = {
 	position: 'absolute',
@@ -67,6 +67,7 @@ const ModalRegisterWindow = () => {
 			open={isModalOpen}
 			onClose={() => {
 				setIsLoading(false)
+
 				dispatch(resetRegisterData())
 				handleClose()
 			}}

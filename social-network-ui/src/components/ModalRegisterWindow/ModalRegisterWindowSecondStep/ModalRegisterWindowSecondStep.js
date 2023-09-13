@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
-import { Box, Button, Typography } from '@mui/material'
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import CustomInput from '../../CustomInput'
-import LinkText from '../../LinkText'
-import { useDispatch } from 'react-redux'
-import { register } from '../../../redux/slices/registerSlice'
 import styled from '@emotion/styled'
+import {
+	Box,
+	Button,
+	Checkbox,
+	FormControlLabel,
+	FormGroup,
+	Typography,
+} from '@mui/material'
 import Avatar from '@mui/material/Avatar'
-import { useSelector } from 'react-redux'
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
+import { Form, Formik } from 'formik'
 import PropTypes from 'prop-types'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import * as Yup from 'yup'
+import { register } from '../../../redux/slices/registerSlice'
+import CustomInput from '../../CustomInput/CustomInput'
+import LinkText from '../../LinkText/LinkText'
 
 const VisuallyHiddenInput = styled('input')`
 	clip: rect(0 0 0 0);
@@ -103,7 +108,6 @@ const ModalRegisterWindowSecondStep = ({
 				handleClose()
 			}
 		}, 1000)
-		
 	}
 	return (
 		<Box

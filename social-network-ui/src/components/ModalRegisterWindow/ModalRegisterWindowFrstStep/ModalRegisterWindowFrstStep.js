@@ -1,10 +1,3 @@
-import React from 'react'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import { Formik, Form } from 'formik'
-import * as Yup from 'yup'
-import CustomInput from '../../CustomInput'
-import LinkText from '../../LinkText'
 import {
 	Button,
 	FormControl,
@@ -13,11 +6,17 @@ import {
 	MenuItem,
 	Select,
 } from '@mui/material'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import { getDaysInMonth, getYear } from 'date-fns'
+import { Form, Formik } from 'formik'
 import { PropTypes } from 'prop-types'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import * as Yup from 'yup'
 import { register } from '../../../redux/slices/registerSlice'
-import { useState, useEffect } from 'react'
-import { getYear, getDaysInMonth } from 'date-fns'
+import CustomInput from '../../CustomInput/CustomInput'
+import LinkText from '../../LinkText/LinkText'
 
 const months = [
 	// months for date of birth

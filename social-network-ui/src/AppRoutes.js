@@ -1,8 +1,8 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-// import HomePage from './pages/HomePage'
-import AuthPage from './pages/AuthPage'
-import LoginPage from './pages/LoginPage'
+// import HomePage from './pages/HomePage/HomePage.js'
+import AuthPage from './pages/AuthPage/AuthPage'
+import LoginPage from './pages/LoginPage/LoginPage'
 
 const AppRoutes = () => {
 	return (
