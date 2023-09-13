@@ -57,43 +57,53 @@ const ModalRegisterWindowSecondStep = ({
 	handleClose,
 }) => {
 	const dispatch = useDispatch()
-	const [dataProcessing, setDataProcessing] = useState(false)
-	const [subscribeNewsletter, setSubscribeNewsletter] = useState(false)
-	const [isCreatingPassword, setIsCreatingPassword] = useState(false)
+
+	const [dataProcessing, setDataProcessing] = useState(false) // data processing checkbox
+	const [subscribeNewsletter, setSubscribeNewsletter] = useState(false) // subscribe news checkbox
+	const [isCreatingPassword, setIsCreatingPassword] = useState(false) // creating password step
+
+	const registerName = useSelector(state => state.register.registerData?.name) // register user name
 
 	const handleDataProcessingChange = event => {
+		// data processing checkbox
 		setDataProcessing(event.target.checked)
 	}
 
 	const handleSubscribeNewsletterChange = event => {
+		// subscribe news
 		setSubscribeNewsletter(event.target.checked)
 	}
-	const registerName = useSelector(state => state.register.registerData?.name)
+
 	const onSubmit = (values, { resetForm }) => {
 		if (!isCreatingPassword) {
-			console.log(values)
+			// road to creating password step
 			setIsCreatingPassword(true)
 			return
 		}
+
 		if (values.avatar === '') {
 			values.avatar = false
 		}
+
 		const obj = {
+			// add secod part of register data
 			...values,
 			dataProcessing: dataProcessing,
 			subscribeNews: subscribeNewsletter,
 			registerData: new Date().toUTCString(),
 		}
+
 		dispatch(register(obj))
 		setIsLoading(true)
 		resetForm()
+
 		setTimeout(() => {
 			setIsLoading(false)
 			if (isModalOpen) {
 				handleClose()
 			}
-			setRegisterStep(prevStep => prevStep + 1)
 		}, 1000)
+		
 	}
 	return (
 		<Box

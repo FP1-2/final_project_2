@@ -9,13 +9,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 function CustomInput({ label, ...props }) {
 	const [field, meta] = useField(props)
-	const { type } = props
+	const { type } = props // input type
 	const [showPassword, setShowPassword] = useState(false)
 
-	useEffect(() => {}, [field.value])
-
 	const handlePasswordVisibility = () => {
-		console.log('handlePasswordVisibility')
+		// show/hide password
 		setShowPassword(!showPassword)
 	}
 	return (

@@ -20,6 +20,7 @@ import { useState, useEffect } from 'react'
 import { getYear, getDaysInMonth } from 'date-fns'
 
 const months = [
+	// months for date of birth
 	'January',
 	'February',
 	'March',
@@ -35,6 +36,7 @@ const months = [
 ]
 
 function getYears() {
+	// get years for date of birth
 	const years = []
 	const currentYear = getYear(new Date())
 	for (let i = currentYear; i >= currentYear - 100; i--) {
@@ -43,7 +45,7 @@ function getYears() {
 	return years
 }
 
-const allYears = getYears()
+const allYears = getYears() // all years for date of birth
 
 const validationSchema = Yup.object({
 	email: Yup.string()
@@ -76,13 +78,19 @@ const ModalRegisterWindowFrstStep = ({
 	isModalOpen,
 	setRegisterStep,
 }) => {
+	const dispatch = useDispatch()
+
 	const [month, setMonth] = useState('')
 	const [day, setDay] = useState('')
 	const [year, setYear] = useState('')
 	const [days, setDays] = useState([])
-	const [isPhone, setIsPhone] = useState(false)
-	const dispatch = useDispatch()
+	const [isPhone, setIsPhone] = useState(false) // phone or email registration
+
+	const years = allYears // years for date of birth
+	const initialValues = { name: '', email: '', phone: '' }
+
 	const getDays = () => {
+		// using month and year for get true days in month
 		const daysInMonth = getDaysInMonth(new Date(year, month))
 		setDays(prevDays => {
 			const newDays = []
@@ -92,16 +100,15 @@ const ModalRegisterWindowFrstStep = ({
 			return newDays
 		})
 	}
+
 	useEffect(() => {
 		if (month !== '' && year !== '') {
 			getDays()
 		}
 	}, [month, year])
 
-	const years = allYears
-	const initialValues = { name: '', email: '', phone: '' }
-
 	const handleNextRegistrationStep = obj => {
+		// add first part of register data
 		dispatch(register(obj))
 		setIsLoading(true)
 		setTimeout(() => {
@@ -110,6 +117,7 @@ const ModalRegisterWindowFrstStep = ({
 		}, 1000)
 	}
 	const resetInfo = () => {
+		// reset info on the fields
 		setMonth('')
 		setDay('')
 		setYear('')
@@ -122,14 +130,18 @@ const ModalRegisterWindowFrstStep = ({
 	}, [isModalOpen])
 
 	const onSubmit = (values, { resetForm }) => {
+		// submit form
 		const newValues = { ...values }
 		if (isPhone) {
+			// if phone registration
 			newValues.email = false
 		} else {
+			// if email registration
 			newValues.phone = false
 		}
 
 		const responseObj = {
+			// add first part of register data
 			...newValues,
 			date: {
 				month: month,

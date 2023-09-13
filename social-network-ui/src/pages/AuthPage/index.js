@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux'
 import { openModal } from '../../redux/slices/modalSlice'
 
 const customPalette = {
+	// custom palette
 	primary: {
 		main: '#000',
 		contrastText: '#fff',
@@ -21,6 +22,7 @@ const customPalette = {
 }
 
 const theme = createTheme({
+	// custom theme
 	palette: customPalette,
 	typography: {
 		h1: {
@@ -59,10 +61,13 @@ const theme = createTheme({
 })
 
 const AuthPage = () => {
+	
 	const dispatch = useDispatch()
+
 	const handleModalOpen = content => {
+		// open modal window
 		if (content) {
-			return dispatch(openModal(content))
+			return dispatch(openModal(content)) // open modal window with custom content
 		}
 		dispatch(openModal())
 	}
