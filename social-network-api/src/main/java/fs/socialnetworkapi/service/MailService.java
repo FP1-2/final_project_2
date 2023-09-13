@@ -12,6 +12,7 @@ public class MailService {
 
   @Value("${spring.mail.sender.email:test@gmail.com}")
   private String senderEmail;
+
   @Autowired
   public MailService(JavaMailSender mailSender) {
     this.mailSender = mailSender;
