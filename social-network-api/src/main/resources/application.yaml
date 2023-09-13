@@ -20,7 +20,7 @@ spring:
             enable: true
     sender: # отправитель письма (его почта и имя)
       email: test@gmail.com
-      text: no-reply
+#      text: no-reply
 
 # local profile
 ---
