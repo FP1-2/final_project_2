@@ -20,6 +20,7 @@ import { useState, useEffect } from 'react'
 import { getYear, getDaysInMonth } from 'date-fns'
 
 const months = [
+	// months for date of birth
 	'January',
 	'February',
 	'March',
@@ -35,6 +36,7 @@ const months = [
 ]
 
 function getYears() {
+	// get years for date of birth
 	const years = []
 	const currentYear = getYear(new Date())
 	for (let i = currentYear; i >= currentYear - 100; i--) {
@@ -43,7 +45,7 @@ function getYears() {
 	return years
 }
 
-const allYears = getYears()
+const allYears = getYears() // all years for date of birth
 
 const validationSchema = Yup.object({
 	email: Yup.string()
@@ -53,8 +55,22 @@ const validationSchema = Yup.object({
 		.required('Name is required')
 		.min(5, 'Please enter at least 6 characters'),
 })
+const validationSchemaAlt = Yup.object({
+	phone: Yup.string()
+		.required('Phone is required')
+		.min(5, 'Please enter at least 6 characters')
+		.max(15, 'Please enter at most 15 characters')
+		.matches(/^[0-9]*$/, 'Please enter a valid phone number (only numbers)'),
 
-const initialValues = { name: '', email: '' }
+	name: Yup.string()
+		.required('Name is required')
+		.min(5, 'Please enter at least 6 characters'),
+})
+
+const initialValuesAlt = {
+	name: '',
+	phone: '',
+}
 
 const ModalRegisterWindowFrstStep = ({
 	modalContent,
@@ -62,12 +78,19 @@ const ModalRegisterWindowFrstStep = ({
 	isModalOpen,
 	setRegisterStep,
 }) => {
+	const dispatch = useDispatch()
+
 	const [month, setMonth] = useState('')
 	const [day, setDay] = useState('')
 	const [year, setYear] = useState('')
 	const [days, setDays] = useState([])
-	const dispatch = useDispatch()
+	const [isPhone, setIsPhone] = useState(false) // phone or email registration
+
+	const years = allYears // years for date of birth
+	const initialValues = { name: '', email: '', phone: '' }
+
 	const getDays = () => {
+		// using month and year for get true days in month
 		const daysInMonth = getDaysInMonth(new Date(year, month))
 		setDays(prevDays => {
 			const newDays = []
@@ -77,15 +100,15 @@ const ModalRegisterWindowFrstStep = ({
 			return newDays
 		})
 	}
+
 	useEffect(() => {
 		if (month !== '' && year !== '') {
 			getDays()
 		}
 	}, [month, year])
 
-	const years = allYears
-
 	const handleNextRegistrationStep = obj => {
+		// add first part of register data
 		dispatch(register(obj))
 		setIsLoading(true)
 		setTimeout(() => {
@@ -94,6 +117,7 @@ const ModalRegisterWindowFrstStep = ({
 		}, 1000)
 	}
 	const resetInfo = () => {
+		// reset info on the fields
 		setMonth('')
 		setDay('')
 		setYear('')
@@ -106,8 +130,19 @@ const ModalRegisterWindowFrstStep = ({
 	}, [isModalOpen])
 
 	const onSubmit = (values, { resetForm }) => {
+		// submit form
+		const newValues = { ...values }
+		if (isPhone) {
+			// if phone registration
+			newValues.email = false
+		} else {
+			// if email registration
+			newValues.phone = false
+		}
+
 		const responseObj = {
-			...values,
+			// add first part of register data
+			...newValues,
 			date: {
 				month: month,
 				day: day,
@@ -135,35 +170,56 @@ const ModalRegisterWindowFrstStep = ({
 			</Typography>
 			<Formik
 				initialValues={initialValues}
-				validationSchema={validationSchema}
+				validationSchema={isPhone ? validationSchemaAlt : validationSchema}
 				onSubmit={onSubmit}
 			>
-				{({ isValid, isSubmitting }) => (
+				{({ isValid, isSubmitting, values }) => (
 					<Form
 						style={{
 							width: '100%',
 						}}
 					>
-						{modalContent?.inputs.map(
-							({ name, type, label, placeholder, autoComplete }, index) => {
-								return (
-									<CustomInput
-										name={name}
-										type={type}
-										label={label}
-										placeholder={placeholder}
-										autoComplete={autoComplete}
-										key={index}
-									/>
-								)
-							}
+						<CustomInput
+							name='name'
+							type='text'
+							label='Name'
+							placeholder='Your First Name'
+							autoComplete='name'
+						/>
+						{isPhone === false ? (
+							<CustomInput
+								name='email'
+								type='email'
+								label='Email'
+								placeholder='Your Email'
+								autoComplete='email'
+							/>
+						) : (
+							<CustomInput
+								name='phone'
+								type='text'
+								label='Phone'
+								placeholder='Your Phone'
+								autoComplete='phone'
+							/>
 						)}
 						<Box
 							sx={{
 								mb: 2,
+								cursor: 'pointer',
+								width: 'fit-content',
 							}}
+							onClick={() =>
+								setIsPhone(prevState => {
+									console.log('123')
+									return !prevState
+								})
+							}
 						>
-							<LinkText text='Use Phone' />
+							<LinkText
+								text={isPhone ? 'Use email' : 'Use phone'}
+								isLink={false}
+							/>
 						</Box>
 						<Box
 							sx={{
@@ -275,6 +331,7 @@ const ModalRegisterWindowFrstStep = ({
 							</Grid>
 						</Grid>
 						<Button
+							id='submit-button'
 							type='submit'
 							variant='contained'
 							fullWidth
@@ -288,7 +345,13 @@ const ModalRegisterWindowFrstStep = ({
 								textTransform: 'none',
 								backgroundColor: '#1DA1F2',
 							}}
-							disabled={!isValid || isSubmitting || day === ''}
+							disabled={
+								!isValid ||
+								isSubmitting ||
+								day === '' ||
+								values.name === '' ||
+								(isPhone ? values.phone === '' : values.email === '')
+							}
 						>
 							Next
 						</Button>

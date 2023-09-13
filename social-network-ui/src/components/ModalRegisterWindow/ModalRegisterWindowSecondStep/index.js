@@ -28,6 +28,8 @@ const initialValues = {
 	city: '',
 	avatar: '',
 	lastName: '',
+	fstPassword: '',
+	sndPassword: '',
 }
 
 const validationSchema = Yup.object({
@@ -39,6 +41,14 @@ const validationSchema = Yup.object({
 		.required('Required')
 		.min(3, 'Last name must be at least 4 characters'),
 })
+const validationSchemaAlt = Yup.object({
+	fstPassword: Yup.string()
+		.required('Required')
+		.min(6, 'Password must be at least 6 characters'),
+	sndPassword: Yup.string()
+		.required('Required')
+		.oneOf([Yup.ref('fstPassword'), null], 'Passwords must match'),
+})
 
 const ModalRegisterWindowSecondStep = ({
 	setIsLoading,
@@ -47,37 +57,53 @@ const ModalRegisterWindowSecondStep = ({
 	handleClose,
 }) => {
 	const dispatch = useDispatch()
-	const [dataProcessing, setDataProcessing] = useState(false)
-	const [subscribeNewsletter, setSubscribeNewsletter] = useState(false)
+
+	const [dataProcessing, setDataProcessing] = useState(false) // data processing checkbox
+	const [subscribeNewsletter, setSubscribeNewsletter] = useState(false) // subscribe news checkbox
+	const [isCreatingPassword, setIsCreatingPassword] = useState(false) // creating password step
+
+	const registerName = useSelector(state => state.register.registerData?.name) // register user name
 
 	const handleDataProcessingChange = event => {
+		// data processing checkbox
 		setDataProcessing(event.target.checked)
 	}
 
 	const handleSubscribeNewsletterChange = event => {
+		// subscribe news
 		setSubscribeNewsletter(event.target.checked)
 	}
-	const registerName = useSelector(state => state.register.registerData?.name)
+
 	const onSubmit = (values, { resetForm }) => {
+		if (!isCreatingPassword) {
+			// road to creating password step
+			setIsCreatingPassword(true)
+			return
+		}
+
 		if (values.avatar === '') {
 			values.avatar = false
 		}
+
 		const obj = {
+			// add secod part of register data
 			...values,
 			dataProcessing: dataProcessing,
 			subscribeNews: subscribeNewsletter,
 			registerData: new Date().toUTCString(),
 		}
+
 		dispatch(register(obj))
 		setIsLoading(true)
 		resetForm()
+
 		setTimeout(() => {
 			setIsLoading(false)
 			if (isModalOpen) {
 				handleClose()
 			}
-			setRegisterStep(prevStep => prevStep + 1)
 		}, 1000)
+		
 	}
 	return (
 		<Box
@@ -96,7 +122,9 @@ const ModalRegisterWindowSecondStep = ({
 			</Typography>
 			<Formik
 				initialValues={initialValues}
-				validationSchema={validationSchema}
+				validationSchema={
+					isCreatingPassword ? validationSchemaAlt : validationSchema
+				}
 				onSubmit={onSubmit}
 			>
 				{({ isValid, isSubmitting }) => (
@@ -137,20 +165,41 @@ const ModalRegisterWindowSecondStep = ({
 								<VisuallyHiddenInput type='file' />
 							</Button>
 						</Box>
-						<CustomInput
-							name='lastName'
-							type='text'
-							label='Last name'
-							placeholder='Your Last Name'
-							autoComplete='off'
-						/>
-						<CustomInput
-							name='city'
-							type='text'
-							label='city'
-							placeholder='Your City'
-							autoComplete='off'
-						/>
+						{isCreatingPassword ? (
+							<>
+								<CustomInput
+									name='fstPassword'
+									type='password'
+									label='Password'
+									placeholder='Your Password'
+									autoComplete='off'
+								/>
+								<CustomInput
+									name='sndPassword'
+									type='password'
+									label='Confirm Password'
+									placeholder='Confirm Password'
+									autoComplete='off'
+								/>
+							</>
+						) : (
+							<>
+								<CustomInput
+									name='lastName'
+									type='text'
+									label='Last name'
+									placeholder='Your Last Name'
+									autoComplete='off'
+								/>
+								<CustomInput
+									name='city'
+									type='text'
+									label='city'
+									placeholder='Your City'
+									autoComplete='off'
+								/>
+							</>
+						)}
 
 						<Box
 							sx={{
@@ -203,9 +252,9 @@ const ModalRegisterWindowSecondStep = ({
 								textTransform: 'none',
 								backgroundColor: '#1DA1F2',
 							}}
-							disabled={!isValid || isSubmitting || !dataProcessing}
+							disabled={!isValid || !dataProcessing}
 						>
-							Finish Registration
+							{isCreatingPassword ? 'Create Account' : 'Set Password'}
 						</Button>
 					</Form>
 				)}
