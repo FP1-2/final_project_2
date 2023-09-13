@@ -11,7 +11,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
   private final UserRepo userRepo;
-  private MailService mailService;
+  private final MailService mailService;
 
   public boolean addUser(User user) {
     User userFromDb = userRepo.findByEmail(user.getEmail());
