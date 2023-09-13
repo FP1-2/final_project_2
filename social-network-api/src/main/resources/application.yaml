@@ -9,8 +9,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: evgeniygalagurya@gmail.com # логин от учётки
-    password: krekvffymummwxvq # специальный пароль для приложения
+    username: finalproject2danit@gmail.com # логин от учётки
+    password: doskjmyncxzhdvsn # специальный пароль для приложения
     test-connection: true # проверка подключения при старте приложения
     properties:
       mail:
