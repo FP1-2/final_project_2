@@ -18,9 +18,9 @@ spring:
           auth: true
           ssl:
             enable: true
-    sender: # отправитель письма (его почта и имя)
-      email: 12345@gmail.com
-      text: no-reply
+#    sender: # отправитель письма (его почта и имя)
+#      email: 12345@gmail.com
+#      text: no-reply
 
 # local profile
 ---
@@ -73,5 +73,5 @@ spring:
     url: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
     username: postgres
     password: postgres
-    initialization-mode: always # never
+#    initialization-mode: always # never
 
