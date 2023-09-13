@@ -53,8 +53,22 @@ const validationSchema = Yup.object({
 		.required('Name is required')
 		.min(5, 'Please enter at least 6 characters'),
 })
+const validationSchemaAlt = Yup.object({
+	phone: Yup.string()
+		.required('Phone is required')
+		.min(5, 'Please enter at least 6 characters')
+		.max(15, 'Please enter at most 15 characters')
+		.matches(/^[0-9]*$/, 'Please enter a valid phone number (only numbers)'),
 
-const initialValues = { name: '', email: '' }
+	name: Yup.string()
+		.required('Name is required')
+		.min(5, 'Please enter at least 6 characters'),
+})
+
+const initialValuesAlt = {
+	name: '',
+	phone: '',
+}
 
 const ModalRegisterWindowFrstStep = ({
 	modalContent,
@@ -66,6 +80,7 @@ const ModalRegisterWindowFrstStep = ({
 	const [day, setDay] = useState('')
 	const [year, setYear] = useState('')
 	const [days, setDays] = useState([])
+	const [isPhone, setIsPhone] = useState(false)
 	const dispatch = useDispatch()
 	const getDays = () => {
 		const daysInMonth = getDaysInMonth(new Date(year, month))
@@ -84,6 +99,7 @@ const ModalRegisterWindowFrstStep = ({
 	}, [month, year])
 
 	const years = allYears
+	const initialValues = { name: '', email: '', phone: '' }
 
 	const handleNextRegistrationStep = obj => {
 		dispatch(register(obj))
@@ -106,8 +122,15 @@ const ModalRegisterWindowFrstStep = ({
 	}, [isModalOpen])
 
 	const onSubmit = (values, { resetForm }) => {
+		const newValues = { ...values }
+		if (isPhone) {
+			newValues.email = false
+		} else {
+			newValues.phone = false
+		}
+
 		const responseObj = {
-			...values,
+			...newValues,
 			date: {
 				month: month,
 				day: day,
@@ -135,35 +158,56 @@ const ModalRegisterWindowFrstStep = ({
 			</Typography>
 			<Formik
 				initialValues={initialValues}
-				validationSchema={validationSchema}
+				validationSchema={isPhone ? validationSchemaAlt : validationSchema}
 				onSubmit={onSubmit}
 			>
-				{({ isValid, isSubmitting }) => (
+				{({ isValid, isSubmitting, values }) => (
 					<Form
 						style={{
 							width: '100%',
 						}}
 					>
-						{modalContent?.inputs.map(
-							({ name, type, label, placeholder, autoComplete }, index) => {
-								return (
-									<CustomInput
-										name={name}
-										type={type}
-										label={label}
-										placeholder={placeholder}
-										autoComplete={autoComplete}
-										key={index}
-									/>
-								)
-							}
+						<CustomInput
+							name='name'
+							type='text'
+							label='Name'
+							placeholder='Your First Name'
+							autoComplete='name'
+						/>
+						{isPhone === false ? (
+							<CustomInput
+								name='email'
+								type='email'
+								label='Email'
+								placeholder='Your Email'
+								autoComplete='email'
+							/>
+						) : (
+							<CustomInput
+								name='phone'
+								type='text'
+								label='Phone'
+								placeholder='Your Phone'
+								autoComplete='phone'
+							/>
 						)}
 						<Box
 							sx={{
 								mb: 2,
+								cursor: 'pointer',
+								width: 'fit-content',
 							}}
+							onClick={() =>
+								setIsPhone(prevState => {
+									console.log('123')
+									return !prevState
+								})
+							}
 						>
-							<LinkText text='Use Phone' />
+							<LinkText
+								text={isPhone ? 'Use email' : 'Use phone'}
+								isLink={false}
+							/>
 						</Box>
 						<Box
 							sx={{
@@ -275,6 +319,7 @@ const ModalRegisterWindowFrstStep = ({
 							</Grid>
 						</Grid>
 						<Button
+							id='submit-button'
 							type='submit'
 							variant='contained'
 							fullWidth
@@ -288,7 +333,13 @@ const ModalRegisterWindowFrstStep = ({
 								textTransform: 'none',
 								backgroundColor: '#1DA1F2',
 							}}
-							disabled={!isValid || isSubmitting || day === ''}
+							disabled={
+								!isValid ||
+								isSubmitting ||
+								day === '' ||
+								values.name === '' ||
+								(isPhone ? values.phone === '' : values.email === '')
+							}
 						>
 							Next
 						</Button>
