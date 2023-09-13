@@ -1,5 +1,5 @@
-
 POST http://localhost:5000/registration
+Content-Type: application/json
 
 {
   "firstName": "Jonn",
