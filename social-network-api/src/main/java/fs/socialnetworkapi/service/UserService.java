@@ -3,7 +3,6 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import java.util.UUID;
@@ -11,23 +10,17 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
   private final UserRepo userRepo;
-
   private MailService mailService;
 
   public boolean addUser(User user) {
     User userFromDb = userRepo.findByEmail(user.getEmail());
-
     if (userFromDb != null) {
       return false;
     }
-
     user.setActive(true);
     user.setActivationCode(UUID.randomUUID().toString());
-
     userRepo.save(user);
-
     if (!StringUtils.isEmpty(user.getEmail())) {
       String message = String.format(
           "Hello, %s! \n"
@@ -35,24 +28,18 @@ public class UserService {
           user.getEmail(),
           user.getActivationCode()
       );
-
       mailService.send(user.getEmail(), "Activation code", message);
     }
-
     return true;
   }
 
   public boolean activateUser(String code) {
     User user = userRepo.findByActivationCode(code);
-
     if (user == null) {
       return false;
     }
-
     user.setActivationCode(null);
-
     userRepo.save(user);
-
     return true;
   }
 }

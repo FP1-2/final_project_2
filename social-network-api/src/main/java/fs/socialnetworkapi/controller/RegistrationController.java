@@ -17,20 +17,6 @@ public class RegistrationController {
   @Autowired
   private UserService userService;
 
-  //  @GetMapping("/registration")
-  //  public String registration() {
-  //    return "registration";
-  //  }
-
-  //  @PostMapping("/registration")
-  //  public String addUser(User user, Map<String, Object> model) {
-  //    if (!userService.addUser(user)) {
-  //      model.put("message", "User exists!");
-  //      return "registration";
-  //    }
-  //    return "activation";
-  //  }
-
   @PostMapping("/registration")
   public void create(@RequestBody User user) {
     userService.addUser(user);
