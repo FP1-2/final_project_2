@@ -10,6 +10,7 @@ import CustomInput from '../../components/CustomInput'
 import LinkText from '../../components/LinkText'
 
 const theme = createTheme({
+	// custom theme
 	typography: {
 		h3: {
 			fontSize: '2.5rem',
@@ -26,13 +27,14 @@ const validationSchema = Yup.object({
 		.min(6, 'Password is too short'),
 })
 
-const LoginPage = () => {
-	const initialValues = {
-		email: '',
-		password: '',
-	}
+const initialValues = {
+	email: '',
+	password: '',
+}
 
+const LoginPage = () => {
 	const onSubmit = (values, { resetForm }) => {
+		// submit handler
 		console.log('send', values)
 		resetForm()
 	}
