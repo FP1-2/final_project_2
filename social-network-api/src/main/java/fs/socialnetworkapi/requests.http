@@ -1,0 +1,14 @@
+POST http://localhost:5000/registration
+Content-Type: application/json
+
+{
+  "firstName": "Jonn",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "05/08/82",
+  "avatar": "https://klike.net/uploads/posts/2019-03/1551511866_11.jpg",
+  "mainFoto": "https://www.liga.net/images/general/2019/02/14/20190214174619-9721.png",
+  "password": "123"
+}
+
+
