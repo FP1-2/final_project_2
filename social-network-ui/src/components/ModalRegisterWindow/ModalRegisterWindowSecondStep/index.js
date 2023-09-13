@@ -28,6 +28,8 @@ const initialValues = {
 	city: '',
 	avatar: '',
 	lastName: '',
+	fstPassword: '',
+	sndPassword: '',
 }
 
 const validationSchema = Yup.object({
@@ -39,6 +41,14 @@ const validationSchema = Yup.object({
 		.required('Required')
 		.min(3, 'Last name must be at least 4 characters'),
 })
+const validationSchemaAlt = Yup.object({
+	fstPassword: Yup.string()
+		.required('Required')
+		.min(6, 'Password must be at least 6 characters'),
+	sndPassword: Yup.string()
+		.required('Required')
+		.oneOf([Yup.ref('fstPassword'), null], 'Passwords must match'),
+})
 
 const ModalRegisterWindowSecondStep = ({
 	setIsLoading,
@@ -49,6 +59,7 @@ const ModalRegisterWindowSecondStep = ({
 	const dispatch = useDispatch()
 	const [dataProcessing, setDataProcessing] = useState(false)
 	const [subscribeNewsletter, setSubscribeNewsletter] = useState(false)
+	const [isCreatingPassword, setIsCreatingPassword] = useState(false)
 
 	const handleDataProcessingChange = event => {
 		setDataProcessing(event.target.checked)
@@ -59,6 +70,11 @@ const ModalRegisterWindowSecondStep = ({
 	}
 	const registerName = useSelector(state => state.register.registerData?.name)
 	const onSubmit = (values, { resetForm }) => {
+		if (!isCreatingPassword) {
+			console.log(values)
+			setIsCreatingPassword(true)
+			return
+		}
 		if (values.avatar === '') {
 			values.avatar = false
 		}
@@ -96,7 +112,9 @@ const ModalRegisterWindowSecondStep = ({
 			</Typography>
 			<Formik
 				initialValues={initialValues}
-				validationSchema={validationSchema}
+				validationSchema={
+					isCreatingPassword ? validationSchemaAlt : validationSchema
+				}
 				onSubmit={onSubmit}
 			>
 				{({ isValid, isSubmitting }) => (
@@ -137,20 +155,41 @@ const ModalRegisterWindowSecondStep = ({
 								<VisuallyHiddenInput type='file' />
 							</Button>
 						</Box>
-						<CustomInput
-							name='lastName'
-							type='text'
-							label='Last name'
-							placeholder='Your Last Name'
-							autoComplete='off'
-						/>
-						<CustomInput
-							name='city'
-							type='text'
-							label='city'
-							placeholder='Your City'
-							autoComplete='off'
-						/>
+						{isCreatingPassword ? (
+							<>
+								<CustomInput
+									name='fstPassword'
+									type='password'
+									label='Password'
+									placeholder='Your Password'
+									autoComplete='off'
+								/>
+								<CustomInput
+									name='sndPassword'
+									type='password'
+									label='Confirm Password'
+									placeholder='Confirm Password'
+									autoComplete='off'
+								/>
+							</>
+						) : (
+							<>
+								<CustomInput
+									name='lastName'
+									type='text'
+									label='Last name'
+									placeholder='Your Last Name'
+									autoComplete='off'
+								/>
+								<CustomInput
+									name='city'
+									type='text'
+									label='city'
+									placeholder='Your City'
+									autoComplete='off'
+								/>
+							</>
+						)}
 
 						<Box
 							sx={{
@@ -203,9 +242,9 @@ const ModalRegisterWindowSecondStep = ({
 								textTransform: 'none',
 								backgroundColor: '#1DA1F2',
 							}}
-							disabled={!isValid || isSubmitting || !dataProcessing}
+							disabled={!isValid || !dataProcessing}
 						>
-							Finish Registration
+							{isCreatingPassword ? 'Create Account' : 'Set Password'}
 						</Button>
 					</Form>
 				)}
