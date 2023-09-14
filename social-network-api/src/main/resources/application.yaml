@@ -54,24 +54,25 @@ spring:
 
 # prod profile
 ---
-
 spring:
   config:
     activate:
       on-profile: prod
-  jpa:
-    hibernate:
-      ddl-auto: update #create-drop # update
-    generate-ddl: false
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc:
-          time_zone: UTC
   datasource:
     url: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
     username: postgres
     password: postgres
-#    initialization-mode: always # never
-
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred #default
+  jpa:
+    hibernate:
+      ddl-auto: create-drop #update
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      jdbc:
+        time_zone: UTC
