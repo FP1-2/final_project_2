@@ -1,13 +1,12 @@
-import React from 'react'
-import { Box, CssBaseline, Typography } from '@mui/material'
-import IconTwitter from '../../components/IconTwitter'
-import { createTheme } from '@mui/material/styles'
-import { ThemeProvider } from '@mui/material'
-import { Formik, Form, Field } from 'formik'
+import { Box, CssBaseline, ThemeProvider, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
+import { createTheme } from '@mui/material/styles'
+import { Form, Formik } from 'formik'
+import React from 'react'
 import * as Yup from 'yup'
-import CustomInput from '../../components/CustomInput'
-import LinkText from '../../components/LinkText'
+import CustomInput from '../../components/CustomInput/CustomInput'
+import IconTwitter from '../../components/IconTwitter/IconTwitter'
+import LinkText from '../../components/LinkText/LinkText'
 
 const theme = createTheme({
 	// custom theme

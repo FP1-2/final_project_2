@@ -1,6 +1,6 @@
 import AppRoutes from './AppRoutes'
 import React from 'react'
-import ModalRegisterWindow from './components/ModalRegisterWindow'
+import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
 
 function App() {
 	return (
