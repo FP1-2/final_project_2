@@ -4,7 +4,6 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -22,11 +21,10 @@ public class UserService {
     user.setActive(true);
     user.setActivationCode(UUID.randomUUID().toString());
     userRepo.save(user);
-    //    if (!StringUtils.isEmpty(user.getEmail())) {
     if (user.getEmail() != null) {
       String message = String.format(
           "Hello, %s! \n"
-            + "Welcome to Twitter. Please, visit next link: http://localhost:5000/activate/%s",
+            + "Welcome to Twitter. Please, visit next link: http://http://twitterdemo.us-east-1.elasticbeanstalk.com/activate/%s",
           user.getFirstName(),
           user.getActivationCode()
       );
