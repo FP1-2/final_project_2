@@ -22,7 +22,7 @@ public class UserService {
     user.setActive(true);
     user.setActivationCode(UUID.randomUUID().toString());
     userRepo.save(user);
-//    if (!StringUtils.isEmpty(user.getEmail())) {
+    //    if (!StringUtils.isEmpty(user.getEmail())) {
     if (user.getEmail() != null) {
       String message = String.format(
           "Hello, %s! \n"
