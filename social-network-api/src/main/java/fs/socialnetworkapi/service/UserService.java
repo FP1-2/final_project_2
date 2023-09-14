@@ -22,11 +22,12 @@ public class UserService {
     user.setActive(true);
     user.setActivationCode(UUID.randomUUID().toString());
     userRepo.save(user);
-    if (!StringUtils.isEmpty(user.getEmail())) {
+//    if (!StringUtils.isEmpty(user.getEmail())) {
+    if (user.getEmail() != null) {
       String message = String.format(
           "Hello, %s! \n"
             + "Welcome to Twitter. Please, visit next link: http://localhost:5000/activate/%s",
-          user.getEmail(),
+          user.getFirstName(),
           user.getActivationCode()
       );
       mailService.send(user.getEmail(), "Activation code", message);

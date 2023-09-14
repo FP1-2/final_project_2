@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserTest {
+class UserTest {
 
   @Test
-  public void testGettersAndSetters() {
+  void testGettersAndSetters() {
     User user = new User();
     user.setId(1L);
     user.setFirstName("John");

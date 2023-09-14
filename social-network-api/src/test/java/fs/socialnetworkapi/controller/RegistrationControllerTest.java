@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 
 import static org.mockito.Mockito.*;
 
-public class RegistrationControllerTest {
+class RegistrationControllerTest {
 
   @Mock
   private UserService userService;
@@ -28,7 +28,7 @@ public class RegistrationControllerTest {
   }
 
   @Test
-  public void testCreate() {
+  void testCreate() {
     User user = new User();
     registrationController.create(user);
 
@@ -36,7 +36,7 @@ public class RegistrationControllerTest {
   }
 
   @Test
-  public void testActivateUserSuccess() {
+  void testActivateUserSuccess() {
     String activationCode = "validCode";
     when(userService.activateUser(activationCode)).thenReturn(true);
 
@@ -47,7 +47,7 @@ public class RegistrationControllerTest {
   }
 
   @Test
-  public void testActivateUserFailure() {
+  void testActivateUserFailure() {
     String activationCode = "invalidCode";
     when(userService.activateUser(activationCode)).thenReturn(false);
 

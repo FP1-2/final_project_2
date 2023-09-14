@@ -12,7 +12,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
+class UserServiceTest {
 
   @Mock
   private UserRepo userRepo;
@@ -29,7 +29,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void testAddUser() {
+  void testAddUser() {
     User user = new User();
     user.setEmail("test@example.com");
     user.setActive(false);
@@ -49,7 +49,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void testAddUserDuplicateEmail() {
+  void testAddUserDuplicateEmail() {
     User existingUser = new User();
     existingUser.setEmail("test@example.com");
 
@@ -69,7 +69,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void testActivateUser() {
+  void testActivateUser() {
     String activationCode = UUID.randomUUID().toString();
     User user = new User();
     user.setActivationCode(activationCode);
@@ -83,7 +83,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void testActivateUserInvalidCode() {
+  void testActivateUserInvalidCode() {
     String invalidCode = "invalid_code";
 
     when(userRepo.findByActivationCode(invalidCode)).thenReturn(null);

@@ -12,7 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class MailServiceTest {
+class MailServiceTest {
 
   @Mock
   private JavaMailSender mailSender;
@@ -29,7 +29,7 @@ public class MailServiceTest {
   private String senderEmail;
 
   @Test
-  public void testSend() {
+  void testSend() {
     String recipient = "recipient@example.com";
     String subject = "Test Subject";
     String messageText = "Test Message";
