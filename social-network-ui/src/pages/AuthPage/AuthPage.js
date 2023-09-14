@@ -1,16 +1,16 @@
 import * as React from 'react'
 
+import AppleIcon from '@mui/icons-material/Apple'
+import GoogleIcon from '@mui/icons-material/Google'
 import { Typography } from '@mui/material'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import Grid from '@mui/material/Grid'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import Button from '@mui/material/Button'
-import GoogleIcon from '@mui/icons-material/Google'
-import AppleIcon from '@mui/icons-material/Apple'
-import LinkText from '../../components/LinkText'
-import IconTwitter from '../../components/IconTwitter'
 import { useDispatch } from 'react-redux'
+import IconTwitter from '../../components/IconTwitter/IconTwitter'
+import LinkText from '../../components/LinkText/LinkText'
 import { openModal } from '../../redux/slices/modalSlice'
 
 const customPalette = {
@@ -61,7 +61,6 @@ const theme = createTheme({
 })
 
 const AuthPage = () => {
-	
 	const dispatch = useDispatch()
 
 	const handleModalOpen = content => {
