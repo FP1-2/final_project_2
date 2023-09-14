@@ -16,6 +16,8 @@ import * as Yup from 'yup'
 import { register } from '../../../redux/slices/registerSlice'
 import CustomInput from '../../CustomInput/CustomInput'
 import LinkText from '../../LinkText/LinkText'
+import { useNavigate } from 'react-router-dom'
+
 import axios from 'axios'
 
 const VisuallyHiddenInput = styled('input')`
@@ -61,6 +63,7 @@ const ModalRegisterWindowSecondStep = ({
 	setRegisterStep,
 	isModalOpen,
 	handleClose,
+	setIsRegisterDone,
 }) => {
 	const dispatch = useDispatch()
 
@@ -68,11 +71,12 @@ const ModalRegisterWindowSecondStep = ({
 	const [subscribeNewsletter, setSubscribeNewsletter] = useState(false) // subscribe news checkbox
 	const [isCreatingPassword, setIsCreatingPassword] = useState(false) // creating password step
 
+	let navigate = useNavigate()
+
 	const registerName = useSelector(state => state.register.registerData?.name) // register user name
 
 	const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME // Cloudinary cloud name
 
-	console.log(cloudName)
 	const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Cloudinary upload preset
 
 	const [imageUrl, setImageUrl] = useState('') // image url
@@ -89,17 +93,14 @@ const ModalRegisterWindowSecondStep = ({
 		formData.append('upload_preset', uploadPreset)
 
 		try {
-			console.log('123')
 			const response = await axios.post(
 				`https://api.cloudinary.com/v1_1/${cloudName}/upload`,
 				formData
 			)
-			console.log(response)
 
 			if (response.status === 200) {
 				const uploadedImageUrl = response.data.secure_url
 				setImageUrl(uploadedImageUrl)
-				console.log(uploadedImageUrl)
 				setError('')
 			} else {
 				setError('Something went wrong')
@@ -122,7 +123,6 @@ const ModalRegisterWindowSecondStep = ({
 	const onSubmit = (values, { resetForm }) => {
 		if (!isCreatingPassword) {
 			// road to creating password step
-			console.log(values)
 			setIsCreatingPassword(true)
 			return
 		}
@@ -150,10 +150,17 @@ const ModalRegisterWindowSecondStep = ({
 
 		setTimeout(() => {
 			setIsLoading(false)
-			if (isModalOpen) {
-				handleClose()
-			}
+			setIsRegisterDone(true)
 		}, 1000)
+
+		setTimeout(() => {
+			if (isModalOpen) {
+				setIsRegisterDone(false)
+				handleClose()
+				setRegisterStep(1)
+				navigate('/signIn')
+			}
+		}, 3000)
 	}
 	return (
 		<Box
@@ -327,6 +334,7 @@ const ModalRegisterWindowSecondStep = ({
 }
 
 ModalRegisterWindowSecondStep.propTypes = {
+	setIsRegisterDone: PropTypes.func.isRequired,
 	setIsLoading: PropTypes.func.isRequired,
 	setRegisterStep: PropTypes.func.isRequired,
 	handleClose: PropTypes.func.isRequired,
