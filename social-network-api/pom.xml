@@ -107,13 +107,6 @@
 					<execution>
 						<configuration>
 							<target>
-
-								<!--
-                                  Place any Ant task here. You can add anything
-                                  you can add between <target> and </target> in a
-                                  build.xml.
-                                -->
-
 							</target>
 						</configuration>
 						<goals>
