@@ -50,7 +50,7 @@ const ModalRegisterWindow = () => {
 	const dispatch = useDispatch()
 
 	const [isLoading, setIsLoading] = useState(false)
-	const [registerStep, setRegisterStep] = useState(1)
+	const [registerStep, setRegisterStep] = useState(2)
 
 	const isModalOpen = useSelector(state => state.modal.modalProps.isOpen) // modal status
 

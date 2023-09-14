@@ -16,6 +16,7 @@ import * as Yup from 'yup'
 import { register } from '../../../redux/slices/registerSlice'
 import CustomInput from '../../CustomInput/CustomInput'
 import LinkText from '../../LinkText/LinkText'
+import axios from 'axios'
 
 const VisuallyHiddenInput = styled('input')`
 	clip: rect(0 0 0 0);
@@ -69,6 +70,45 @@ const ModalRegisterWindowSecondStep = ({
 
 	const registerName = useSelector(state => state.register.registerData?.name) // register user name
 
+	const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME // Cloudinary cloud name
+
+	console.log(cloudName)
+	const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Cloudinary upload preset
+
+	const [imageUrl, setImageUrl] = useState('') // image url
+	const [error, setError] = useState('') // error
+
+	const handleImageUpload = async event => {
+		// image upload
+		const file = event.target.files[0]
+
+		if (!file) return
+
+		const formData = new FormData()
+		formData.append('file', file)
+		formData.append('upload_preset', uploadPreset)
+
+		try {
+			console.log('123')
+			const response = await axios.post(
+				`https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+				formData
+			)
+			console.log(response)
+
+			if (response.status === 200) {
+				const uploadedImageUrl = response.data.secure_url
+				setImageUrl(uploadedImageUrl)
+				console.log(uploadedImageUrl)
+				setError('')
+			} else {
+				setError('Something went wrong')
+			}
+		} catch (err) {
+			setError('Something went wrong')
+		}
+	}
+
 	const handleDataProcessingChange = event => {
 		// data processing checkbox
 		setDataProcessing(event.target.checked)
@@ -82,8 +122,14 @@ const ModalRegisterWindowSecondStep = ({
 	const onSubmit = (values, { resetForm }) => {
 		if (!isCreatingPassword) {
 			// road to creating password step
+			console.log(values)
 			setIsCreatingPassword(true)
 			return
+		}
+
+		if (imageUrl !== '') {
+			// set avatar
+			values.avatar = imageUrl
 		}
 
 		if (values.avatar === '') {
@@ -145,16 +191,29 @@ const ModalRegisterWindowSecondStep = ({
 								justifyContent: 'center',
 							}}
 						>
-							<Avatar
-								sx={{
-									bgcolor: 'rgb(29, 161, 241)',
-									p: 5,
-									fontSize: '3rem',
-									mb: 1,
-								}}
-							>
-								{registerName?.charAt(0).toUpperCase()}
-							</Avatar>
+							{imageUrl === '' ? (
+								<Avatar
+									sx={{
+										width: '6rem',
+										height: '6rem',
+										bgcolor: 'rgb(29, 161, 241)',
+										p: 5,
+										fontSize: '3rem',
+										mb: 1,
+									}}
+								>
+									{registerName?.charAt(0).toUpperCase()}
+								</Avatar>
+							) : (
+								<Avatar
+									sx={{
+										width: '6rem',
+										height: '6rem',
+										mb: 1,
+									}}
+									src={imageUrl}
+								></Avatar>
+							)}
 							<Button
 								component='label'
 								variant='contained'
@@ -166,7 +225,7 @@ const ModalRegisterWindowSecondStep = ({
 								}}
 							>
 								Upload Avatar
-								<VisuallyHiddenInput type='file' />
+								<VisuallyHiddenInput type='file' onChange={handleImageUpload} />
 							</Button>
 						</Box>
 						{isCreatingPassword ? (
