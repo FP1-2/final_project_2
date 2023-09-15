@@ -76,3 +76,5 @@ spring:
         format_sql: true
       jdbc:
         time_zone: UTC
+  thymeleaf:
+    enabled: true
