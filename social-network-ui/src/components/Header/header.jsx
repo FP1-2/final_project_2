@@ -31,7 +31,7 @@ import { ReactComponent as Logo } from '../../logo.svg'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { MIN_WIDTH } from './../../constants'
 
-const drawerWidth = 240
+// const drawerWidth = 240
 
 export default function PermanentDrawerLeft ({ pageName }) {
   const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
@@ -60,25 +60,14 @@ export default function PermanentDrawerLeft ({ pageName }) {
     return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar
-          position='fixed'
-          sx={{
-            width: `calc(100% - ${drawerWidth}px)`,
-            ml: `${drawerWidth}px`
-          }}
-        >
-          <Toolbar>
-            <Typography variant='h6' noWrap component='div'>
-              {pageName}
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        
         <Drawer
           sx={{
-            width: drawerWidth,
+            // width: drawerWidth,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              width: drawerWidth,
+              // width: drawerWidth,
+              width: '100%',
               boxSizing: 'border-box'
             }
           }}
@@ -87,13 +76,27 @@ export default function PermanentDrawerLeft ({ pageName }) {
         >
           <Toolbar>
             {' '}
-            <Link to='/home'>
+            
+          </Toolbar>
+          <AppBar
+          position='fixed'
+          sx={{
+          //   width: `calc(100% - ${drawerWidth}px)`,
+          //   ml: `${drawerWidth}px`
+          }}
+        >
+            <Toolbar>
+              <Link to='/home' className={styles.link}>
               {' '}
               <div className={styles.logo}>
-                <Logo height='50px' color='primary' />
+                <Logo height='3rem' color='white' />
               </div>
             </Link>
+            <Typography sx={{ml: '24px'}} variant='h6' noWrap component='div'>
+              {pageName}
+            </Typography>
           </Toolbar>
+        </AppBar>
           <Divider />
           <List>
             {links.map(text => (
