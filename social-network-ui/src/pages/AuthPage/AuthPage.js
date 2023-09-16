@@ -63,11 +63,8 @@ const theme = createTheme({
 const AuthPage = () => {
 	const dispatch = useDispatch()
 
-	const handleModalOpen = content => {
+	const handleModalOpen = () => {
 		// open modal window
-		if (content) {
-			return dispatch(openModal(content)) // open modal window with custom content
-		}
 		dispatch(openModal())
 	}
 
@@ -172,34 +169,7 @@ const AuthPage = () => {
 									textTransform: 'none',
 								}}
 								variant='outlined'
-								onClick={() =>
-									handleModalOpen({
-										header: 'Create an account',
-										inputs: [
-											{
-												name: 'name',
-												type: 'text',
-												label: 'Name',
-												placeholder: 'Your First Name',
-												autoComplete: 'name',
-											},
-											{
-												name: 'email',
-												type: 'text',
-												label: 'Email',
-												placeholder: 'Your Email',
-												autoComplete: 'email',
-											},
-										],
-										mainInfo: {
-											title: 'Date of birth',
-											text: 'Facilisi sem pulvinar velit nunc, gravida scelerisque amet nibh sit. Quis bibendum ante phasellus metus, magna lacinia sed augue. Odio enim nascetur leo mauris vel eget. Pretium id ullamcorper blandit viverra dignissim eget tellus. Nibh mi massa in molestie a sit. Elit congue.',
-										},
-										buttton: {
-											text: 'Next',
-										},
-									})
-								}
+								onClick={handleModalOpen}
 							>
 								Sign up with phone or email
 							</Button>

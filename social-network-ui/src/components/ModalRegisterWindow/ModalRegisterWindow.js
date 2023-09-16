@@ -4,11 +4,12 @@ import Modal from '@mui/material/Modal'
 import * as React from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeModal } from '../../redux/slices/modalSlice'
 import { resetRegisterData } from '../../redux/slices/registerSlice'
 import IconTwitter from '../IconTwitter/IconTwitter'
 import ModalRegisterWindowFrstStep from './ModalRegisterWindowFrstStep/ModalRegisterWindowFrstStep'
 import ModalRegisterWindowSecondStep from './ModalRegisterWindowSecondStep/ModalRegisterWindowSecondStep'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { closeModal } from '../../redux/slices/modalSlice'
 
 const style = {
 	position: 'absolute',
@@ -50,11 +51,10 @@ const ModalRegisterWindow = () => {
 	const dispatch = useDispatch()
 
 	const [isLoading, setIsLoading] = useState(false)
-	const [registerStep, setRegisterStep] = useState(2)
+	const [registerStep, setRegisterStep] = useState(1) // register step
+	const [isRegisterDone, setIsRegisterDone] = useState(false) // register done status
 
 	const isModalOpen = useSelector(state => state.modal.modalProps.isOpen) // modal status
-
-	const modalContent = useSelector(state => state.modal.modalProps?.content)
 
 	const handleClose = () => {
 		// close modal window
@@ -67,49 +67,48 @@ const ModalRegisterWindow = () => {
 			open={isModalOpen}
 			onClose={() => {
 				setIsLoading(false)
-
 				dispatch(resetRegisterData())
 				handleClose()
 			}}
 		>
 			<Box sx={style}>
-				{modalContent !== null ? (
+				<Box
+					sx={{
+						position: 'relative',
+					}}
+				>
 					<Box
 						sx={{
-							position: 'relative',
+							position: 'absolute',
+							top: '0',
+							left: '0',
+							padding: '0.5rem 1rem',
+							borderRadius: '2rem',
+							backgroundColor: 'rgb(29, 161, 241)',
+							color: '#fff',
+							fontWeight: '700',
+							cursor: 'default',
 						}}
 					>
-						<Box
-							sx={{
-								position: 'absolute',
-								top: '0',
-								left: '0',
-								padding: '0.5rem 1rem',
-								borderRadius: '2rem',
-								backgroundColor: 'rgb(29, 161, 241)',
-								color: '#fff',
-								fontWeight: '700',
-								cursor: 'default',
-							}}
-						>
-							{`Step ${registerStep} of 2`}
-						</Box>
+						{`Step ${registerStep} of 2`}
+					</Box>
 
-						<Box
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-								width: '100%',
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							width: '100%',
+						}}
+					>
+						<IconTwitter
+							style={{
+								margin: '0 auto',
 							}}
-						>
-							<IconTwitter
-								style={{
-									margin: '0 auto',
-								}}
-							/>
-						</Box>
-						{isLoading ? (
+						/>
+					</Box>
+					{!isRegisterDone ? (
+						isLoading ? (
 							<Box
 								sx={{
 									display: 'flex',
@@ -123,7 +122,6 @@ const ModalRegisterWindow = () => {
 							</Box>
 						) : registerStep === 1 ? (
 							<ModalRegisterWindowFrstStep
-								modalContent={modalContent}
 								isModalOpen={isModalOpen}
 								setIsLoading={setIsLoading}
 								setRegisterStep={setRegisterStep}
@@ -134,21 +132,28 @@ const ModalRegisterWindow = () => {
 								setRegisterStep={setRegisterStep}
 								handleClose={handleClose}
 								isModalOpen={isModalOpen}
+								setIsRegisterDone={setIsRegisterDone}
 							/>
-						)}
-					</Box>
-				) : (
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							width: '100%',
-						}}
-					>
-						<CircularProgress />
-					</Box>
-				)}
+						)
+					) : (
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								width: '100%',
+								minHeight: '30vh',
+							}}
+						>
+							<CheckCircleIcon
+								sx={{
+									color: 'rgb(29, 161, 241)',
+									fontSize: '10rem',
+								}}
+							/>
+						</Box>
+					)}
+				</Box>
 			</Box>
 		</Modal>
 	)
