@@ -28,7 +28,7 @@ public class UserService {
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
         "Hello, %s! \n"
-          + "Welcome to Twitter. Please, visit next link: http://twitterdemo.us-east-1.elasticbeanstalk.com/activate/%s",
+          + "Welcome to Twitter. Please, visit next link: http://twitterdemo.us-east-1.elasticbeanstalk.com/api/v1/activate/%s",
         userDtoIn.getFirstName(),
         userDtoIn.getActivationCode()
       );
