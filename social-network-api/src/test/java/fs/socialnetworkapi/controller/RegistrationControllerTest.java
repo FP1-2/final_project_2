@@ -1,59 +1,79 @@
 package fs.socialnetworkapi.controller;
 
-import fs.socialnetworkapi.entity.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fs.socialnetworkapi.dto.UserDtoIn;
+import fs.socialnetworkapi.dto.UserDtoOut;
 import fs.socialnetworkapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class RegistrationControllerTest {
-
-  @Mock
-  private UserService userService;
 
   @InjectMocks
   private RegistrationController registrationController;
 
   @Mock
   private Model model;
+  @Autowired
+  private MockMvc mockMvc;
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  @Autowired
+  private UserService userService;
 
   @BeforeEach
   public void setUp() {
     MockitoAnnotations.openMocks(this);
   }
 
-//  @Test
-//  void testCreate() {
-//    User user = new User();
-//    registrationController.create(user);
-//
-//    verify(userService, times(1)).addUser(user);
-//  }
-
   @Test
-  void testActivateUserSuccess() {
-    String activationCode = "validCode";
-    when(userService.activateUser(activationCode)).thenReturn(true);
+  public void testCreateUser() throws Exception {
+    // Create a UserDtoIn object with valid data
+    UserDtoIn userDtoIn = new UserDtoIn();
+    userDtoIn.setFirstName("John");
+    userDtoIn.setLastName("Doe");
+    userDtoIn.setEmail("john@example.com");
+    userDtoIn.setBirthday("1990-01-01");
 
-    String result = registrationController.activate(model, activationCode);
+    String userDtoInJson = objectMapper.writeValueAsString(userDtoIn);
 
-    verify(model, times(1)).addAttribute("message", "User successfully activated");
-    assert "login".equals(result);
-  }
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+        .post("/registration")
+        .content(userDtoInJson)
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andReturn();
 
-  @Test
-  void testActivateUserFailure() {
-    String activationCode = "invalidCode";
-    when(userService.activateUser(activationCode)).thenReturn(false);
+    String responseJson = result.getResponse().getContentAsString();
+    UserDtoOut userDtoOut = objectMapper.readValue(responseJson, UserDtoOut.class);
 
-    String result = registrationController.activate(model, activationCode);
-
-    verify(model, times(1)).addAttribute("message", "Activation code is not found!");
-    assert "login".equals(result);
-  }
+    // Verify that the user was created and returned correctly
+    assertEquals("John", userDtoOut.getFirstName());
+    assertEquals("Doe", userDtoOut.getLastName());
+    assertEquals("john@example.com", userDtoOut.getEmail());
+    assertEquals("1990-01-01", userDtoOut.getBirthday());
+}
 }

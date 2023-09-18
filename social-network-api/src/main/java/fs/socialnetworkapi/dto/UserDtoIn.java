@@ -1,12 +1,9 @@
 package fs.socialnetworkapi.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
-import org.hibernate.validator.constraints.Range;
 
 @Data
 public class UserDtoIn {

@@ -2,7 +2,6 @@ package fs.socialnetworkapi.controller;
 
 import fs.socialnetworkapi.dto.UserDtoIn;
 import fs.socialnetworkapi.dto.UserDtoOut;
-import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
