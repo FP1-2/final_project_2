@@ -46,37 +46,37 @@ class UserDtoInTest {
   @Test
   void setFirstName() {
     userTest1.setFirstName("Petro");
-    assertEquals(userTest1.getFirstName(), "Petro");
+    assertEquals("Petro", userTest1.getFirstName());
   }
 
   @Test
   void setLastName() {
     userTest1.setLastName("Petrov");
-    assertEquals(userTest1.getLastName(), "Petrov");
+    assertEquals("Petrov", userTest1.getLastName());
   }
 
   @Test
   void setEmail() {
     userTest1.setEmail("Petro@gmail.com");
-    assertEquals(userTest1.getEmail(), "Petro@gmail.com");
+    assertEquals("Petro@gmail.com", userTest1.getEmail());
   }
 
   @Test
   void setBirthday() {
     userTest1.setBirthday("23/02/92");
-    assertEquals(userTest1.getBirthday(), "23/02/92");
+    assertEquals("23/02/92", userTest1.getBirthday());
   }
 
   @Test
   void setAvatar() {
     userTest1.setAvatar("Petro.img");
-    assertEquals(userTest1.getAvatar(), "Petro.img");
+    assertEquals("Petro.img", userTest1.getAvatar());
   }
 
   @Test
   void setMainPhoto() {
     userTest1.setMainPhoto("Petro.png");
-    assertEquals(userTest1.getMainPhoto(), "Petro.png");
+    assertEquals("Petro.png", userTest1.getMainPhoto());
   }
 
 }
