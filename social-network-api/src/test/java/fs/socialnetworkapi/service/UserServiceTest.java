@@ -36,7 +36,7 @@ class UserServiceTest {
   }
 
   @Test
-  public void testAddUser() {
+  void testAddUser() {
     UserDtoIn userDtoIn = new UserDtoIn();
     userDtoIn.setEmail("test@example.com");
     userDtoIn.setFirstName("John");

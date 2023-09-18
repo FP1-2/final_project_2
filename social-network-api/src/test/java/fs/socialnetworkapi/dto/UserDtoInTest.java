@@ -3,44 +3,44 @@ package fs.socialnetworkapi.dto;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserDtoInTest {
+class UserDtoInTest {
    UserDtoIn userTest = new UserDtoIn(1L, "Ivan", "Petrov", "test@org.ua", "05/08/82",
      "https://klike.net/uploads/posts/2019-03/1551511866_11.jpg",
      "https://www.liga.net/images/general/2019/02/14/20190214174619-9721.png");
 
   @Test
   void getId() {
-    assertEquals(userTest.getId(), 1L);
+    assertEquals(1L, userTest.getId());
   }
 
   @Test
   void getFirstName() {
-    assertEquals(userTest.getFirstName(), "Ivan");
+    assertEquals("Ivan", userTest.getFirstName());
   }
 
   @Test
   void getLastName() {
-    assertEquals(userTest.getLastName(), "Petrov");
+    assertEquals("Petrov", userTest.getLastName());
   }
 
   @Test
   void getEmail() {
-    assertEquals(userTest.getEmail(), "test@org.ua");
+    assertEquals("test@org.ua", userTest.getEmail());
   }
 
   @Test
   void getBirthday() {
-    assertEquals(userTest.getBirthday(), "05/08/82");
+    assertEquals("05/08/82", userTest.getBirthday());
   }
 
   @Test
   void getAvatar() {
-    assertEquals(userTest.getAvatar(), "https://klike.net/uploads/posts/2019-03/1551511866_11.jpg");
+    assertEquals("https://klike.net/uploads/posts/2019-03/1551511866_11.jpg", userTest.getAvatar());
   }
 
   @Test
   void getMainPhoto() {
-    assertEquals(userTest.getMainPhoto(), "https://www.liga.net/images/general/2019/02/14/20190214174619-9721.png");
+    assertEquals("https://www.liga.net/images/general/2019/02/14/20190214174619-9721.png", userTest.getMainPhoto());
   }
   UserDtoIn userTest1 = new UserDtoIn();
   @Test

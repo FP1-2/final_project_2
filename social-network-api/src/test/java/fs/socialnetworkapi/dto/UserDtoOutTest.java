@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserDtoOutTest {
+class UserDtoOutTest {
 
   @Test
   public void testUserDtoOutGetterAndSetter() {
@@ -22,56 +22,43 @@ public class UserDtoOutTest {
     assertEquals("1990-01-01", userDtoOut.getBirthday());
   }
 
-//  @Test
-//  public void testUserDtoOutToString() {
-//    UserDtoOut userDtoOut = new UserDtoOut();
-//    userDtoOut.setId(1L);
-//    userDtoOut.setFirstName("John");
-//    userDtoOut.setLastName("Doe");
-//    userDtoOut.setEmail("john@example.com");
-//    userDtoOut.setBirthday("1990-01-01");
-//
-//    String expectedToString = "UserDtoOut(id=1, firstName=John, lastName=Doe, email=john@example.com, birthday=1990-01-01)";
-//    assertEquals(expectedToString, userDtoOut.toString());
-//  }
-
-  UserDtoIn userTest = new UserDtoIn(1L, "Ivan", "Petrov", "test@org.ua", "05/08/82",
+UserDtoIn userTest = new UserDtoIn(1L, "Ivan", "Petrov", "test@org.ua", "05/08/82",
     "https://klike.net/uploads/posts/2019-03/1551511866_11.jpg",
     "https://www.liga.net/images/general/2019/02/14/20190214174619-9721.png");
 
   @Test
   void getId() {
-    assertEquals(userTest.getId(), 1L);
+    assertEquals(1L, userTest.getId());
   }
 
   @Test
   void getFirstName() {
-    assertEquals(userTest.getFirstName(), "Ivan");
+    assertEquals("Ivan", userTest.getFirstName());
   }
 
   @Test
   void getLastName() {
-    assertEquals(userTest.getLastName(), "Petrov");
+    assertEquals("Petrov", userTest.getLastName());
   }
 
   @Test
   void getEmail() {
-    assertEquals(userTest.getEmail(), "test@org.ua");
+    assertEquals("test@org.ua", userTest.getEmail());
   }
 
   @Test
   void getBirthday() {
-    assertEquals(userTest.getBirthday(), "05/08/82");
+    assertEquals("05/08/82", userTest.getBirthday());
   }
 
   @Test
   void getAvatar() {
-    assertEquals(userTest.getAvatar(), "https://klike.net/uploads/posts/2019-03/1551511866_11.jpg");
+    assertEquals("https://klike.net/uploads/posts/2019-03/1551511866_11.jpg", userTest.getAvatar());
   }
 
   @Test
   void getMainPhoto() {
-    assertEquals(userTest.getMainPhoto(), "https://www.liga.net/images/general/2019/02/14/20190214174619-9721.png");
+    assertEquals("https://www.liga.net/images/general/2019/02/14/20190214174619-9721.png", userTest.getMainPhoto());
   }
   UserDtoIn userTest1 = new UserDtoIn();
   @Test

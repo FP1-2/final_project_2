@@ -49,7 +49,7 @@ class RegistrationControllerTest {
   }
 
   @Test
-  public void testCreateUser() throws Exception {
+  void testCreateUser() throws Exception {
     // Create a UserDtoIn object with valid data
     UserDtoIn userDtoIn = new UserDtoIn();
     userDtoIn.setFirstName("John");
