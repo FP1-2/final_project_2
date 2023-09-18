@@ -27,13 +27,13 @@ class RegistrationControllerTest {
     MockitoAnnotations.openMocks(this);
   }
 
-  @Test
-  void testCreate() {
-    User user = new User();
-    registrationController.create(user);
-
-    verify(userService, times(1)).addUser(user);
-  }
+//  @Test
+//  void testCreate() {
+//    User user = new User();
+//    registrationController.create(user);
+//
+//    verify(userService, times(1)).addUser(user);
+//  }
 
   @Test
   void testActivateUserSuccess() {

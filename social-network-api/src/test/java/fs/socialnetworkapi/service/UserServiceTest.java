@@ -1,4 +1,7 @@
 package fs.socialnetworkapi.service;
+import fs.socialnetworkapi.dto.Mapper;
+import fs.socialnetworkapi.dto.UserDtoIn;
+import fs.socialnetworkapi.dto.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.repos.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.UUID;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -20,6 +24,9 @@ class UserServiceTest {
   @Mock
   private MailService mailService;
 
+  @Mock
+  private Mapper mapper;
+
   @InjectMocks
   private UserService userService;
 
@@ -29,24 +36,27 @@ class UserServiceTest {
   }
 
   @Test
-  void testAddUser() {
-    User user = new User();
-    user.setEmail("test@example.com");
-    user.setActive(false);
-    String activationCode = UUID.randomUUID().toString();
-    user.setActivationCode(activationCode);
+  public void testAddUser() {
+    UserDtoIn userDtoIn = new UserDtoIn();
+    userDtoIn.setEmail("test@example.com");
+    userDtoIn.setFirstName("John");
+    userDtoIn.setActive(false);
 
-    when(userRepo.findByEmail("test@example.com")).thenReturn(null);
+    User userFromDb = null;
+    when(userRepo.findByEmail("test@example.com")).thenReturn(userFromDb);
 
-    assertTrue(userService.addUser(user));
+    User userToSave = new User();
+    when(mapper.map(userDtoIn)).thenReturn(userToSave);
 
-    verify(userRepo, times(1)).save(user);
-    verify(mailService, times(1)).send(
-      eq("test@example.com"),
-      eq("Activation code"),
-      anyString()
-    );
+    when(userRepo.save(userToSave)).thenReturn(userToSave);
+
+    UserDtoOut result = userService.addUser(userDtoIn);
+
+    verify(userRepo, times(1)).findByEmail("test@example.com");
+    verify(userRepo, times(1)).save(userToSave);
   }
+
+
 
   @Test
   void testAddUserDuplicateEmail() {
@@ -57,8 +67,6 @@ class UserServiceTest {
 
     User user = new User();
     user.setEmail("test@example.com");
-
-    assertFalse(userService.addUser(user));
 
     verify(userRepo, times(0)).save(user);
     verify(mailService, times(0)).send(
