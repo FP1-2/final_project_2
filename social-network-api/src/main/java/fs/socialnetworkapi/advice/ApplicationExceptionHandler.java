@@ -19,8 +19,8 @@ public class ApplicationExceptionHandler {
 
     Map<String, Object> errorMap = new HashMap<>();
 
-    ex.getBindingResult().getFieldErrors().forEach(
-            error -> errorMap.put(error.getField(), error.getDefaultMessage()));
+    ex.getBindingResult().getFieldErrors().forEach(error -> errorMap.put(error.getField(), error.getDefaultMessage()));
+
     return errorMap;
   }
 
