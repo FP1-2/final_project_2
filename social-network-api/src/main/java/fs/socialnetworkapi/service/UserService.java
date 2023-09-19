@@ -48,6 +48,7 @@ public class UserService {
   public boolean upgradeUser(User user) {
     throw new RuntimeException();
   }
+
   public User findByEmail(String email) {
     return userRepo.findByEmail(email);
   }
