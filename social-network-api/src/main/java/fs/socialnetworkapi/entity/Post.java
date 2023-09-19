@@ -12,12 +12,12 @@ import lombok.Data;
 @Data
 public class Post extends AbstractEntity {
 
-    private String description;
+  private String description;
 
-    private String photo;
+  private String photo;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
 }

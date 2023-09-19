@@ -13,38 +13,37 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handelInvalidArgument(MethodArgumentNotValidException ex){
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, Object> handelInvalidArgument(MethodArgumentNotValidException ex) {
 
-        Map<String, Object> errorMap = new HashMap<>();
+    Map<String, Object> errorMap = new HashMap<>();
 
-        ex.getBindingResult().getFieldErrors().forEach(
+    ex.getBindingResult().getFieldErrors().forEach(
 
-                error ->{
-                    errorMap.put(error.getField(),error.getDefaultMessage());
-                }
-        );
-        return errorMap;
-    }
+            error -> {
+              errorMap.put(error.getField(), error.getDefaultMessage());
+            });
+    return errorMap;
+  }
 
-    @ExceptionHandler(PostNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handelBusinessEx(PostNotFoundException ex){
+  @ExceptionHandler(PostNotFoundException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, Object> handelBusinessEx(PostNotFoundException ex) {
 
-        Map<String, Object> errorMap = new HashMap<>();
+    Map<String, Object> errorMap = new HashMap<>();
 
-        errorMap.put("errorMessage",ex.getMessage());
-        return errorMap;
-    }
+    errorMap.put("errorMessage", ex.getMessage());
+    return errorMap;
+  }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handelBusinessEx(UserNotFoundException ex){
+  @ExceptionHandler(UserNotFoundException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, Object> handelBusinessEx(UserNotFoundException ex) {
 
-        Map<String, Object> errorMap = new HashMap<>();
+    Map<String, Object> errorMap = new HashMap<>();
 
-        errorMap.put("errorMessage",ex.getMessage());
-        return errorMap;
-    }
+    errorMap.put("errorMessage", ex.getMessage());
+    return errorMap;
+  }
 }

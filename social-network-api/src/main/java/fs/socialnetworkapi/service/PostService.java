@@ -20,49 +20,49 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
 
-    private final PostRepo postRepo;
-    private final UserRepo userRepo;
-    private final Mapper mapper;
-    public List<PostDtoOut> getAllPosts(Long idUser, Integer page, Integer size) {
+  private final PostRepo postRepo;
+  private final UserRepo userRepo;
+  private final Mapper mapper;
 
-        User user = new User();
-        user.setId(idUser);
-        return postRepo.findByUser(user, PageRequest.of(page, size))
-                .stream()
-                .map(mapper::map)
-                .toList();
+  public List<PostDtoOut> getAllPosts(Long idUser, Integer page, Integer size) {
+
+    User user = new User();
+    user.setId(idUser);
+    return postRepo.findByUser(user, PageRequest.of(page, size))
+            .stream()
+            .map(mapper::map)
+            .toList();
+  }
+
+
+  public PostDtoOut save(Long idUser, PostDtoIn postDtoIn) {
+    try {
+      Post post = mapper.map(postDtoIn);
+      User user = new User();
+      user.setId(idUser);
+
+      post.setUser(user);
+      return mapper.map(postRepo.save(post));
+    } catch (EntityNotFoundException ex) {
+      throw new UserNotFoundException("User is not found with id:" + idUser);
     }
+  }
 
+  public void deletePost(Long idUser, Long idPost) {
 
-    public PostDtoOut save(Long idUser, PostDtoIn postDtoIn) {
-        try {
-            Post post = mapper.map(postDtoIn);
-            User user = new User();
-            user.setId(idUser);
+    postRepo.deleteById(idPost);
+  }
 
-            post.setUser(user);
-            return mapper.map(
-                    postRepo.save(post));
-        } catch (EntityNotFoundException ex) {
-            throw new UserNotFoundException("User is not found with id:" + idUser);
-        }
+  public PostDtoOut editePost(PostDtoIn postDtoIn) {
+
+    try {
+      Post post = postRepo.getReferenceById(postDtoIn.getId());
+      post.setDescription(postDtoIn.getDescription());
+      post.setPhoto(postDtoIn.getPhoto());
+
+      return mapper.map(postRepo.save(post));
+    } catch (EntityNotFoundException ex) {
+      throw new PostNotFoundException("Post is not found with id:" + postDtoIn.getId());
     }
-
-    public void deletePost(Long idUser, Long idPost){
-
-        postRepo.deleteById(idPost);
-    }
-
-    public PostDtoOut editePost(PostDtoIn postDtoIn) {
-
-        try {
-            Post post = postRepo.getReferenceById(postDtoIn.getId());
-            post.setDescription(postDtoIn.getDescription());
-            post.setPhoto(postDtoIn.getPhoto());
-
-            return mapper.map(postRepo.save(post));
-        }catch (EntityNotFoundException ex){
-            throw new PostNotFoundException("Post is not found with id:" + postDtoIn.getId());
-        }
-    }
+  }
 }
