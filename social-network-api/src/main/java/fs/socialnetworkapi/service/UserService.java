@@ -45,16 +45,15 @@ public class UserService {
     return true;
   }
 
-    public boolean upgradeUser(User user) {
-        throw new RuntimeException();
-    }
+  public boolean upgradeUser(User user) {
+    throw new RuntimeException();
+  }
+  public User findByEmail(String email) {
+    return userRepo.findByEmail(email);
+  }
 
-    public User findByEmail(String email) {
-        return userRepo.findByEmail(email);
-    }
-
-    public User findByActivationCode(String activationCode) {
-        return userRepo.findByActivationCode(activationCode);
-    }
+  public User findByActivationCode(String activationCode) {
+    return userRepo.findByActivationCode(activationCode);
+  }
 
 }
