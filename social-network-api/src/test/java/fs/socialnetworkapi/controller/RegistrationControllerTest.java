@@ -49,7 +49,7 @@ class RegistrationControllerTest {
   }
 
   @Test
-  public void testCreateUser() throws Exception {
+  void testCreateUser() throws Exception {
     // Create a UserDtoIn object with valid data
     UserDtoIn userDtoIn = new UserDtoIn();
     userDtoIn.setFirstName("John");
@@ -60,7 +60,7 @@ class RegistrationControllerTest {
     String userDtoInJson = objectMapper.writeValueAsString(userDtoIn);
 
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-        .post("/registration")
+        .post("/api/v1/registration")
         .content(userDtoInJson)
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))

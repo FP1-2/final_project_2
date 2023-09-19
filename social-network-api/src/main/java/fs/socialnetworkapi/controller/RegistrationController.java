@@ -20,13 +20,13 @@ public class RegistrationController {
   @Autowired
   private UserService userService;
 
-  @PostMapping("/registration")
+  @PostMapping("/api/v1/registration")
   public UserDtoOut create(@Valid @RequestBody UserDtoIn userDtoIn) {
     return userService.addUser(userDtoIn);
   }
 
 
-  @GetMapping("/activate/{code}")
+  @GetMapping("/api/v1/activate/{code}")
   public String activate(Model model, @PathVariable String code) {
     boolean isActivated = userService.activateUser(code);
 

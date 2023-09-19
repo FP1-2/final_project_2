@@ -2,10 +2,12 @@ package fs.socialnetworkapi.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class UserDtoIn {
 
   private Long id;
@@ -20,7 +22,7 @@ public class UserDtoIn {
   @NotNull
   private String birthday;
   private String avatar;
-  private String mainFoto;
+  private String mainPhoto;
   private String password;
   private boolean active;
   private String activationCode;
@@ -28,5 +30,15 @@ public class UserDtoIn {
   public UserDtoIn() {
   }
 
+  public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String avatar,
+                   String mainPhoto) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.birthday = birthday;
+    this.avatar = avatar;
+    this.mainPhoto = mainPhoto;
+  }
 }
 
