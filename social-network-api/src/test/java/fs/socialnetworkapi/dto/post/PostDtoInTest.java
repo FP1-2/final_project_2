@@ -51,28 +51,4 @@ class PostDtoInTest {
     assertEquals("description2", postDtoIn.getDescription());
   }
 
-  @Test
-  void testEquals() {
-  }
-
-  @Test
-  void canEqual() {
-
-  }
-
-  @Test
-  void testHashCode() {
-  }
-
-  @Test
-  void testToString() {
-  }
-
-  @Test
-  void builder() {
-  }
-
-  @Test
-  void toBuilder() {
-  }
 }

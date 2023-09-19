@@ -3,9 +3,12 @@ package fs.socialnetworkapi.dto.post;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
+@Getter
+@Setter
 @Builder(toBuilder = true)
 public class PostDtoIn {
 
