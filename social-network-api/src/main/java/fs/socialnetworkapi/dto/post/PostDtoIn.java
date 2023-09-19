@@ -8,10 +8,10 @@ import jakarta.validation.constraints.*;
 @Builder(toBuilder = true)
 public class PostDtoIn {
 
-    private Long id;
-    private Long userId;
-    private String photo;
-    @Size(min = 1, max = 280, message = "Description should be between 1 and 280 characters")
-    private String description;
+  private Long id;
+  private Long userId;
+  private String photo;
+  @Size(min = 1, max = 280, message = "Description should be between 1 and 280 characters")
+  private String description;
 
 }

@@ -7,9 +7,9 @@ import lombok.Data;
 @Builder(toBuilder = true)
 public class PostDtoOut {
 
-    private Long id;
-    private Long userId;
-    private String description;
-    private String photo;
+  private Long id;
+  private Long userId;
+  private String description;
+  private String photo;
 
 }
