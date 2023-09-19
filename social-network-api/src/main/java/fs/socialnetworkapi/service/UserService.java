@@ -4,7 +4,6 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -45,8 +44,8 @@ public class UserService {
     return true;
   }
 
-  public boolean upgradeUser(User user) {
-    throw new RuntimeException();
+  public void upgradeUser(User user) {
+    userRepo.save(user);
   }
 
   public User findByEmail(String email) {
