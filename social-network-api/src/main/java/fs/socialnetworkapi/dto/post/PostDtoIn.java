@@ -1,8 +1,9 @@
 package fs.socialnetworkapi.dto.post;
 
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
-import jakarta.validation.constraints.*;
+
 
 @Data
 @Builder(toBuilder = true)

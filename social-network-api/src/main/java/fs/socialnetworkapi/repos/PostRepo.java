@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepo extends JpaRepository<Post, Long> {
 
-    Page<Post> findByUser(User user, Pageable pageable);
+  Page<Post> findByUser(User user, Pageable pageable);
 }
