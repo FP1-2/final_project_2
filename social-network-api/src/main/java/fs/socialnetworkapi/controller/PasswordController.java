@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/reset")
 public class PasswordController {
 
-    @Autowired
-    private final PasswordResetService passwordResetService;
+  @Autowired
+  private final PasswordResetService passwordResetService;
 
-    @PostMapping("/request")
-    public void requestPasswordReset(@RequestBody String email) {
-        passwordResetService.setNewActivationCode(email);
-    }
+  @PostMapping("/request")
+  public void requestPasswordReset(@RequestBody String email) {
+    passwordResetService.setNewActivationCode(email);
+  }
 
-    @PostMapping("/confirm")
-    public void confirmPasswordReset(@RequestBody PasswordResetRequest request) {
-        passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword());
-    }
+  @PostMapping("/confirm")
+  public void confirmPasswordReset(@RequestBody PasswordResetRequest request) {
+    passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword());
+  }
 
 }
