@@ -8,24 +8,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MailService {
-    private final JavaMailSender mailSender;
+  private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.sender.email:test@gmail.com}")
-    private String senderEmail;
+  @Value("${spring.mail.sender.email:test@gmail.com}")
+  private String senderEmail;
 
-    @Autowired
-    public MailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+  @Autowired
+  public MailService(JavaMailSender mailSender) {
+    this.mailSender = mailSender;
+  }
 
-    public void send(String emailTo, String subject, String message) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
+  public void send(String emailTo, String subject, String message) {
+    SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-        mailMessage.setFrom(senderEmail);
-        mailMessage.setTo(emailTo);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(message);
+    mailMessage.setFrom(senderEmail);
+    mailMessage.setTo(emailTo);
+    mailMessage.setSubject(subject);
+    mailMessage.setText(message);
 
-        mailSender.send(mailMessage);
-    }
+    mailSender.send(mailMessage);
+  }
 }
