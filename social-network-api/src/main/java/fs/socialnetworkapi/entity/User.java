@@ -2,23 +2,17 @@ package fs.socialnetworkapi.entity;
 
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Setter
 @Getter
-public class User {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+public class User extends AbstractEntity {
 
   private String firstName;
   private String lastName;
@@ -29,6 +23,9 @@ public class User {
   private String password;
   private boolean active;
   private String activationCode;
+
+  @OneToMany(mappedBy = "user")
+  private List<Post> posts;
 }
 
 
