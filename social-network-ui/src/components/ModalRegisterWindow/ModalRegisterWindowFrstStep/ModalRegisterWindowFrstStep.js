@@ -72,7 +72,6 @@ const initialValuesAlt = {
 }
 
 const ModalRegisterWindowFrstStep = ({
-	modalContent,
 	setIsLoading,
 	isModalOpen,
 	setRegisterStep,
@@ -165,7 +164,7 @@ const ModalRegisterWindowFrstStep = ({
 			}}
 		>
 			<Typography variant='h4' sx={{ mb: 5, fontWeight: '700' }}>
-				{modalContent?.header}
+				Create an account
 			</Typography>
 			<Formik
 				initialValues={initialValues}
@@ -210,7 +209,6 @@ const ModalRegisterWindowFrstStep = ({
 							}}
 							onClick={() =>
 								setIsPhone(prevState => {
-									console.log('123')
 									return !prevState
 								})
 							}
@@ -232,7 +230,7 @@ const ModalRegisterWindowFrstStep = ({
 									marginBottom: '0.1rem',
 								}}
 							>
-								{modalContent.mainInfo.title}
+								Date of birth
 							</Typography>
 							<Typography
 								variant='p'
@@ -240,7 +238,11 @@ const ModalRegisterWindowFrstStep = ({
 									fontSize: '0.90rem',
 								}}
 							>
-								{modalContent.mainInfo.text}
+								Facilisi sem pulvinar velit nunc, gravida scelerisque amet nibh
+								sit. Quis bibendum ante phasellus metus, magna lacinia sed
+								augue. Odio enim nascetur leo mauris vel eget. Pretium id
+								ullamcorper blandit viverra dignissim eget tellus. Nibh mi massa
+								in molestie a sit. Elit congue.
 							</Typography>
 						</Box>
 
@@ -362,7 +364,6 @@ const ModalRegisterWindowFrstStep = ({
 }
 
 ModalRegisterWindowFrstStep.propTypes = {
-	modalContent: PropTypes.object.isRequired,
 	isModalOpen: PropTypes.bool.isRequired,
 	setIsLoading: PropTypes.func.isRequired,
 	setRegisterStep: PropTypes.func.isRequired,
