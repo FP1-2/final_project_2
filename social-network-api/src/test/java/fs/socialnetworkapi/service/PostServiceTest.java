@@ -126,16 +126,12 @@ public class PostServiceTest {
 
         List<PostDtoOut> expectedPostDtoOutList = List.of(PostDtoOut.builder().build(), PostDtoOut.builder().build());
 
-        // Макетування поведінки
-
         Mockito.when(postRepo.findByUser(any(User.class), eq(PageRequest.of(page, size)))).thenReturn(pageOfPosts);
         Mockito.when(mapper.map(posts.get(0))).thenReturn(expectedPostDtoOutList.get(0));
         Mockito.when(mapper.map(posts.get(1))).thenReturn(expectedPostDtoOutList.get(1));
 
-        // Виклик методу getAllPosts
         List<PostDtoOut> result = postService.getAllPosts(idUser, page, size);
 
-        // Перевірка результату
         assertEquals(expectedPostDtoOutList, result);
     }
 }
