@@ -25,7 +25,7 @@ public class User {
   private String email;
   private String birthday;
   private String avatar;
-  private String mainFoto;
+  private String mainPhoto;
   private String password;
   private boolean active;
   private String activationCode;
