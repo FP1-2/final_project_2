@@ -46,4 +46,17 @@ public class UserService {
     userRepo.save(user);
     return true;
   }
+
+  public void upgradeUser(User user) {
+    userRepo.save(user);
+  }
+
+  public User findByEmail(String email) {
+    return userRepo.findByEmail(email);
+  }
+
+  public User findByActivationCode(String activationCode) {
+    return userRepo.findByActivationCode(activationCode);
+  }
+
 }
