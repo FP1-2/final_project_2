@@ -36,19 +36,15 @@ public class PostService {
 
 
   public PostDtoOut save(Long idUser, PostDtoIn postDtoIn) {
-    try {
       Post post = mapper.map(postDtoIn);
       User user = new User();
       user.setId(idUser);
 
       post.setUser(user);
       return mapper.map(postRepo.save(post));
-    } catch (EntityNotFoundException ex) {
-      throw new UserNotFoundException("User is not found with id:" + idUser);
-    }
   }
 
-  public void deletePost(Long idUser, Long idPost) {
+  public void deletePost(Long idPost) {
 
     postRepo.deleteById(idPost);
   }

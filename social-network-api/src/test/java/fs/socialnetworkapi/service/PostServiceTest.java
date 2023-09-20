@@ -5,6 +5,7 @@ import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -109,6 +111,20 @@ public class PostServiceTest {
         PostDtoOut result = postService.editePost(postDtoIn);
         assertNotNull(result);
         assertEquals(expectedPostDtoOut, result);
+    }
+    @Test
+    public void testEditePostWhenPostNotFound() throws PostNotFoundException{
+        PostDtoIn postDtoIn = PostDtoIn.builder()
+                .id(1L)
+                .userId(1L)
+                .description("Description")
+                .photo("Photo")
+                .build();
+
+        Mockito.when(postRepo.getReferenceById(postDtoIn.getId())).thenThrow(
+                new PostNotFoundException("Post is not found with id:" + postDtoIn.getId()));
+
+        assertThrows(PostNotFoundException.class, () -> postService.editePost(postDtoIn));
     }
 
     @Test
