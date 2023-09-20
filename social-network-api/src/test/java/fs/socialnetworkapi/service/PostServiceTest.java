@@ -120,11 +120,17 @@ public class PostServiceTest {
 
         User user = new User();
         user.setId(idUser);
+        Post post1 = new Post();
+        post1.setId(1L);
+        post1.setUser(user);
 
-        List<Post> posts = List.of(new Post(), new Post());
+        Post post2 = new Post();
+        post2.setId(2L);
+        post2.setUser(user);
+        List<Post> posts = List.of(post1, post2);
         Page<Post> pageOfPosts = new PageImpl<>(posts);
 
-        List<PostDtoOut> expectedPostDtoOutList = List.of(PostDtoOut.builder().build(), PostDtoOut.builder().build());
+        List<PostDtoOut> expectedPostDtoOutList = List.of(PostDtoOut.builder().id(1L).userId(idUser).build(), PostDtoOut.builder().id(2L).userId(idUser).build());
 
         Mockito.when(postRepo.findByUser(any(User.class), eq(PageRequest.of(page, size)))).thenReturn(pageOfPosts);
         Mockito.when(mapper.map(posts.get(0))).thenReturn(expectedPostDtoOutList.get(0));

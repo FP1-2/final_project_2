@@ -53,4 +53,57 @@ class PostDtoOutTest {
     assertEquals("Photo2", postDtoOut.getPhoto());
   }
 
+  @Test
+  void testEquals(){
+    PostDtoOut postDtoOut1 = PostDtoOut.builder()
+            .id(1L)
+            .userId(1L)
+            .photo("photo")
+            .description("desc").build();
+
+    PostDtoOut postDtoOut2 = postDtoOut1;
+
+    PostDtoOut postDtoOut3 = PostDtoOut.builder()
+            .id(1L)
+            .userId(1L)
+            .photo("photo2")
+            .description("desc").build();
+
+    PostDtoOut postDtoOut4 = PostDtoOut.builder()
+            .id(2L)
+            .userId(1L)
+            .photo("photo")
+            .description("desc").build();
+
+    assertEquals(postDtoOut1,postDtoOut2);
+    assertNotEquals(postDtoOut1,postDtoOut3);
+    assertEquals(postDtoOut1,postDtoOut4);
+  }
+
+  @Test
+  void testHashCode(){
+    PostDtoOut postDtoOut1 = PostDtoOut.builder()
+            .id(1L)
+            .userId(1L)
+            .photo("photo")
+            .description("desc").build();
+
+    PostDtoOut postDtoOut2 = postDtoOut1;
+
+    PostDtoOut postDtoOut3 = PostDtoOut.builder()
+            .id(1L)
+            .userId(1L)
+            .photo("photo2")
+            .description("desc").build();
+
+    PostDtoOut postDtoOut4 = PostDtoOut.builder()
+            .id(2L)
+            .userId(1L)
+            .photo("photo")
+            .description("desc").build();
+
+    assertEquals(postDtoOut1.hashCode(),postDtoOut2.hashCode());
+    assertNotEquals(postDtoOut1.hashCode(),postDtoOut3.hashCode());
+    assertEquals(postDtoOut1.hashCode(),postDtoOut4.hashCode());
+  }
 }
