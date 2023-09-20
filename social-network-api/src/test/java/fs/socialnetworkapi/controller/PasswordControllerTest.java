@@ -1,7 +1,7 @@
 package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.entity.PasswordResetRequest;
+import fs.socialnetworkapi.dto.PasswordResetRequest;
 import fs.socialnetworkapi.service.PasswordResetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
