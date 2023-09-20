@@ -17,10 +17,10 @@ public class PostDtoOut {
   private String photo;
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    PostDtoOut that = (PostDtoOut) o;
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    PostDtoOut that = (PostDtoOut) obj;
     return Objects.equals(userId, that.userId) && Objects.equals(description, that.description) && Objects.equals(photo, that.photo);
   }
 
