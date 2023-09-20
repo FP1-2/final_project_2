@@ -36,12 +36,12 @@ public class PostService {
 
 
   public PostDtoOut save(Long idUser, PostDtoIn postDtoIn) {
-      Post post = mapper.map(postDtoIn);
-      User user = new User();
-      user.setId(idUser);
+    Post post = mapper.map(postDtoIn);
+    User user = new User();
+    user.setId(idUser);
 
-      post.setUser(user);
-      return mapper.map(postRepo.save(post));
+    post.setUser(user);
+    return mapper.map(postRepo.save(post));
   }
 
   public void deletePost(Long idPost) {
