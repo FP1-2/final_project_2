@@ -6,7 +6,6 @@ import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
-import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
