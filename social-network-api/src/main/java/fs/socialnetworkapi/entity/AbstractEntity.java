@@ -12,7 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public class AbstractEntity {
+public abstract class AbstractEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Getter
