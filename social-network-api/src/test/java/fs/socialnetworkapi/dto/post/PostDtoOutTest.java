@@ -64,21 +64,27 @@ class PostDtoOutTest {
     PostDtoOut postDtoOut2 = postDtoOut1;
 
     PostDtoOut postDtoOut3 = PostDtoOut.builder()
-            .id(1L)
+            .id(2L)
             .userId(1L)
             .photo("photo2")
             .description("desc2").build();
 
     PostDtoOut postDtoOut4 = PostDtoOut.builder()
-            .id(2L)
+            .id(3L)
             .userId(1L)
             .photo("photo")
             .description("desc").build();
 
     PostDtoOut postDtoOut5 = PostDtoOut.builder()
-            .id(1L)
+            .id(4L)
             .userId(1L)
             .photo("photo2")
+            .description("desc").build();
+
+    PostDtoOut postDtoOut6 = PostDtoOut.builder()
+            .id(5L)
+            .userId(2L)
+            .photo("photo")
             .description("desc").build();
 
     PostDtoIn postDtoIn = PostDtoIn.builder().build();
@@ -89,6 +95,7 @@ class PostDtoOutTest {
     assertNotEquals(postDtoOut1,postDtoOut3);
     assertNotEquals(postDtoOut1,null);
     assertNotEquals(postDtoOut1,postDtoOut5);
+    assertNotEquals(postDtoOut1,postDtoOut6);
     assertFalse(postDtoOut1.equals(postDtoIn));
   }
 
