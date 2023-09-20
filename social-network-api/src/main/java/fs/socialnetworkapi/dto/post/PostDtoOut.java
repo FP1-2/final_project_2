@@ -18,10 +18,16 @@ public class PostDtoOut {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null || getClass() != obj.getClass()) return false;
+    if (this == obj){
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()){
+      return false;
+    }
     PostDtoOut that = (PostDtoOut) obj;
-    return Objects.equals(userId, that.userId) && Objects.equals(description, that.description) && Objects.equals(photo, that.photo);
+    return Objects.equals(userId, that.userId)
+            && Objects.equals(description, that.description)
+            && Objects.equals(photo, that.photo);
   }
 
   @Override
