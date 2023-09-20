@@ -9,11 +9,13 @@ import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,11 +42,13 @@ public class PostServiceTest {
     @Mock
     private Mapper mapper;
 
-    @Mock
-    private Pageable mockPageable;
-
     @InjectMocks
     private PostService postService;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     public void testSave() {
@@ -155,5 +159,15 @@ public class PostServiceTest {
         List<PostDtoOut> result = postService.getAllPosts(idUser, page, size);
 
         assertEquals(expectedPostDtoOutList, result);
+    }
+
+    @Test
+    public void testDeletePost() {
+
+        Long idPost = 1L;
+        PostService postService1 = new PostService(postRepo,userRepo,mapper);
+        postService1.deletePost(idPost);
+        Mockito.verify(postRepo).deleteById(idPost);
+
     }
 }

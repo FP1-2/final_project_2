@@ -77,6 +77,7 @@ class PostDtoOutTest {
 
     assertEquals(postDtoOut1,postDtoOut2);
     assertNotEquals(postDtoOut1,postDtoOut3);
+    assertNotEquals(postDtoOut1,null);
     assertEquals(postDtoOut1,postDtoOut4);
   }
 
