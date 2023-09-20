@@ -15,7 +15,7 @@ class UserTest {
     user.setEmail("john@example.com");
     user.setBirthday("1990-01-01");
     user.setAvatar("avatar.jpg");
-    user.setMainFoto("main.jpg");
+    user.setMainPhoto("main.jpg");
     user.setPassword("password");
     user.setActive(true);
     user.setActivationCode("123456");
@@ -26,7 +26,7 @@ class UserTest {
     assertEquals("john@example.com", user.getEmail());
     assertEquals("1990-01-01", user.getBirthday());
     assertEquals("avatar.jpg", user.getAvatar());
-    assertEquals("main.jpg", user.getMainFoto());
+    assertEquals("main.jpg", user.getMainPhoto());
     assertEquals("password", user.getPassword());
     assertEquals(true, user.isActive());
     assertEquals("123456", user.getActivationCode());
