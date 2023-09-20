@@ -45,11 +45,6 @@ public class PostServiceTest {
     @InjectMocks
     private PostService postService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     public void testSave() {
 
