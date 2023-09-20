@@ -8,6 +8,7 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -121,8 +122,7 @@ public class PostServiceTest {
                 .photo("Photo")
                 .build();
 
-        Mockito.when(postRepo.getReferenceById(postDtoIn.getId())).thenThrow(
-                new PostNotFoundException("Post is not found with id:" + postDtoIn.getId()));
+        Mockito.when(postRepo.getReferenceById(postDtoIn.getId())).thenThrow(new EntityNotFoundException());
 
         assertThrows(PostNotFoundException.class, () -> postService.editePost(postDtoIn));
     }
