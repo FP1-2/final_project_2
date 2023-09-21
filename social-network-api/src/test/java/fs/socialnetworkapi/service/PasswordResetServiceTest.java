@@ -45,7 +45,7 @@ class PasswordResetServiceTest {
     passwordResetService.sendActivationCode(user);
 
     verify(mailService, times(1)).send(eq("test@example.com"), eq("Password Reset"), anyString());
-    String expectedLink = "http://localhost:5000/reset/confirm?code=" + user.getActivationCode();
+    String expectedLink = "http://twitterdemo.us-east-1.elasticbeanstalk.com/reset/confirm?code=" + user.getActivationCode();
     verify(mailService).send(eq("test@example.com"), eq("Password Reset"), contains(expectedLink));
   }
 
