@@ -1,4 +1,4 @@
-package fs.socialnetworkapi.entity;
+package fs.socialnetworkapi.dto;
 
 import lombok.Getter;
 import lombok.Setter;

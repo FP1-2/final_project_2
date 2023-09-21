@@ -28,7 +28,7 @@ public class PasswordResetService {
   }
 
   public void sendActivationCode(User user) {
-    String link = "http://localhost:5000/reset/confirm?code=" + generateActivationCode(user);
+    String link = "http://twitterdemo.us-east-1.elasticbeanstalk.com/reset/confirm?code=" + generateActivationCode(user);
     String message = "To reset your password, click the following link: " + link;
     mailService.send(user.getEmail(), "Password Reset", message);
   }

@@ -1,7 +1,7 @@
 package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.entity.PasswordResetRequest;
+import fs.socialnetworkapi.dto.PasswordResetRequest;
 import fs.socialnetworkapi.service.PasswordResetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class PasswordControllerTest {
   public void testRequestPasswordReset() throws Exception {
     String email = "test@example.com";
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/reset/request")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/reset/request")
                     .content(email)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
@@ -50,7 +50,7 @@ public class PasswordControllerTest {
     request.setActivationCode("12345");
     request.setNewPassword("newPassword");
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/reset/confirm")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/reset/confirm")
                     .content(asJsonString(request))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
