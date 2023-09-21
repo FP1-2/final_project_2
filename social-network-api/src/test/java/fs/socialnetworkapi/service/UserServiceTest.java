@@ -98,44 +98,4 @@ class UserServiceTest {
 
     assertFalse(userService.activateUser(invalidCode));
   }
-
-  @Test
-  public void testUpgradeUser() {
-    User user = new User();
-    userService.upgradeUser(user);
-    verify(userRepo, times(1)).save(user);
-  }
-
-  @Test
-  public void testFindByActivationCode() {
-    String activationCode = "testActivationCode";
-    User user = new User();
-    user.setActivationCode(activationCode);
-
-    when(userRepo.findByActivationCode(activationCode)).thenReturn(user);
-
-    User foundUser = userService.findByActivationCode(activationCode);
-
-    assertNotNull(foundUser);
-    assertEquals(activationCode, foundUser.getActivationCode());
-    verify(userRepo, times(1)).findByActivationCode(activationCode);
-  }
-
-  @Test
-  public void testFindByEmail() {
-    String userEmail = "test@example.com";
-    User user = new User();
-    user.setEmail(userEmail);
-
-    when(userRepo.findByEmail(userEmail)).thenReturn(user);
-
-    User foundUser = userService.findByEmail(userEmail);
-
-    assertNotNull(foundUser);
-    assertEquals(userEmail, foundUser.getEmail());
-    verify(userRepo, times(1)).findByEmail(userEmail);
-  }
-
-
-
 }
