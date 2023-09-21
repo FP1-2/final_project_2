@@ -24,6 +24,7 @@ public class UserController {
     userService.subscribe(currentUserId, userId);
     return ResponseEntity.ok().build();
   }
+
   @GetMapping("user/{current_user_id}/unsubscribe/{user_id}")
   public ResponseEntity<?> unsubscribe(@PathVariable("current_user_id") Long currentUserId,
                                      @PathVariable("user_id") Long userId) {
@@ -33,13 +34,13 @@ public class UserController {
 
   @GetMapping("user/{current_user_id}/followers") //підписчики
   public ResponseEntity<List<UserDtoOut>> getFollowers(@PathVariable("current_user_id") Long currentUserId) {
-    List<UserDtoOut> followers= userService.getFollowers(currentUserId);
+    List<UserDtoOut> followers = userService.getFollowers(currentUserId);
     return ResponseEntity.ok(followers);
   }
 
   @GetMapping("user/{current_user_id}/followings") //підписки
   public ResponseEntity<List<UserDtoOut>> getFollowings(@PathVariable("current_user_id") Long currentUserId) {
-    List<UserDtoOut> followings= userService.getFollowings(currentUserId);
+    List<UserDtoOut> followings = userService.getFollowings(currentUserId);
     return ResponseEntity.ok(followings);
   }
 

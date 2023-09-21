@@ -33,6 +33,7 @@ public class ApplicationExceptionHandler {
     errorMap.put("errorMessage", ex.getMessage());
     return errorMap;
   }
+
   @ExceptionHandler(UserNotFoundException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public Map<String, Object> handelBusinessEx(UserNotFoundException ex) {

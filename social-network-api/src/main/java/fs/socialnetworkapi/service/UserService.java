@@ -60,6 +60,7 @@ public class UserService {
   public User findByActivationCode(String activationCode) {
     return userRepo.findByActivationCode(activationCode);
   }
+
   public void subscribe(Long currentUserId, Long userId) {
 
     User currentUser = userRepo.findById(currentUserId)
