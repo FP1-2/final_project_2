@@ -6,6 +6,7 @@ import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,8 @@ public class RegistrationController {
   private UserService userService;
 
   @PostMapping("/api/v1/registration")
-  public UserDtoOut create(@Valid @RequestBody UserDtoIn userDtoIn) {
-    return userService.addUser(userDtoIn);
+  public ResponseEntity<UserDtoOut> create(@Valid @RequestBody UserDtoIn userDtoIn) {
+    return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
 
 

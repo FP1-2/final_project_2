@@ -2,12 +2,7 @@ package fs.socialnetworkapi.entity;
 
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,17 +26,17 @@ public class User extends AbstractEntity {
   private boolean active;
   private String activationCode;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Post> posts;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
           name = "subscriptions",
           joinColumns = {@JoinColumn(name = "follower_is")},
           inverseJoinColumns = {@JoinColumn(name = "following_id")})
   private Set<User> followers = new HashSet<>();
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
           name = "subscriptions",
           joinColumns = {@JoinColumn(name = "following_id")},
