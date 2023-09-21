@@ -39,4 +39,17 @@ class ApplicationExceptionHandlerTest {
 
   }
 
+  @Test
+  void testHandelUserNotFoundEx(){
+
+    // Arrange
+    PostNotFoundException exception = new PostNotFoundException("User not found");
+
+    // Act
+    Map<String, Object> result = applicationExceptionHandler.handelBusinessEx(exception);
+
+    assertEquals("User not found", result.get("errorMessage"));
+
+  }
+
 }
