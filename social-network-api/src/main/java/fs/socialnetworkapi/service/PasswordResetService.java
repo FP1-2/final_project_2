@@ -33,8 +33,11 @@ public class PasswordResetService {
     mailService.send(user.getEmail(), "Password Reset", message);
   }
 
-  public void setNewActivationCode(String email) {
-    findByEmail(email).ifPresent(this::sendActivationCode);
+  public boolean setNewActivationCode(String email) {
+    Optional<User> findUser = findByEmail(email);
+    if (findUser.isEmpty()) return false;
+    sendActivationCode(findUser.get());
+    return true;
   }
 
   public Optional<User> findByActivationCode(String activationCode) {
@@ -46,9 +49,11 @@ public class PasswordResetService {
     userService.upgradeUser(user);
   }
 
-  public void changePassword(String activationCode, String newPassword) {
-    Optional<User> user = findByActivationCode(activationCode);
-    user.ifPresent(value -> setNewPassword(value, newPassword));
+  public boolean changePassword(String activationCode, String newPassword) {
+    Optional<User> findUser = findByActivationCode(activationCode);
+    if (findUser.isEmpty()) return false;
+    setNewPassword(findUser.get(), newPassword);
+    return true;
   }
 
 }
