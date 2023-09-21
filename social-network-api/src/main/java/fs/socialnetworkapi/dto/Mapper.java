@@ -1,5 +1,8 @@
 package fs.socialnetworkapi.dto;
 
+import fs.socialnetworkapi.dto.post.PostDtoIn;
+import fs.socialnetworkapi.dto.post.PostDtoOut;
+import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -15,6 +18,10 @@ public class Mapper {
       .setMatchingStrategy(MatchingStrategies.STRICT);
     this.modelMapper
       .createTypeMap(User.class, UserDtoOut.class);
+
+    //Post
+    this.modelMapper.createTypeMap(Post.class, PostDtoOut.class)
+            .addMappings(mapper -> mapper.map(src -> src.getUser().getId(), PostDtoOut::setUserId));
   }
 
   public UserDtoOut map(User user) {
@@ -25,4 +32,11 @@ public class Mapper {
     return this.modelMapper.map(userDtoIn, User.class);
   }
 
+  public PostDtoOut map(Post post) {
+    return this.modelMapper.map(post, PostDtoOut.class);
+  }
+
+  public Post map(PostDtoIn post) {
+    return this.modelMapper.map(post, Post.class);
+  }
 }
