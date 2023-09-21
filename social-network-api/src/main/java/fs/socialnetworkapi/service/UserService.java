@@ -63,11 +63,9 @@ public class UserService {
   public void subscribe(Long currentUserId, Long userId) {
 
     User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(
-                    () -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
     User user = userRepo.findById(userId)
-            .orElseThrow(
-                    () -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
 
     user.getFollowers().add(currentUser);
     userRepo.save(user);
@@ -75,11 +73,9 @@ public class UserService {
 
   public void unsubscribe(Long currentUserId, Long userId) {
     User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(
-                    () -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
     User user = userRepo.findById(userId)
-            .orElseThrow(
-                    () -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
 
     user.getFollowers().remove(currentUser);
     userRepo.save(user);
@@ -87,8 +83,7 @@ public class UserService {
 
   public List<UserDtoOut> getFollowers(Long currentUserId) {
     User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(
-                    () -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
 
     return currentUser.getFollowers()
             .stream()
@@ -98,8 +93,7 @@ public class UserService {
 
   public List<UserDtoOut> getFollowings(Long currentUserId) {
     User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(
-                    () -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
 
     return currentUser.getFollowings()
             .stream()
