@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.advice;
 
 import fs.socialnetworkapi.exception.PostNotFoundException;
+import fs.socialnetworkapi.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,7 +44,7 @@ class ApplicationExceptionHandlerTest {
   void testHandelUserNotFoundEx(){
 
     // Arrange
-    PostNotFoundException exception = new PostNotFoundException("User not found");
+    UserNotFoundException exception = new UserNotFoundException("User not found");
 
     // Act
     Map<String, Object> result = applicationExceptionHandler.handelBusinessEx(exception);
