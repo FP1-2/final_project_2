@@ -6,6 +6,7 @@ import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
+import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -25,20 +27,25 @@ public class PostService {
 
   public List<PostDtoOut> getAllPosts(Long idUser, Integer page, Integer size) {
 
-    User user = new User();
-    user.setId(idUser);
-    return postRepo.findByUser(user, PageRequest.of(page, size))
+    User user = userRepo.findById(idUser)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
+
+    Set<User> followings = user.getFollowings();
+    followings.add(user);
+    List<User> users = followings.stream().toList();
+
+    return postRepo.findByUserIn(users, PageRequest.of(page, size))
             .stream()
             .map(mapper::map)
             .toList();
   }
 
-
   public PostDtoOut save(Long idUser, PostDtoIn postDtoIn) {
-    Post post = mapper.map(postDtoIn);
-    User user = new User();
-    user.setId(idUser);
 
+    User user = userRepo.findById(idUser)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
+
+    Post post = mapper.map(postDtoIn);
     post.setUser(user);
     return mapper.map(postRepo.save(post));
   }
