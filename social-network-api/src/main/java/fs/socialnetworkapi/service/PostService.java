@@ -35,9 +35,20 @@ public class PostService {
     followings.add(user);
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
 
-    return postRepo.findByUserIn(users, PageRequest.of(page, size))
+//    return postRepo.findByUserIn(users, PageRequest.of(page, size))
+//            .stream()
+//            .map(mapper::map)
+//            .toList();
+    List<Long> idList = user.getReposts().stream().map(Post::getId).toList();
+    return postRepo.findByUserInOrIdIn(users, idList, PageRequest.of(page, size))
             .stream()
             .map(mapper::map)
+            .peek(postDtoOut -> {
+              if (!postDtoOut.getUserId().equals(idUser)){
+                postDtoOut.setIsRepost(true);
+                postDtoOut.setUsersReposts(List.of());
+              }
+            })
             .toList();
   }
 
@@ -67,5 +78,16 @@ public class PostService {
     } catch (EntityNotFoundException ex) {
       throw new PostNotFoundException("Post is not found with id:" + postDtoIn.getId());
     }
+  }
+
+  public PostDtoOut saveRepost(Long idUser, Long idPost) {
+    User user = userRepo.findById(idUser)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
+    Post post = postRepo.findById(idPost)
+            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", idPost)));
+
+    post.getUsersReposts().add(user);
+
+    return mapper.map(postRepo.save(post));
   }
 }

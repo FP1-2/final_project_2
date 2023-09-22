@@ -13,4 +13,6 @@ import java.util.List;
 public interface PostRepo extends JpaRepository<Post, Long> {
 
   Page<Post> findByUserIn(List<User> users, Pageable pageable);
+
+  Page<Post> findByUserInOrIdIn(List<User> users, List<Long> Id, Pageable pageable);
 }

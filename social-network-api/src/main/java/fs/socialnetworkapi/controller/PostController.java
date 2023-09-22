@@ -54,4 +54,11 @@ public class PostController {
     return ResponseEntity.ok(postDtoOut);
   }
 
+  @PostMapping("user/{user_id}/post/{post_id}/repost")
+  public ResponseEntity<PostDtoOut> addRepost(@PathVariable("user_id") Long idUser,
+                                              @PathVariable("post_id") Long idPost) {
+    PostDtoOut postDtoOut = postService.saveRepost(idUser, idPost);
+    return ResponseEntity.ok(postDtoOut);
+  }
+
 }

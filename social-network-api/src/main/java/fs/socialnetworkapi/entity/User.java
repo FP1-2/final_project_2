@@ -37,8 +37,15 @@ public class User extends AbstractEntity {
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
+          name = "reposts",
+          joinColumns = {@JoinColumn(name = "user_id")},
+          inverseJoinColumns = {@JoinColumn(name = "original_post_id")})
+  private Set<Post> reposts = new HashSet<>();
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
           name = "subscriptions",
-          joinColumns = {@JoinColumn(name = "follower_is")},
+          joinColumns = {@JoinColumn(name = "follower_id")},
           inverseJoinColumns = {@JoinColumn(name = "following_id")})
   private Set<User> followers = new HashSet<>();
 
@@ -46,7 +53,7 @@ public class User extends AbstractEntity {
   @JoinTable(
           name = "subscriptions",
           joinColumns = {@JoinColumn(name = "following_id")},
-          inverseJoinColumns = {@JoinColumn(name = "follower_is")})
+          inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
 
 }
