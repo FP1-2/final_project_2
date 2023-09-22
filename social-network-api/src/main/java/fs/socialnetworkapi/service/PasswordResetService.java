@@ -35,7 +35,9 @@ public class PasswordResetService {
 
   public boolean setNewActivationCode(String email) {
     Optional<User> findUser = findByEmail(email);
-    if (findUser.isEmpty()) return false;
+    if (findUser.isEmpty()) {
+      return false;
+    }
     sendActivationCode(findUser.get());
     return true;
   }
@@ -51,7 +53,9 @@ public class PasswordResetService {
 
   public boolean changePassword(String activationCode, String newPassword) {
     Optional<User> findUser = findByActivationCode(activationCode);
-    if (findUser.isEmpty()) return false;
+    if (findUser.isEmpty()) {
+      return false;
+    }
     setNewPassword(findUser.get(), newPassword);
     return true;
   }
