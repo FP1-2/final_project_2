@@ -223,8 +223,6 @@ public class PostServiceTest {
 
         Mockito.when(mapper.map(post1)).thenReturn(postDto1);
         Mockito.when(mapper.map(post2)).thenReturn(postDto2);
-//        Mockito.when(mapper.map(post3)).thenReturn(postDto3);
-//        Mockito.when(mapper.map(post4)).thenReturn(postDto4);
         Mockito.when(mapper.map(post5)).thenReturn(postDto5);
         Mockito.when(mapper.map(post6)).thenReturn(postDto6);
         Mockito.when(mapper.map(post7)).thenReturn(postDto7);
