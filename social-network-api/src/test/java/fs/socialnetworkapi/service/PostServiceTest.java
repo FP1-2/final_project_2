@@ -217,7 +217,7 @@ public class PostServiceTest {
                 postDto6,
                 postDto7);
 
-        List<User> users = List.of(user1, subscription1, subscription2);
+        List<User> users = List.of(user1,subscription1, subscription2);
         Mockito.when(userRepo.findById(idUser)).thenReturn(Optional.of(user1));
         Mockito.when(postRepo.findByUserIn(eq(users), eq(PageRequest.of(page, size)))).thenReturn(pageOfPosts);
 

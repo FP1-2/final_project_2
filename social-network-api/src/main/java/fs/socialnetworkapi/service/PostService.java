@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class PostService {
 
     Set<User> followings = user.getFollowings();
     followings.add(user);
-    List<User> users = followings.stream().toList();
+    List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId()- user2.getId())).toList();
 
     return postRepo.findByUserIn(users, PageRequest.of(page, size))
             .stream()
