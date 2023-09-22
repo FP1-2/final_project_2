@@ -46,14 +46,14 @@ public class PostControllerTest {
                 .photo("URL photo")
                 .build();
 
-        PostDtoOut postDtoOut = PostDtoOut.builder()
+        PostDtoOut postDtoOut1 = PostDtoOut.builder()
                 .id(1L)
                 .userId(1L)
                 .description("New Description")
                 .photo("URL photo")
                 .build();
 
-        Mockito.when(postService.save(eq(1L), any(PostDtoIn.class))).thenReturn(postDtoOut);
+        Mockito.when(postService.save(eq(1L), any(PostDtoIn.class))).thenReturn(postDtoOut1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/user/{user_id}/post", 1)
@@ -64,7 +64,7 @@ public class PostControllerTest {
                 .andReturn();
 
         String responseJson = mvcResult.getResponse().getContentAsString();
-        postDtoOut = objectMapper.readValue(responseJson, PostDtoOut.class);
+        PostDtoOut postDtoOut = objectMapper.readValue(responseJson, PostDtoOut.class);
 
         assertEquals(1L, postDtoOut.getId());
         assertEquals(1L, postDtoOut.getUserId());

@@ -4,10 +4,12 @@ import fs.socialnetworkapi.dto.Mapper;
 import fs.socialnetworkapi.dto.UserDtoIn;
 import fs.socialnetworkapi.dto.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -59,4 +61,44 @@ public class UserService {
     return userRepo.findByActivationCode(activationCode);
   }
 
+  public void subscribe(Long currentUserId, Long userId) {
+
+    User currentUser = userRepo.findById(currentUserId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+    User user = userRepo.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+
+    user.getFollowers().add(currentUser);
+    userRepo.save(user);
+  }
+
+  public void unsubscribe(Long currentUserId, Long userId) {
+    User currentUser = userRepo.findById(currentUserId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+    User user = userRepo.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+
+    user.getFollowers().remove(currentUser);
+    userRepo.save(user);
+  }
+
+  public List<UserDtoOut> getFollowers(Long currentUserId) {
+    User currentUser = userRepo.findById(currentUserId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+
+    return currentUser.getFollowers()
+            .stream()
+            .map(mapper::map)
+            .toList();
+  }
+
+  public List<UserDtoOut> getFollowings(Long currentUserId) {
+    User currentUser = userRepo.findById(currentUserId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+
+    return currentUser.getFollowings()
+            .stream()
+            .map(mapper::map)
+            .toList();
+  }
 }
