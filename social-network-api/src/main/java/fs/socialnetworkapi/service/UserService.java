@@ -22,7 +22,7 @@ public class UserService {
     if (userFromDb != null) {
       return mapper.map(userFromDb);
     }
-    userDtoIn.setActive(true);
+    userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
@@ -43,6 +43,7 @@ public class UserService {
       return false;
     }
     user.setActivationCode(null);
+    user.setActive(true);
     userRepo.save(user);
     return true;
   }

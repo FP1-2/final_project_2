@@ -1,7 +1,5 @@
 package fs.socialnetworkapi.entity;
 
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;

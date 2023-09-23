@@ -43,7 +43,7 @@ spring:
       path: /h2
   jpa:
     hibernate:
-      ddl-auto: create-drop #update
+      ddl-auto: update #create-drop #update
     generate-ddl: true
     show-sql: true
     properties:
@@ -68,7 +68,7 @@ spring:
         bootstrap-mode: deferred #default
   jpa:
     hibernate:
-      ddl-auto: create-drop #update
+      ddl-auto: update #create-drop #update
     generate-ddl: true
     show-sql: true
     properties:
