@@ -1,4 +1,4 @@
-package fs.socialnetworkapi.dto;
+package fs.socialnetworkapi.dto.password;
 
 import lombok.Getter;
 import lombok.Setter;

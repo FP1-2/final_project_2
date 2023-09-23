@@ -1,6 +1,6 @@
 package fs.socialnetworkapi.controller;
 
-import fs.socialnetworkapi.dto.PasswordResetRequest;
+import fs.socialnetworkapi.dto.password.PasswordResetRequest;
 import fs.socialnetworkapi.service.PasswordResetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

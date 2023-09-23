@@ -1,7 +1,7 @@
 package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.Mapper;
-import fs.socialnetworkapi.dto.UserDtoIn;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoIn;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.repos.UserRepo;
 import org.junit.jupiter.api.BeforeEach;

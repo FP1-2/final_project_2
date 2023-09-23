@@ -1,12 +1,13 @@
 package fs.socialnetworkapi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,17 @@ public class User extends AbstractEntity {
 
   @OneToMany(mappedBy = "user")
   private List<Post> posts;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  private Set<RoleEntity> roles;
+
+  public Set<RoleEntity> getRoles() {
+    return roles;
+  }
+
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return this.roles;
+  }
 }
 
 

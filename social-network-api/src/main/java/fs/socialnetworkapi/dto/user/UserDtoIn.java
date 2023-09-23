@@ -1,4 +1,4 @@
-package fs.socialnetworkapi.dto;
+package fs.socialnetworkapi.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

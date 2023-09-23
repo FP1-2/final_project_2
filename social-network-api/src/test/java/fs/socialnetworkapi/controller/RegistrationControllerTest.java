@@ -1,8 +1,8 @@
 package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.dto.UserDtoIn;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoIn;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,6 @@ import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
