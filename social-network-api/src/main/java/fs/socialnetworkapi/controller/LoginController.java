@@ -16,10 +16,7 @@ public class LoginController {
   private final SecurityService securityService;
   @PostMapping("api/v1/login")
   public LoginDtoOut login(@RequestBody LoginDtoIn loginDtoIn){
-
     TokenDetails tokenDetails = securityService.authenticate(loginDtoIn.getEmail(), loginDtoIn.getPassword());
-    System.out.println(tokenDetails);
-
     return LoginDtoOut
       .builder()
       .id(tokenDetails.getUserId())

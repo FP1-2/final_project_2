@@ -2,8 +2,12 @@ package fs.socialnetworkapi.security;
 
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.service.UserService;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.apache.tools.ant.types.resources.Tokens;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -26,58 +30,52 @@ public class SecurityService {
   @Value("${jwt.issuer}")
   private String issuer;
 
+  public TokenDetails authenticate(String email, String password) {
+    User userByEmail = userService.findByEmail(email);
+    if (Objects.equals(password, userByEmail.getPassword())){
+//        if (passwordEncoder.matches(password, userByEmail.getPassword())){
+      return generateToken(userByEmail).toBuilder()
+        .userId(userByEmail.getId())
+        .build();
+    }else{
+      return new TokenDetails();
+    }
+  }
+
   private TokenDetails generateToken(User user){
     Map<String,Object> claims = new HashMap<>();
     claims.put("roles",user.getRoles());
-    // climes.put("role","ROLE_USER");
     claims.put("email", user.getEmail());
     claims.put(Claims.ID,user.getId().toString());
 
-    return generateToken1(claims, user.getEmail());
+    return generateToken(claims, user.getEmail());
   }
-  private TokenDetails generateToken1(Map<String, Object> claims, String subject){
+  private TokenDetails generateToken(Map<String, Object> claims, String subject){
     Long expirationTimeInMillis = expirationInSeconds * 1000L;
     LocalDateTime expirationDate = LocalDateTime.now().plusSeconds(expirationTimeInMillis);
-
-    return generateToken2(expirationDate, claims, subject);
+    return generateToken(expirationDate, claims, subject);
   }
-  private TokenDetails generateToken2(LocalDateTime expirationDate, Map<String, Object> claims, String subject){
-    LocalDateTime createdDate = LocalDateTime.now();
-    //        String token = Jwts.builder()
-//                .setClaims(claims)
-//                .setIssuer(issuer)
-////                .setSubject(subject)
-//                .setIssuedAt(Date.from(createdDate.atZone(ZoneId.systemDefault()).toInstant()))
-//               // .setId(UUID.randomUUID().toString())
-//                .setExpiration(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()))
-////                .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secret.getBytes()))
-//                .compact();
 
-    String token = Jwts.builder()
-      .setSubject(subject)
-      .compact();
+  private TokenDetails generateToken(LocalDateTime expirationDate, Map<String, Object> claims, String subject){
+    LocalDateTime createdDate = LocalDateTime.now();
+//    String token = generateToken(expirationDate, claims, subject, createdDate);
+      String token = Jwts.builder()
+        .setClaims(claims)
+        .setIssuer(issuer)
+        .setSubject(subject)
+        .setIssuedAt(Date.from(createdDate.atZone(ZoneId.systemDefault()).toInstant()))
+        .setId(UUID.randomUUID().toString())
+        .setExpiration(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()))
+        .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secret.getBytes()))
+        .compact();
 
     return TokenDetails.builder()
       .token(token)
       .issuedAt(createdDate)
       .expiresAt(expirationDate)
       .build();
-
   }
-  public TokenDetails authenticate(String email, String password) {
-    User userByEmail = userService.findByEmail(email);
-    if (Objects.equals(password, userByEmail.getPassword())){
-//        if (passwordEncoder.matches(password, userByEmail.getPassword())){
-      System.out.println("12");
-      return generateToken(userByEmail).toBuilder()
-        .userId(userByEmail.getId())
-        .build();
-    }else{
-      System.out.println("13");
-      return new TokenDetails();
-    }
 
-  }
   public Optional<Claims> getClaims(String token){
     try {
       return Optional.of(Jwts.parser()
