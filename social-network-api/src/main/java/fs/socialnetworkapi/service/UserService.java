@@ -20,7 +20,7 @@ public class UserService {
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
     if (userFromDb != null) {
-      return mapper.map(userFromDb);
+      return mapper.map(userFromDb); // need to correct
     }
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
@@ -34,7 +34,7 @@ public class UserService {
       );
       mailService.send(userDtoIn.getEmail(), "Activation code", message);
     }
-    return mapper.map(user1);
+    return mapper.map(user1);// need to correct
   }
 
   public boolean activateUser(String code) {
