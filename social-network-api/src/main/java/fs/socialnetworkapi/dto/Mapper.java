@@ -4,11 +4,13 @@ import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.utils.Universal;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -27,9 +29,13 @@ public class Mapper {
     Converter<Set<User>, List<UserDtoOut>> convertSetUserToListUserDtoOut = (src) -> src.getSource().stream()
             .map(this::map)
             .toList();
+    Converter<LocalDateTime, String> convertLocalDateTimeToString = (src) -> Universal.convert(src.getSource());
+
     this.modelMapper.createTypeMap(Post.class, PostDtoOut.class)
-            .addMappings(mapper -> mapper.using(convertSetUserToListUserDtoOut).map(Post::getUsersReposts, PostDtoOut::setUsersReposts))
-            .addMappings(mapper -> mapper.map(src -> src.getUser().getId(), PostDtoOut::setUserId));
+            .addMappings(mapper -> mapper.using(convertSetUserToListUserDtoOut)
+                    .map(Post::getUsersReposts, PostDtoOut::setUsersReposts))
+            .addMappings(mapper -> mapper.using(convertLocalDateTimeToString)
+                    .map(Post::getCreatedDate, PostDtoOut::setTimeWhenWasPost));
   }
 
   public UserDtoOut map(User user) {

@@ -33,6 +33,14 @@ public class PostController {
     return ResponseEntity.ok(allPosts);
   }
 
+  @GetMapping("user/{user_id}/followings-posts")
+  public ResponseEntity<List<PostDtoOut>> getFollowingsPosts(@PathVariable("user_id") Long idUser,
+                                                      @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    List<PostDtoOut> allPosts = postService.getFollowingsPosts(idUser, page, size);
+    return ResponseEntity.ok(allPosts);
+  }
+
   @PostMapping("user/{user_id}/post")
   public ResponseEntity<PostDtoOut> addPost(@PathVariable("user_id") Long idUser,
                                             @Valid @RequestBody PostDtoIn postDtoIn) {

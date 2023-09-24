@@ -12,9 +12,9 @@ import fs.socialnetworkapi.repos.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -35,20 +35,31 @@ public class PostService {
     followings.add(user);
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
 
-//    return postRepo.findByUserIn(users, PageRequest.of(page, size))
-//            .stream()
-//            .map(mapper::map)
-//            .toList();
     List<Long> idList = user.getReposts().stream().map(Post::getId).toList();
-    return postRepo.findByUserInOrIdIn(users, idList, PageRequest.of(page, size))
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    return postRepo.findByUserInOrIdIn(users, idList, pageRequest)
             .stream()
             .map(mapper::map)
             .peek(postDtoOut -> {
-              if (!postDtoOut.getUserId().equals(idUser)){
+              if (!postDtoOut.getUser().getId().equals(idUser)) {
                 postDtoOut.setIsRepost(true);
                 postDtoOut.setUsersReposts(List.of());
               }
             })
+            .toList();
+  }
+
+  public List<PostDtoOut> getFollowingsPosts(Long idUser, Integer page, Integer size) {
+
+    User user = userRepo.findById(idUser)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
+
+    Set<User> followings = user.getFollowings();
+    List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
+
+    return postRepo.findByUserIn(users, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate")))
+            .stream()
+            .map(mapper::map)
             .toList();
   }
 

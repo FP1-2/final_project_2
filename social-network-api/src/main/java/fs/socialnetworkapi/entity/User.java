@@ -22,6 +22,7 @@ import java.util.Set;
 @Getter
 public class User extends AbstractEntity {
 
+  private String username;
   private String firstName;
   private String lastName;
   private String email;

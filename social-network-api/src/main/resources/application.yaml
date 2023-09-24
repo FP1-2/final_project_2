@@ -1,9 +1,14 @@
 server:
-  port: 5000
+  port:  5000 #5000 #433
+  #ssl:
+  #  key-store: social-network-api\src\main\resources\keystore.p12
+  #  key-store-password:
+  #  keyStoreType: PKCS12
+  #  keyAlias: tomcat
 
 spring:
   profiles:
-    active: prod #local  # prod
+    active: local #local  # prod
 
 
   mail:
@@ -54,27 +59,24 @@ spring:
 
 # prod profile
 ---
+
 spring:
   config:
     activate:
       on-profile: prod
-  datasource:
-    url: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
-    username: postgres
-    password: postgres
-  data:
-    jpa:
-      repositories:
-        bootstrap-mode: deferred #default
   jpa:
     hibernate:
-      ddl-auto: create-drop #update
-    generate-ddl: true
+      ddl-auto: update #create-drop # update
+    generate-ddl: false
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-      jdbc:
-        time_zone: UTC
-  thymeleaf:
-    enabled: true
+        jdbc:
+          time_zone: UTC
+  datasource:
+    url: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
+    username: postgres
+    password: postgres
+#    initialization-mode: always # never
+

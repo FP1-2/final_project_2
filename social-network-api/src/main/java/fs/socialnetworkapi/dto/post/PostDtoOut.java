@@ -19,10 +19,11 @@ import java.util.Objects;
 public class PostDtoOut {
 
   private Long id;
-  private Long userId;
+  private UserDtoOut user;
   private String description;
   private String photo;
   private LocalDateTime createdDate;
+  private String timeWhenWasPost;
   private List<UserDtoOut> usersReposts;
   private Boolean isRepost = false;
 
@@ -35,13 +36,13 @@ public class PostDtoOut {
       return false;
     }
     PostDtoOut that = (PostDtoOut) obj;
-    return Objects.equals(userId, that.userId)
+    return Objects.equals(user, that.user)
             && Objects.equals(description, that.description)
             && Objects.equals(photo, that.photo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, description, photo);
+    return Objects.hash(user, description, photo);
   }
 }

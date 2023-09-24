@@ -3,9 +3,11 @@ package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fs.socialnetworkapi.dto.UserDtoOut;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.service.PostService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -38,6 +40,14 @@ public class PostControllerTest {
     @MockBean
     private PostService postService;
 
+    private UserDtoOut userDtoOut1;
+    @BeforeEach
+    public void setUp() {
+        userDtoOut1 = new UserDtoOut();
+        userDtoOut1.setId(1L);
+        userDtoOut1.setUsername("Jim");
+    }
+
     @Test
     public void testAddPost() throws Exception {
 
@@ -48,7 +58,7 @@ public class PostControllerTest {
 
         PostDtoOut postDtoOut1 = PostDtoOut.builder()
                 .id(1L)
-                .userId(1L)
+                .user(userDtoOut1)
                 .description("New Description")
                 .photo("URL photo")
                 .build();
@@ -67,7 +77,7 @@ public class PostControllerTest {
         PostDtoOut postDtoOut = objectMapper.readValue(responseJson, PostDtoOut.class);
 
         assertEquals(1L, postDtoOut.getId());
-        assertEquals(1L, postDtoOut.getUserId());
+        assertEquals(userDtoOut1, postDtoOut.getUser());
         assertEquals("New Description", postDtoOut.getDescription());
         assertEquals("URL photo", postDtoOut.getPhoto());
     }
@@ -84,7 +94,7 @@ public class PostControllerTest {
 
         PostDtoOut postDtoOut = PostDtoOut.builder()
                 .id(1L)
-                .userId(1L)
+                .user(userDtoOut1)
                 .description("New Description")
                 .photo("URL photo")
                 .build();
@@ -103,7 +113,7 @@ public class PostControllerTest {
         postDtoOut = objectMapper.readValue(responseJson, PostDtoOut.class);
 
         assertEquals(1L, postDtoOut.getId());
-        assertEquals(1L, postDtoOut.getUserId());
+        assertEquals(userDtoOut1, postDtoOut.getUser());
         assertEquals("New Description", postDtoOut.getDescription());
         assertEquals("URL photo", postDtoOut.getPhoto());
     }
@@ -123,19 +133,19 @@ public class PostControllerTest {
 
         PostDtoOut postDtoOut1 = PostDtoOut.builder()
                 .id(1L)
-                .userId(1L)
+                .user(userDtoOut1)
                 .description("New Description1")
                 .photo("URL photo1")
                 .build();
         PostDtoOut postDtoOut2 = PostDtoOut.builder()
                 .id(2L)
-                .userId(1L)
+                .user(userDtoOut1)
                 .description("New Description2")
                 .photo("URL photo2")
                 .build();
         PostDtoOut postDtoOut3 = PostDtoOut.builder()
                 .id(3L)
-                .userId(1L)
+                .user(userDtoOut1)
                 .description("New Description3")
                 .photo("URL photo3")
                 .build();
@@ -157,7 +167,7 @@ public class PostControllerTest {
         assertEquals(3, postDtoOuts.size());
 
         assertEquals(1L, postDtoOuts.get(0).getId());
-        assertEquals(1L, postDtoOuts.get(0).getUserId());
+        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
         assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
         assertEquals("New Description1", postDtoOuts.get(0).getDescription());
     }
