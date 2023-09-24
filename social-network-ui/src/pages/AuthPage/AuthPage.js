@@ -13,6 +13,9 @@ import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
 import { openModal } from '../../redux/slices/modalSlice'
 
+const imageLink =
+	'https://res.cloudinary.com/doenettec/image/upload/v1695565552/back-twitter_1_ysrqxd.png'
+
 const customPalette = {
 	// custom palette
 	primary: {
@@ -79,8 +82,7 @@ const AuthPage = () => {
 					md={6}
 					lg={7}
 					sx={{
-						backgroundImage:
-							'url(https://res.cloudinary.com/doenettec/image/upload/v1695474153/back-twitter_1_sgpuvr.png)',
+						backgroundImage: `url(${imageLink})`,
 						backgroundRepeat: 'no-repeat',
 						backgroundColor: t =>
 							t.palette.mode === 'light'
