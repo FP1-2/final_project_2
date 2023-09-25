@@ -19,7 +19,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import SearchIcon from '@mui/icons-material/Search'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity'
 import LogoutIcon from '@mui/icons-material/Logout'
 import LoginIcon from '@mui/icons-material/Login'
@@ -31,9 +31,9 @@ import { ReactComponent as Logo } from '../../logo.svg'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { MIN_WIDTH } from './../../constants'
 
-// const drawerWidth = 240
+const drawerWidth = 240
 
-export default function PermanentDrawerLeft ({ pageName }) {
+export default function PermanentDrawerLeft ({ pageName, children }) {
   const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
   let links = []
   isLoggedIn
@@ -42,7 +42,7 @@ export default function PermanentDrawerLeft ({ pageName }) {
         'explore',
         'notifications',
         'messages',
-        'bookmarks',
+        'favourites',
         'profile'
       ])
     : (links = ['home', 'explore'])
@@ -63,11 +63,11 @@ export default function PermanentDrawerLeft ({ pageName }) {
         
         <Drawer
           sx={{
-            // width: drawerWidth,
+            width: drawerWidth,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-              // width: drawerWidth,
-              width: '100%',
+              width: drawerWidth,
+              // width: '100%',
               boxSizing: 'border-box'
             }
           }}
@@ -81,8 +81,8 @@ export default function PermanentDrawerLeft ({ pageName }) {
           <AppBar
           position='fixed'
           sx={{
-          //   width: `calc(100% - ${drawerWidth}px)`,
-          //   ml: `${drawerWidth}px`
+            // width: `calc(100% - ${drawerWidth}px)`,
+            // ml: `${drawerWidth}px`
           }}
         >
             <Toolbar>
@@ -108,7 +108,7 @@ export default function PermanentDrawerLeft ({ pageName }) {
                       {text === 'explore' && <SearchIcon />}
                       {text === 'notifications' && <NotificationsNoneIcon />}
                       {text === 'messages' && <MailOutlineIcon />}
-                      {text === 'bookmarks' && <BookmarkBorderIcon />}
+                      {text === 'favourites' && <FavoriteBorderIcon />}
                       {text === 'profile' && <PermIdentityIcon />}
                     </ListItemIcon>
                     {text}
@@ -161,6 +161,7 @@ export default function PermanentDrawerLeft ({ pageName }) {
           component='main'
           sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
         >
+          {children}
           <Toolbar />
         </Box>
       </Box>
@@ -198,6 +199,12 @@ export default function PermanentDrawerLeft ({ pageName }) {
             </Toolbar>
           </Container>
         </AppBar>
+        <Box
+          component='main'
+          sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        >
+          {children}
+        </Box>
         <AppBar
           position='fixed'
           color='primary'
@@ -243,5 +250,6 @@ export default function PermanentDrawerLeft ({ pageName }) {
 }
 
 PermanentDrawerLeft.propTypes = {
-  pageName: PropTypes.string
+  pageName: PropTypes.string,
+  children: PropTypes.node
 }
