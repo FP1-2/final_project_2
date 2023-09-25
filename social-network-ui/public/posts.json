@@ -1,0 +1,42 @@
+[
+	{
+		"id": 1,
+		"avatar": "./iphone-images/iphone11-red-select1-2019_1_2.jpeg",
+		 "name": "Ihor Lachenkov",
+		 "tagName": "@igorlachenkov",
+		 "timeWhenWasPost": "45s",
+		 "twitte": "Такий тіхоня, а такий уйобок"
+	  },
+	  {
+		"id": 2,
+		"avatar": "./iphone-images/iphone11-red-select1-2019_1_2.jpeg",
+		 "name": "Ihor Lachenkov",
+		 "tagName": "@igorlachenkov",
+		 "timeWhenWasPost": "45s",
+		 "twitte": "Такий тіхоня, а такий уйобок"
+	  },
+	  {
+		"id": 3,
+		"avatar": "./iphone-images/iphone11-red-select1-2019_1_2.jpeg",
+		 "name": "Ihor Lachenkov",
+		 "tagName": "@igorlachenkov",
+		 "timeWhenWasPost": "45s",
+		 "twitte": "Такий тіхоня, а такий уйобок"
+	  },
+	  {
+		"id": 4,
+		"avatar": "./iphone-images/iphone11-red-select1-2019_1_2.jpeg",
+		 "name": "Ihor Lachenkov",
+		 "tagName": "igorlachenkov",
+		 "timeWhenWasPost": "45s",
+		 "twitte": "Такий тіхоня, а такий уйобок"
+	  },
+	  {
+		"id": 5,
+		"avatar": "./iphone-images/iphone11-red-select1-2019_1_2.jpeg",
+		 "name": "Ihor Lachenkov",
+		 "tagName": "@igorlachenkov",
+		 "timeWhenWasPost": "45s",
+		 "twitte": "Такий тіхоня, а такий уйобок"
+	  }
+]

@@ -1,0 +1,31 @@
+.writeWindow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.writeWindowHeader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.writeWindowBody {
+	min-width: 300px;
+}
+.writeWindowFooter {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.postBtn {
+	font-weight: 700;
+	color: #fff;
+	background-color: rgb(29, 155, 240);
+	border: none;
+	padding-right: 20px;
+	padding-left: 20px;
+	min-width: 36px;
+	min-height: 36px;
+	border-radius: 36px;
+}
