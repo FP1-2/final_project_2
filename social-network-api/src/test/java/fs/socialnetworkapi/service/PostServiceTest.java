@@ -11,6 +11,7 @@ import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,6 +51,41 @@ public class PostServiceTest {
     @InjectMocks
     private PostService postService;
 
+    private User user1;
+    private User user2;
+    private UserDtoOut userDtoOut1;
+    private UserDtoOut userDtoOut2;
+    private Post post;
+    private Post post2;
+
+    @BeforeEach
+    public void setUp() {
+
+        user1 = new User();
+        user1.setId(1L);
+
+        user2 = new User();
+        user2.setId(2L);
+
+        userDtoOut1 = new UserDtoOut();
+        userDtoOut1.setId(1L);
+
+        userDtoOut2 = new UserDtoOut();
+        userDtoOut2.setId(2L);
+
+        post = new Post();
+        post.setDescription("Description");
+        post.setPhoto("Photo");
+        post.setUser(user1);
+
+        post2 = new Post();
+        post2.setDescription("Description");
+        post2.setPhoto("Photo");
+        Set<User> usersRepost = new HashSet<>();
+        usersRepost.add(user2);
+        post2.setUsersReposts(usersRepost);
+        post2.setUser(user1);
+    }
     @Test
     public void testSave_whenUserNotFound(){
         Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
@@ -58,22 +95,10 @@ public class PostServiceTest {
     @Test
     public void testSave() {
 
-        Long idUser = 1L;
         PostDtoIn postDtoIn = PostDtoIn.builder()
                 .description("Description")
                 .photo("Photo")
                 .build();
-
-        User user = new User();
-        user.setId(idUser);
-
-        Post post = new Post();
-        post.setDescription("Description");
-        post.setPhoto("Photo");
-        post.setUser(user);
-
-        UserDtoOut userDtoOut1 = new UserDtoOut();
-        userDtoOut1.setId(1L);
 
         PostDtoOut expectedPostDtoOut = PostDtoOut.builder()
                 .id(1L)
@@ -82,12 +107,12 @@ public class PostServiceTest {
                 .photo("Photo")
                 .build();
 
-        Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(user1));
         Mockito.when(mapper.map(postDtoIn)).thenReturn(post);
         Mockito.when(postRepo.save(post)).thenReturn(post);
         Mockito.when(mapper.map(post)).thenReturn(expectedPostDtoOut);
 
-        PostDtoOut result = postService.save(idUser, postDtoIn);
+        PostDtoOut result = postService.save(1L, postDtoIn);
 
         Mockito.verify(userRepo,times(1)).findById(any());
 
@@ -251,7 +276,7 @@ public class PostServiceTest {
         Mockito.when(mapper.map(post7)).thenReturn(postDto7);
         Mockito.when(mapper.map(post8)).thenReturn(postDto8);
 
-        List<PostDtoOut> result = postService.getAllPosts(idUser, page, size);
+        List<PostDtoOut> result = postService.getAllUserPosts(idUser, page, size);
 
         assertEquals(expectedPostDtoOutList, result);
     }
@@ -263,6 +288,78 @@ public class PostServiceTest {
         PostService postService1 = new PostService(postRepo,userRepo,mapper);
         postService1.deletePost(idPost);
         Mockito.verify(postRepo).deleteById(idPost);
+
+    }
+
+    @Test
+    public void testSaveRepost_whenUserNotFound(){
+        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> postService.saveRepost(1L, 1L));
+    }
+
+    @Test
+    public void testSaveRepost_whenPostNotFound(){
+        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user1));
+        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        assertThrows(PostNotFoundException.class, () -> postService.saveRepost(1L, 1L));
+    }
+
+    @Test
+    public void testSaveRepost(){
+
+        PostDtoOut expectedPostDtoOut = PostDtoOut.builder()
+                .id(1L)
+                .user(userDtoOut1)
+                .description("Description")
+                .photo("Photo")
+                .isRepost(true)
+                .usersReposts(List.of(userDtoOut2))
+                .build();
+
+        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user2));
+        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.of(post));
+        Mockito.when(postRepo.save(post)).thenReturn(post);
+        Mockito.when(mapper.map(post)).thenReturn(expectedPostDtoOut);
+
+        PostDtoOut result = postService.saveRepost(2L, 1L);
+
+        Mockito.verify(userRepo,times(1)).findById(any());
+        Mockito.verify(postRepo,times(1)).findById(any());
+
+        assertNotNull(result);
+        assertEquals(expectedPostDtoOut, result);
+    }
+
+    @Test
+    public void testRemoveRepost_whenUserNotFound(){
+        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> postService.deleteRepost(1L, 1L));
+    }
+
+    @Test
+    public void testRemoveRepost_whenPostNotFound(){
+        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user1));
+        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        assertThrows(PostNotFoundException.class, () -> postService.deleteRepost(1L, 1L));
+    }
+
+    @Test
+    public void testRemoveRepost(){
+
+        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user2));
+        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.of(post2));
+        Mockito.when(postRepo.save(post2)).thenReturn(post2);
+
+
+        postService.deleteRepost(2L, 1L);
+
+        Mockito.verify(userRepo,times(1)).findById(any());
+        Mockito.verify(postRepo,times(1)).findById(any());
+        Mockito.verify(postRepo,times(1)).save(post2);
 
     }
 }

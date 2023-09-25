@@ -25,11 +25,18 @@ public class PostController {
 
   private final PostService postService;
 
+  @GetMapping("all-posts")
+  public ResponseEntity<List<PostDtoOut>> getAllPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    List<PostDtoOut> allPosts = postService.getAllPost(page, size);
+    return ResponseEntity.ok(allPosts);
+  }
+
   @GetMapping("user/{user_id}/posts")
   public ResponseEntity<List<PostDtoOut>> getAllPosts(@PathVariable("user_id") Long idUser,
                                                       @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-    List<PostDtoOut> allPosts = postService.getAllPosts(idUser, page, size);
+    List<PostDtoOut> allPosts = postService.getAllUserPosts(idUser, page, size);
     return ResponseEntity.ok(allPosts);
   }
 
@@ -67,6 +74,13 @@ public class PostController {
                                               @PathVariable("post_id") Long idPost) {
     PostDtoOut postDtoOut = postService.saveRepost(idUser, idPost);
     return ResponseEntity.ok(postDtoOut);
+  }
+
+  @DeleteMapping("user/{user_id}/post/{post_id}/repost")
+  public ResponseEntity<PostDtoOut> removeRepost(@PathVariable("user_id") Long idUser,
+                                              @PathVariable("post_id") Long idPost) {
+    postService.deleteRepost(idUser, idPost);
+    return ResponseEntity.ok().build();
   }
 
 }

@@ -26,7 +26,15 @@ public class PostService {
   private final UserRepo userRepo;
   private final Mapper mapper;
 
-  public List<PostDtoOut> getAllPosts(Long idUser, Integer page, Integer size) {
+  public List<PostDtoOut> getAllPost(Integer page, Integer size) {
+
+    return postRepo.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate")))
+            .stream()
+            .map(mapper::map)
+            .toList();
+  }
+
+  public List<PostDtoOut> getAllUserPosts(Long idUser, Integer page, Integer size) {
 
     User user = userRepo.findById(idUser)
             .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
@@ -91,14 +99,29 @@ public class PostService {
     }
   }
 
-  public PostDtoOut saveRepost(Long idUser, Long idPost) {
-    User user = userRepo.findById(idUser)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
-    Post post = postRepo.findById(idPost)
-            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", idPost)));
+  public PostDtoOut saveRepost(Long userId, Long postId) {
+    User user = userRepo.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+    Post post = postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
 
     post.getUsersReposts().add(user);
 
     return mapper.map(postRepo.save(post));
   }
+
+  public void deleteRepost(Long userId, Long postId) {
+
+    User user = userRepo.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+    Post post = postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
+
+    post.getUsersReposts().remove(user);
+
+    postRepo.save(post);
+
+  }
+
+
 }

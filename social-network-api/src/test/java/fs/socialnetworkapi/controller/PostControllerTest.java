@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,27 +41,63 @@ public class PostControllerTest {
     private PostService postService;
 
     private UserDtoOut userDtoOut1;
+    private UserDtoOut userDtoOut2;
+    private PostDtoOut postDtoOut1;
+    private PostDtoOut postDtoOut2;
+    private PostDtoOut postDtoOut3;
+    private PostDtoOut repostDtoOut4;
+    private PostDtoIn postDtoIn;
+
     @BeforeEach
     public void setUp() {
         userDtoOut1 = new UserDtoOut();
         userDtoOut1.setId(1L);
         userDtoOut1.setUsername("Jim");
+
+        userDtoOut2 = new UserDtoOut();
+        userDtoOut2.setId(2L);
+        userDtoOut2.setUsername("Bil");
+
+        postDtoOut1 = PostDtoOut
+                .builder()
+                .id(1L)
+                .user(userDtoOut1)
+                .description("New Description1")
+                .photo("URL photo1").build();
+
+        postDtoOut2 = PostDtoOut.
+                builder()
+                .id(2L)
+                .user(userDtoOut1)
+                .description("New Description2")
+                .photo("URL photo2").build();
+
+        postDtoOut3 = PostDtoOut
+                .builder()
+                .id(3L)
+                .user(userDtoOut1)
+                .description("New Description3")
+                .photo("URL photo3")
+                .build();
+
+        repostDtoOut4 = PostDtoOut
+                .builder()
+                .id(4L)
+                .user(userDtoOut2)
+                .description("New Description4")
+                .photo("URL photo4")
+                .isRepost(true)
+                .usersReposts(List.of(userDtoOut1))
+                .build();
+
+        postDtoIn = PostDtoIn.builder()
+                .description("New Description1")
+                .photo("URL photo1")
+                .build();
     }
 
     @Test
     public void testAddPost() throws Exception {
-
-        PostDtoIn postDtoIn = PostDtoIn.builder()
-                .description("New Description")
-                .photo("URL photo")
-                .build();
-
-        PostDtoOut postDtoOut1 = PostDtoOut.builder()
-                .id(1L)
-                .user(userDtoOut1)
-                .description("New Description")
-                .photo("URL photo")
-                .build();
 
         Mockito.when(postService.save(eq(1L), any(PostDtoIn.class))).thenReturn(postDtoOut1);
 
@@ -78,28 +114,14 @@ public class PostControllerTest {
 
         assertEquals(1L, postDtoOut.getId());
         assertEquals(userDtoOut1, postDtoOut.getUser());
-        assertEquals("New Description", postDtoOut.getDescription());
-        assertEquals("URL photo", postDtoOut.getPhoto());
+        assertEquals("New Description1", postDtoOut.getDescription());
+        assertEquals("URL photo1", postDtoOut.getPhoto());
     }
 
     @Test
     public void testEditePost() throws Exception {
 
-        PostDtoIn postDtoIn = PostDtoIn.builder()
-                .id(1L)
-                .userId(1L)
-                .description("New Description")
-                .photo("URL photo")
-                .build();
-
-        PostDtoOut postDtoOut = PostDtoOut.builder()
-                .id(1L)
-                .user(userDtoOut1)
-                .description("New Description")
-                .photo("URL photo")
-                .build();
-
-        Mockito.when(postService.editePost(any(PostDtoIn.class))).thenReturn(postDtoOut);
+        Mockito.when(postService.editePost(any(PostDtoIn.class))).thenReturn(postDtoOut1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .put("/api/v1/user/{user_id}/post", 1)
@@ -110,12 +132,12 @@ public class PostControllerTest {
                 .andReturn();
 
         String responseJson = mvcResult.getResponse().getContentAsString();
-        postDtoOut = objectMapper.readValue(responseJson, PostDtoOut.class);
+        PostDtoOut postDtoOut = objectMapper.readValue(responseJson, PostDtoOut.class);
 
         assertEquals(1L, postDtoOut.getId());
         assertEquals(userDtoOut1, postDtoOut.getUser());
-        assertEquals("New Description", postDtoOut.getDescription());
-        assertEquals("URL photo", postDtoOut.getPhoto());
+        assertEquals("New Description1", postDtoOut.getDescription());
+        assertEquals("URL photo1", postDtoOut.getPhoto());
     }
 
     @Test
@@ -129,30 +151,11 @@ public class PostControllerTest {
     }
 
     @Test
-    public void testGetAllPosts() throws Exception {
-
-        PostDtoOut postDtoOut1 = PostDtoOut.builder()
-                .id(1L)
-                .user(userDtoOut1)
-                .description("New Description1")
-                .photo("URL photo1")
-                .build();
-        PostDtoOut postDtoOut2 = PostDtoOut.builder()
-                .id(2L)
-                .user(userDtoOut1)
-                .description("New Description2")
-                .photo("URL photo2")
-                .build();
-        PostDtoOut postDtoOut3 = PostDtoOut.builder()
-                .id(3L)
-                .user(userDtoOut1)
-                .description("New Description3")
-                .photo("URL photo3")
-                .build();
+    public void testGetAllUserPosts() throws Exception {
 
         List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
 
-        Mockito.when(postService.getAllPosts(1L, 0, 10)).thenReturn(postDtoOuts);
+        Mockito.when(postService.getAllUserPosts(1L, 0, 10)).thenReturn(postDtoOuts);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/user/{user_id}/posts?page=0&size=10", 1)
@@ -170,5 +173,88 @@ public class PostControllerTest {
         assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
         assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
         assertEquals("New Description1", postDtoOuts.get(0).getDescription());
+    }
+
+    @Test
+    public void testGetAllPosts() throws Exception {
+
+        List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
+
+        Mockito.when(postService.getAllPost(0, 10)).thenReturn(postDtoOuts);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/v1/all-posts?page=0&size=10")
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+
+        assertEquals(3, postDtoOuts.size());
+
+        assertEquals(1L, postDtoOuts.get(0).getId());
+        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
+        assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
+        assertEquals("New Description1", postDtoOuts.get(0).getDescription());
+    }
+
+    @Test
+    public void testGetFollowingsPosts() throws Exception {
+
+        List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
+
+        Mockito.when(postService.getFollowingsPosts(1L, 0, 10)).thenReturn(postDtoOuts);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/v1/user/{user_id}/followings-posts?page=0&size=10", 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+
+        assertEquals(3, postDtoOuts.size());
+
+        assertEquals(1L, postDtoOuts.get(0).getId());
+        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
+        assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
+        assertEquals("New Description1", postDtoOuts.get(0).getDescription());
+    }
+
+    @Test
+    public void testAddRepost() throws Exception {
+
+        Mockito.when(postService.saveRepost(eq(1L),eq(4L))).thenReturn(repostDtoOut4);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/v1/user/{user_id}/post/{post_id}/repost", 1, 4)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        PostDtoOut postDtoOut = objectMapper.readValue(responseJson, PostDtoOut.class);
+
+        assertEquals(4L, postDtoOut.getId());
+        assertEquals(userDtoOut2, postDtoOut.getUser());
+        assertEquals("New Description4", postDtoOut.getDescription());
+        assertEquals("URL photo4", postDtoOut.getPhoto());
+        assertTrue(postDtoOut.getUsersReposts().contains(userDtoOut1));
+        assertTrue(postDtoOut.getIsRepost());
+    }
+
+    @Test
+    public void testRemoveRepost() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/api/v1/user/{user_id}/post/{post_id}/repost", 1, 4)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk());
     }
 }
