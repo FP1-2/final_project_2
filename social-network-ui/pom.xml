@@ -12,7 +12,6 @@
 	<packaging>jar</packaging>
 	<build>
 		<plugins>
-			<!-- clean the dist directory -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
