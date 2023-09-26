@@ -71,6 +71,12 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>8.0.1.Final</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-dependency-plugin</artifactId>
+			<version>3.5.0</version>
+		</dependency>
 
 
 		<dependency>
@@ -179,14 +185,14 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.1.2</version>
+				<version>3.5.0</version>
 				<executions>
 					<execution>
 						<id>merge</id>
 						<phase>initialize</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
+<!--						<goals>-->
+<!--							<goal>unpack</goal>-->
+<!--						</goals>-->
 						<configuration>
 							<artifactItems>
 								<artifactItem>
