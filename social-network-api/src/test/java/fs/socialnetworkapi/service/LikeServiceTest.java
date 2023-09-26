@@ -53,10 +53,14 @@ class LikeServiceTest {
     when(postRepo.findById(2L)).thenReturn(Optional.of(post));
     when(likeRepo.findByPostIdAndUserId(2L, 1L)).thenReturn(Optional.of(like));
 
+    assertTrue(like.isLiked());
     likeService.likePost(2L, 1L);
 
     assertFalse(like.isLiked());
     verify(likeRepo, times(1)).save(like);
+
+    likeService.likePost(2L, 1L);
+    assertTrue(like.isLiked());
   }
 
   @Test
