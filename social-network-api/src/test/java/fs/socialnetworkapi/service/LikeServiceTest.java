@@ -1,11 +1,5 @@
 package fs.socialnetworkapi.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
@@ -14,11 +8,18 @@ import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class LikeServiceTest {
 
@@ -46,13 +47,16 @@ public class LikeServiceTest {
     Post post = new Post();
     post.setId(2L);
 
+    Like like = new Like(user, post, true);
+
     when(userRepo.findById(1L)).thenReturn(Optional.of(user));
     when(postRepo.findById(2L)).thenReturn(Optional.of(post));
-    when(likeRepo.findByPostIdAndUserId(2L, 1L)).thenReturn(Optional.of(new Like(user, post, true)));
+    when(likeRepo.findByPostIdAndUserId(2L, 1L)).thenReturn(Optional.of(like));
 
     likeService.likePost(2L, 1L);
 
-    verify(likeRepo, times(1)).save(any(Like.class));
+    assertFalse(like.isLiked());
+    verify(likeRepo, times(1)).save(like);
   }
 
   @Test
