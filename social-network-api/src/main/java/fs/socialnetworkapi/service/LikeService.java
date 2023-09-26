@@ -40,7 +40,7 @@ public class LikeService {
     Optional<Like> newLike = likeRepo.findByPostIdAndUserId(postId, userId);
     if (newLike.isPresent()) {
       changeState(newLike.get());
-    }else {
+    } else {
        likeRepo.save(new Like(user, post, true));
     }
   }
