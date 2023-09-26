@@ -21,7 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class LikeServiceTest {
+class LikeServiceTest {
 
   private LikeService likeService;
 
@@ -41,7 +41,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void likePost_LikeExists_ChangesState() {
+  void likePost_LikeExists_ChangesState() {
     User user = new User();
     user.setId(1L);
     Post post = new Post();
@@ -60,7 +60,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void likePost_LikeDoesNotExist_CreatesNewLike() {
+  void likePost_LikeDoesNotExist_CreatesNewLike() {
     User user = new User();
     user.setId(1L);
     Post post = new Post();
@@ -76,7 +76,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void likePost_UserNotFound_ThrowsException() {
+  void likePost_UserNotFound_ThrowsException() {
     when(userRepo.findById(1L)).thenReturn(Optional.empty());
 
     assertThrows(UserNotFoundException.class, () -> likeService.likePost(2L, 1L));
@@ -85,7 +85,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void likePost_PostNotFound_ThrowsException() {
+  void likePost_PostNotFound_ThrowsException() {
     User user = new User();
     user.setId(1L);
 
@@ -98,7 +98,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void getLikesForPost_PostExists_ReturnsLikes() {
+  void getLikesForPost_PostExists_ReturnsLikes() {
     Long postId = 1L;
     Post post = new Post();
     post.setId(postId);
@@ -116,7 +116,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void getLikesForPost_LikeDoesNotExist_ReturnsEmptyList() {
+  void getLikesForPost_LikeDoesNotExist_ReturnsEmptyList() {
     Long postId = 1L;
 
     when(likeRepo.findByPostId(postId)).thenReturn(Collections.emptyList());
@@ -127,7 +127,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void getLikesForUser_UserExists_ReturnsLikes() {
+  void getLikesForUser_UserExists_ReturnsLikes() {
     Long userId = 1L;
     User user = new User();
     user.setId(userId);
@@ -145,7 +145,7 @@ public class LikeServiceTest {
   }
 
   @Test
-  public void getLikesForUser_LikeDoesNotExist_ReturnsEmptyList() {
+  void getLikesForUser_LikeDoesNotExist_ReturnsEmptyList() {
     Long userId = 1L;
 
     when(likeRepo.findByUserId(userId)).thenReturn(Collections.emptyList());

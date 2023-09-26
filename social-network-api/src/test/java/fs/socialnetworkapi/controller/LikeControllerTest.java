@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LikeControllerTest {
+class LikeControllerTest {
 
   private MockMvc mockMvc;
 
@@ -30,7 +30,7 @@ public class LikeControllerTest {
   }
 
   @Test
-  public void testGetLikesForPost() throws Exception {
+  void testGetLikesForPost() throws Exception {
     Long postId = 1L;
     List<Like> likes = new ArrayList<>();
     likes.add(new Like());
@@ -46,7 +46,7 @@ public class LikeControllerTest {
   }
 
   @Test
-  public void testGetLikesForUser() throws Exception {
+  void testGetLikesForUser() throws Exception {
     Long userId = 1L;
     List<Like> likes = new ArrayList<>();
     likes.add(new Like());
@@ -62,7 +62,7 @@ public class LikeControllerTest {
   }
 
   @Test
-  public void testLikePost() throws Exception {
+  void testLikePost() throws Exception {
     Long postId = 1L;
     Long userId = 2L;
 
