@@ -1,6 +1,8 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.entity.*;
+import fs.socialnetworkapi.entity.Like;
+import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.LikeRepo;
@@ -38,7 +40,7 @@ public class LikeService {
     Optional<Like> newLike = likeRepo.findByPostIdAndUserId(postId, userId);
     if (newLike.isPresent()) {
       changeState(newLike.get());
-    } else {
+    }else {
        likeRepo.save(new Like(user, post, true));
     }
   }
