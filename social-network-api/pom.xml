@@ -18,6 +18,7 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -89,6 +90,9 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.0.3</version>
 		</dependency>
+
+
+
 	</dependencies>
 
 	<build>
@@ -190,9 +194,9 @@
 					<execution>
 						<id>merge</id>
 						<phase>initialize</phase>
-<!--						<goals>-->
-<!--							<goal>unpack</goal>-->
-<!--						</goals>-->
+						<goals>
+							<goal>unpack</goal>
+						</goals>
 						<configuration>
 							<artifactItems>
 								<artifactItem>
