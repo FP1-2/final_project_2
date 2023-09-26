@@ -22,6 +22,9 @@ spring:
       email: test@gmail.com
 #      text: no-reply
 
+myapp:
+  baseUrl: http://twitterdemo.us-east-1.elasticbeanstalk.com
+
 # local profile
 ---
 spring:
