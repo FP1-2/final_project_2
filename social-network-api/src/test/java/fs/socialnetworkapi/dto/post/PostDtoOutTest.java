@@ -1,22 +1,38 @@
 package fs.socialnetworkapi.dto.post;
 
+import fs.socialnetworkapi.dto.UserDtoOut;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PostDtoOutTest {
 
+  private UserDtoOut userDtoOut1;
+  private UserDtoOut userDtoOut2;
+  private PostDtoOut postDtoOut;
 
-  PostDtoOut postDtoOut = new PostDtoOut(1L,1L,"Description", "Photo");
+  @BeforeEach
+  void setup() {
+    userDtoOut1 = new UserDtoOut();
+    userDtoOut1.setId(1L);
 
+    userDtoOut2 = new UserDtoOut();
+    userDtoOut2.setId(2L);
+
+    postDtoOut = new PostDtoOut(1L, userDtoOut1,"Description", "Photo", LocalDateTime.now(),"", List.of(),false);
+  }
   @Test
   void getId() {
     assertEquals(1L, postDtoOut.getId());
   }
 
   @Test
-  void getUserId() {
-    assertEquals(1L, postDtoOut.getUserId());
+  void getUser() {
+    assertEquals(userDtoOut1, postDtoOut.getUser());
   }
 
   @Test
@@ -36,9 +52,9 @@ class PostDtoOutTest {
   }
 
   @Test
-  void setUserId() {
-    postDtoOut.setUserId(2L);
-    assertEquals(2L, postDtoOut.getUserId());
+  void setUser() {
+    postDtoOut.setUser(userDtoOut2);
+    assertEquals(userDtoOut2, postDtoOut.getUser());
   }
 
   @Test
@@ -57,7 +73,7 @@ class PostDtoOutTest {
   void testEquals(){
     PostDtoOut postDtoOut1 = PostDtoOut.builder()
             .id(1L)
-            .userId(1L)
+            .user(userDtoOut1)
             .photo("photo")
             .description("desc").build();
 
@@ -65,25 +81,25 @@ class PostDtoOutTest {
 
     PostDtoOut postDtoOut3 = PostDtoOut.builder()
             .id(2L)
-            .userId(1L)
+            .user(userDtoOut1)
             .photo("photo2")
             .description("desc2").build();
 
     PostDtoOut postDtoOut4 = PostDtoOut.builder()
             .id(3L)
-            .userId(1L)
+            .user(userDtoOut1)
             .photo("photo")
             .description("desc").build();
 
     PostDtoOut postDtoOut5 = PostDtoOut.builder()
             .id(4L)
-            .userId(1L)
+            .user(userDtoOut1)
             .photo("photo2")
             .description("desc").build();
 
     PostDtoOut postDtoOut6 = PostDtoOut.builder()
             .id(5L)
-            .userId(2L)
+            .user(userDtoOut2)
             .photo("photo")
             .description("desc").build();
 
@@ -103,7 +119,7 @@ class PostDtoOutTest {
   void testHashCode(){
     PostDtoOut postDtoOut1 = PostDtoOut.builder()
             .id(1L)
-            .userId(1L)
+            .user(userDtoOut1)
             .photo("photo")
             .description("desc").build();
 
@@ -111,13 +127,13 @@ class PostDtoOutTest {
 
     PostDtoOut postDtoOut3 = PostDtoOut.builder()
             .id(1L)
-            .userId(1L)
+            .user(userDtoOut1)
             .photo("photo2")
             .description("desc").build();
 
     PostDtoOut postDtoOut4 = PostDtoOut.builder()
             .id(2L)
-            .userId(1L)
+            .user(userDtoOut1)
             .photo("photo")
             .description("desc").build();
 
