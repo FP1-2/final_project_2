@@ -39,6 +39,7 @@ jobs:
     
           - name: Run build
             run: npm run build --prefix social-network-ui
+
     java-ci-checks:
       name: Automated Java CI checks
       runs-on: ubuntu-latest
@@ -55,6 +56,3 @@ jobs:
 
         - name: Compile and package with Maven
           run: mvn clean package
-
-        - name: Compile and test with Maven
-          run: mvn clean test
