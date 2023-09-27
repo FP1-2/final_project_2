@@ -26,3 +26,4 @@ yarn-error.log*
 
 # Exception .stylelintcache
 .stylelintcache
+.vercel

@@ -13,6 +13,9 @@ import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
 import { openModal } from '../../redux/slices/modalSlice'
 
+const imageLink =
+	'https://res.cloudinary.com/doenettec/image/upload/v1695565552/back-twitter_1_ysrqxd.png'
+
 const customPalette = {
 	// custom palette
 	primary: {
@@ -79,8 +82,7 @@ const AuthPage = () => {
 					md={6}
 					lg={7}
 					sx={{
-						backgroundImage:
-							'url(https://s3-alpha-sig.figma.com/img/fc73/ba7a/f1e6944d750f97b53adecbabca7ffd40?Expires=1694995200&Signature=fVENpy2gXpJjkhjghjf5WW8eCMkInSPx89h3vi5Ansjo4MNI0xfzumjhZ86Jx8ntH3hpF8LucgiQVKsu9y~Vrl5iqBhNd-1NFryvnlN3WUT7OUs~TnSPHWB2D54w37ctxJ-0WjO9K5KUG4QEUql88Yr~RV6FmsSCXDeXK~NiP8RNqPBVjfcjxQVpHbTrhqJQdRPi6Zm-EfymS8~dDP~lalXAvjgUj8MvCdbgYb2wwlF85tvn7IP2LnjIT3fuURWBloGapwGbLIZygbB-zk7~B0qME6IXMKU-t5q4tnzkm9u3KhhTUiYF~0W4skCg0hD9a8V~jwX4ev-khcjuvL3GhQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4)',
+						backgroundImage: `url(${imageLink})`,
 						backgroundRepeat: 'no-repeat',
 						backgroundColor: t =>
 							t.palette.mode === 'light'
