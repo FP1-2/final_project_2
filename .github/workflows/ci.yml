@@ -53,5 +53,8 @@ jobs:
             java-version: 17
             cache: 'maven'
 
-        - name: Compile and run tests with Maven
+        - name: Compile and package with Maven
           run: mvn clean package
+
+        - name: Compile and test with Maven
+          run: mvn clean test
