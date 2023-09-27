@@ -1,9 +1,14 @@
 server:
   port: 5000
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: 050882
+    key-store-type: PKCS12
+    key-alias: tomcat
 
 spring:
   profiles:
-    active:  local #prod
+    active: prod #local  # prod
 
 
   mail:
@@ -21,6 +26,9 @@ spring:
     sender: # отправитель письма (его почта и имя)
       email: test@gmail.com
 #      text: no-reply
+
+myapp:
+  baseUrl: http://twitterdemo.us-east-1.elasticbeanstalk.com
 
 # local profile
 ---
@@ -54,24 +62,27 @@ spring:
 
 # prod profile
 ---
-
 spring:
   config:
     activate:
       on-profile: prod
-  jpa:
-    hibernate:
-      ddl-auto: update #create-drop # update
-    generate-ddl: false
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc:
-          time_zone: UTC
   datasource:
     url: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
     username: postgres
     password: postgres
-#    initialization-mode: always # never
-
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred #default
+  jpa:
+    hibernate:
+      ddl-auto: create-drop #update
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      jdbc:
+        time_zone: UTC
+  thymeleaf:
+    enabled: true
