@@ -1,7 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 a.active {
   font-size: 1.1rem;
 
   svg {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 }

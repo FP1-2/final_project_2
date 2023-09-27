@@ -1,9 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-	registerData: {
-		name: 'John',
-	},
+	registerData: {},
 }
 
 const registerSlice = createSlice({
