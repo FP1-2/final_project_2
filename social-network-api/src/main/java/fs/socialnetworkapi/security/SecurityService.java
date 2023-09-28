@@ -32,9 +32,8 @@ public class SecurityService {
 
   public TokenDetails authenticate(String email, String password) {
     User userByEmail = userService.findByEmail(email);
-//    if (Objects.equals(password, userByEmail.getPassword())){
 
-    if (passwordEncoder.matches(password, userByEmail.getPassword())){
+    if (passwordEncoder.matches(password, userByEmail.getPassword()) & userByEmail.isActive()){
       return generateToken(userByEmail).toBuilder()
         .userId(userByEmail.getId())
         .build();
