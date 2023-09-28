@@ -1,9 +1,11 @@
 package fs.socialnetworkapi.controller;
 
-import fs.socialnetworkapi.dto.password.PasswordResetRequest;
+import fs.socialnetworkapi.dto.EmailRequest;
+import fs.socialnetworkapi.dto.PasswordResetRequest;
 import fs.socialnetworkapi.service.PasswordResetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +20,17 @@ public class PasswordController {
   private final PasswordResetService passwordResetService;
 
   @PostMapping("/request")
-  public void requestPasswordReset(@RequestBody String email) {
-    passwordResetService.setNewActivationCode(email);
+  public ResponseEntity<?> requestPasswordReset(@RequestBody EmailRequest email) {
+    return passwordResetService.setNewActivationCode(email.getEmail())
+            ? ResponseEntity.ok().build()
+            : ResponseEntity.badRequest().body("No such email");
   }
 
   @PostMapping("/confirm")
-  public void confirmPasswordReset(@RequestBody PasswordResetRequest request) {
-    passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword());
+  public ResponseEntity<?> confirmPasswordReset(@RequestBody PasswordResetRequest request) {
+    return passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword())
+            ? ResponseEntity.ok().build()
+            : ResponseEntity.badRequest().body("Try again");
   }
 
 }

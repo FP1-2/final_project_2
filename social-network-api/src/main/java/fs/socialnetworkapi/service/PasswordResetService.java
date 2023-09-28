@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.component.AppLink;
 import fs.socialnetworkapi.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class PasswordResetService {
   private final UserService userService;
   @Autowired
   private final MailService mailService;
+  @Autowired
+  private final AppLink appLink;
 
   public Optional<User> findByEmail(String email) {
     return Optional.of(userService.findByEmail(email));
@@ -28,13 +31,18 @@ public class PasswordResetService {
   }
 
   public void sendActivationCode(User user) {
-    String link = "http://twitterdemo.us-east-1.elasticbeanstalk.com/reset/confirm?code=" + generateActivationCode(user);
+    String link = appLink.getBaseUrl() + "/reset/confirm?code=" + generateActivationCode(user);
     String message = "To reset your password, click the following link: " + link;
     mailService.send(user.getEmail(), "Password Reset", message);
   }
 
-  public void setNewActivationCode(String email) {
-    findByEmail(email).ifPresent(this::sendActivationCode);
+  public boolean setNewActivationCode(String email) {
+    Optional<User> findUser = findByEmail(email);
+    if (findUser.isEmpty()) {
+      return false;
+    }
+    sendActivationCode(findUser.get());
+    return true;
   }
 
   public Optional<User> findByActivationCode(String activationCode) {
@@ -46,9 +54,13 @@ public class PasswordResetService {
     userService.upgradeUser(user);
   }
 
-  public void changePassword(String activationCode, String newPassword) {
-    Optional<User> user = findByActivationCode(activationCode);
-    user.ifPresent(value -> setNewPassword(value, newPassword));
+  public boolean changePassword(String activationCode, String newPassword) {
+    Optional<User> findUser = findByActivationCode(activationCode);
+    if (findUser.isEmpty()) {
+      return false;
+    }
+    setNewPassword(findUser.get(), newPassword);
+    return true;
   }
 
 }

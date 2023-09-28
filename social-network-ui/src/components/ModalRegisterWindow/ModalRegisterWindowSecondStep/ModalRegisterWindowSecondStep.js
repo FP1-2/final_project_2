@@ -13,10 +13,14 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
-import { register } from '../../../redux/slices/registerSlice'
+import {
+	register,
+	resetRegisterData,
+} from '../../../redux/slices/registerSlice'
 import CustomInput from '../../CustomInput/CustomInput'
 import LinkText from '../../LinkText/LinkText'
 import { useNavigate } from 'react-router-dom'
+import postRegistrationData from '../../../api/authApi'
 
 import axios from 'axios'
 
@@ -37,7 +41,7 @@ const initialValues = {
 	avatar: '',
 	lastName: '',
 	fstPassword: '',
-	sndPassword: '',
+	scndPassword: '',
 }
 
 const validationSchema = Yup.object({
@@ -53,7 +57,7 @@ const validationSchemaAlt = Yup.object({
 	fstPassword: Yup.string()
 		.required('Required')
 		.min(6, 'Password must be at least 6 characters'),
-	sndPassword: Yup.string()
+	scndPassword: Yup.string()
 		.required('Required')
 		.oneOf([Yup.ref('fstPassword'), null], 'Passwords must match'),
 })
@@ -127,18 +131,22 @@ const ModalRegisterWindowSecondStep = ({
 			return
 		}
 
+		const newValues = { ...values }
+
 		if (imageUrl !== '') {
 			// set avatar
-			values.avatar = imageUrl
+			newValues.avatar = imageUrl
 		}
 
-		if (values.avatar === '') {
-			values.avatar = false
+		if (newValues.avatar === '') {
+			newValues.avatar = false
 		}
+
+		const { scndPassword, ...secondPart } = Object.assign({}, newValues)
 
 		const obj = {
 			// add secod part of register data
-			...values,
+			...secondPart,
 			dataProcessing: dataProcessing,
 			subscribeNews: subscribeNewsletter,
 			registerData: new Date().toUTCString(),
@@ -147,20 +155,21 @@ const ModalRegisterWindowSecondStep = ({
 		dispatch(register(obj))
 		setIsLoading(true)
 		resetForm()
-
-		setTimeout(() => {
+		;(async () => {
+			const response = await postRegistrationData(obj)
+			console.log(response)
 			setIsLoading(false)
 			setIsRegisterDone(true)
-		}, 1000)
-
-		setTimeout(() => {
-			if (isModalOpen) {
-				setIsRegisterDone(false)
-				handleClose()
-				setRegisterStep(1)
-				navigate('/signIn')
-			}
-		}, 3000)
+			setTimeout(() => {
+				if (isModalOpen) {
+					setIsRegisterDone(false)
+					handleClose()
+					setRegisterStep(1)
+					dispatch(resetRegisterData())
+					navigate('/signIn')
+				}
+			}, 3000)
+		})()
 	}
 	return (
 		<Box
@@ -245,7 +254,7 @@ const ModalRegisterWindowSecondStep = ({
 									autoComplete='off'
 								/>
 								<CustomInput
-									name='sndPassword'
+									name='scndPassword'
 									type='password'
 									label='Confirm Password'
 									placeholder='Confirm Password'

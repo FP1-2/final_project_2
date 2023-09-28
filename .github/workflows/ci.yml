@@ -39,6 +39,7 @@ jobs:
     
           - name: Run build
             run: npm run build --prefix social-network-ui
+
     java-ci-checks:
       name: Automated Java CI checks
       runs-on: ubuntu-latest
@@ -53,5 +54,5 @@ jobs:
             java-version: 17
             cache: 'maven'
 
-        - name: Compile and run tests with Maven
-          run: mvn -f social-network-api/pom.xml clean test
+        - name: Compile and package with Maven
+          run: mvn clean package

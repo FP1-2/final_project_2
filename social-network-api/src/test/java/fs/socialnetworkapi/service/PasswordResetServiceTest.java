@@ -1,10 +1,12 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.component.AppLink;
 import fs.socialnetworkapi.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.UUID;
 
@@ -19,12 +21,18 @@ class PasswordResetServiceTest {
   @Mock
   private MailService mailService;
 
+  @Mock
+  private AppLink appLink;
+
+  @Value("${myapp.baseUrl}")
+  private String baseUrl;
+
   private PasswordResetService passwordResetService;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    passwordResetService = new PasswordResetService(userService, mailService);
+    passwordResetService = new PasswordResetService(userService, mailService, appLink);
   }
 
   @Test
@@ -45,7 +53,7 @@ class PasswordResetServiceTest {
     passwordResetService.sendActivationCode(user);
 
     verify(mailService, times(1)).send(eq("test@example.com"), eq("Password Reset"), anyString());
-    String expectedLink = "http://twitterdemo.us-east-1.elasticbeanstalk.com/reset/confirm?code=" + user.getActivationCode();
+    String expectedLink = baseUrl + "/reset/confirm?code=" + user.getActivationCode();
     verify(mailService).send(eq("test@example.com"), eq("Password Reset"), contains(expectedLink));
   }
 

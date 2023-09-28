@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.dto.user;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 public class UserDtoIn {
 
   private Long id;
+  private String username;
   @NotNull
   @Size(min = 2, message = "User firstname should have at least 2 characters")
   private String firstName;
@@ -20,6 +22,7 @@ public class UserDtoIn {
   @Email
   private String email;
   @NotNull
+  @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "birthday should be in format '1990-01-01'")
   private String birthday;
   private String avatar;
   private String mainPhoto;
@@ -39,6 +42,10 @@ public class UserDtoIn {
     this.birthday = birthday;
     this.avatar = avatar;
     this.mainPhoto = mainPhoto;
+  }
+
+  public String getUsername() {
+    return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
   }
 }
 

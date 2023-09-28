@@ -1,11 +1,18 @@
 package fs.socialnetworkapi.entity;
 
-import jakarta.persistence.*;
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +22,7 @@ import java.util.Set;
 @Getter
 public class User extends AbstractEntity {
 
+  private String username;
   private String firstName;
   private String lastName;
   private String email;
@@ -25,19 +33,30 @@ public class User extends AbstractEntity {
   private boolean active;
   private String activationCode;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Post> posts;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  private Set<RoleEntity> roles;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "reposts",
+          joinColumns = {@JoinColumn(name = "user_id")},
+          inverseJoinColumns = {@JoinColumn(name = "original_post_id")})
+  private Set<Post> reposts = new HashSet<>();
 
-  public Set<RoleEntity> getRoles() {
-    return roles;
-  }
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "subscriptions",
+          joinColumns = {@JoinColumn(name = "follower_id")},
+          inverseJoinColumns = {@JoinColumn(name = "following_id")})
+  private Set<User> followers = new HashSet<>();
 
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return this.roles;
-  }
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+          name = "subscriptions",
+          joinColumns = {@JoinColumn(name = "following_id")},
+          inverseJoinColumns = {@JoinColumn(name = "follower_id")})
+  private Set<User> followings = new HashSet<>();
+
 }
 
 

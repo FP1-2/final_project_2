@@ -3,13 +3,17 @@ import fs.socialnetworkapi.dto.Mapper;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -136,4 +140,102 @@ class UserServiceTest {
     verify(userRepo, times(1)).findByEmail(userEmail);
   }
 
+  @Test
+  void testSubscribe_whenUserNotFound(){
+
+    Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
+
+    assertThrows(UserNotFoundException.class, () -> userService.subscribe(1L,2L));
+  }
+
+  @Test
+  void testSubscribe(){
+
+    User currentUser = new User();
+    currentUser.setId(1L);
+    User user = new User();
+    user.setId(2L);
+
+    Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(currentUser));
+    Mockito.when(userRepo.findById(2L)).thenReturn(Optional.of(user));
+
+    userService.subscribe(1L,2L);
+
+    verify(userRepo, times(2)).findById(any());
+    verify(userRepo,times(1)).save(any(User.class));
+    assertEquals(1,userRepo.findById(2L).get().getFollowers().size());
+    assertEquals(1,user.getFollowers().size());
+  }
+  @Test
+  void testUnsubscribe_whenUserNotFound(){
+
+    Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
+
+    assertThrows(UserNotFoundException.class, () -> userService.unsubscribe(1L,2L));
+  }
+
+  @Test
+  void testUnsubscribe(){
+
+    User currentUser = new User();
+    currentUser.setId(1L);
+    User user = new User();
+    user.setId(2L);
+    user.getFollowers().add(currentUser);
+
+    Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(currentUser));
+    Mockito.when(userRepo.findById(2L)).thenReturn(Optional.of(user));
+
+    userService.unsubscribe(1L,2L);
+
+    verify(userRepo, times(2)).findById(any());
+    verify(userRepo,times(1)).save(any(User.class));
+    assertEquals(0,userRepo.findById(2L).get().getFollowers().size());
+    assertEquals(0,user.getFollowers().size());
+  }
+  @Test
+  void testGetFollowers_whenUserNotFound(){
+    Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
+
+    assertThrows(UserNotFoundException.class, () -> userService.getFollowers(1L));
+  }
+  @Test
+  void testGetFollowers(){
+    User currentUser = new User();
+    currentUser.setId(1L);
+    User user = new User();
+    user.setId(2L);
+    user.getFollowers().add(currentUser);
+
+    Mockito.when(userRepo.findById(2L)).thenReturn(Optional.of(user));
+    Mockito.when(mapper.map(any(User.class))).thenReturn(any(UserDtoOut.class));
+
+    List<UserDtoOut> followers = userService.getFollowers(2L);
+    verify(userRepo, times(1)).findById(any());
+    assertEquals(1,followers.size());
+
+  }
+  @Test
+  void testGetFollowings_whenUserNotFound(){
+    Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
+
+    assertThrows(UserNotFoundException.class, () -> userService.getFollowings(1L));
+  }
+  @Test
+  void testGetFollowings(){
+
+    User currentUser = new User();
+    currentUser.setId(1L);
+    User user = new User();
+    user.setId(2L);
+
+    currentUser.getFollowings().add(user);
+
+    Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(currentUser));
+    Mockito.when(mapper.map(any(User.class))).thenReturn(any(UserDtoOut.class));
+
+    List<UserDtoOut> followings = userService.getFollowings(1L);
+    verify(userRepo, times(1)).findById(any());
+    assertEquals(1,followings.size());
+  }
 }

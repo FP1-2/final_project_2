@@ -1,17 +1,21 @@
 package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.dto.user.UserDtoIn;
-import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.dto.UserDtoIn;
+import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,30 +26,20 @@ import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(RegistrationController.class)
 class RegistrationControllerTest {
-
-  @InjectMocks
-  private RegistrationController registrationController;
-
-  @Mock
-  private Model model;
   @Autowired
   private MockMvc mockMvc;
 
   @Autowired
   private ObjectMapper objectMapper;
 
-  @Autowired
+  @MockBean
   private UserService userService;
-
-  @BeforeEach
-  public void setUp() {
-    MockitoAnnotations.openMocks(this);
-  }
 
   @Test
   void testCreateUser() throws Exception {
@@ -56,14 +50,22 @@ class RegistrationControllerTest {
     userDtoIn.setEmail("john@example.com");
     userDtoIn.setBirthday("1990-01-01");
 
+    UserDtoOut userOut = new UserDtoOut();
+    userOut.setId(1L);
+    userOut.setFirstName("John");
+    userOut.setLastName("Doe");
+    userOut.setEmail("john@example.com");
+    userOut.setBirthday("1990-01-01");
+
     String userDtoInJson = objectMapper.writeValueAsString(userDtoIn);
+    Mockito.when(userService.addUser(any(UserDtoIn.class))).thenReturn(userOut);
 
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders
         .post("/api/v1/registration")
         .content(userDtoInJson)
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
-      .andExpect(MockMvcResultMatchers.status().isOk())
+      .andExpect(status().isOk())
       .andReturn();
 
     String responseJson = result.getResponse().getContentAsString();

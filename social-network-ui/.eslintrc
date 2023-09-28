@@ -9,9 +9,12 @@
 		"react/no-unknown-property": ["off", { "ignore": ["data-testid"] }]
 	},
 	"parserOptions": {
+		"parser": "@babel/eslint-parser",
 		"requireConfigFile": false,
-		"ecmaFeatures": {
-			"jsx": true
+		"babelOptions": {
+			"parserOpts": {
+				"plugins": ["jsx"]
+			}
 		}
 	}
 }
