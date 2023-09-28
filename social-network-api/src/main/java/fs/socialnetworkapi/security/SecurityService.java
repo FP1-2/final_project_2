@@ -68,12 +68,14 @@ public class SecurityService {
         .setExpiration(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()))
         .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secret.getBytes()))
         .compact();
+    System.out.println("777");
 
     return TokenDetails.builder()
       .token(token)
       .issuedAt(createdDate)
       .expiresAt(expirationDate)
       .build();
+
   }
 
   public Optional<Claims> getClaims(String token){

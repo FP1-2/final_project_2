@@ -11,7 +11,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,6 +59,17 @@ public class User extends AbstractEntity {
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
 
+  @ManyToMany(fetch = FetchType.EAGER)
+  private Set<RoleEntity> roles;
+
+  public Set<RoleEntity> getRoles() {
+    return roles;
+  }
+
+
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return this.roles;
+  }
 }
 
 

@@ -21,6 +21,15 @@ spring:
     sender: # отправитель письма (его почта и имя)
       email: test@gmail.com
 #      text: no-reply
+jwt:
+  password:
+    encoder:
+      secret: FZK2DZ82odqS13e8aENggaMdd_fAkl-nJL4EVBX43g
+      iteration: 64
+      keylength: 256
+  secret: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
+  expiration: 3600
+  issuer: pervuy
 
 myapp:
   baseUrl: http://twitterdemo.us-east-1.elasticbeanstalk.com
