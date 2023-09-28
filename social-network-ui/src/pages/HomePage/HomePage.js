@@ -1,8 +1,18 @@
-import React from 'react'
-import Header from '../../components/Header/header'
+import React from "react";
+// import Header from "../../components/Header/header";
+import Post from "../../components/HomePage/Post/Post";
+import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
 
 const Home = () => {
-  return <Header pageName='Main' />
-}
+  return (
+    <div>
+      {/* <Header pageName="Main" /> */}
+      <section>
+        <TwitterWriteWindow />
+        <Post />
+      </section>
+    </div>
+  );
+};
 
-export default Home
+export default Home;

@@ -7,7 +7,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ShareIcon from "@mui/icons-material/Share";
 import Avatar from "../../Avatar/Avatar";
-const Post = () => {
+import PropTypes from "prop-types";
+
+const Post = (props) => {
   return (
     <div className={styles.post}>
       <Avatar />
@@ -32,6 +34,7 @@ const Post = () => {
         <div className={styles.body__main}>
           <p className={styles.main__twitte}>
             {/* {post.twitte} */}
+            {props.post}
             sdsdaSDAsddfsdfvsdfasdfsdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
           </p>
           {/* <img src={image} alt="" /> */}
@@ -54,3 +57,7 @@ const Post = () => {
 };
 
 export default Post;
+Post.propTypes = {
+  post: PropTypes.string.isRequired, // Пропс 'text' має бути рядком і обов'язковим
+  // onChange: PropTypes.func.isRequired, // Пропс 'onChange' має бути функцією і обов'язковим
+};
