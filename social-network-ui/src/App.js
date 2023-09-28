@@ -1,14 +1,22 @@
-import AppRoutes from "./AppRoutes";
-import React from "react";
-import ModalRegisterWindow from "./components/ModalRegisterWindow/ModalRegisterWindow";
+
+import AppRoutes from './AppRoutes'
+import React, { useEffect } from 'react'
+import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
+import useScreenSize from './hooks/useScreenSize'
 
 function App() {
-  return (
-    <>
-      <AppRoutes />
-      <ModalRegisterWindow />
-    </>
-  );
+	const screenSize = useScreenSize()
+
+	useEffect(() => {
+		console.log(screenSize)
+	}, [screenSize])
+	return (
+		<>
+			<AppRoutes />
+			<ModalRegisterWindow />
+		</>
+	)
+
 }
 
 export default App;

@@ -1,10 +1,5 @@
 server:
   port: 5000
-  ssl:
-    key-store: social-network-api\src\main\resources\keystore.p12
-    key-store-password: 050882
-    key-store-type: PKCS12
-    key-alias: tomcat
 
 spring:
   profiles:
@@ -26,6 +21,9 @@ spring:
     sender: # отправитель письма (его почта и имя)
       email: test@gmail.com
 #      text: no-reply
+
+myapp:
+  baseUrl: http://twitterdemo.us-east-1.elasticbeanstalk.com
 
 # local profile
 ---
@@ -73,7 +71,7 @@ spring:
         bootstrap-mode: deferred #default
   jpa:
     hibernate:
-      ddl-auto: create-drop #update
+      ddl-auto: update #update
     generate-ddl: true
     show-sql: true
     properties:
