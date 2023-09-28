@@ -1,11 +1,14 @@
 package fs.socialnetworkapi.dto.user;
 
+import fs.socialnetworkapi.entity.RoleEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Setter
 @Getter
@@ -47,5 +50,6 @@ public class UserDtoIn {
   public String getUsername() {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
   }
+
 }
 

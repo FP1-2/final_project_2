@@ -3,12 +3,15 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.Mapper;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.entity.RoleEntity;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,14 +21,18 @@ public class UserService {
   private final UserRepo userRepo;
   private final MailService mailService;
   private final Mapper mapper;
+  private final PasswordEncoder passwordEncoder;
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
     if (userFromDb != null) {
       return mapper.map(userFromDb); // need to correct
     }
+
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
+    userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
+//    userDtoIn.setRoles(Collections.singleton(new RoleEntity(2L, "ROLE_USER")));
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
