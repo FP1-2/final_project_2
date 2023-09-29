@@ -8,6 +8,6 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class LoginDtoIn {
 
-    private String email;
-    private String password;
+  private String email;
+  private String password;
 }

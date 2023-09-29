@@ -17,8 +17,11 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class LoginDtoOut {
 
-    private Long id;
-    private String token;
-    private LocalDateTime issueAt;
-    private LocalDateTime expiresAt;
+  private Long id;
+  private String token;
+  private LocalDateTime issueAt;
+  private LocalDateTime expiresAt;
+
 }
+
+

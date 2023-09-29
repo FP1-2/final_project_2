@@ -2,7 +2,7 @@ package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

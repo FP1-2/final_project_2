@@ -14,28 +14,33 @@ import java.util.Set;
 @Data
 public class RoleEntity extends AbstractEntity implements GrantedAuthority {
 
-    private String name;
+  private String name;
 
-    @Transient
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+  @Transient
+  @ManyToMany(mappedBy = "roles")
+  private Set<User> users;
 
-    public RoleEntity(Long id, String name) {
-        setId(id);
-        this.name = name;
-    }
-    public RoleEntity(){
+  public RoleEntity(Long id, String name) {
+    setId(id);
+    this.name = name;
+  }
 
-    }
+  public RoleEntity(String name) {
+    this.name = name;
+  }
 
-    public static RoleEntity getUserRole(){
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setName("ROLE_USER");
-        return roleEntity;
-    }
+  public RoleEntity() {
 
-    @Override
-    public String getAuthority() {
-        return null;
-    }
+  }
+
+  public static RoleEntity getUserRole() {
+    RoleEntity roleEntity = new RoleEntity();
+    roleEntity.setName("ROLE_USER");
+    return roleEntity;
+  }
+
+  @Override
+  public String getAuthority() {
+    return null;
+  }
 }

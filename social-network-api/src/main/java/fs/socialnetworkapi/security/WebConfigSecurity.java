@@ -19,40 +19,40 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class WebConfigSecurity {
 
-    @Value("${jwt.secret}")
-    private String secret;
-    private final JwtFilter jwtFilter;
-    private final String[] publicRoutes = {"/api/v1/registration","/api/v1/login"};
+  @Value("${jwt.secret}")
+  private String secret;
+  private final JwtFilter jwtFilter;
+  private final String[] publicRoutes = {"/api/v1/registration","/api/v1/login"};
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests((authorizeHttpRequests) ->
-                        authorizeHttpRequests
-                                .requestMatchers("/api/v1/registration").permitAll()
-                                .requestMatchers("/api/v1/login").permitAll()
-                                .requestMatchers("/error").permitAll()
-                                //.requestMatchers("/h2-console/**").permitAll()
-                                .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT,"api/v1/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET,"api/v1/**").hasRole("USER")
-                                .requestMatchers(HttpMethod.POST,"api/v1/**").hasRole("USER")
+    http.csrf(AbstractHttpConfigurer::disable);
+    http.authorizeHttpRequests((authorizeHttpRequests) ->
+        authorizeHttpRequests
+          .requestMatchers("/api/v1/registration").permitAll()
+          .requestMatchers("/api/v1/login").permitAll()
+          .requestMatchers("/error").permitAll()
+          //.requestMatchers("/h2-console/**").permitAll()
+          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.GET,"api/v1/**").hasRole("USER")
+          .requestMatchers(HttpMethod.POST,"api/v1/**").hasRole("USER")
 
-                )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+      )
+      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return (WebSecurity web)-> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
-    }
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (WebSecurity web)-> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
+  }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizerDebug() {
-        return (WebSecurity web) -> web.debug(true);
-    }
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizerDebug() {
+    return (WebSecurity web) -> web.debug(true);
+  }
 
 }

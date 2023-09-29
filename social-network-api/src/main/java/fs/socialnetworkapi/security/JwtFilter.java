@@ -34,25 +34,22 @@ public class JwtFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    throws ServletException, IOException {
     try {
       Optional<String> token = extractTokenFromRequest(request);
-      Optional<SecurityService.VerificationResult> verificationResult = token.map(tokenService::check);
+      Optional<SecurityService.verificationResult> verificationResult = token.map(tokenService::check);
       Optional<UsernamePasswordAuthenticationToken> usernamePasswordAuthenticationToken = verificationResult
               .map(UserAuthenticationBearer::create);
-//            usernamePasswordAuthenticationToken.ifPresentOrElse(at -> {
-//                    at.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                    SecurityContextHolder.getContext().setAuthentication(at);
-//                },
-//                        () -> response.setStatus(403));
-      if (usernamePasswordAuthenticationToken.isPresent()){
+      if (usernamePasswordAuthenticationToken.isPresent()) {
         UsernamePasswordAuthenticationToken at = usernamePasswordAuthenticationToken.get();
         at.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(at);
-      }else {
+      } else {
         //Якщо не має токена, тоді передаємо пустого юзера
         User user = new User();
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user,null, user.getAuthorities()));
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user,null,
+          user.getAuthorities()));
         //response.setStatus(403);
       }
       filterChain.doFilter(request, response);

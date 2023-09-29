@@ -1,7 +1,7 @@
 package fs.socialnetworkapi.service;
 
 import fs.socialnetworkapi.dto.Mapper;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Post;

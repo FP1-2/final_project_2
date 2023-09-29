@@ -32,6 +32,7 @@ public class UserDtoIn {
   private String password;
   private boolean active;
   private String activationCode;
+  private Set<RoleEntity> roles;
 
   public UserDtoIn() {
   }
@@ -51,5 +52,7 @@ public class UserDtoIn {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
   }
 
+  public void setRoles(Set<RoleEntity> roleUser) {
+  }
 }
 

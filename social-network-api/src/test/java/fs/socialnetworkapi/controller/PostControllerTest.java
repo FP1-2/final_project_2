@@ -3,7 +3,7 @@ package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.service.PostService;

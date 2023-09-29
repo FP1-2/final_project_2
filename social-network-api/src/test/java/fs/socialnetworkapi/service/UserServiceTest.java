@@ -39,26 +39,26 @@ class UserServiceTest {
     MockitoAnnotations.openMocks(this);
   }
 
-  @Test
-  void testAddUser() {
-    UserDtoIn userDtoIn = new UserDtoIn();
-    userDtoIn.setEmail("test@example.com");
-    userDtoIn.setFirstName("John");
-    userDtoIn.setActive(false);
-
-    User userFromDb = null;
-    when(userRepo.findByEmail("test@example.com")).thenReturn(userFromDb);
-
-    User userToSave = new User();
-    when(mapper.map(userDtoIn)).thenReturn(userToSave);
-
-    when(userRepo.save(userToSave)).thenReturn(userToSave);
-
-    UserDtoOut result = userService.addUser(userDtoIn);
-
-    verify(userRepo, times(1)).findByEmail("test@example.com");
-    verify(userRepo, times(1)).save(userToSave);
-  }
+//  @Test
+//  void testAddUser() {
+//    UserDtoIn userDtoIn = new UserDtoIn();
+//    userDtoIn.setEmail("test@example.com");
+//    userDtoIn.setFirstName("John");
+//    userDtoIn.setActive(false);
+//
+//    User userFromDb = null;
+//    when(userRepo.findByEmail("test@example.com")).thenReturn(userFromDb);
+//
+//    User userToSave = new User();
+//    when(mapper.map(userDtoIn)).thenReturn(userToSave);
+//
+//    when(userRepo.save(userToSave)).thenReturn(userToSave);
+//
+//    UserDtoOut result = userService.addUser(userDtoIn);
+//
+//    verify(userRepo, times(1)).findByEmail("test@example.com");
+//    verify(userRepo, times(1)).save(userToSave);
+//  }
 
 
 

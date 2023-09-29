@@ -1,9 +1,11 @@
 package fs.socialnetworkapi.dto.user;
 
+import fs.socialnetworkapi.entity.RoleEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -15,6 +17,7 @@ public class UserDtoOut {
   private String email;
   private String birthday;
   private String avatar;
+  private Set<RoleEntity> roles;
 
   @Override
   public boolean equals(Object obj) {

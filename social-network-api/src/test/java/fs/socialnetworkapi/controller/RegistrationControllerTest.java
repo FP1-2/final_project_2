@@ -1,8 +1,8 @@
 package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.dto.UserDtoIn;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoIn;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
