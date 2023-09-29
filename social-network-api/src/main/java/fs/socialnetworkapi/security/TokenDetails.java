@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TokenDetails {
 
-    private Long userId;
-    private String token;
-    private LocalDateTime issuedAt;
-    private LocalDateTime expiresAt;
+  private Long userId;
+  private String token;
+  private LocalDateTime issuedAt;
+  private LocalDateTime expiresAt;
 }
