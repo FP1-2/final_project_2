@@ -25,43 +25,11 @@ const TwitterWriteWindow = () => {
     e.preventDefault();
     console.log({ tweetPost });
     //  console.log(urlPOST);
-    const urlPOST = "/api/v1/user/{user_id}/post";
-    const user = {
-      id: 22,
-      user: {
-        id: 22,
-        username: "Sn",
-        firstName: "SN",
-        lastName: "KN",
-        email: "string",
-        birthday: "string",
-        avatar: "string",
-      },
-      description: "string",
-      photo: "string",
-      createdDate: "2023-09-28T19:37:05.432Z",
-      timeWhenWasPost: "string",
-      usersReposts: [
-        {
-          id: 0,
-          username: "string",
-          firstName: "string",
-          lastName: "string",
-          email: "string",
-          birthday: "string",
-          avatar: "string",
-        },
-      ],
-      isRepost: true,
-    };
+    const urlPOST =
+      "http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/user/1/posts?page=0&size=10";
 
-    await axios({
-      method: "post",
-      url: urlPOST,
-      data: {
-        user,
-      },
-    })
+    await axios
+      .get(urlPOST)
       .then((data) => console.log(data))
       .catch((err) => console.log(err));
   }
