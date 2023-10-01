@@ -35,7 +35,7 @@ public class RoleEntity extends AbstractEntity implements GrantedAuthority {
 
   public static RoleEntity getUserRole() {
     RoleEntity roleEntity = new RoleEntity();
-    roleEntity.setName("ROLE_USER");
+    roleEntity.setName("USER");
     return roleEntity;
   }
 

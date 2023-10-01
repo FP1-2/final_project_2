@@ -32,7 +32,7 @@ public class UserDtoIn {
   private String password;
   private boolean active;
   private String activationCode;
-  private Set<RoleEntity> roles;
+//  private Set<RoleEntity> roles;
 
   public UserDtoIn() {
   }

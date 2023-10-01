@@ -17,7 +17,7 @@ public class UserDtoOut {
   private String email;
   private String birthday;
   private String avatar;
-  private Set<RoleEntity> roles;
+//  private Set<RoleEntity> roles;
 
   @Override
   public boolean equals(Object obj) {

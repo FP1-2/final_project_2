@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Table(name = "users")
 @Setter
 @Getter
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements UserDetails {
 
   private String username;
   private String firstName;
@@ -59,8 +60,8 @@ public class User extends AbstractEntity {
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  private Set<RoleEntity> roles;
+  @ManyToMany(fetch = FetchType.LAZY)
+  private Set<RoleEntity> roles = new HashSet<>();
 
   public Set<RoleEntity> getRoles() {
     return roles;
@@ -69,6 +70,26 @@ public class User extends AbstractEntity {
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return this.roles;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return false;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return false;
   }
 }
 

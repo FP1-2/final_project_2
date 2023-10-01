@@ -22,7 +22,7 @@ public class WebConfigSecurity {
   @Value("${jwt.secret}")
   private String secret;
   private final JwtFilter jwtFilter;
-  private final String[] publicRoutes = {"/api/v1/registration","/api/v1/login"};
+//  private final String[] publicRoutes = {"/api/v1/registration","/api/v1/login"};
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,8 +34,8 @@ public class WebConfigSecurity {
           .requestMatchers("/api/v1/login").permitAll()
           .requestMatchers("/error").permitAll()
           //.requestMatchers("/h2-console/**").permitAll()
-          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasRole("ADMIN")
-          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasRole("ADMIN")
+          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasRole("USER")
+          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasRole("USER")
           .requestMatchers(HttpMethod.GET,"api/v1/**").hasRole("USER")
           .requestMatchers(HttpMethod.POST,"api/v1/**").hasRole("USER")
 
@@ -47,7 +47,7 @@ public class WebConfigSecurity {
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
-    return (WebSecurity web)-> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
+    return (WebSecurity web)-> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2/**"));
   }
 
   @Bean

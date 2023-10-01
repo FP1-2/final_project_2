@@ -40,16 +40,6 @@ public class SecurityService {
     return generateToken(userByEmail).toBuilder()
       .userId(userByEmail.getId())
       .build();
-
-//    User userByEmail = userService.findByEmail(email);
-//
-//    if (passwordEncoder.matches(password, userByEmail.getPassword()) & userByEmail.isActive()) {
-//      return generateToken(userByEmail).toBuilder()
-//        .userId(userByEmail.getId())
-//        .build();
-//    } else {
-//      return new TokenDetails();
-//    }
   }
 
   private TokenDetails generateToken(User user) {

@@ -32,7 +32,7 @@ public class UserService {
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
     userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
-    userDtoIn.setRoles(Collections.singleton(new RoleEntity("ROLE_GUEST")));
+    userDtoIn.setRoles(Collections.singleton(new RoleEntity("GUEST")));
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
@@ -53,7 +53,7 @@ public class UserService {
     }
     user.setActivationCode(null);
     user.setActive(true);
-    user.setRoles(Collections.singleton(new RoleEntity("ROLE_USER")));
+    user.setRoles(Collections.singleton(new RoleEntity("USER")));
     userRepo.save(user);
     return true;
   }
