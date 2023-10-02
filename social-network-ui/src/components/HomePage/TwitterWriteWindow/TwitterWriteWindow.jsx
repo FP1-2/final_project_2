@@ -8,9 +8,9 @@ import MultilineTextFields from "../WriteInput/MultilineTextFields";
 const TwitterWriteWindow = () => {
   const [tweetPost, setTweetPost] = useState("");
 
-  const [tweetImage, setTweetImage] = useState("");
+  //   const [tweetImage, setTweetImage] = useState("");
 
-  const [appState, setAppState] = useState();
+  //   const [appState, setAppState] = useState();
 
   //   useEffect(() => {
   //     const urlPOST = "/api/v1/user/{user_id}/post";
@@ -25,13 +25,13 @@ const TwitterWriteWindow = () => {
     e.preventDefault();
     console.log({ tweetPost });
     //  console.log(urlPOST);
-    const urlPOST =
-      "http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/user/1/posts?page=0&size=10";
+    //  const urlPOST =
+    //    "http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/user/3/posts?page=0&size=10";
 
-    await axios
-      .get(urlPOST)
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+    //  await axios
+    //    .get(urlPOST)
+    //    .then((data) => console.log(data.data))
+    //    .catch((err) => console.log(err));
   }
   return (
     <div>

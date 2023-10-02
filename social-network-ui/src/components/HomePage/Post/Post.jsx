@@ -9,24 +9,20 @@ import ShareIcon from "@mui/icons-material/Share";
 import Avatar from "../../Avatar/Avatar";
 import PropTypes from "prop-types";
 
-const Post = (props) => {
+const Post = (tweet) => {
   return (
     <div className={styles.post}>
       <Avatar />
       <div className={styles.post__body}>
         <div className={styles.body__header}>
           <span className={styles.header__mainName}>
-            {/* {post.name} */}
-            Devid
+            {tweet.firstName + tweet.lastName}
+            {/* Devid */}
           </span>
-          {/* <VerifiedUserIcon
-            fontSize="small"
-       
-            className={styles.header__mainName}
-          /> */}
+
           <span className={styles.header__tagName}>
-            {/* {post.tagName} */}
-            @аываываыаыаыва
+            {tweet.username}
+            {/* @аываываыаыаыва */}
           </span>
           <FiberManualRecordIcon style={{ fontSize: 10, color: "#737373" }} />
           <span className={styles.header__time}>12w</span>
@@ -34,7 +30,7 @@ const Post = (props) => {
         <div className={styles.body__main}>
           <p className={styles.main__twitte}>
             {/* {post.twitte} */}
-            {props.post}
+            {/* {props.post} */}
             sdsdaSDAsddfsdfvsdfasdfsdfasddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
           </p>
           {/* <img src={image} alt="" /> */}
@@ -57,7 +53,7 @@ const Post = (props) => {
 };
 
 export default Post;
-Post.propTypes = {
-  post: PropTypes.string.isRequired, // Пропс 'text' має бути рядком і обов'язковим
-  // onChange: PropTypes.func.isRequired, // Пропс 'onChange' має бути функцією і обов'язковим
-};
+// Post.propTypes = {
+//   post: PropTypes.string.isRequired, // Пропс 'text' має бути рядком і обов'язковим
+// onChange: PropTypes.func.isRequired, // Пропс 'onChange' має бути функцією і обов'язковим
+// };
