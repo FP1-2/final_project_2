@@ -34,13 +34,13 @@ class LikeControllerTest {
   private LikeController likeController;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     closable = MockitoAnnotations.openMocks(this);
     mockMvc = MockMvcBuilders.standaloneSetup(likeController).build();
   }
 
   @AfterEach
-  public void close() throws Exception {
+  void close() throws Exception {
     closable.close();
   }
 
