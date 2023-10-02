@@ -41,26 +41,21 @@ class LikeServiceTest {
   }
 
   @Test
-  void likePost_LikeExists_ChangesState() {
+  void likePost_LikeExists_DeleteLike() {
     User user = new User();
     user.setId(1L);
     Post post = new Post();
     post.setId(2L);
 
-    Like like = new Like(user, post, true);
+    Like like = new Like(user, post);
 
     when(userRepo.findById(1L)).thenReturn(Optional.of(user));
     when(postRepo.findById(2L)).thenReturn(Optional.of(post));
     when(likeRepo.findByPostIdAndUserId(2L, 1L)).thenReturn(Optional.of(like));
 
-    assertTrue(like.isLiked());
     likeService.likePost(2L, 1L);
 
-    assertFalse(like.isLiked());
-    verify(likeRepo, times(1)).save(like);
-
-    likeService.likePost(2L, 1L);
-    assertTrue(like.isLiked());
+    verify(likeRepo, times(1)).delete(like);
   }
 
   @Test
@@ -86,6 +81,7 @@ class LikeServiceTest {
     assertThrows(UserNotFoundException.class, () -> likeService.likePost(2L, 1L));
 
     verify(likeRepo, never()).save(any(Like.class));
+    verify(likeRepo, never()).delete(any(Like.class));
   }
 
   @Test
@@ -99,6 +95,7 @@ class LikeServiceTest {
     assertThrows(PostNotFoundException.class, () -> likeService.likePost(2L, 1L));
 
     verify(likeRepo, never()).save(any(Like.class));
+    verify(likeRepo, never()).delete(any(Like.class));
   }
 
   @Test
@@ -108,15 +105,15 @@ class LikeServiceTest {
     post.setId(postId);
 
     List<Like> likes = new ArrayList<>();
-    likes.add(new Like(new User(), post, true));
-    likes.add(new Like(new User(), post, false));
+    likes.add(new Like(new User(), post));
+    likes.add(new Like(new User(), post));
 
     when(postRepo.findById(postId)).thenReturn(Optional.of(post));
     when(likeRepo.findByPostId(postId)).thenReturn(likes);
 
     List<Like> result = likeService.getLikesForPost(postId);
 
-    assertEquals(1, result.size());
+    assertEquals(likes.size(), result.size());
   }
 
   @Test
@@ -137,15 +134,15 @@ class LikeServiceTest {
     user.setId(userId);
 
     List<Like> likes = new ArrayList<>();
-    likes.add(new Like(user, new Post(), true));
-    likes.add(new Like(user, new Post(), false));
+    likes.add(new Like(user, new Post()));
+    likes.add(new Like(user, new Post()));
 
     when(userRepo.findById(userId)).thenReturn(Optional.of(user));
     when(likeRepo.findByUserId(userId)).thenReturn(likes);
 
     List<Like> result = likeService.getLikesForUser(userId);
 
-    assertEquals(1, result.size());
+    assertEquals(likes.size(), result.size());
   }
 
   @Test
@@ -158,5 +155,4 @@ class LikeServiceTest {
 
     assertTrue(result.isEmpty());
   }
-
 }

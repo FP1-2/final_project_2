@@ -1,19 +1,22 @@
 package fs.socialnetworkapi.controller;
 
-import fs.socialnetworkapi.entity.Like;
+import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.service.LikeService;
+import fs.socialnetworkapi.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 class LikeControllerTest {
 
@@ -22,53 +25,71 @@ class LikeControllerTest {
   @Mock
   private LikeService likeService;
 
+  @Mock
+  private PostService postService;
+
+  @InjectMocks
+  private LikeController likeController;
+
   @BeforeEach
-  public void setup() {
+  public void setUp() {
     MockitoAnnotations.initMocks(this);
-    LikeController likeController = new LikeController(likeService);
     mockMvc = MockMvcBuilders.standaloneSetup(likeController).build();
   }
 
   @Test
-  void testGetLikesForPost() throws Exception {
+  public void testGetLikesForPost() throws Exception {
     Long postId = 1L;
-    List<Like> likes = new ArrayList<>();
-    likes.add(new Like());
-    likes.add(new Like());
+    PostDtoOut postDtoOut = new PostDtoOut();
 
-    when(likeService.getLikesForPost(postId)).thenReturn(likes);
+    when(postService.findById(postId)).thenReturn(postDtoOut);
 
-    mockMvc.perform(get("/api/v1/likes/post/" + postId)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.length()").value(2));
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/likes/post/{postId}", postId))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(postDtoOut.getId()));
   }
 
   @Test
-  void testGetLikesForUser() throws Exception {
-    Long userId = 1L;
-    List<Like> likes = new ArrayList<>();
-    likes.add(new Like());
-    likes.add(new Like());
+  public void testGetLikesForPosts() throws Exception {
+    List<Long> postIds = Arrays.asList(1L, 2L);
+    List<PostDtoOut> postDtoOutList = Arrays.asList(
+            new PostDtoOut(),
+            new PostDtoOut()
+    );
 
-    when(likeService.getLikesForUser(userId)).thenReturn(likes);
+    when(postService.findByIds(postIds)).thenReturn(postDtoOutList);
 
-    mockMvc.perform(get("/api/v1/likes/user/" + userId)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.length()").value(2));
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/likes/posts")
+                    .param("postIds", "1", "2"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(postDtoOutList.get(0).getId()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(postDtoOutList.get(1).getId()));
   }
+
+  @Test
+  public void testGetLikedPostsForUser() throws Exception {
+    Long userId = 1L;
+    List<PostDtoOut> postDtoOutList = Arrays.asList(
+            new PostDtoOut(),
+            new PostDtoOut()
+    );
+
+    when(postService.findLikedPostsByUserId(userId)).thenReturn(postDtoOutList);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/likes/user/{userId}", userId))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(postDtoOutList.get(0).getId()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(postDtoOutList.get(1).getId()));
+  }
+
 
   @Test
   void testLikePost() throws Exception {
     Long postId = 1L;
     Long userId = 2L;
 
-    mockMvc.perform(post("/api/v1/likes/like/" + postId + "/" + userId)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/likes/like/{postId}/{userId}", postId, userId))
+            .andExpect(MockMvcResultMatchers.status().isOk());
 
     verify(likeService, times(1)).likePost(postId, userId);
   }

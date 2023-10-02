@@ -23,8 +23,19 @@ class PostDtoOutTest {
     userDtoOut2 = new UserDtoOut();
     userDtoOut2.setId(2L);
 
-    postDtoOut = new PostDtoOut(1L, userDtoOut1,"Description", "Photo", LocalDateTime.now(),"", List.of(),false);
+    postDtoOut = PostDtoOut.builder()
+            .id(1L)
+            .user(userDtoOut1)
+            .description("Description")
+            .photo("Photo")
+            .createdDate(LocalDateTime.now())
+            .timeWhenWasPost("")
+            .usersReposts(List.of())
+            .isRepost(false)
+            .likes(List.of())
+            .build();
   }
+
   @Test
   void getId() {
     assertEquals(1L, postDtoOut.getId());

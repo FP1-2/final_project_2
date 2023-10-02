@@ -2,12 +2,15 @@ package fs.socialnetworkapi.dto;
 
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
+import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.service.LikeService;
 import fs.socialnetworkapi.utils.Universal;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -17,13 +20,15 @@ import java.util.Set;
 @Component
 public class Mapper {
   private final ModelMapper modelMapper;
+  @Autowired
+  private LikeService likeService;
 
   public Mapper() {
     this.modelMapper = new ModelMapper();
     modelMapper.getConfiguration()
-      .setMatchingStrategy(MatchingStrategies.STRICT);
+            .setMatchingStrategy(MatchingStrategies.STRICT);
     this.modelMapper
-      .createTypeMap(User.class, UserDtoOut.class);
+            .createTypeMap(User.class, UserDtoOut.class);
 
     //Post
     Converter<Set<User>, List<UserDtoOut>> convertSetUserToListUserDtoOut = (src) -> src.getSource().stream()
@@ -47,7 +52,10 @@ public class Mapper {
   }
 
   public PostDtoOut map(Post post) {
-    return this.modelMapper.map(post, PostDtoOut.class);
+    PostDtoOut postDtoOut = this.modelMapper.map(post, PostDtoOut.class);
+    List<Like> likes = likeService.getLikesForPost(post.getId());
+    postDtoOut.setLikes(likes);
+    return postDtoOut;
   }
 
   public Post map(PostDtoIn post) {
