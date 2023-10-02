@@ -29,6 +29,7 @@ public class User extends AbstractEntity implements UserDetails {
   private String avatar;
   private String mainPhoto;
   private String password;
+  private String address;
   private boolean active;
   private String activationCode;
 
@@ -56,8 +57,8 @@ public class User extends AbstractEntity implements UserDetails {
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
 
-  @LazyCollection(LazyCollectionOption.FALSE)
-  @ManyToMany(mappedBy = "users",cascade = {CascadeType.REMOVE})
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "role_id")
   private Set<RoleEntity> roles = new HashSet<>();
 
   public Set<RoleEntity> getRoles() {

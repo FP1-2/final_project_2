@@ -30,6 +30,7 @@ public class UserDtoIn {
   private String avatar;
   private String mainPhoto;
   private String password;
+  private String address;
   private boolean active;
   private String activationCode;
 //  private Set<RoleEntity> roles;
@@ -37,22 +38,19 @@ public class UserDtoIn {
   public UserDtoIn() {
   }
 
-  public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String avatar,
-                   String mainPhoto) {
+  public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String address) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.birthday = birthday;
-    this.avatar = avatar;
-    this.mainPhoto = mainPhoto;
+    this.address = address;
+
   }
 
   public String getUsername() {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
   }
 
-  public void setRoles(Set<RoleEntity> roleUser) {
-  }
 }
 

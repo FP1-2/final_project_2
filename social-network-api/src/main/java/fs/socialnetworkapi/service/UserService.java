@@ -26,12 +26,13 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final RoleRepository roleRepository;
 
+
+
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
 
-    RoleEntity role = new RoleEntity("USER");
-    RoleEntity role1 = new RoleEntity("GUEST");
-    roleRepository.save(role);
+//    RoleEntity role = new RoleEntity("USER");
+//    roleRepository.save(role);
 
 
     if (userFromDb != null) {
@@ -52,6 +53,8 @@ public class UserService {
         userDtoIn.getActivationCode()
       );
       mailService.send(userDtoIn.getEmail(), "Activation code", message);
+      RoleEntity role = new RoleEntity("USER");
+      roleRepository.save(role);
     }
     return mapper.map(user1);// need to correct
   }
@@ -61,11 +64,12 @@ public class UserService {
     if (user == null) {
       return false;
     }
-    RoleEntity role = new RoleEntity("USER");
-    roleRepository.save(role);
+    RoleEntity role = roleRepository.getReferenceById(1L);
+//    RoleEntity role = new RoleEntity("USER");
+//    roleRepository.save(role);
     user.setActivationCode(null);
     user.setActive(true);
-    user.setRoles(Collections.singleton(role));
+    user.setRoles((Set<RoleEntity>) roleRepository.findAll());
     userRepo.save(user);
     return true;
   }

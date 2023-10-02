@@ -13,20 +13,15 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-@Data
+//@Data
 @Setter
 @Getter
 public class RoleEntity extends AbstractEntity implements GrantedAuthority {
 
   private String name;
 
-//  @Transient
-  @LazyCollection(LazyCollectionOption.FALSE)
-  @ManyToMany(cascade = { CascadeType.MERGE })
-  @JoinTable(
-      name = "users_roles",
-      joinColumns = { @JoinColumn(name = "role_id") },
-      inverseJoinColumns = { @JoinColumn(name = "user_id") })
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
   private Set<User> users = new HashSet<>();
 
   public RoleEntity(Long id, String name) {
