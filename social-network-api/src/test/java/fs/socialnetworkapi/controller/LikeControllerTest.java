@@ -3,6 +3,7 @@ package fs.socialnetworkapi.controller;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.service.LikeService;
 import fs.socialnetworkapi.service.PostService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.*;
 class LikeControllerTest {
 
   private MockMvc mockMvc;
+  private AutoCloseable closable;
 
   @Mock
   private LikeService likeService;
@@ -33,12 +35,17 @@ class LikeControllerTest {
 
   @BeforeEach
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
+    closable = MockitoAnnotations.openMocks(this);
     mockMvc = MockMvcBuilders.standaloneSetup(likeController).build();
   }
 
+  @AfterEach
+  public void close() throws Exception {
+    closable.close();
+  }
+
   @Test
-  public void testGetLikesForPost() throws Exception {
+  void testGetLikesForPost() throws Exception {
     Long postId = 1L;
     PostDtoOut postDtoOut = new PostDtoOut();
 
@@ -50,7 +57,7 @@ class LikeControllerTest {
   }
 
   @Test
-  public void testGetLikesForPosts() throws Exception {
+  void testGetLikesForPosts() throws Exception {
     List<Long> postIds = Arrays.asList(1L, 2L);
     List<PostDtoOut> postDtoOutList = Arrays.asList(
             new PostDtoOut(),
@@ -67,7 +74,7 @@ class LikeControllerTest {
   }
 
   @Test
-  public void testGetLikedPostsForUser() throws Exception {
+  void testGetLikedPostsForUser() throws Exception {
     Long userId = 1L;
     List<PostDtoOut> postDtoOutList = Arrays.asList(
             new PostDtoOut(),

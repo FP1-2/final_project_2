@@ -402,7 +402,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void testFindById() {
+    void testFindById() {
         Mockito.when(postRepo.findById(1L)).thenReturn(Optional.of(post));
         Mockito.when(mapper.map(post)).thenReturn(postDtoOut1);
 
@@ -417,7 +417,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void testFindByIds() {
+    void testFindByIds() {
         List<Long> postIds = List.of(1L, 2L);
 
         Mockito.when(postRepo.findById(1L)).thenReturn(Optional.of(post));
@@ -441,10 +441,9 @@ public class PostServiceTest {
     }
 
     @Test
-    public void testFindLikedPostsByUserId() {
+    void testFindLikedPostsByUserId() {
         List<Like> likes = List.of(like1, like2);
         Mockito.when(likeService.getLikesForUser(1L)).thenReturn(likes);
-        List<PostDtoOut> likedPosts = List.of(postDtoOut1, postDtoOut2);
         Mockito.when(mapper.map(Mockito.any(Post.class))).thenReturn(postDtoOut1, postDtoOut2);
 
         List<PostDtoOut> results = postService.findLikedPostsByUserId(1L);
