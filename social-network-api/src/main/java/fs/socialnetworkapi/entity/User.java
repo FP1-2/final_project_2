@@ -2,15 +2,11 @@ package fs.socialnetworkapi.entity;
 
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -60,7 +56,8 @@ public class User extends AbstractEntity implements UserDetails {
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.LAZY)
+  @LazyCollection(LazyCollectionOption.FALSE)
+  @ManyToMany(mappedBy = "users",cascade = {CascadeType.REMOVE})
   private Set<RoleEntity> roles = new HashSet<>();
 
   public Set<RoleEntity> getRoles() {

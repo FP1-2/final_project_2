@@ -1,24 +1,33 @@
 package fs.socialnetworkapi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
 @Data
+@Setter
+@Getter
 public class RoleEntity extends AbstractEntity implements GrantedAuthority {
 
   private String name;
 
-  @Transient
-  @ManyToMany(mappedBy = "roles")
-  private Set<User> users;
+//  @Transient
+  @LazyCollection(LazyCollectionOption.FALSE)
+  @ManyToMany(cascade = { CascadeType.MERGE })
+  @JoinTable(
+      name = "users_roles",
+      joinColumns = { @JoinColumn(name = "role_id") },
+      inverseJoinColumns = { @JoinColumn(name = "user_id") })
+  private Set<User> users = new HashSet<>();
 
   public RoleEntity(Long id, String name) {
     setId(id);

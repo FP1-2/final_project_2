@@ -6,6 +6,7 @@ import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.RoleEntity;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
+import fs.socialnetworkapi.repos.RoleRepository;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -22,9 +24,16 @@ public class UserService {
   private final MailService mailService;
   private final Mapper mapper;
   private final PasswordEncoder passwordEncoder;
+  private final RoleRepository roleRepository;
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
+
+    RoleEntity role = new RoleEntity("USER");
+    RoleEntity role1 = new RoleEntity("GUEST");
+    roleRepository.save(role);
+
+
     if (userFromDb != null) {
       return mapper.map(userFromDb); // need to correct
     }
@@ -32,7 +41,8 @@ public class UserService {
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
     userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
-    userDtoIn.setRoles(Collections.singleton(new RoleEntity("GUEST")));
+//    userDtoIn.setRoles(Collections.singleton(new RoleEntity("GUEST")));
+//    userDtoIn.setRoles((Set<RoleEntity>) role1);
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
@@ -51,9 +61,11 @@ public class UserService {
     if (user == null) {
       return false;
     }
+    RoleEntity role = new RoleEntity("USER");
+    roleRepository.save(role);
     user.setActivationCode(null);
     user.setActive(true);
-    user.setRoles(Collections.singleton(new RoleEntity("USER")));
+    user.setRoles(Collections.singleton(role));
     userRepo.save(user);
     return true;
   }
