@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
-public class LikeTest {
+class LikeTest {
 
   @Test
-  public void testGetUser() {
+  void testGetUser() {
     User user = mock(User.class);
     Like like = new Like();
     like.setUser(user);
@@ -16,7 +16,7 @@ public class LikeTest {
   }
 
   @Test
-  public void testGetPost() {
+  void testGetPost() {
     Post post = mock(Post.class);
     Like like = new Like();
     like.setPost(post);
@@ -24,7 +24,7 @@ public class LikeTest {
   }
 
   @Test
-  public void testConstructor() {
+  void testConstructor() {
     User user = mock(User.class);
     Post post = mock(Post.class);
     Like like = new Like(user, post);
