@@ -8,6 +8,11 @@ import java.util.Locale;
 public class Universal {
 
   public static String convert(LocalDateTime createdDate) {
+
+    if (createdDate == null) {
+      return "";
+    }
+
     LocalDateTime now = LocalDateTime.now();
     String timeWhenWasPost;
     Duration duration = Duration.between(createdDate, now);
