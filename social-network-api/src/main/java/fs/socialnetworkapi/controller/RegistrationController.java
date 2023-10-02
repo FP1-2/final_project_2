@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequiredArgsConstructor
 public class RegistrationController {
+
   @Autowired
   private UserService userService;
 

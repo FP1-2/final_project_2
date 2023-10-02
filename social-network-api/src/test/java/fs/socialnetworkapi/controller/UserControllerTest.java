@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -38,8 +39,11 @@ public class UserControllerTest {
 
    mockMvc.perform(MockMvcRequestBuilders
            .get("/api/v1/user/{current_user_id}/subscribe/{user_id}", 1, 2)
-           .contentType(MediaType.APPLICATION_JSON))
-           .andExpect(status().isOk());
+           .contentType(MediaType.APPLICATION_JSON)
+           .header("Access-Control-Request-Method", "GET")
+           .header("Origin", "http://twitterdanit.us-east-1.elasticbeanstalk.com"))
+           .andExpect(status().isOk())
+           .andExpect(header().string("Access-Control-Allow-Origin", "http://twitterdanit.us-east-1.elasticbeanstalk.com"));
    verify(userService, times(1)).subscribe(1L, 2L);
 
   }
@@ -49,7 +53,8 @@ public class UserControllerTest {
 
     mockMvc.perform(MockMvcRequestBuilders
                     .get("/api/v1/user/{current_user_id}/unsubscribe/{user_id}", 1, 2)
-                    .contentType(MediaType.APPLICATION_JSON))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Origin", "http://localhost:3000"))
             .andExpect(status().isOk());
     verify(userService, times(1)).unsubscribe(1L, 2L);
 

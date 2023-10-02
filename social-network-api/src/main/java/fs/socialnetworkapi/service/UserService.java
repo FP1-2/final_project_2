@@ -24,13 +24,13 @@ public class UserService {
     if (userFromDb != null) {
       return mapper.map(userFromDb);
     }
-    userDtoIn.setActive(true);
+    userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
         "Hello, %s! \n"
-          + "Welcome to Twitter. Please, visit next link: http://twitterdemo.us-east-1.elasticbeanstalk.com/api/v1/activate/%s",
+          + "Welcome to Twitter. Please, visit next link: http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/activate/%s",
         userDtoIn.getFirstName(),
         userDtoIn.getActivationCode()
       );
@@ -45,6 +45,7 @@ public class UserService {
       return false;
     }
     user.setActivationCode(null);
+    user.setActive(true);
     userRepo.save(user);
     return true;
   }
