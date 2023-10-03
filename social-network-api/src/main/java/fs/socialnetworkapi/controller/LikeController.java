@@ -3,8 +3,7 @@ package fs.socialnetworkapi.controller;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.service.LikeService;
 import fs.socialnetworkapi.service.PostService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,13 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/api/v1/likes")
 public class LikeController {
-
-  @Autowired
   private final LikeService likeService;
-  @Autowired
   private final PostService postService;
 
   @GetMapping("/post/{postId}")
@@ -35,7 +31,7 @@ public class LikeController {
   }
 
   @GetMapping("/user/{userId}")
-  public List<PostDtoOut> getLikedPostsForUser(@PathVariable Long userId) {
+  public List<PostDtoOut> getLikesForUser(@PathVariable Long userId) {
     return postService.findLikedPostsByUserId(userId);
   }
 

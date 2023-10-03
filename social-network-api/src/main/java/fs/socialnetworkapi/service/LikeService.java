@@ -9,7 +9,6 @@ import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +18,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class LikeService {
 
-  @Autowired
   private final LikeRepo likeRepo;
-  @Autowired
   private final UserRepo userRepo;
-  @Autowired
   private final PostRepo postRepo;
 
   public List<Like> getLikesForPost(Long postId) {
