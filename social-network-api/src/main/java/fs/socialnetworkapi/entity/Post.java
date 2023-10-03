@@ -1,16 +1,12 @@
 package fs.socialnetworkapi.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,4 +28,8 @@ public class Post extends AbstractEntity {
         joinColumns = {@JoinColumn(name = "original_post_id")},
         inverseJoinColumns = {@JoinColumn(name = "user_id")})
   private Set<User> usersReposts = new HashSet<>();
+
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Like> likes = new ArrayList<>();
+
 }

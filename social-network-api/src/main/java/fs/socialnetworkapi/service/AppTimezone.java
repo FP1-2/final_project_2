@@ -1,4 +1,4 @@
-package fs.socialnetworkapi.component;
+package fs.socialnetworkapi.service;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;

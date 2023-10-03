@@ -123,7 +123,7 @@ class PostDtoOutTest {
     assertNotEquals(postDtoOut1,null);
     assertNotEquals(postDtoOut1,postDtoOut5);
     assertNotEquals(postDtoOut1,postDtoOut6);
-    assertFalse(postDtoOut1.equals(postDtoIn));
+    assertNotEquals(postDtoOut1, postDtoIn);
   }
 
   @Test
