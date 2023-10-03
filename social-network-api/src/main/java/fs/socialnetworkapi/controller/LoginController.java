@@ -3,10 +3,13 @@ package fs.socialnetworkapi.controller;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.login.LoginDtoOut;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.repos.UserRepo;
 import fs.socialnetworkapi.security.SecurityService;
 import fs.socialnetworkapi.security.TokenDetails;
 import fs.socialnetworkapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +24,7 @@ public class LoginController {
   private final SecurityService securityService;
   private final PasswordEncoder passwordEncoder;
   private final UserService userService;
+  private final UserRepo userRepo;
 
   @PostMapping("api/v1/login")
   public LoginDtoOut login(@RequestBody LoginDtoIn loginDtoIn) {
@@ -36,9 +40,12 @@ public class LoginController {
         .issueAt(tokenDetails.getIssuedAt())
         .build();
     }
-    return LoginDtoOut.builder()
-      .token("wrong user/password combination")
-      .issueAt(createdDate)
+
+    return LoginDtoOut
+      .builder()
+      .error("wrong user/password combination")
       .build();
+
   }
+
 }

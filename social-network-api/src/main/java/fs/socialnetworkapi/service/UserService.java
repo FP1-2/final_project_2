@@ -26,8 +26,6 @@ public class UserService {
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
-    System.out.println(userDtoIn.getEmail());
-
 
     if (userFromDb != null) {
       return mapper.map(userFromDb); // need to correct
@@ -36,6 +34,7 @@ public class UserService {
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
     userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
+    userDtoIn.setRoles("Guest");
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
@@ -56,8 +55,9 @@ public class UserService {
     }
     user.setActivationCode(null);
     user.setActive(true);
-//    user.setRoles("USER");
+    user.setRoles("User");
     userRepo.save(user);
+    System.out.println(user);
     return true;
   }
 

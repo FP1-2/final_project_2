@@ -32,7 +32,7 @@ public class User extends AbstractEntity implements UserDetails {
   private String address;
   private boolean active;
   private String activationCode;
-//  private String roles;
+  private String roles;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Post> posts;
@@ -58,9 +58,6 @@ public class User extends AbstractEntity implements UserDetails {
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
 
-//  @Transient
-//  private final String DELIMITER = ":";
-//
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return null;
@@ -85,6 +82,8 @@ public class User extends AbstractEntity implements UserDetails {
   public boolean isEnabled() {
     return false;
   }
+
+
 }
 
 

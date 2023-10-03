@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -34,12 +33,12 @@ public class UserDtoOut {
             && Objects.equals(lastName, that.lastName)
             && Objects.equals(email, that.email)
             && Objects.equals(birthday, that.birthday)
-//            && Objects.equals(address, that.address)
+            && Objects.equals(address, that.address)
             && Objects.equals(avatar, that.avatar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, firstName, lastName, email, birthday,avatar);
+    return Objects.hash(id, username, firstName, lastName, email, birthday, avatar, address);
   }
 }

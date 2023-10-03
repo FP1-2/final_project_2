@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.beans.Transient;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -33,9 +31,8 @@ public class UserDtoIn {
   private String address;
   private boolean active;
   private String activationCode;
-//  private String roles;
+  private String roles;
 
-//  private final String DELIMITER = ":";
 
   public UserDtoIn() {
   }
@@ -49,17 +46,9 @@ public class UserDtoIn {
     this.avatar = avatar;
     this.mainPhoto = mainPhoto;
     this.address = address;
-//    setRoles(roles);
-
   }
 
-//  public void setRoles(String[] roles) {
-//    this.roles = String.join(DELIMITER, roles);
-//  }
-//
-//  public String[] getRoles() {
-//    return this.roles.split(DELIMITER);
-//  }
+
 
   public String getUsername() {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
