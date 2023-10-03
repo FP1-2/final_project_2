@@ -8,8 +8,10 @@ import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -23,8 +25,6 @@ import static org.mockito.Mockito.*;
 
 class LikeServiceTest {
 
-  private LikeService likeService;
-
   @Mock
   private LikeRepo likeRepo;
 
@@ -34,10 +34,18 @@ class LikeServiceTest {
   @Mock
   private PostRepo postRepo;
 
+  @InjectMocks
+  private LikeService likeService;
+  private AutoCloseable closeable;
+
   @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    likeService = new LikeService(likeRepo, userRepo, postRepo);
+  void setup() {
+    closeable = MockitoAnnotations.openMocks(this);
+  }
+
+  @AfterEach
+  void close() throws Exception {
+    closeable.close();
   }
 
   @Test
