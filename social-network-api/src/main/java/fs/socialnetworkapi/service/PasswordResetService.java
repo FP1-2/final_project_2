@@ -2,21 +2,17 @@ package fs.socialnetworkapi.service;
 
 import fs.socialnetworkapi.component.AppLink;
 import fs.socialnetworkapi.entity.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PasswordResetService {
-  @Autowired
   private final UserService userService;
-  @Autowired
   private final MailService mailService;
-  @Autowired
   private final AppLink appLink;
 
   public Optional<User> findByEmail(String email) {
