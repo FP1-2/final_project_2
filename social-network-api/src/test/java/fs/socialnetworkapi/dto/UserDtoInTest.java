@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserDtoInTest {
-   UserDtoIn userTest = new UserDtoIn(1L, "Ivan", "Petrov", "test@org.ua", "05/08/82",
+   UserDtoIn userTest = new UserDtoIn(1L, "Ivan", "Petrov", "test@org.ua", "05/08/82", "Photo", "Avatar",
      "Kharkiv");
 
   @Test

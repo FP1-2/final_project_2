@@ -1,6 +1,5 @@
 package fs.socialnetworkapi.dto.user;
 
-import fs.socialnetworkapi.entity.RoleEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -8,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.beans.Transient;
 import java.util.Set;
 
 @Setter
@@ -33,20 +33,33 @@ public class UserDtoIn {
   private String address;
   private boolean active;
   private String activationCode;
-//  private Set<RoleEntity> roles;
+//  private String roles;
+
+//  private final String DELIMITER = ":";
 
   public UserDtoIn() {
   }
 
-  public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String address) {
+  public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String avatar, String mainPhoto, String address) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.birthday = birthday;
+    this.avatar = avatar;
+    this.mainPhoto = mainPhoto;
     this.address = address;
+//    setRoles(roles);
 
   }
+
+//  public void setRoles(String[] roles) {
+//    this.roles = String.join(DELIMITER, roles);
+//  }
+//
+//  public String[] getRoles() {
+//    return this.roles.split(DELIMITER);
+//  }
 
   public String getUsername() {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);

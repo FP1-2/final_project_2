@@ -32,6 +32,7 @@ public class User extends AbstractEntity implements UserDetails {
   private String address;
   private boolean active;
   private String activationCode;
+//  private String roles;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Post> posts;
@@ -57,17 +58,12 @@ public class User extends AbstractEntity implements UserDetails {
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "role_id")
-  private Set<RoleEntity> roles = new HashSet<>();
-
-  public Set<RoleEntity> getRoles() {
-    return roles;
-  }
-
-
+//  @Transient
+//  private final String DELIMITER = ":";
+//
+  @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return this.roles;
+    return null;
   }
 
   @Override
