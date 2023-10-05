@@ -144,7 +144,7 @@ const ModalRegisterWindowFrstStep = ({
 		const responseObj = {
 			// add first part of register data
 			...newValues,
-			date: newBirthday,
+			birthday: newBirthday,
 		}
 		handleNextRegistrationStep(responseObj)
 		resetInfo()
