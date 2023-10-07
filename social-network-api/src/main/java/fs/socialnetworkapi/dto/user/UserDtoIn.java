@@ -37,7 +37,8 @@ public class UserDtoIn {
   public UserDtoIn() {
   }
 
-  public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String avatar, String mainPhoto, String address) {
+  public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String avatar,
+                   String mainPhoto, String address) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;

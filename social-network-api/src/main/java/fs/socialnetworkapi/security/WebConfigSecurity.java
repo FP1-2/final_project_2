@@ -38,13 +38,14 @@ public class WebConfigSecurity {
         authorizeHttpRequests
           .requestMatchers("/api/v1/registration").permitAll()
           .requestMatchers("/api/v1/login").permitAll()
-//          .requestMatchers("/api/v1/all-posts").permitAll()
+          .requestMatchers("/api/v1/activate/**").permitAll()
+          .requestMatchers("/api/v1/all-posts").permitAll()
           .requestMatchers("/api/v1/reset").permitAll()
           .requestMatchers("/error").permitAll()
-          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("ROLE_USER")
-          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("ROLE_USER")
-          .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("ROLE_USER")
-          .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("ROLE_USER")
+          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
 
       )
       .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

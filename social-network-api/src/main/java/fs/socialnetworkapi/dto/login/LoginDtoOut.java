@@ -1,6 +1,11 @@
 package fs.socialnetworkapi.dto.login;
 
-import lombok.*;
+
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 

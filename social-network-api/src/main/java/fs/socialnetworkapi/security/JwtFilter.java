@@ -58,6 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
   }
+
   private Optional<String> extractTokenFromRequest(HttpServletRequest rq) {
     return Optional.ofNullable(rq.getHeader(AUTH_HEADER))
       .filter(h -> h.startsWith(BEARER))

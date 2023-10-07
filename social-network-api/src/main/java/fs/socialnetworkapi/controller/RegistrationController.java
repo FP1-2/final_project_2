@@ -27,7 +27,6 @@ public class RegistrationController {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
 
-
   @GetMapping("/api/v1/activate/{code}")
   public String activate(Model model, @PathVariable String code) {
     boolean isActivated = userService.activateUser(code);

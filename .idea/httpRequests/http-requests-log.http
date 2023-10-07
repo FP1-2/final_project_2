@@ -1,3 +1,258 @@
+POST http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/registration
+Content-Type: application/json
+Content-Length: 160
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivan",
+  "email": "eveniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "address": "Kharkiv",
+  "password": "123"
+}
+
+<> 2023-10-07T232800.200.json
+
+###
+
+POST http://localhost:5000/api/v1/login
+Content-Type: application/json
+Content-Length: 67
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "evgeniygalagurya@gmail.com",
+  "password": "123456"
+}
+
+<> 2023-10-07T232523.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T232456.200.json
+
+###
+
+POST http://localhost:5000/api/v1/login
+Content-Type: application/json
+Content-Length: 67
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "evgeniygalagurya@gmail.com",
+  "password": "123456"
+}
+
+<> 2023-10-07T221247.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T221203.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T220852.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T220333.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T220046.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T215803.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T215738.400.json
+
+###
+
+POST http://localhost:5000/api/v1/login
+Content-Type: application/json
+Content-Length: 67
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "email": "evgeniygalagurya@gmail.com",
+  "password": "123456"
+}
+
+<> 2023-10-07T215430.200.json
+
+###
+
+POST http://localhost:5000/api/v1/registration
+Content-Type: application/json
+Content-Length: 212
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "email": "evgeniygalagurya@gmail.com",
+  "birthday": "1982-05-08",
+  "mainPhoto": "Photo",
+  "avatar": "Avatar",
+  "password": "123456",
+  "address": "Kharkiv"
+}
+
+<> 2023-10-07T214558.200.json
+
+###
+
 POST http://localhost:5000/api/v1/login
 Content-Type: application/json
 Content-Length: 67
@@ -709,263 +964,6 @@ Accept-Encoding: br,deflate,gzip,x-gzip
 }
 
 <> 2023-10-04T010600.200.json
-
-###
-
-POST http://localhost:5000/api/v1/login
-Content-Type: application/json
-Content-Length: 69
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "email": "evgeniygalagurya@gmail.com",
-  "password": "123456"
-
-
-}
-
-<> 2023-10-04T010023.200.json
-
-###
-
-POST http://localhost:5000/api/v1/login
-Content-Type: application/json
-Content-Length: 70
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "email": "evgeniygalagurya@gmail.com",
-  "password": "1234z56"
-
-
-}
-
-<> 2023-10-04T010007.200.json
-
-###
-
-POST http://localhost:5000/api/v1/login
-Content-Type: application/json
-Content-Length: 70
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "email": "evgeniygalagurya@gmail.com",
-  "password": "1234z56"
-
-
-}
-
-<> 2023-10-04T004209.200.json
-
-###
-
-POST http://localhost:5000/api/v1/login
-Content-Type: application/json
-Content-Length: 69
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "email": "evgeniygalagurya@gmail.com",
-  "password": "123456"
-
-
-}
-
-<> 2023-10-04T004143.200.json
-
-###
-
-POST http://localhost:5000/api/v1/registration
-Content-Type: application/json
-Content-Length: 212
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "evgeniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "mainPhoto": "Photo",
-  "avatar": "Avatar",
-  "password": "123456",
-  "address": "Kharkiv"
-}
-
-<> 2023-10-04T003303.200.json
-
-###
-
-POST http://localhost:5000/api/v1/registration
-Content-Type: application/json
-Content-Length: 212
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "evgeniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "mainPhoto": "Photo",
-  "avatar": "Avatar",
-  "password": "123456",
-  "address": "Kharkiv"
-}
-
-<> 2023-10-04T002948.200.json
-
-###
-
-POST http://localhost:5000/api/v1/registration
-Content-Type: application/json
-Content-Length: 212
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "evgeniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "mainPhoto": "Photo",
-  "avatar": "Avatar",
-  "password": "123456",
-  "address": "Kharkiv"
-}
-
-<> 2023-10-04T002452.200.json
-
-###
-
-POST http://localhost:5000/api/v1/registration
-Content-Type: application/json
-Content-Length: 212
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "evgeniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "mainPhoto": "Photo",
-  "avatar": "Avatar",
-  "password": "123456",
-  "address": "Kharkiv"
-}
-
-<> 2023-10-03T105858.200.json
-
-###
-
-POST http://localhost:5000/api/v1/registration
-Content-Type: application/json
-Content-Length: 212
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "evgeniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "mainPhoto": "Photo",
-  "avatar": "Avatar",
-  "password": "123456",
-  "address": "Kharkiv"
-}
-
-<> 2023-10-03T104601.200.json
-
-###
-
-POST http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/registration
-Content-Type: application/json
-Content-Length: 164
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "ev1geniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "address": "Kharkiv",
-  "password": "123"
-}
-
-<> 2023-10-03T104510.200.json
-
-###
-
-POST http://localhost:5000/api/v1/registration
-Content-Type: application/json
-Content-Length: 212
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "evgeniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "mainPhoto": "Photo",
-  "avatar": "Avatar",
-  "password": "123456",
-  "address": "Kharkiv"
-}
-
-<> 2023-10-03T104242.200.json
-
-###
-
-POST http://localhost:5000/api/v1/registration
-Content-Type: application/json
-Content-Length: 212
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Cookie: JSESSIONID=004B08D28A7CF6FB9A09A9C6640D117F
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan",
-  "lastName": "Ivanov",
-  "email": "evgeniygalagurya@gmail.com",
-  "birthday": "1982-05-08",
-  "mainPhoto": "Photo",
-  "avatar": "Avatar",
-  "password": "123456",
-  "address": "Kharkiv"
-}
-
-<> 2023-10-03T103705.200.json
 
 ###
 

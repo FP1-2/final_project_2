@@ -3,13 +3,13 @@ package fs.socialnetworkapi.security;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UnauthorizedException;
 import fs.socialnetworkapi.service.UserService;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.tools.ant.types.resources.Tokens;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Optional;
 import java.util.Base64;
 
@@ -67,7 +66,6 @@ public class SecurityService {
       .setIssuer(issuer)
       .setSubject(subject)
       .setIssuedAt(Date.from(createdDate.atZone(ZoneId.systemDefault()).toInstant()))
-//      .setId(UUID.randomUUID().toString())
       .setExpiration(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()))
       .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secret.getBytes()))
       .compact();
@@ -100,6 +98,7 @@ public class SecurityService {
     }
     return new verificationResult(claims, token);
   }
+
   public record verificationResult(Optional<Claims> claims, String token) {
   }
 
