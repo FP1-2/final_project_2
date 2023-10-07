@@ -6,9 +6,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class UserAuthenticationBearer {
 
@@ -20,15 +20,11 @@ public class UserAuthenticationBearer {
     Claims claims = verificationResult.claims().get();
     String email = claims.getSubject();
 
-    ArrayList<LinkedHashMap<String,String>> roles     = claims.get("roles", ArrayList.class);
-    String role = roles.stream()
-      .map(r->r.get("email"))
-      .collect(Collectors.joining());
-    // String email = claims.getSubject();
+    String roles     = claims.get("roles", String.class);
 
-    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roles));
 
-    long principalId = Long.parseLong(claims.getId());
+    long principalId = Long.parseLong(claims.get(Claims.ID).toString());
     User principal = new User();
     principal.setId(principalId);
     principal.setEmail(email);

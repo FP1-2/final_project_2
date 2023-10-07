@@ -15,8 +15,4 @@ public class LoginDtoOut {
   private LocalDateTime issueAt;
   private LocalDateTime expiresAt;
   private String error;
-
-
 }
-
-

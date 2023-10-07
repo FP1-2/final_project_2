@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.security;
 
+import fs.socialnetworkapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -22,7 +24,11 @@ public class WebConfigSecurity {
   @Value("${jwt.secret}")
   private String secret;
   private final JwtFilter jwtFilter;
-//  private final String[] publicRoutes = {"/api/v1/registration","/api/v1/login"};
+
+  @Bean
+  public UserDetailsService userDetailsService(UserService userService) {
+    return userService;
+  }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,12 +38,13 @@ public class WebConfigSecurity {
         authorizeHttpRequests
           .requestMatchers("/api/v1/registration").permitAll()
           .requestMatchers("/api/v1/login").permitAll()
+//          .requestMatchers("/api/v1/all-posts").permitAll()
+          .requestMatchers("/api/v1/reset").permitAll()
           .requestMatchers("/error").permitAll()
-          //.requestMatchers("/h2-console/**").permitAll()
-          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasRole("USER")
-          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasRole("USER")
-          .requestMatchers(HttpMethod.GET,"api/v1/**").hasRole("USER")
-          .requestMatchers(HttpMethod.POST,"api/v1/**").hasRole("USER")
+          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("ROLE_USER")
+          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("ROLE_USER")
+          .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("ROLE_USER")
+          .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("ROLE_USER")
 
       )
       .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

@@ -7,6 +7,9 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
   private final UserRepo userRepo;
   private final MailService mailService;
   private final Mapper mapper;
@@ -34,7 +37,7 @@ public class UserService {
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
     userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
-    userDtoIn.setRoles("Guest");
+    userDtoIn.setRoles("USER");
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
@@ -53,11 +56,10 @@ public class UserService {
     if (user == null) {
       return false;
     }
+    user.setRoles("USER");
     user.setActivationCode(null);
     user.setActive(true);
-    user.setRoles("User");
     userRepo.save(user);
-    System.out.println(user);
     return true;
   }
 
@@ -111,5 +113,10 @@ public class UserService {
             .stream()
             .map(mapper::map)
             .toList();
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepo.findByEmail(username);
   }
 }

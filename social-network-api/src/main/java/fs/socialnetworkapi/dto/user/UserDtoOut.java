@@ -17,7 +17,6 @@ public class UserDtoOut {
   private String avatar;
   private String address;
 
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

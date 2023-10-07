@@ -1,16 +1,17 @@
 package fs.socialnetworkapi.security;
 
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.exception.UnauthorizedException;
 import fs.socialnetworkapi.service.UserService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.tools.ant.types.resources.Tokens;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,11 +22,12 @@ import java.util.UUID;
 import java.util.Optional;
 import java.util.Base64;
 
+@Log4j2
 @Component
 @RequiredArgsConstructor
+@Service
 public class SecurityService {
 
-  private final PasswordEncoder passwordEncoder;
   private final UserService userService;
 
   @Value("${jwt.secret}")
@@ -35,7 +37,8 @@ public class SecurityService {
   @Value("${jwt.issuer}")
   private String issuer;
 
-  public TokenDetails authenticate(String email, String password) {
+
+  public TokenDetails authenticate(String email) {
     User userByEmail = userService.findByEmail(email);
     return generateToken(userByEmail).toBuilder()
       .userId(userByEmail.getId())
@@ -64,7 +67,7 @@ public class SecurityService {
       .setIssuer(issuer)
       .setSubject(subject)
       .setIssuedAt(Date.from(createdDate.atZone(ZoneId.systemDefault()).toInstant()))
-      .setId(UUID.randomUUID().toString())
+//      .setId(UUID.randomUUID().toString())
       .setExpiration(Date.from(expirationDate.atZone(ZoneId.systemDefault()).toInstant()))
       .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secret.getBytes()))
       .compact();
@@ -93,13 +96,12 @@ public class SecurityService {
     Optional<Claims> claims = getClaims(token);
 
     if (claims.isEmpty() || claims.get().getExpiration().before(new Date())) {
-      throw new RuntimeException("Token expired");
+      throw new UnauthorizedException("Unauthorized access: Token expired");
     }
-
     return new verificationResult(claims, token);
   }
-
   public record verificationResult(Optional<Claims> claims, String token) {
-
   }
+
+
 }
