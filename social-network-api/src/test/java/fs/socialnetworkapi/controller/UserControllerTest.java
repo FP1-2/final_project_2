@@ -15,11 +15,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
 class UserControllerTest {
 
   @Mock
   private UserService userService;
+
 
   @InjectMocks
   private UserController userController;
@@ -34,6 +34,7 @@ class UserControllerTest {
     // Arrange
     Long currentUserId = 1L;
     Long userId = 2L;
+
 
     // Act
     ResponseEntity<?> responseEntity = userController.subscribe(currentUserId, userId);
