@@ -9,12 +9,12 @@ const registerSlice = createSlice({
 	initialState,
 	reducers: {
 		register: (state, action) => {
-			console.log('register', action.payload)
 			const newObj = {
 				...state.registerData,
 				...action.payload,
 			}
 			state.registerData = newObj
+			console.log('registerData', state.registerData)
 		},
 		resetRegisterData: state => {
 			state.registerData = {}
