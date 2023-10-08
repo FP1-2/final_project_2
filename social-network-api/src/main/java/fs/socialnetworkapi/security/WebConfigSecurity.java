@@ -1,6 +1,5 @@
 package fs.socialnetworkapi.security;
 
-import fs.socialnetworkapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -26,11 +24,6 @@ public class WebConfigSecurity {
   private final JwtFilter jwtFilter;
 
   @Bean
-  public UserDetailsService userDetailsService(UserService userService) {
-    return userService;
-  }
-
-  @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
     http.csrf(AbstractHttpConfigurer::disable);
@@ -40,7 +33,7 @@ public class WebConfigSecurity {
           .requestMatchers("/api/v1/login").permitAll()
           .requestMatchers("/api/v1/activate/**").permitAll()
           .requestMatchers("/api/v1/all-posts").permitAll()
-          .requestMatchers("/api/v1/reset").permitAll()
+          .requestMatchers("/api/v1/reset/**").permitAll()
           .requestMatchers("/error").permitAll()
           .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")

@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class AuthorizationService {
 
+  private final UserService userService;
   private final SecurityService securityService;
   private final PasswordEncoder passwordEncoder;
 
-  public LoginDtoOut tokenGenerate(@RequestBody LoginDtoIn loginDtoIn, User userByEmail) {
+  public LoginDtoOut tokenGenerate(@RequestBody LoginDtoIn loginDtoIn) {
+    User userByEmail = userService.findByEmail(loginDtoIn.getEmail());
     if (passwordEncoder.matches(loginDtoIn.getPassword(), userByEmail.getPassword()) & userByEmail.isActive()) {
       TokenDetails tokenDetails = securityService.authenticate(loginDtoIn.getEmail());
       return LoginDtoOut
