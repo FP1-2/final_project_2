@@ -4,7 +4,6 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.login.LoginDtoOut;
 import fs.socialnetworkapi.entity.User;
-
 import fs.socialnetworkapi.security.SecurityService;
 import fs.socialnetworkapi.security.TokenDetails;
 import lombok.RequiredArgsConstructor;
