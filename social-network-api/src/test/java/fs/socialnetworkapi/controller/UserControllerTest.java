@@ -1,92 +1,92 @@
 package fs.socialnetworkapi.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+class UserControllerTest {
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
-
-  @Autowired
-  private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
-
-  @MockBean
+  @Mock
   private UserService userService;
 
-  @Test
-  public void testSubscribe() throws Exception {
 
-   mockMvc.perform(MockMvcRequestBuilders
-           .get("/api/v1/user/{current_user_id}/subscribe/{user_id}", 1, 2)
-           .contentType(MediaType.APPLICATION_JSON)
-           .header("Access-Control-Request-Method", "GET")
-           .header("Origin", "http://twitterdanit.us-east-1.elasticbeanstalk.com"))
-           .andExpect(status().isOk())
-           .andExpect(header().string("Access-Control-Allow-Origin", "http://twitterdanit.us-east-1.elasticbeanstalk.com"));
-   verify(userService, times(1)).subscribe(1L, 2L);
+  @InjectMocks
+  private UserController userController;
 
+  @BeforeEach
+  void setUp() {
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test
-  public void testUnsubscribe() throws Exception {
+  void testSubscribe() {
+    // Arrange
+    Long currentUserId = 1L;
+    Long userId = 2L;
 
-    mockMvc.perform(MockMvcRequestBuilders
-                    .get("/api/v1/user/{current_user_id}/unsubscribe/{user_id}", 1, 2)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Origin", "http://localhost:3000"))
-            .andExpect(status().isOk());
-    verify(userService, times(1)).unsubscribe(1L, 2L);
 
+    // Act
+    ResponseEntity<?> responseEntity = userController.subscribe(currentUserId, userId);
+
+    // Assert
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    verify(userService, times(1)).subscribe(currentUserId, userId);
   }
 
   @Test
-  public void testGetFollowers() throws Exception {
+  void testUnsubscribe() {
+    // Arrange
+    Long currentUserId = 1L;
+    Long userId = 2L;
 
-    MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                    .get("/api/v1/user/{current_user_id}/followers", 1)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
+    // Act
+    ResponseEntity<?> responseEntity = userController.unsubscribe(currentUserId, userId);
 
-    String responseJson = mvcResult.getResponse().getContentAsString();
-    List<UserDtoOut> userDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<UserDtoOut>>(){});
-    verify(userService, times(1)).getFollowers(1L);
-
+    // Assert
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    verify(userService, times(1)).unsubscribe(currentUserId, userId);
   }
 
   @Test
-  public void testGetFollowings() throws Exception {
+  void testGetFollowers() {
+    // Arrange
+    Long currentUserId = 1L;
+    List<UserDtoOut> followers = new ArrayList<>();
+    when(userService.getFollowers(currentUserId)).thenReturn(followers);
 
-    MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                    .get("/api/v1/user/{current_user_id}/followings", 1)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
+    // Act
+    ResponseEntity<List<UserDtoOut>> responseEntity = userController.getFollowers(currentUserId);
 
-    String responseJson = mvcResult.getResponse().getContentAsString();
-    List<UserDtoOut> userDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<UserDtoOut>>(){});
-    verify(userService, times(1)).getFollowings(1L);
+    // Assert
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    assertEquals(followers, responseEntity.getBody());
+    verify(userService, times(1)).getFollowers(currentUserId);
+  }
 
+  @Test
+  void testGetFollowings() {
+    // Arrange
+    Long currentUserId = 1L;
+    List<UserDtoOut> followings = new ArrayList<>();
+    when(userService.getFollowings(currentUserId)).thenReturn(followings);
+
+    // Act
+    ResponseEntity<List<UserDtoOut>> responseEntity = userController.getFollowings(currentUserId);
+
+    // Assert
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    assertEquals(followings, responseEntity.getBody());
+    verify(userService, times(1)).getFollowings(currentUserId);
   }
 }

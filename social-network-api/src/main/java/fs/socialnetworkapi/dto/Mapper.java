@@ -2,6 +2,8 @@ package fs.socialnetworkapi.dto;
 
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoIn;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.utils.Universal;

@@ -3,32 +3,40 @@ MAIN_EMAIL_PASSWORD:
 DB_URL:
 DB_USER:
 DB_PASSWORD:
+
 server:
   port: 5000
 
 spring:
-  profiles:
-    active: prod #local  # prod
-
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIN_EMAIL} # логин от учётки
-    password: ${MAIN_EMAIL_PASSWORD} # специальный пароль для приложения
-    test-connection: true # проверка подключения при старте приложения
-    properties:
-      mail:
-        smtp:
-          auth: true
-          ssl:
-            enable: true
-    sender: # отправитель письма (его почта и имя)
-      email: test@gmail.com
+     profiles:
+       active: prod #local  # prod
+     mail:
+       host: smtp.gmail.com
+       port: 587
+       username: ${MAIN_EMAIL} # логин от учётки
+       password: ${MAIN_EMAIL_PASSWORD} # специальный пароль для приложения
+       test-connection: true # проверка подключения при старте приложения
+       properties:
+         mail:
+     smtp:
+       auth: true
+       ssl:
+         enable: true
+       sender: # отправитель письма (его почта и имя)
+         email: test@gmail.com
 #      text: no-reply
+jwt:
+  password:
+    encoder:
+      secret: FZK2DZ82odqS13e8aENggaMdd_fAkl-nJL4EVBX43g
+      iteration: 64
+      keylength: 256
+  secret: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
+  expiration: 3600
+  issuer: finalproject
 
 myapp:
-  baseUrl: http://twitterdemo.us-east-1.elasticbeanstalk.com
+  baseUrl: http://twitterdanit.us-east-1.elasticbeanstalk.com
 
 # local profile
 ---
@@ -44,7 +52,6 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred #default
-
   h2:
     console:
       enabled: true
@@ -59,7 +66,6 @@ spring:
         format_sql: true
       jdbc:
         time_zone: UTC
-
 # prod profile
 ---
 spring:
@@ -73,16 +79,3 @@ spring:
   data:
     jpa:
       repositories:
-        bootstrap-mode: deferred #default
-  jpa:
-    hibernate:
-      ddl-auto: update #update
-    generate-ddl: true
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-      jdbc:
-        time_zone: UTC
-  thymeleaf:
-    enabled: true
