@@ -50,9 +50,9 @@ const validationSchema = Yup.object({
 	email: Yup.string()
 		.email('invalid email address')
 		.required('Email is required'),
-	name: Yup.string()
+	firstName: Yup.string()
 		.required('Name is required')
-		.min(5, 'Please enter at least 6 characters'),
+		.min(3, 'Please enter at least 3 characters'),
 })
 const validationSchemaAlt = Yup.object({
 	phone: Yup.string()
@@ -61,13 +61,13 @@ const validationSchemaAlt = Yup.object({
 		.max(15, 'Please enter at most 15 characters')
 		.matches(/^[0-9]*$/, 'Please enter a valid phone number (only numbers)'),
 
-	name: Yup.string()
+	firstName: Yup.string()
 		.required('Name is required')
-		.min(5, 'Please enter at least 6 characters'),
+		.min(3, 'Please enter at least 3 characters'),
 })
 
 const initialValuesAlt = {
-	name: '',
+	firstName: '',
 	phone: '',
 }
 
@@ -85,7 +85,7 @@ const ModalRegisterWindowFrstStep = ({
 	const [isPhone, setIsPhone] = useState(false) // phone or email registration
 
 	const years = allYears // years for date of birth
-	const initialValues = { name: '', email: '', phone: '' }
+	const initialValues = { firstName: '', email: '', phone: '' }
 
 	const getDays = () => {
 		// using month and year for get true days in month
@@ -137,15 +137,14 @@ const ModalRegisterWindowFrstStep = ({
 			// if email registration
 			newValues.phone = false
 		}
+		const newBirthday = `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${
+			day < 10 ? `0${day}` : day
+		}`
 
 		const responseObj = {
 			// add first part of register data
 			...newValues,
-			date: {
-				month: month,
-				day: day,
-				year: year,
-			},
+			birthday: newBirthday,
 		}
 		handleNextRegistrationStep(responseObj)
 		resetInfo()
@@ -178,11 +177,11 @@ const ModalRegisterWindowFrstStep = ({
 						}}
 					>
 						<CustomInput
-							name='name'
+							name='firstName'
 							type='text'
 							label='Name'
 							placeholder='Your First Name'
-							autoComplete='name'
+							autoComplete='firstName'
 						/>
 						{isPhone === false ? (
 							<CustomInput
@@ -350,7 +349,7 @@ const ModalRegisterWindowFrstStep = ({
 								!isValid ||
 								isSubmitting ||
 								day === '' ||
-								values.name === '' ||
+								values.firstName === '' ||
 								(isPhone ? values.phone === '' : values.email === '')
 							}
 						>

@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.dto.post;
 
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.entity.Like;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class PostDtoOut {
   private String timeWhenWasPost;
   private List<UserDtoOut> usersReposts;
   private Boolean isRepost = false;
+  private List<Like> likes;
 
   @Override
   public boolean equals(Object obj) {

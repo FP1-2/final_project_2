@@ -23,9 +23,9 @@ public class Mapper {
   public Mapper() {
     this.modelMapper = new ModelMapper();
     modelMapper.getConfiguration()
-      .setMatchingStrategy(MatchingStrategies.STRICT);
+            .setMatchingStrategy(MatchingStrategies.STRICT);
     this.modelMapper
-      .createTypeMap(User.class, UserDtoOut.class);
+            .createTypeMap(User.class, UserDtoOut.class);
 
     //Post
     Converter<Set<User>, List<UserDtoOut>> convertSetUserToListUserDtoOut = (src) -> src.getSource().stream()
