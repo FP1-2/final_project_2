@@ -19,9 +19,7 @@ public class UserAuthenticationBearer {
 
     Claims claims = verificationResult.claims().get();
     String email = claims.getSubject();
-
     String roles     = claims.get("roles", String.class);
-
     List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roles));
 
     long principalId = Long.parseLong(claims.get(Claims.ID).toString());
