@@ -1,19 +1,21 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.component.AppLink;
 import fs.socialnetworkapi.entity.User;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PasswordResetService {
   private final UserService userService;
   private final MailService mailService;
-  private final AppLink appLink;
+
+  @Value("${myapp.baseUrl}")
+  private String baseUrl;
 
   public Optional<User> findByEmail(String email) {
     return Optional.of(userService.findByEmail(email));
@@ -27,7 +29,7 @@ public class PasswordResetService {
   }
 
   public void sendActivationCode(User user) {
-    String link = appLink.getBaseUrl() + "/reset/confirm?code=" + generateActivationCode(user);
+    String link = baseUrl + "/reset/confirm?code=" + generateActivationCode(user);
     String message = "To reset your password, click the following link: " + link;
     mailService.send(user.getEmail(), "Password Reset", message);
   }

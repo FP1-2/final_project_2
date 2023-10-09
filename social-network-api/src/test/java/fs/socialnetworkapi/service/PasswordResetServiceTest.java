@@ -1,7 +1,7 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.component.AppLink;
 import fs.socialnetworkapi.entity.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,18 +21,21 @@ class PasswordResetServiceTest {
   @Mock
   private MailService mailService;
 
-  @Mock
-  private AppLink appLink;
-
   @Value("${myapp.baseUrl}")
   private String baseUrl;
 
   private PasswordResetService passwordResetService;
+  private AutoCloseable closeable;
 
   @BeforeEach
-  void setUp() {
-    MockitoAnnotations.openMocks(this);
-    passwordResetService = new PasswordResetService(userService, mailService, appLink);
+  void setup() {
+    closeable = MockitoAnnotations.openMocks(this);
+    passwordResetService = new PasswordResetService(userService, mailService);
+  }
+
+  @AfterEach
+  void close() throws Exception {
+    closeable.close();
   }
 
   @Test

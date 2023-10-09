@@ -1,14 +1,15 @@
-package fs.socialnetworkapi.service;
+package fs.socialnetworkapi.config;
 
 import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.TimeZone;
 
-@Service
-public class AppTimezone {
+@Configuration
+public class TimezoneConfig {
   @PostConstruct
   public void started() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
   }
+
 }

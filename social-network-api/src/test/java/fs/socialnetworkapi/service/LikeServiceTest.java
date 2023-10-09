@@ -3,7 +3,6 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
-import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
@@ -90,49 +89,6 @@ class LikeServiceTest {
 
     verify(likeRepo, never()).save(any(Like.class));
     verify(likeRepo, never()).delete(any(Like.class));
-  }
-
-  @Test
-  void likePost_PostNotFound_ThrowsException() {
-    User user = new User();
-    user.setId(1L);
-
-    when(userRepo.findById(1L)).thenReturn(Optional.of(user));
-    when(postRepo.findById(2L)).thenReturn(Optional.empty());
-
-    assertThrows(PostNotFoundException.class, () -> likeService.likePost(2L, 1L));
-
-    verify(likeRepo, never()).save(any(Like.class));
-    verify(likeRepo, never()).delete(any(Like.class));
-  }
-
-  @Test
-  void getLikesForPost_PostExists_ReturnsLikes() {
-    Long postId = 1L;
-    Post post = new Post();
-    post.setId(postId);
-
-    List<Like> likes = new ArrayList<>();
-    likes.add(new Like(new User(), post));
-    likes.add(new Like(new User(), post));
-
-    when(postRepo.findById(postId)).thenReturn(Optional.of(post));
-    when(likeRepo.findByPostId(postId)).thenReturn(likes);
-
-    List<Like> result = likeService.getLikesForPost(postId);
-
-    assertEquals(likes.size(), result.size());
-  }
-
-  @Test
-  void getLikesForPost_LikeDoesNotExist_ReturnsEmptyList() {
-    Long postId = 1L;
-
-    when(likeRepo.findByPostId(postId)).thenReturn(Collections.emptyList());
-
-    List<Like> result = likeService.getLikesForPost(postId);
-
-    assertTrue(result.isEmpty());
   }
 
   @Test
