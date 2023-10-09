@@ -25,7 +25,10 @@ public class PasswordController {
 
   @PostMapping("/confirm")
   public ResponseEntity<?> confirmPasswordReset(@RequestBody PasswordResetRequest request) {
-    return passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword())
+//    return passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword())
+//            ? ResponseEntity.ok().build()
+//            : ResponseEntity.badRequest().body("Try again");
+    return passwordResetService.changePassword(request)
             ? ResponseEntity.ok().build()
             : ResponseEntity.badRequest().body("Try again");
   }

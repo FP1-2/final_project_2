@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.dto.password.PasswordResetRequest;
 import fs.socialnetworkapi.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +60,15 @@ public class PasswordResetService {
     }
     setNewPassword(findUser.get(), newPassword);
     return true;
+  }
+
+  public boolean changePassword(PasswordResetRequest request) {
+//    Optional<User> findUser = findByActivationCode(activationCode);
+//    if (findUser.isEmpty()) {
+//      return false;
+//    }
+//    setNewPassword(findUser.get(), newPassword);
+    return userService.changePassword(request);
   }
 
 }

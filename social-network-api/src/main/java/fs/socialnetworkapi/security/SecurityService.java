@@ -102,5 +102,4 @@ public class SecurityService {
   public record verificationResult(Optional<Claims> claims, String token) {
   }
 
-
 }

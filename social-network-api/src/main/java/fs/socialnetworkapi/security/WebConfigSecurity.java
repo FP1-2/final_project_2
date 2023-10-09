@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -38,10 +42,12 @@ public class WebConfigSecurity {
           .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("USER")
-          .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
+          //.requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
+            .requestMatchers(HttpMethod.POST,"api/v1/**").permitAll()
 
       )
-      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+      //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+    ;
 
     return http.build();
   }

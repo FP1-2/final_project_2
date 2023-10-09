@@ -2,6 +2,8 @@ package fs.socialnetworkapi.dto.post;
 
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Like;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fs.socialnetworkapi.enums.TypePost;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
@@ -18,16 +20,20 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class PostDtoOut {
-
-  private Long id;
+  private long id;
   private UserDtoOut user;
   private String description;
   private String photo;
   private LocalDateTime createdDate;
-  private String timeWhenWasPost;
-  private List<UserDtoOut> usersReposts;
-  private Boolean isRepost = false;
   private List<Like> likes;
+  private TypePost typePost;
+  private int countRepost;
+  private int countComments;
+  private int countLikes;
+  private OriginalPostDto originalPost;
+  private List<PostDtoOut> comments;
+  //private boolean yourRepost;
+  //private boolean thisUserHasRepost;
 
   @Override
   public boolean equals(Object obj) {
@@ -38,13 +44,14 @@ public class PostDtoOut {
       return false;
     }
     PostDtoOut that = (PostDtoOut) obj;
-    return Objects.equals(user, that.user)
+    return Objects.equals(id, that.id)
+            &&Objects.equals(user, that.user)
             && Objects.equals(description, that.description)
             && Objects.equals(photo, that.photo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(user, description, photo);
+    return Objects.hash(id, user, description, photo);
   }
 }
