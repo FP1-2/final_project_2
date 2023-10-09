@@ -25,6 +25,19 @@ public class PostService {
   private final PostRepo postRepo;
   private final UserRepo userRepo;
   private final Mapper mapper;
+  private final LikeService likeService;
+
+  public PostDtoOut findById(Long postId) {
+    return mapper.map(postRepo.findById(postId).orElseThrow(() -> new PostNotFoundException("No such post")));
+  }
+
+  public List<PostDtoOut> findByIds(List<Long> postIds) {
+    return postIds.stream().map(this::findById).toList();
+  }
+
+  public List<PostDtoOut> findLikedPostsByUserId(Long userId) {
+    return likeService.getLikesForUser(userId).stream().map(like -> mapper.map(like.getPost())).toList();
+  }
 
   public List<PostDtoOut> getAllPost(Integer page, Integer size) {
 

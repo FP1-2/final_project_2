@@ -4,6 +4,7 @@ import fs.socialnetworkapi.dto.Mapper;
 import fs.socialnetworkapi.dto.UserDtoOut;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
+import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
@@ -48,6 +49,9 @@ public class PostServiceTest {
     @Mock
     private Mapper mapper;
 
+    @Mock
+    private LikeService likeService;
+
     @InjectMocks
     private PostService postService;
 
@@ -57,6 +61,11 @@ public class PostServiceTest {
     private UserDtoOut userDtoOut2;
     private Post post;
     private Post post2;
+    private PostDtoOut postDtoOut1;
+    private PostDtoOut postDtoOut2;
+    private Like like1;
+    private Like like2;
+
 
     @BeforeEach
     public void setUp() {
@@ -85,7 +94,36 @@ public class PostServiceTest {
         usersRepost.add(user2);
         post2.setUsersReposts(usersRepost);
         post2.setUser(user1);
+
+        postDtoOut1 = PostDtoOut.builder()
+                .id(1L)
+                .user(userDtoOut1)
+                .description("Description")
+                .photo("Photo")
+                .createdDate(LocalDateTime.now())
+                .timeWhenWasPost("")
+                .usersReposts(List.of())
+                .isRepost(false)
+                .likes(List.of())
+                .build();
+
+        postDtoOut2 = PostDtoOut.builder()
+                .id(2L)
+                .user(userDtoOut2)
+                .description("Description")
+                .photo("Photo")
+                .createdDate(LocalDateTime.now())
+                .timeWhenWasPost("")
+                .usersReposts(List.of())
+                .isRepost(false)
+                .likes(List.of())
+                .build();
+
+        like1 = new Like(user1, post);
+        like2 = new Like(user1, post2);
+
     }
+
     @Test
     public void testSave_whenUserNotFound(){
         Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
@@ -285,7 +323,7 @@ public class PostServiceTest {
     public void testDeletePost() {
 
         Long idPost = 1L;
-        PostService postService1 = new PostService(postRepo,userRepo,mapper);
+        PostService postService1 = new PostService(postRepo, userRepo, mapper, likeService);
         postService1.deletePost(idPost);
         Mockito.verify(postRepo).deleteById(idPost);
 
@@ -362,4 +400,64 @@ public class PostServiceTest {
         Mockito.verify(postRepo,times(1)).save(post2);
 
     }
+
+    @Test
+    void testFindById() {
+        Mockito.when(postRepo.findById(1L)).thenReturn(Optional.of(post));
+        Mockito.when(mapper.map(post)).thenReturn(postDtoOut1);
+
+        PostDtoOut result = postService.findById(1L);
+
+        assertNotNull(result);
+        assertEquals("Description", result.getDescription());
+        assertEquals("Photo", result.getPhoto());
+        assertEquals(userDtoOut1, result.getUser());
+
+        Mockito.verify(postRepo, times(1)).findById(1L);
+    }
+
+    @Test
+    void testFindByIds() {
+        List<Long> postIds = List.of(1L, 2L);
+
+        Mockito.when(postRepo.findById(1L)).thenReturn(Optional.of(post));
+        Mockito.when(mapper.map(post)).thenReturn(postDtoOut1);
+        Mockito.when(postRepo.findById(2L)).thenReturn(Optional.of(post2));
+        Mockito.when(mapper.map(post2)).thenReturn(postDtoOut2);
+
+        List<PostDtoOut> results = postService.findByIds(postIds);
+
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        assertEquals("Description", results.get(0).getDescription());
+        assertEquals("Photo", results.get(0).getPhoto());
+        assertEquals(userDtoOut1, results.get(0).getUser());
+        assertEquals("Description", results.get(1).getDescription());
+        assertEquals("Photo", results.get(1).getPhoto());
+        assertEquals(userDtoOut2, results.get(1).getUser());
+
+        Mockito.verify(postRepo, times(1)).findById(1L);
+        Mockito.verify(postRepo, times(1)).findById(2L);
+    }
+
+    @Test
+    void testFindLikedPostsByUserId() {
+        List<Like> likes = List.of(like1, like2);
+        Mockito.when(likeService.getLikesForUser(1L)).thenReturn(likes);
+        Mockito.when(mapper.map(Mockito.any(Post.class))).thenReturn(postDtoOut1, postDtoOut2);
+
+        List<PostDtoOut> results = postService.findLikedPostsByUserId(1L);
+
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        assertEquals("Description", results.get(0).getDescription());
+        assertEquals("Photo", results.get(0).getPhoto());
+        assertEquals(userDtoOut1, results.get(0).getUser());
+        assertEquals("Description", results.get(1).getDescription());
+        assertEquals("Photo", results.get(1).getPhoto());
+        assertEquals(userDtoOut2, results.get(1).getUser());
+
+        Mockito.verify(likeService, times(1)).getLikesForUser(1L);
+    }
+
 }
