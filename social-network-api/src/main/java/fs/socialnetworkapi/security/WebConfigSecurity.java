@@ -42,11 +42,11 @@ public class WebConfigSecurity {
           .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("USER")
-          //.requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
-            .requestMatchers(HttpMethod.POST,"api/v1/**").permitAll()
+          .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
+
 
       )
-      //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
     ;
 
     return http.build();
