@@ -7,12 +7,15 @@
 	border-top: 1px solid #000000;
 	padding: 10px;
 }
+// .avatar {
+// 	align-items: flex-start;
+// }
 .body {
 	&__header {
 		margin-bottom: 5px;
 	}
 	&__main {
-		max-width: 300px;
+		width: 300px;
 	}
 	&__footer {
 		margin-top: 10px;

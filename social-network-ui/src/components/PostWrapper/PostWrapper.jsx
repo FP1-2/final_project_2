@@ -13,8 +13,8 @@ PostWrapper.propTypes = {
   tweets: PropTypes.array,
 };
 
-// PostWrapper.defaultProps = {
-//   tweets: [],
-// };
+PostWrapper.defaultProps = {
+  tweets: [],
+};
 
 export default PostWrapper;

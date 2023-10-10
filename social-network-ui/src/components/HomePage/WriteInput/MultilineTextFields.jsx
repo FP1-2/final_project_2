@@ -16,20 +16,18 @@ export default function MultilineTextFields(props) {
       <div>
         <TextField
           id="standard-textarea"
-          value={props.tweetPost}
+          name="text"
+          value={props.value}
           onChange={props.onChange}
-          //  label="Multiline Placeholder"
           placeholder="What's happening?!"
           multiline
           variant="standard"
-          //  className={styles.inputTweet}
-          //  color="warning"
         />
       </div>
     </Box>
   );
 }
 MultilineTextFields.propTypes = {
-  tweetPost: PropTypes.string.isRequired, // Пропс 'text' має бути рядком і обов'язковим
-  onChange: PropTypes.func.isRequired, // Пропс 'onChange' має бути функцією і обов'язковим
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };

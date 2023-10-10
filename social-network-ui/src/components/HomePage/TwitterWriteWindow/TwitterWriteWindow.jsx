@@ -1,50 +1,90 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+
 import styles from "./TwitterWriteWindow.module.scss";
-import Avatar from "../../Avatar/Avatar";
 import ImageInput from "../ImageInput/ImageInput";
 import MultilineTextFields from "../WriteInput/MultilineTextFields";
+import Avatar from "@mui/material/Avatar";
+import postApiPost from "../../../api/postApiPost";
+import PropTypes from "prop-types";
+import axios from "axios";
+import { Image, CloudinaryContext, Transformation } from "cloudinary-react";
+import cloudinaryCore from "../../../api/cloudinaryConfig";
 
-const TwitterWriteWindow = () => {
-  const [tweetPost, setTweetPost] = useState("");
+const TwitterWriteWindow = ({
+  setTweetPost,
+  tweetPosts,
+  userPhoto,
+  firstName,
+  lastName,
+}) => {
+  console.log(userPhoto);
+  const [description, setDescription] = useState("");
+  const [photo, setPhoto] = useState(null);
+  const [userId, setUserId] = useState(9); //токен
 
-  //   const [tweetImage, setTweetImage] = useState("");
+  //   const handleTextInput = (event) => {
+  //     setDescription(event.target.value);
+  //   };
 
-  //   const [appState, setAppState] = useState();
+  //   const handlePhotoInput = (event) => {
+  //  setPhoto(event.target.value);
+  //   }; // переписати для клаудінарі
 
-  //   useEffect(() => {
-  //     const urlPOST = "/api/v1/user/{user_id}/post";
-  //     axios.post(urlPOST).then((resp) => {
-  //       const allPersons = resp.data;
-  //       console.log(allPersons);
-  //       setAppState(allPersons);
-  //     });
-  //   }, [setAppState]);
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  async function handlePostSubmit(e) {
-    e.preventDefault();
-    console.log({ tweetPost });
-    //  console.log(urlPOST);
-    //  const urlPOST =
-    //    "http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/user/3/posts?page=0&size=10";
+    // Form validation
+    if (!description.trim()) {
+      setError("Description is required");
+      return;
+    }
 
-    //  await axios
-    //    .get(urlPOST)
-    //    .then((data) => console.log(data.data))
-    //    .catch((err) => console.log(err));
-  }
+    //  if (!photo) {
+    //    setError("Photo is required");
+    //    return;
+    //  }
+    postApiPost(userId, photo, description)
+      .then((response) => {
+        setTweetPost([response.data, ...tweetPosts]);
+        setDescription(""); // Clear input fields on successful submission
+        setPhoto("");
+        //   setError("");
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
-      <form className={styles.writeWindow} onSubmit={handlePostSubmit}>
-        <Avatar />
+      <form className={styles.writeWindow} onSubmit={handleSubmit}>
+        {userPhoto ? ( // Перевірка наявності фото у користувача
+          <Avatar
+            alt={`${firstName} ${lastName}`}
+            src={userPhoto}
+            sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
+          />
+        ) : (
+          // Якщо фото відсутнє, виводимо ініціали імені та прізвища
+          <Avatar
+            sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
+          >
+            {firstName.charAt(0)}
+            {lastName.charAt(0)}
+          </Avatar>
+        )}
+
         <div className={styles.writeWindowBody}>
           <MultilineTextFields
-            value={tweetPost}
-            onChange={(e) => setTweetPost(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
+          <img src={photo}></img>
           <div className={styles.writeWindowFooter}>
             <div>
-              <ImageInput />
+              <ImageInput
+                value={photo}
+                onChange={(e) => setPhoto(e.target.value)}
+                //  onChange={handlePhotoUpload}
+              />
             </div>
             <button className={styles.postBtn}>Post</button>
           </div>
@@ -52,6 +92,15 @@ const TwitterWriteWindow = () => {
       </form>
     </div>
   );
+};
+
+TwitterWriteWindow.propTypes = {
+  onSubmit: PropTypes.func,
+  setTweetPost: PropTypes.func.isRequired,
+  tweetPosts: PropTypes.array.isRequired,
+  userPhoto: PropTypes.string.isRequired,
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
 };
 
 export default TwitterWriteWindow;
