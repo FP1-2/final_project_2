@@ -1,10 +1,9 @@
 package fs.socialnetworkapi.controller;
 
 import fs.socialnetworkapi.dto.EmailRequest;
-import fs.socialnetworkapi.dto.PasswordResetRequest;
+import fs.socialnetworkapi.dto.password.PasswordResetRequest;
 import fs.socialnetworkapi.service.PasswordResetService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/api/v1/reset")
 public class PasswordController {
-
-  @Autowired
   private final PasswordResetService passwordResetService;
 
   @PostMapping("/request")
