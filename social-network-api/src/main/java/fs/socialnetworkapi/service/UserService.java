@@ -24,6 +24,19 @@ public class UserService implements UserDetailsService {
   private final Mapper mapper;
   private final PasswordEncoder passwordEncoder;
 
+  public UserDtoOut editUser(UserDtoIn userDtoIn) {
+    User user = userRepo.findByEmail(userDtoIn.getEmail());
+    user.setFirstName(userDtoIn.getFirstName());
+    user.setLastName(userDtoIn.getLastName());
+    user.setBirthday(userDtoIn.getBirthday());
+    user.setMainPhoto(userDtoIn.getMainPhoto());
+    user.setAvatar(userDtoIn.getAvatar());
+    user.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
+    user.setAddress(userDtoIn.getAddress());
+    user.setUsername(String.format("%s_%s",userDtoIn.getFirstName(),userDtoIn.getLastName()));
+    return mapper.map(userRepo.save(user));
+  }
+
 
 
 

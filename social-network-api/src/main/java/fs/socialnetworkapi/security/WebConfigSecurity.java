@@ -34,6 +34,7 @@ public class WebConfigSecurity {
           .requestMatchers("/api/v1/activate/**").permitAll()
           .requestMatchers("/api/v1/all-posts").permitAll()
           .requestMatchers("/api/v1/reset/**").permitAll()
+          .requestMatchers("/api/v1/edit").permitAll()
           .requestMatchers("/error").permitAll()
           .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")
