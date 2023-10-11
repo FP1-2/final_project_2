@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,9 +37,9 @@ public class UserService implements UserDetailsService {
 
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
-    User user1 = userRepo.save(mapper.map(userDtoIn, User.class));
     userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
     userDtoIn.setRoles("USER");
+    User user1 = userRepo.save(mapper.map(userDtoIn, User.class));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
         "Hello, %s! \n"

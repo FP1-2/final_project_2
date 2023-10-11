@@ -2,7 +2,11 @@ package fs.socialnetworkapi.dto.post;
 
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.enums.TypePost;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 @Getter
 @Setter

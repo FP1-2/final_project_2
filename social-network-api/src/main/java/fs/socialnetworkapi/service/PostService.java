@@ -27,7 +27,8 @@ public class PostService {
 
   public PostDtoOut findById(Long postId) {
 
-    return mapper.map(postRepo.findById(postId).orElseThrow(() -> new PostNotFoundException("No such post")),PostDtoOut.class);
+    return mapper.map(postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException("No such post")),PostDtoOut.class);
   }
 
   public List<PostDtoOut> findByIds(List<Long> postIds) {
@@ -35,12 +36,16 @@ public class PostService {
   }
 
   public List<PostDtoOut> findLikedPostsByUserId(Long userId) {
-    return likeService.getLikesForUser(userId).stream().map(like -> mapper.map(like.getPost(),PostDtoOut.class)).toList();
+    return likeService.getLikesForUser(userId)
+            .stream()
+            .map(like -> mapper.map(like.getPost(),PostDtoOut.class))
+            .toList();
   }
 
   public List<PostDtoOut> getAllPost(Integer page, Integer size) {
 
-    return postRepo.findByTypePost(TypePost.POST, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate")))
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    return postRepo.findByTypePost(TypePost.POST, pageRequest)
             .stream()
             .map(p -> mapper.map(p,PostDtoOut.class))
             .peek(postDtoOut -> postDtoOut.setComments(List.of()))
@@ -67,8 +72,9 @@ public class PostService {
 
     Set<User> followings = user.getFollowings();
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-    return postRepo.findByUserInAndTypePost(users, TypePost.POST, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate")))
+    return postRepo.findByUserInAndTypePost(users, TypePost.POST, pageRequest)
             .stream()
             .map(post -> mapper.map(post, PostDtoOut.class))
             .toList();
@@ -104,7 +110,8 @@ public class PostService {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     Post originalPost = postRepo.findById(originalPostId)
-            .orElseThrow(() -> new PostNotFoundException(String.format("Original post with id: %d not found", originalPostId)));
+            .orElseThrow(() -> new PostNotFoundException(
+                    String.format("Original post with id: %d not found", originalPostId)));
 
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);

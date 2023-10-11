@@ -63,11 +63,11 @@ public class PasswordResetService {
   }
 
   public boolean changePassword(PasswordResetRequest request) {
-//    Optional<User> findUser = findByActivationCode(activationCode);
-//    if (findUser.isEmpty()) {
-//      return false;
-//    }
-//    setNewPassword(findUser.get(), newPassword);
+    //    Optional<User> findUser = findByActivationCode(activationCode);
+    //    if (findUser.isEmpty()) {
+    //      return false;
+    //    }
+    //    setNewPassword(findUser.get(), newPassword);
     return userService.changePassword(request);
   }
 

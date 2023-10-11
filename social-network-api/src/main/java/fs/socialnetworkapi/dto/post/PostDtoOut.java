@@ -2,7 +2,6 @@ package fs.socialnetworkapi.dto.post;
 
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Like;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import fs.socialnetworkapi.enums.TypePost;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,7 +44,7 @@ public class PostDtoOut {
     }
     PostDtoOut that = (PostDtoOut) obj;
     return Objects.equals(id, that.id)
-            &&Objects.equals(user, that.user)
+            && Objects.equals(user, that.user)
             && Objects.equals(description, that.description)
             && Objects.equals(photo, that.photo);
   }

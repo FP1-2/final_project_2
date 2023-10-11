@@ -34,7 +34,7 @@ public class Post extends AbstractEntity {
   @Transient
   private int countReposts;
 
-  @ManyToOne(fetch=FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   private User user;
 
@@ -46,10 +46,14 @@ public class Post extends AbstractEntity {
   private Post originalPost;
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Post post = (Post) o;
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Post post = (Post) obj;
     return Objects.equals(this.getId(), post.getId())
             && Objects.equals(description, post.description)
             && Objects.equals(photo, post.photo)

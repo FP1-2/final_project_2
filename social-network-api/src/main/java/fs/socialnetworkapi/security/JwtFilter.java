@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
   private final SecurityService tokenService;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+  public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
     try {
       Optional<String> token = extractTokenFromRequest(request);
