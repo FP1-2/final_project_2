@@ -6,7 +6,7 @@ import MultilineTextFields from "../WriteInput/MultilineTextFields";
 import Avatar from "@mui/material/Avatar";
 import postApiPost from "../../../api/postApiPost";
 import PropTypes from "prop-types";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { Image, CloudinaryContext, Transformation } from "cloudinary-react";
 import cloudinaryCore from "../../../api/cloudinaryConfig";
 
@@ -26,9 +26,19 @@ const TwitterWriteWindow = ({
   //     setDescription(event.target.value);
   //   };
 
-  //   const handlePhotoInput = (event) => {
-  //  setPhoto(event.target.value);
-  //   }; // переписати для клаудінарі
+  const handlePhotoInput = (event) => {
+    //  console.log(files[0]);
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("upload_preset", "danit2023");
+    axios
+      .post("https://api.cloudinary.com/v1_1/dl4ihoods/image/upload", formData)
+      .then((response) => {
+        setPhoto(response.data.url);
+      });
+
+    //   setPhoto(event.target.value);
+  }; // переписати для клаудінарі
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -77,14 +87,18 @@ const TwitterWriteWindow = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <img src={photo}></img>
+          {/* <Image cloudName="dl4ihoods" src={photo} /> */}
+
+          {photo && (
+            <Image
+              style={{ width: 360, height: 300 }}
+              cloudName="dl4ihoods"
+              publicId={photo}
+            ></Image>
+          )}
           <div className={styles.writeWindowFooter}>
             <div>
-              <ImageInput
-                value={photo}
-                onChange={(e) => setPhoto(e.target.value)}
-                //  onChange={handlePhotoUpload}
-              />
+              <ImageInput file={photo} onChange={handlePhotoInput} />
             </div>
             <button className={styles.postBtn}>Post</button>
           </div>

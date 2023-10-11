@@ -6,7 +6,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ShareIcon from "@mui/icons-material/Share";
-// import Avatar from "../../Avatar/Avatar";
 import Avatar from "@mui/material/Avatar";
 
 import PropTypes from "prop-types";
@@ -41,7 +40,7 @@ const Post = ({ tweet }) => {
           <p className={styles.main__twitte}>{tweet.description}</p>
 
           {tweet.photo && (
-            <img src={tweet.photo} alt="" width={300} height={250} />
+            <img src={tweet.photo} alt="" width={350} height={250} />
           )}
         </div>
         <div className={styles.body__footer}>

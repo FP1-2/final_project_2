@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import getApiPosts from "../../api/getApiPosts";
-// import Header from "../../components/Header/header";
+import Header from "../../components/Header/header";
 import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
-import axios from "axios";
 import PostWrapper from "../../components/PostWrapper/PostWrapper";
 
 const Home = () => {
@@ -16,8 +15,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      {/* <Header pageName="Main" /> */}
+    <Header pageName="Home">
       <section>
         <TwitterWriteWindow
           setTweetPost={setTweetPost}
@@ -28,7 +26,7 @@ const Home = () => {
         />
         <PostWrapper tweets={tweetPosts} />
       </section>
-    </div>
+    </Header>
   );
 };
 

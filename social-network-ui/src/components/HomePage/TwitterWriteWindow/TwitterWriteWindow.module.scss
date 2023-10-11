@@ -1,7 +1,12 @@
 .writeWindow {
+	margin-top: 40px;
+	padding-top: 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	width: 600px;
+	border-bottom: 1px solid #e0e0e0;
+	border-right: 1px solid #e0e0e0;
 }
 .writeWindowHeader {
 	display: flex;
