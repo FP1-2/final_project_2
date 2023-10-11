@@ -1,47 +1,53 @@
 .post {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 600px;
-	border-bottom: 1px solid #e0e0e0;
-	border-right: 1px solid #e0e0e0;
-	padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 600px;
+  padding: 10px;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .body {
-	&__header {
-		margin-bottom: 5px;
-	}
-	&__main {
-		width: 350px;
-	}
-	&__footer {
-		margin-top: 10px;
-		display: flex;
-		justify-content: space-between;
-	}
+  &__header {
+    margin-bottom: 5px;
+  }
+
+  &__main {
+    width: 350px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
 }
+
 .header {
-	&__mainName {
-		font-weight: 800;
-		margin-right: 5px;
-	}
-	&__tagName {
-		font-weight: 300;
-		color: #737373;
-		padding-right: 5px;
-	}
-	&__time {
-		font-weight: 300;
-		color: #737373;
-		padding-left: 5px;
-	}
+  &__mainName {
+    margin-right: 5px;
+    font-weight: 800;
+  }
+
+  &__tagName {
+    padding-right: 5px;
+    color: #737373;
+    font-weight: 300;
+  }
+
+  &__time {
+    padding-left: 5px;
+    color: #737373;
+    font-weight: 300;
+  }
 }
 
 .counter {
-	font-size: 15px;
+  font-size: 15px;
 }
+
 .main__twitte {
-	word-wrap: break-word;
-	white-space: pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }

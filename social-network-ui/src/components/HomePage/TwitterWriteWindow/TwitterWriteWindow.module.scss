@@ -1,36 +1,39 @@
 .writeWindow {
-	margin-top: 40px;
-	padding-top: 50px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 600px;
-	border-bottom: 1px solid #e0e0e0;
-	border-right: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 600px;
+  margin-top: 40px;
+  padding-top: 50px;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
+
 .writeWindowHeader {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .writeWindowBody {
-	min-width: 300px;
+  min-width: 300px;
 }
+
 .writeWindowFooter {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 15px;
-	margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .postBtn {
-	font-weight: 700;
-	color: #fff;
-	background-color: rgb(29, 155, 240);
-	border: none;
-	padding-right: 20px;
-	padding-left: 20px;
-	min-width: 36px;
-	min-height: 36px;
-	border-radius: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding-right: 20px;
+  padding-left: 20px;
+  border: none;
+  border-radius: 36px;
+  background-color: rgb(29, 155, 240);
+  color: #fff;
+  font-weight: 700;
 }
