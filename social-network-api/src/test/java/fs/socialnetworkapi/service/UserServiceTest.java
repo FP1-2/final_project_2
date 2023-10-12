@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,9 @@ class UserServiceTest {
 
   @Mock
   private ModelMapper mapper;
+
+  @Mock
+  private PasswordEncoder passwordEncoder;
 
   @InjectMocks
   private UserService userService;
@@ -53,7 +57,7 @@ class UserServiceTest {
     when(mapper.map(userDtoIn, User.class)).thenReturn(userToSave);
 
     when(userRepo.save(userToSave)).thenReturn(userToSave);
-
+    when(passwordEncoder.encode(userDtoIn.getPassword())).thenReturn(userDtoIn.getPassword());
     UserDtoOut result = userService.addUser(userDtoIn);
 
     verify(userRepo, times(1)).findByEmail("test@example.com");
@@ -208,7 +212,7 @@ class UserServiceTest {
     user.getFollowers().add(currentUser);
 
     Mockito.when(userRepo.findById(2L)).thenReturn(Optional.of(user));
-    Mockito.when(mapper.map(any(User.class), UserDtoOut.class)).thenReturn(any(UserDtoOut.class));
+    Mockito.when(mapper.map(any(User.class), eq(UserDtoOut.class))).thenReturn(any(UserDtoOut.class));
 
     List<UserDtoOut> followers = userService.getFollowers(2L);
     verify(userRepo, times(1)).findById(any());
@@ -232,7 +236,7 @@ class UserServiceTest {
     currentUser.getFollowings().add(user);
 
     Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(currentUser));
-    Mockito.when(mapper.map(any(User.class), UserDtoOut.class)).thenReturn(any(UserDtoOut.class));
+    Mockito.when(mapper.map(any(User.class), eq(UserDtoOut.class))).thenReturn(any(UserDtoOut.class));
 
     List<UserDtoOut> followings = userService.getFollowings(1L);
     verify(userRepo, times(1)).findById(any());
