@@ -77,7 +77,11 @@ const ModalRegisterWindowSecondStep = ({
 
 	let navigate = useNavigate()
 
-	const registerName = useSelector(state => state.register.registerData?.name) // register user name
+	const registerName = useSelector(
+		state => state.register.registerData?.firstName
+	) // register user name
+
+	const userObj = useSelector(state => state.register.registerData) // register user object
 
 	const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME // Cloudinary cloud name
 
@@ -142,21 +146,28 @@ const ModalRegisterWindowSecondStep = ({
 			newValues.avatar = false
 		}
 
-		const { scndPassword, ...secondPart } = Object.assign({}, newValues)
+		const { scndPassword, fstPassword, ...secondPart } = Object.assign(
+			{},
+			newValues
+		)
+		secondPart.password = scndPassword
 
 		const obj = {
 			// add secod part of register data
 			...secondPart,
-			dataProcessing: dataProcessing,
+			// dataProcessing: dataProcessing,
 			subscribeNews: subscribeNewsletter,
 			registerData: new Date().toUTCString(),
+			username: null,
+			mainPhoto: null,
 		}
 
 		dispatch(register(obj))
 		setIsLoading(true)
 		resetForm()
 		;(async () => {
-			const response = await postRegistrationData(obj)
+			console.log({ ...userObj, ...obj })
+			const response = await postRegistrationData({ ...userObj, ...obj })
 			console.log(response)
 			setIsLoading(false)
 			setIsRegisterDone(true)

@@ -1,17 +1,20 @@
 package fs.socialnetworkapi.entity;
 
 
-
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +23,7 @@ import java.util.Set;
 @Table(name = "users")
 @Setter
 @Getter
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements UserDetails {
 
   private String username;
   private String firstName;
@@ -30,8 +33,10 @@ public class User extends AbstractEntity {
   private String avatar;
   private String mainPhoto;
   private String password;
+  private String address;
   private boolean active;
   private String activationCode;
+  private String roles;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Post> posts;
@@ -56,6 +61,32 @@ public class User extends AbstractEntity {
           joinColumns = {@JoinColumn(name = "following_id")},
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return false;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return false;
+  }
+
 
 }
 

@@ -2,9 +2,11 @@ package fs.socialnetworkapi.dto;
 
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.utils.Universal;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,15 +15,22 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 class MapperTest {
 
   @InjectMocks
   private Mapper mapper;
+  private AutoCloseable closeable;
 
   @BeforeEach
   public void setUp() {
-    MockitoAnnotations.openMocks(this);
+    closeable = MockitoAnnotations.openMocks(this);
+  }
+
+  @AfterEach
+  public void close() throws Exception {
+    closeable.close();
   }
 
   @Test
@@ -37,6 +46,7 @@ class MapperTest {
     post.setPhoto("Photo");
     post.setDescription("Description");
     post.setCreatedDate(createDate);
+    post.setLikes(List.of());
 
     UserDtoOut userDtoOut = new UserDtoOut();
     userDtoOut.setId(2L);
@@ -51,11 +61,12 @@ class MapperTest {
             .timeWhenWasPost(Universal.convert(createDate))
             .usersReposts(List.of())
             .isRepost(false)
+            .likes(List.of())
             .build();
 
     PostDtoOut dtoOut = mapper.map(post);
 
-    assertTrue(postDtoOut.equals(dtoOut));
+    assertEquals(postDtoOut, dtoOut);
 
   }
 
@@ -73,7 +84,8 @@ class MapperTest {
 
     Post post2 = mapper.map(postDtoIn);
 
-    assertTrue(post1.equals(post2));
+    assertEquals(post1, post2);
 
   }
+
 }

@@ -1,7 +1,7 @@
 package fs.socialnetworkapi.controller;
 
-import fs.socialnetworkapi.dto.UserDtoIn;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoIn;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ public class RegistrationController {
   public ResponseEntity<UserDtoOut> create(@Valid @RequestBody UserDtoIn userDtoIn) {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
-
 
   @GetMapping("/api/v1/activate/{code}")
   public String activate(Model model, @PathVariable String code) {
