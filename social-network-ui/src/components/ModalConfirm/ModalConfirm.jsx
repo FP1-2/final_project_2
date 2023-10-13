@@ -1,19 +1,18 @@
 import React from 'react'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import LinkText from '../../components/LinkText/LinkText'
+
 import { Box, CssBaseline, ThemeProvider, Typography,Button } from '@mui/material'
 
 import { createTheme } from '@mui/material/styles'
 
 import Modal from '@mui/material/Modal';
 import IconTwitter from '../IconTwitter/IconTwitter'
-import { Form, Formik } from 'formik'
+import { ErrorMessage, Form, Formik, Field } from 'formik'
 import CustomInput from '../../components/CustomInput/CustomInput'
 import * as Yup from 'yup'
 import { Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { closeModal } from '../../redux/slices/modalSlice'
+
 
 const style = {
 	position: 'absolute',
@@ -76,121 +75,157 @@ const initialValues = {
 function ModalConfirm() {
  
     const [resetModal, setResetModal] = useState(true);
-
-
-
     const handleClose = () => {
 		navigate('/signIn');
-	
 	}
+	const handleBackReset = () => {
+        navigate("/resetPassword")
+      };
+
 	const navigate   = useNavigate();
-	const onSubmit = (values) => {
-		const {data} = axios.post('https://basova.top/api/confirm', values)
-		.then(function(respons){console.log(respons.status);
-			if(respons.status === 200){
-			setTimeout(() => {
-				navigate('/signIn');
-			}, 2000);
+	const onSubmit = async(values) => {
+		try {
+			const response = await axios.post(
+        "https://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/reset/confirm",
+        values
+      );
+
+			if (response.status === 200) {
+				setTimeout(() => {
+					navigate('/resetPassword/confirm');
+				}, 1000);
 			}
-		})
-		console.log('send', values)
+			console.log("send", values);
+
+			resetForm();
+
+			console.log("send", values);
+			} catch (error) {
+					ErrorMessage('Error:', error);
+				}
 	}
+
+
 		
-		
+
   return (
-	<ThemeProvider theme={theme}>
-		<Modal
-		open={resetModal}
-		onClose={handleClose}
-		>
-		<Box sx={style} >
-			<Box sx={{
-				position: 'relative',
-				}}>
-					
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
-								width: '100%',
-							}}
-						>
-							<IconTwitter
-								style={{
-									margin: '0 auto',
-								}}
-							/>
-							<Box>
-								enter code email
-							</Box>
-							<Formik
-						initialValues={initialValues}
-						validationSchema={validationSchema}
-						onSubmit={onSubmit}
-					>
-						{({ isValid, isSubmitting }) => (
-							<Form
-								style={{
-									width: '100%',
-								}}
-							>
-								<CustomInput
-									name='activationCode'
-									type='text'
-									label='Activation Code'
-									placeholder='Code '
-									
-								/>
-								<CustomInput
-									name='newPassword'
-									type='text'
-									label='New Password'
-									placeholder='New Password '
-									
-								/>
-								
-								<Button
-									type='submit'
-									variant='contained'
-									fullWidth
-									margin='normal'
-									sx={{
-										marginBottom: '1.3rem',
-										padding: '1.1rem 0',
-										borderRadius: '2rem',
-										fontSize: '1rem',
-										fontWeight: 700,
-										textTransform: 'none',
-										backgroundColor: '#1DA1F2',
-									}}
-									disabled={!isValid || isSubmitting}
-								>
-									Reset
-								</Button>
-							</Form>
-						)}
-					</Formik>
-					
-						</Box>
-						<Box
-						sx={{
-							display: 'flex',
-							width: '100%',
-							fontWeight: '400',
-							fontSize: '1rem'
-    						
-						}}
-					>
-						<LinkText text=' Log in' link='/signIn' />
-					</Box>
-				
-			</Box>
-		</Box>
-		</Modal>
-	</ThemeProvider>
-  )
+    <ThemeProvider theme={theme}>
+      <Modal open={resetModal} onClose={handleClose}>
+        <Box sx={style}>
+          <Box
+            sx={{
+              position: "relative",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <IconTwitter
+                style={{
+                  margin: "0 auto",
+                }}
+              />
+              <Box
+                sx={{
+                  margin: 1,
+                  fontWeight: 400,
+                  fontSize: "1rem",
+                  textAlign: "center",
+                }}
+              >
+                We have sent you the code Check if you have received a
+                confirmation code to your email. If you need to request a new
+                code, return to the previous screen and select a verification
+                method again.
+              </Box>
+
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+              >
+                {({ isValid, isSubmitting, dirty }) => (
+                  <Form
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <CustomInput
+                      name="activationCode"
+                      type="text"
+                      label="Activation Code"
+                      placeholder="Code "
+                      error="true"
+                    />
+                    <CustomInput
+                      name="newPassword"
+                      type="text"
+                      label="New Password"
+                      placeholder="New Password "
+                      error="true"
+                    />
+
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      margin="normal"
+                      sx={{
+                        marginBottom: "1.3rem",
+                        padding: "1.1rem 0",
+                        borderRadius: "2rem",
+                        fontSize: "1rem",
+                        fontWeight: 700,
+                        textTransform: "none",
+                        backgroundColor: "#1DA1F2",
+                      }}
+                      disabled={!(dirty && isValid) || isSubmitting}
+                    >
+                      Confirm
+                    </Button>
+
+                    <Button
+                      onClick={handleBackReset}
+                      variant="contained"
+                      fullWidth
+                      margin="normal"
+                      sx={{
+                        marginBottom: "1.3rem",
+                        padding: "1.1rem 0",
+                        borderRadius: "2rem",
+                        fontSize: "1rem",
+                        fontWeight: 700,
+                        textTransform: "none",
+                        backgroundColor: "#1DA1F2",
+                      }}
+                    >
+                      Back to
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                fontWeight: "400",
+                fontSize: "1rem",
+              }}
+            >
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+    </ThemeProvider>
+  );
 }
 
 export default ModalConfirm
