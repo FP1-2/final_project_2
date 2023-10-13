@@ -10,7 +10,9 @@ public class WebConfig  implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/api/**")
-            .allowedOrigins("http://localhost:3000","http://twitterdanit.us-east-1.elasticbeanstalk.com")
+            .allowedOrigins("http://localhost:3000","http://localhost:5000",
+              "http://twitterdanit.us-east-1.elasticbeanstalk.com",
+              "http://twitter-demo.us-east-1.elasticbeanstalk.com/")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true);
