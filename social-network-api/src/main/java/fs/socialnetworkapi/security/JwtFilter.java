@@ -29,13 +29,10 @@ public class JwtFilter extends OncePerRequestFilter {
   private final SecurityService tokenService;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+  public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
     try {
       Optional<String> token = extractTokenFromRequest(request);
-
-      System.out.println(token);
-
       Optional<SecurityService.verificationResult> verificationResult = token.map(tokenService::check);
       Optional<UsernamePasswordAuthenticationToken> usernamePasswordAuthenticationToken = verificationResult
               .map(UserAuthenticationBearer::create);
@@ -44,12 +41,11 @@ public class JwtFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken at = usernamePasswordAuthenticationToken.get();
         at.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(at);
-        System.out.println("1");
       } else {
         User user = new User();
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user,null,
           user.getAuthorities()));
-        response.setStatus(403);
+//        response.setStatus(403);
       }
       filterChain.doFilter(request, response);
     } catch (Exception x) {

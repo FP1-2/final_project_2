@@ -30,6 +30,7 @@ public class WebConfigSecurity {
     http.authorizeHttpRequests((authorizeHttpRequests) ->
         authorizeHttpRequests
           .requestMatchers("/api/v1/registration").permitAll()
+          .requestMatchers("/h2/**").permitAll()
           .requestMatchers("/api/v1/login").permitAll()
           .requestMatchers("/api/v1/activate/**").permitAll()
           .requestMatchers("/api/v1/all-posts").permitAll()
@@ -49,7 +50,17 @@ public class WebConfigSecurity {
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
-    return (WebSecurity web)-> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2/**"));
+    return (WebSecurity web)-> web.ignoring()
+      .requestMatchers(new AntPathRequestMatcher("/h2/**"))
+      .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
+      .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
+      .requestMatchers(new AntPathRequestMatcher("/index*"))
+      .requestMatchers(new AntPathRequestMatcher("/static/**"))
+      .requestMatchers(new AntPathRequestMatcher("/"))
+      .requestMatchers(new AntPathRequestMatcher("/*.js"))
+      .requestMatchers(new AntPathRequestMatcher("/*.json"))
+      .requestMatchers(new AntPathRequestMatcher("/*.ico"))
+      ;
   }
 
   @Bean
