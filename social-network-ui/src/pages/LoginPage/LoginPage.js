@@ -7,6 +7,7 @@ import * as Yup from 'yup'
 import CustomInput from '../../components/CustomInput/CustomInput'
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
+import { postLoginData } from '../../api/authApis'
 
 const theme = createTheme({
 	// custom theme
@@ -34,8 +35,17 @@ const initialValues = {
 const LoginPage = () => {
 	const onSubmit = (values, { resetForm }) => {
 		// submit handler
-		console.log('send', values)
-		resetForm()
+		;(async () => {
+			try {
+				const data = await postLoginData(values)
+				console.log(data)
+				if (data.error === null) {
+					resetForm()
+				}
+			} catch (error) {
+				console.log(error)
+			}
+		})()
 	}
 	return (
 		<ThemeProvider theme={theme}>
