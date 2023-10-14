@@ -20,7 +20,7 @@ import {
 import CustomInput from '../../CustomInput/CustomInput'
 import LinkText from '../../LinkText/LinkText'
 import { useNavigate } from 'react-router-dom'
-import postRegistrationData from '../../../api/authApis'
+import postRegistrationData from '../../../api/authApi'
 
 import axios from 'axios'
 

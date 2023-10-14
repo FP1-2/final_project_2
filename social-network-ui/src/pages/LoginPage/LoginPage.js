@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import CustomInput from '../../components/CustomInput/CustomInput'
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
-import { postLoginData } from '../../api/authApis'
+import { postLoginData } from '../../api/authApi'
 
 const theme = createTheme({
 	// custom theme
