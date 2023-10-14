@@ -28,7 +28,7 @@ public class RegistrationController {
   }
 
   @GetMapping("/api/v1/activate/{code}")
-  public String activate(Model model, @PathVariable String code) {
+  public ResponseEntity<Model> activate(Model model, @PathVariable String code) {
     boolean isActivated = userService.activateUser(code);
 
     if (isActivated) {
@@ -36,6 +36,6 @@ public class RegistrationController {
     } else {
       model.addAttribute("message", "Activation code is not found!");
     }
-    return "login";
+    return ResponseEntity.ok(model);
   }
 }

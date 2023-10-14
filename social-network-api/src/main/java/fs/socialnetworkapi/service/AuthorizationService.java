@@ -1,9 +1,11 @@
 package fs.socialnetworkapi.service;
 
 
+import fs.socialnetworkapi.dto.Mapper;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.login.LoginDtoOut;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.repos.UserRepo;
 import fs.socialnetworkapi.security.SecurityService;
 import fs.socialnetworkapi.security.TokenDetails;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +20,15 @@ public class AuthorizationService {
   private final UserService userService;
   private final SecurityService securityService;
   private final PasswordEncoder passwordEncoder;
+  private final Mapper mapper;
+  private final UserRepo userRepo;
 
   public LoginDtoOut tokenGenerate(@RequestBody LoginDtoIn loginDtoIn) {
     User userByEmail = userService.findByEmail(loginDtoIn.getEmail());
     if (passwordEncoder.matches(loginDtoIn.getPassword(), userByEmail.getPassword()) & userByEmail.isActive()) {
       TokenDetails tokenDetails = securityService.authenticate(loginDtoIn.getEmail());
+      userByEmail.setLoginStatus(true);
+      mapper.map(userRepo.save(userByEmail));
       return LoginDtoOut
         .builder()
         .id(tokenDetails.getUserId())

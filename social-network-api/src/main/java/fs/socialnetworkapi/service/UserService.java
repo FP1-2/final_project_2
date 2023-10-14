@@ -7,6 +7,7 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,44 +25,48 @@ public class UserService implements UserDetailsService {
   private final Mapper mapper;
   private final PasswordEncoder passwordEncoder;
 
-  public UserDtoOut editUser(UserDtoIn userDtoIn) {
-    User user = userRepo.findByEmail(userDtoIn.getEmail());
-    user.setFirstName(userDtoIn.getFirstName());
-    user.setLastName(userDtoIn.getLastName());
-    user.setBirthday(userDtoIn.getBirthday());
-    user.setMainPhoto(userDtoIn.getMainPhoto());
-    user.setAvatar(userDtoIn.getAvatar());
-    user.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
-    user.setAddress(userDtoIn.getAddress());
-    user.setUsername(String.format("%s_%s",userDtoIn.getFirstName(),userDtoIn.getLastName()));
-    return mapper.map(userRepo.save(user));
+  public UserDtoOut editUser(UserDtoIn userDtoIn, String email) {
+
+    User user = userRepo.findByEmail(email);
+    if (user.isLoginStatus()) {
+      user.setFirstName(userDtoIn.getFirstName());
+      user.setLastName(userDtoIn.getLastName());
+      user.setBirthday(userDtoIn.getBirthday());
+      user.setMainPhoto(userDtoIn.getMainPhoto());
+      user.setAvatar(userDtoIn.getAvatar());
+      user.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
+      user.setAddress(userDtoIn.getAddress());
+      user.setUsername(String.format("%s_%s", userDtoIn.getFirstName(), userDtoIn.getLastName()));
+      return mapper.map(userRepo.save(user));
+    }
+    return null;
   }
-
-
 
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
 
     if (userFromDb != null) {
-      return mapper.map(userFromDb); // need to correct
+      return mapper.map(userFromDb);
     }
 
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
     userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
     userDtoIn.setRoles("USER");
+    userDtoIn.setLoginStatus(false);
     User user1 = userRepo.save(mapper.map(userDtoIn));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
         "Hello, %s! \n"
           + "Welcome to Twitter. Please, visit next link: http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/activate/%s",
+          // + "Welcome to Twitter. Please, visit next link: http://localhost:5000/api/v1/activate/%s",
         userDtoIn.getFirstName(),
         userDtoIn.getActivationCode()
       );
       mailService.send(userDtoIn.getEmail(), "Activation code", message);
     }
-    return mapper.map(user1);// need to correct
+    return mapper.map(user1);
   }
 
   public boolean activateUser(String code) {

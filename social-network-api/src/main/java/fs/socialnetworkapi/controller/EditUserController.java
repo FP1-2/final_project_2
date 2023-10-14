@@ -7,8 +7,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,9 +19,9 @@ public class EditUserController {
   @Autowired
   private UserService userService;
 
-  @PostMapping("/api/v1/edit")
-  public ResponseEntity<UserDtoOut> create(@Valid @RequestBody UserDtoIn userDtoIn) {
-    return ResponseEntity.ok(userService.editUser(userDtoIn));
+  @PostMapping("/api/v1/edit/{user_email}")
+  public ResponseEntity<UserDtoOut> create(@PathVariable("user_email") String email, @Valid @RequestBody UserDtoIn userDtoIn ) {
+    return ResponseEntity.ok(userService.editUser(userDtoIn, email));
   }
 
 

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class AbstractEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Getter
@@ -29,4 +30,4 @@ public abstract class AbstractEntity {
   @UpdateTimestamp
   private LocalDateTime lastModifiedDate;
 
-}
+  }

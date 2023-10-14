@@ -35,13 +35,7 @@ class RegistrationControllerTest {
   void testCreate() {
     // Arrange
     UserDtoIn userDtoIn = new UserDtoIn();
-    userDtoIn.setFirstName("John");
-    userDtoIn.setLastName("Doe");
-
     UserDtoOut userDtoOut = new UserDtoOut();
-    userDtoOut.setFirstName("John");
-    userDtoOut.setLastName("Doe");
-
     when(userService.addUser(userDtoIn)).thenReturn(userDtoOut);
 
     // Act
@@ -56,14 +50,16 @@ class RegistrationControllerTest {
   @Test
   void testActivate() {
     // Arrange
-    String activationCode = "exampleCode";
+    String activationCode = "testActivationCode";
     when(userService.activateUser(activationCode)).thenReturn(true);
+    registrationController.activate(model, activationCode);
 
     // Act
-    String result = registrationController.activate(model, activationCode);
+    ResponseEntity<Model> responseEntity = registrationController.activate(model, activationCode);
 
     // Assert
-    verify(userService, times(1)).activateUser(activationCode);
-    assertEquals("login", result);
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    verify(model, times(2)).addAttribute(eq("message"), anyString());
+    verify(userService, times(2)).activateUser(activationCode);
   }
 }
