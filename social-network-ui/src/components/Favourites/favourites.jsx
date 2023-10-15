@@ -15,9 +15,9 @@ function Favourites() {
     useEffect(() => {
         async function getPosts() {
             try {
-                const response = await axios.get('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/all-posts');
-                setFavourites(response.data);
-                console.log(response.data);
+                const {data} = await axios.get('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/all-posts');
+                setFavourites(data);
+                console.log(data);
             } catch (error) {
                 if (error.response) {
                     setError(`Error ${error.response?.status}: ${error.response?.data}`)
