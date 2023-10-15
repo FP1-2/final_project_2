@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { PropTypes } from 'prop-types'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -15,9 +15,10 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Link from '@mui/material/Link'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 function Post ({ post }) {
-  const userId = 777
+  const userId = useSelector(state => state.auth.user)
   const [isLiked, setIsLiked] = useState(post.likes.includes(userId))
   const [likes, setLikes] = useState(post.likes.length || false)
   const [isReposted, setIsReposted] = useState(post.isReposted || false)
