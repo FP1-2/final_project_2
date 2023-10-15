@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { PropTypes } from 'prop-types'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -11,19 +11,31 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import CardActions from '@mui/material/CardActions';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import Link from '@mui/material/Link';
 
 function Post({ post }) {
-  const [isLiked, setIsLiked] = useState(post.isLiked || false);
-  const [likes, setLikes] = useState(post.likes || false)
+  const userId = 777
+  const [isLiked, setIsLiked] = useState(post.likes.includes(userId));
+  const [likes, setLikes] = useState(post.likes.length || false)
+  const [isReposted, setIsReposted] = useState(post.isReposted || false)
+  const [reposts, setReposts] = useState(post.usersReposts || false)
 
   function toggleLiked() {
     isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
     setIsLiked(!isLiked)
   }
 
+  function toggleRepost() {
+    isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
+    setIsReposted (!isReposted)
+  }
+
   return (
     <Card variant="outlined">
-      <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+        <Link href={'/user' + post.user.id} sx={{ display: 'flex', gap: 1, color: 'rgba(0, 0, 0, 0.87)'}} underline='hover'>
         <Box
           sx={{
             position: 'relative',
@@ -41,20 +53,31 @@ function Post({ post }) {
             },
           }}
         >
+          
           <Avatar
             size="sm"
-            src=""
+            src={post.user.avatar}
             sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
-          />
+            />
         </Box>
-        <Typography variant='h5'>{post.userName}</Typography>
-        <Typography>@{post.userName}</Typography>
+        <Typography variant='h5'>{post.user?.firstName} {post.user?.lastName}</Typography>
+        <Typography sx={{display: 'flex', alignItems: 'center'}}>@{post.user.username}</Typography>
+        </Link>
+        <Link href={'/post' + post.id} color='rgba(0, 0, 0, 0.87)' underline='hover'>
+          <Typography>{post.timeWhenWasPost}</Typography>
+        </Link>
       </CardContent>
       <CardContent>
-        <Typography paragraph='true'>{post.content}</Typography>
+        <Typography paragraph={true}>{post.description}</Typography>
+        <ImageList>
+          <ImageListItem><img src={post.photo}></img></ImageListItem>
+        </ImageList>
         <CardActions>
         <Button><MapsUgcRoundedIcon sx={{ color: 'grey' }}/></Button>
-        <Button><AutorenewRoundedIcon sx={{ color: 'grey' }}/></Button>
+          <Button onClick={() => toggleRepost()}>
+            <AutorenewRoundedIcon sx={{ color: isReposted ? 'green' : 'grey' }} />
+            <Typography sx={{ color: isReposted ? 'green' : 'grey', ml: 1}}>{reposts || null}</Typography>
+          </Button>
         <Button onClick={() => toggleLiked()}>
             {isLiked ? <FavoriteIcon sx={{ color: 'red' }} /> : <FavoriteBorderIcon sx={{ color: 'grey' }} />}
             <Typography sx={{ color: isLiked? 'red' : 'grey', ml: 1}}>{likes || null}</Typography>
@@ -67,7 +90,8 @@ function Post({ post }) {
 }
 
 Post.propTypes = {
-  post: PropTypes.object
+  post: PropTypes.object,
+  children: PropTypes.string
 }
 export default Post
 
