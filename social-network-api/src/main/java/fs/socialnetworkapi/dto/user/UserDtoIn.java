@@ -1,4 +1,4 @@
-package fs.socialnetworkapi.dto;
+package fs.socialnetworkapi.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Setter
 @Getter
@@ -27,14 +28,17 @@ public class UserDtoIn {
   private String avatar;
   private String mainPhoto;
   private String password;
+  private String address;
   private boolean active;
   private String activationCode;
+  private String roles;
+
 
   public UserDtoIn() {
   }
 
   public UserDtoIn(Long id, String firstName, String lastName, String email, String birthday, String avatar,
-                   String mainPhoto) {
+                   String mainPhoto, String address) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -42,10 +46,14 @@ public class UserDtoIn {
     this.birthday = birthday;
     this.avatar = avatar;
     this.mainPhoto = mainPhoto;
+    this.address = address;
   }
+
+
 
   public String getUsername() {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
   }
+
 }
 

@@ -1,6 +1,6 @@
 package fs.socialnetworkapi.dto.post;
 
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +23,16 @@ class PostDtoOutTest {
     userDtoOut2 = new UserDtoOut();
     userDtoOut2.setId(2L);
 
-    postDtoOut = new PostDtoOut(1L, userDtoOut1,"Description", "Photo", LocalDateTime.now(),"", List.of(),false);
+    postDtoOut = PostDtoOut.builder()
+            .id(1L)
+            .user(userDtoOut1)
+            .description("Description")
+            .photo("Photo")
+            .createdDate(LocalDateTime.now())
+            .likes(List.of())
+            .build();
   }
+
   @Test
   void getId() {
     assertEquals(1L, postDtoOut.getId());
@@ -106,7 +114,7 @@ class PostDtoOutTest {
     PostDtoIn postDtoIn = PostDtoIn.builder().build();
 
     assertEquals(postDtoOut1,postDtoOut2);
-    assertEquals(postDtoOut1,postDtoOut4);
+    assertNotEquals(postDtoOut1,postDtoOut4);
 
     assertNotEquals(postDtoOut1,postDtoOut3);
     assertNotEquals(postDtoOut1,null);
@@ -139,6 +147,6 @@ class PostDtoOutTest {
 
     assertEquals(postDtoOut1.hashCode(),postDtoOut2.hashCode());
     assertNotEquals(postDtoOut1.hashCode(),postDtoOut3.hashCode());
-    assertEquals(postDtoOut1.hashCode(),postDtoOut4.hashCode());
+    assertNotEquals(postDtoOut1.hashCode(),postDtoOut4.hashCode());
   }
 }

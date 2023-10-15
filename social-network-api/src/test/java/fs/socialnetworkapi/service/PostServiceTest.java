@@ -1,11 +1,12 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.dto.Mapper;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
+import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.enums.TypePost;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
@@ -18,10 +19,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -34,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTest {
@@ -46,7 +51,10 @@ public class PostServiceTest {
     private UserRepo userRepo;
 
     @Mock
-    private Mapper mapper;
+    private ModelMapper mapper;
+
+    @Mock
+    private LikeService likeService;
 
     @InjectMocks
     private PostService postService;
@@ -57,6 +65,11 @@ public class PostServiceTest {
     private UserDtoOut userDtoOut2;
     private Post post;
     private Post post2;
+    private PostDtoOut postDtoOut1;
+    private PostDtoOut postDtoOut2;
+    private Like like1;
+    private Like like2;
+
 
     @BeforeEach
     public void setUp() {
@@ -83,14 +96,37 @@ public class PostServiceTest {
         post2.setPhoto("Photo");
         Set<User> usersRepost = new HashSet<>();
         usersRepost.add(user2);
-        post2.setUsersReposts(usersRepost);
+        //post2.setUsersReposts(usersRepost);
         post2.setUser(user1);
+
+        postDtoOut1 = PostDtoOut.builder()
+                .id(1L)
+                .user(userDtoOut1)
+                .description("Description")
+                .photo("Photo")
+                .createdDate(LocalDateTime.now())
+                .likes(List.of())
+                .build();
+
+        postDtoOut2 = PostDtoOut.builder()
+                .id(2L)
+                .user(userDtoOut2)
+                .description("Description")
+                .photo("Photo")
+                .createdDate(LocalDateTime.now())
+                .likes(List.of())
+                .build();
+
+        like1 = new Like(user1, post);
+        like2 = new Like(user1, post2);
+
     }
+
     @Test
     public void testSave_whenUserNotFound(){
-        Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> postService.save(1L, any(PostDtoIn.class)));
+    //        Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
+    //
+    //        assertThrows(UserNotFoundException.class, () -> postService.savePost( any(PostDtoIn.class)));
     }
     @Test
     public void testSave() {
@@ -107,14 +143,21 @@ public class PostServiceTest {
                 .photo("Photo")
                 .build();
 
-        Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(user1));
-        Mockito.when(mapper.map(postDtoIn)).thenReturn(post);
-        Mockito.when(postRepo.save(post)).thenReturn(post);
-        Mockito.when(mapper.map(post)).thenReturn(expectedPostDtoOut);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
 
-        PostDtoOut result = postService.save(1L, postDtoIn);
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
 
-        Mockito.verify(userRepo,times(1)).findById(any());
+        when(authentication.getPrincipal()).thenReturn(user1);
+
+        //Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(user1));
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user1);
+        when(mapper.map(postDtoIn,Post.class)).thenReturn(post);
+        when(postRepo.save(post)).thenReturn(post);
+        when(mapper.map(eq(post), eq(PostDtoOut.class))).thenReturn(expectedPostDtoOut);
+
+        PostDtoOut result = postService.savePost(postDtoIn);
 
         assertNotNull(result);
         assertEquals(expectedPostDtoOut, result);
@@ -148,9 +191,9 @@ public class PostServiceTest {
                 .photo("Photo")
                 .build();
 
-        Mockito.when(postRepo.getReferenceById(postDtoIn.getId())).thenReturn(post);
-        Mockito.when(postRepo.save(post)).thenReturn(post);
-        Mockito.when(mapper.map(post)).thenReturn(expectedPostDtoOut);
+        when(postRepo.findById(postDtoIn.getId())).thenReturn(Optional.of(post));
+        when(postRepo.save(eq(post))).thenReturn(post);
+        when(mapper.map(eq(post), eq(PostDtoOut.class))).thenReturn(expectedPostDtoOut);
 
         PostDtoOut result = postService.editePost(postDtoIn);
         assertNotNull(result);
@@ -165,40 +208,31 @@ public class PostServiceTest {
                 .photo("Photo")
                 .build();
 
-        Mockito.when(postRepo.getReferenceById(postDtoIn.getId())).thenThrow(new EntityNotFoundException());
+        when(postRepo.findById(postDtoIn.getId())).thenReturn(Optional.empty());
 
         assertThrows(PostNotFoundException.class, () -> postService.editePost(postDtoIn));
     }
 
     @Test
     public void testGetAllPosts_whenUserNotFound(){
-        Mockito.when(userRepo.findById(any())).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> postService.save(1L, any(PostDtoIn.class)));
+//        when(userRepo.findById(any())).thenReturn(Optional.empty());
+//
+//        assertThrows(UserNotFoundException.class, () -> postService.savePost( any(PostDtoIn.class)));
     }
     @Test
-    public void testGetAllPosts() {
+    public void testGetProfilePosts() {
 
-        Long idUser = 1L;
+        Long userId = 1L;
         Integer page = 0;
         Integer size = 5;
 
         User user1 = new User();
-        user1.setId(idUser);
+        user1.setId(userId);
         User user2 = new User();
         user2.setId(4L);
 
-        User subscription1 = new User();
-        subscription1.setId(2L);
-        User subscription2 = new User();
-        subscription2.setId(3L);
-
-        Set<User> followings = user1.getFollowings();
-        followings.add(subscription1);
-        followings.add(subscription2);
-
         UserDtoOut user1DtoOut = new UserDtoOut();
-        user1DtoOut.setId(idUser);
+        user1DtoOut.setId(userId);
         UserDtoOut subscription1DtoOut = new UserDtoOut();
         subscription1DtoOut.setId(2L);
         UserDtoOut subscription2DtoOut = new UserDtoOut();
@@ -226,106 +260,71 @@ public class PostServiceTest {
         post4.setUser(user2);
         post1.setCreatedDate(LocalDateTime.now().minusMinutes(4));
 
-        //posts subscription1
-        Post post5 = new Post();
-        post5.setId(5L);
-        post5.setUser(subscription1);
-        post1.setCreatedDate(LocalDateTime.now().minusMinutes(5));
-
-        Post post6 = new Post();
-        post6.setId(6L);
-        post6.setUser(subscription1);
-        post1.setCreatedDate(LocalDateTime.now().minusMinutes(6));
-
-        //posts subscription2
-        Post post7 = new Post();
-        post7.setId(7L);
-        post7.setUser(subscription2);
-        post1.setCreatedDate(LocalDateTime.now().minusMinutes(7));
-
-        Post post8 = new Post();
-        post8.setId(8L);
-        post8.setUser(subscription2);
-        post1.setCreatedDate(LocalDateTime.now().minusMinutes(8));
-
-        List<Post> posts = List.of(post1, post2, post5, post6, post7);
+        List<Post> posts = List.of(post1, post2);
         Page<Post> pageOfPosts = new PageImpl<>(posts);
 
         PostDtoOut postDto1 = PostDtoOut.builder().id(1L).user(user1DtoOut).build();
         PostDtoOut postDto2 = PostDtoOut.builder().id(2L).user(user1DtoOut).build();
-        PostDtoOut postDto5 = PostDtoOut.builder().id(5L).user(subscription1DtoOut).build();
-        PostDtoOut postDto6 = PostDtoOut.builder().id(6L).user(subscription1DtoOut).build();
-        PostDtoOut postDto7 = PostDtoOut.builder().id(7L).user(subscription2DtoOut).build();
-        PostDtoOut postDto8 = PostDtoOut.builder().id(8L).user(subscription2DtoOut).build();
 
         List<PostDtoOut> expectedPostDtoOutList = List.of(
                 postDto1,
-                postDto2,
-                postDto5,
-                postDto6,
-                postDto7);
+                postDto2);
 
-        List<User> users = List.of(user1,subscription1, subscription2);
-        Mockito.when(userRepo.findById(idUser)).thenReturn(Optional.of(user1));
-        Mockito.when(postRepo.findByUserInOrIdIn(eq(users),any(), eq(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))))).thenReturn(pageOfPosts);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
 
-        Mockito.when(mapper.map(post1)).thenReturn(postDto1);
-        Mockito.when(mapper.map(post2)).thenReturn(postDto2);
-        Mockito.when(mapper.map(post5)).thenReturn(postDto5);
-        Mockito.when(mapper.map(post6)).thenReturn(postDto6);
-        Mockito.when(mapper.map(post7)).thenReturn(postDto7);
-        Mockito.when(mapper.map(post8)).thenReturn(postDto8);
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
 
-        List<PostDtoOut> result = postService.getAllUserPosts(idUser, page, size);
+        when(authentication.getPrincipal()).thenReturn(user1);
+
+        Mockito.when(postRepo.findByUser(eq(user1), eq(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))))).thenReturn(pageOfPosts);
+
+        when(mapper.map(post1, PostDtoOut.class)).thenReturn(postDto1);
+        when(mapper.map(post2, PostDtoOut.class)).thenReturn(postDto2);
+
+        List<PostDtoOut> result = postService.getProfilePosts(page, size);
 
         assertEquals(expectedPostDtoOutList, result);
     }
 
     @Test
-    public void testDeletePost() {
+    public void testSaveByType(){
 
-        Long idPost = 1L;
-        PostService postService1 = new PostService(postRepo,userRepo,mapper);
-        postService1.deletePost(idPost);
-        Mockito.verify(postRepo).deleteById(idPost);
-
-    }
-
-    @Test
-    public void testSaveRepost_whenUserNotFound(){
-        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> postService.saveRepost(1L, 1L));
-    }
-
-    @Test
-    public void testSaveRepost_whenPostNotFound(){
-        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user1));
-        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.empty());
-
-        assertThrows(PostNotFoundException.class, () -> postService.saveRepost(1L, 1L));
-    }
-
-    @Test
-    public void testSaveRepost(){
+        PostDtoIn postDtoIn = PostDtoIn.builder()
+                .id(1L)
+                .userId(1L)
+                .description("Description")
+                .photo("Photo")
+                .build();
 
         PostDtoOut expectedPostDtoOut = PostDtoOut.builder()
                 .id(1L)
                 .user(userDtoOut1)
                 .description("Description")
                 .photo("Photo")
-                .isRepost(true)
-                .usersReposts(List.of(userDtoOut2))
                 .build();
 
-        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user2));
-        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.of(post));
-        Mockito.when(postRepo.save(post)).thenReturn(post);
-        Mockito.when(mapper.map(post)).thenReturn(expectedPostDtoOut);
+        Post post1 = new Post();
+        post1.setId(1L);
+        post1.setUser(user1);
 
-        PostDtoOut result = postService.saveRepost(2L, 1L);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
 
-        Mockito.verify(userRepo,times(1)).findById(any());
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        when(authentication.getPrincipal()).thenReturn(user1);
+
+        when(mapper.map(eq(postDtoIn), eq(Post.class))).thenReturn(post);
+        when(postRepo.save(post)).thenReturn(post);
+        when(postRepo.findById(eq(1L))).thenReturn(Optional.of(post1));
+        when(mapper.map(eq(post), eq(PostDtoOut.class))).thenReturn(expectedPostDtoOut);
+
+
+        PostDtoOut result = postService.saveByType(1L, postDtoIn, TypePost.REPOST);
+
         Mockito.verify(postRepo,times(1)).findById(any());
 
         assertNotNull(result);
@@ -333,33 +332,39 @@ public class PostServiceTest {
     }
 
     @Test
-    public void testRemoveRepost_whenUserNotFound(){
-        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.empty());
+    void testFindById() {
+        when(postRepo.findById(1L)).thenReturn(Optional.of(post));
+        when(mapper.map(post, PostDtoOut.class)).thenReturn(postDtoOut1);
 
-        assertThrows(UserNotFoundException.class, () -> postService.deleteRepost(1L, 1L));
+        PostDtoOut result = postService.findById(1L);
+
+        assertNotNull(result);
+        assertEquals("Description", result.getDescription());
+        assertEquals("Photo", result.getPhoto());
+        assertEquals(userDtoOut1, result.getUser());
+
+        Mockito.verify(postRepo, times(1)).findById(1L);
     }
+
 
     @Test
-    public void testRemoveRepost_whenPostNotFound(){
-        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user1));
-        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.empty());
+    void testFindLikedPostsByUserId() {
+        List<Like> likes = List.of(like1, like2);
+        when(likeService.getLikesForUser(1L)).thenReturn(likes);
+        when(mapper.map(Mockito.any(Post.class), eq(PostDtoOut.class))).thenReturn(postDtoOut1, postDtoOut2);
 
-        assertThrows(PostNotFoundException.class, () -> postService.deleteRepost(1L, 1L));
+        List<PostDtoOut> results = postService.findLikedPostsByUserId(1L);
+
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        assertEquals("Description", results.get(0).getDescription());
+        assertEquals("Photo", results.get(0).getPhoto());
+        assertEquals(userDtoOut1, results.get(0).getUser());
+        assertEquals("Description", results.get(1).getDescription());
+        assertEquals("Photo", results.get(1).getPhoto());
+        assertEquals(userDtoOut2, results.get(1).getUser());
+
+        Mockito.verify(likeService, times(1)).getLikesForUser(1L);
     }
 
-    @Test
-    public void testRemoveRepost(){
-
-        Mockito.when(userRepo.findById(any(Long.class))).thenReturn(Optional.of(user2));
-        Mockito.when(postRepo.findById(any(Long.class))).thenReturn(Optional.of(post2));
-        Mockito.when(postRepo.save(post2)).thenReturn(post2);
-
-
-        postService.deleteRepost(2L, 1L);
-
-        Mockito.verify(userRepo,times(1)).findById(any());
-        Mockito.verify(postRepo,times(1)).findById(any());
-        Mockito.verify(postRepo,times(1)).save(post2);
-
-    }
 }

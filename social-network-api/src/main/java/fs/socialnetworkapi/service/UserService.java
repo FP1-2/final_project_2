@@ -1,12 +1,17 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.dto.Mapper;
-import fs.socialnetworkapi.dto.UserDtoIn;
-import fs.socialnetworkapi.dto.UserDtoOut;
+import fs.socialnetworkapi.dto.password.PasswordResetRequest;
+import fs.socialnetworkapi.dto.user.UserDtoIn;
+import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,19 +19,27 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
   private final UserRepo userRepo;
   private final MailService mailService;
-  private final Mapper mapper;
+  private final ModelMapper mapper;
+  private final PasswordEncoder passwordEncoder;
+
+
+
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
+
     if (userFromDb != null) {
-      return mapper.map(userFromDb);
+      return mapper.map(userFromDb, UserDtoOut.class);
     }
+
     userDtoIn.setActive(false);
     userDtoIn.setActivationCode(UUID.randomUUID().toString());
-    User user1 = userRepo.save(mapper.map(userDtoIn));
+    userDtoIn.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
+    userDtoIn.setRoles("USER");
+    User user1 = userRepo.save(mapper.map(userDtoIn, User.class));
     if (userDtoIn.getEmail() != null) {
       String message = String.format(
         "Hello, %s! \n"
@@ -36,7 +49,7 @@ public class UserService {
       );
       mailService.send(userDtoIn.getEmail(), "Activation code", message);
     }
-    return mapper.map(user1);
+    return mapper.map(user1, UserDtoOut.class);
   }
 
   public boolean activateUser(String code) {
@@ -44,6 +57,7 @@ public class UserService {
     if (user == null) {
       return false;
     }
+    user.setRoles("USER");
     user.setActivationCode(null);
     user.setActive(true);
     userRepo.save(user);
@@ -63,7 +77,6 @@ public class UserService {
   }
 
   public void subscribe(Long currentUserId, Long userId) {
-
     User currentUser = userRepo.findById(currentUserId)
             .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
     User user = userRepo.findById(userId)
@@ -89,7 +102,7 @@ public class UserService {
 
     return currentUser.getFollowers()
             .stream()
-            .map(mapper::map)
+            .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
   }
 
@@ -99,7 +112,19 @@ public class UserService {
 
     return currentUser.getFollowings()
             .stream()
-            .map(mapper::map)
+            .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepo.findByEmail(username);
+  }
+
+  public boolean changePassword(PasswordResetRequest request) {
+    User findUser = userRepo.findByActivationCode(request.getActivationCode());
+    findUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
+    userRepo.save(findUser);
+    return true;
   }
 }

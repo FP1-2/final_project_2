@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Modal from '@mui/material/Modal'
 import * as React from 'react'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetRegisterData } from '../../redux/slices/registerSlice'
 import IconTwitter from '../IconTwitter/IconTwitter'
@@ -10,6 +10,7 @@ import ModalRegisterWindowFrstStep from './ModalRegisterWindowFrstStep/ModalRegi
 import ModalRegisterWindowSecondStep from './ModalRegisterWindowSecondStep/ModalRegisterWindowSecondStep'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { closeModal } from '../../redux/slices/modalSlice'
+import { debounce } from 'lodash'
 
 const style = {
 	position: 'absolute',
@@ -17,12 +18,12 @@ const style = {
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
 	width: '47%',
-	minHeight: '50vh',
 	bgcolor: 'background.paper',
 	border: '1px solid #000',
 	boxShadow: 24,
 	borderRadius: '7px',
 	p: 4.5,
+
 	'@media (min-width: 1800px)': {
 		width: '40%',
 	},
@@ -50,8 +51,12 @@ const style = {
 const ModalRegisterWindow = () => {
 	const dispatch = useDispatch()
 
+	const modalHeight = useRef(null)
+
 	const [isLoading, setIsLoading] = useState(false)
 	const [registerStep, setRegisterStep] = useState(1) // register step
+	const [heightModalBelow, setHeightModalBelow] = useState(false)
+	const [heightModalCountBelow, setHeightModalCountBelow] = useState(0)
 	const [isRegisterDone, setIsRegisterDone] = useState(false) // register done status
 
 	const isModalOpen = useSelector(state => state.modal.modalProps.isOpen) // modal status
@@ -61,6 +66,23 @@ const ModalRegisterWindow = () => {
 		dispatch(closeModal())
 		setRegisterStep(1)
 	}
+	useEffect(() => {
+		const handleResize = debounce(() => {
+			const windowHeight = window.innerHeight
+			if (windowHeight < 820) {
+				setHeightModalBelow(true)
+				setHeightModalCountBelow(windowHeight)
+			} else {
+				setHeightModalBelow(false)
+				setHeightModalCountBelow(0)
+			}
+		}, 400)
+		window.addEventListener('resize', handleResize)
+
+		return () => {
+			window.removeEventListener('resize', handleResize)
+		}
+	}, [])
 
 	return (
 		<Modal
@@ -70,8 +92,23 @@ const ModalRegisterWindow = () => {
 				dispatch(resetRegisterData())
 				handleClose()
 			}}
+			sx={{
+				overflow: 'scroll',
+			}}
 		>
-			<Box sx={style}>
+			<Box
+				ref={modalHeight}
+				sx={[
+					style,
+					{
+						pt: heightModalBelow
+							? heightModalCountBelow < 600
+								? '15rem'
+								: '10rem'
+							: '',
+					},
+				]}
+			>
 				<Box
 					sx={{
 						position: 'relative',
