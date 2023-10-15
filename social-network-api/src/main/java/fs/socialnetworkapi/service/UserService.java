@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -126,5 +127,10 @@ public class UserService implements UserDetailsService {
     findUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
     userRepo.save(findUser);
     return true;
+  }
+
+  public Optional<User> findById(Long userId) {
+    return userRepo.findById(userId);
+
   }
 }
