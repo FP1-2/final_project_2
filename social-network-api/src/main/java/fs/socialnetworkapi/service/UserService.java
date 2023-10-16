@@ -29,6 +29,13 @@ public class UserService implements UserDetailsService {
 
 
 
+  public UserDtoOut showUser(Long userId) {
+    User user = userRepo.getReferenceById(userId);
+    return mapper.map(user, UserDtoOut.class);
+  }
+
+
+
   public UserDtoOut editUser(UserDtoIn userDtoIn) {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     String email = user.getEmail();
@@ -147,4 +154,6 @@ public class UserService implements UserDetailsService {
     userRepo.save(findUser);
     return true;
   }
+
+
 }

@@ -19,7 +19,7 @@ public class EditUserController {
   private UserService userService;
 
   @PostMapping("/api/v1/edit")
-  public ResponseEntity<UserDtoOut> create(@Valid @RequestBody UserDtoIn userDtoIn ) {
+  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn ) {
     return ResponseEntity.ok(userService.editUser(userDtoIn));
   }
 }

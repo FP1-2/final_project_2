@@ -44,4 +44,9 @@ public class UserController {
     return ResponseEntity.ok(followings);
   }
 
+  @GetMapping("user/info/{user_id}")
+  public ResponseEntity<?> userInfo(@PathVariable("user_id") Long userId) {
+    return ResponseEntity.ok(userService.showUser(userId));
+  }
+
 }
