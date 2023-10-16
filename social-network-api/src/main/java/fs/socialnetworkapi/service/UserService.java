@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
     user.setRoles("USER");
     user.setActive(true);
     user.setCreatedDate(createdDateUser);
-    user.setUsername(String.format("%s_%s", userDtoIn.getFirstName(), userDtoIn.getLastName()));
+    user.setUsername(userDtoIn.getUsername());
     return mapper.map(userRepo.save(user), UserDtoOut.class);
   }
 
