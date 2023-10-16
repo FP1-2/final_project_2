@@ -47,8 +47,8 @@ public class UserService implements UserDetailsService {
     user.setCreatedDate(createdDateUser);
     user.setUsername(String.format("%s_%s", userDtoIn.getFirstName(), userDtoIn.getLastName()));
     return mapper.map(userRepo.save(user), UserDtoOut.class);
-
   }
+
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
 
@@ -141,6 +141,7 @@ public class UserService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return userRepo.findByEmail(username);
   }
+
   public boolean changePassword(PasswordResetRequest request) {
     User findUser = userRepo.findByActivationCode(request.getActivationCode());
     findUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
