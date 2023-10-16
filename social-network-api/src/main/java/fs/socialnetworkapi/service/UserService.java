@@ -34,7 +34,6 @@ public class UserService implements UserDetailsService {
     String email = user.getEmail();
     User userFromDb = userRepo.findByEmail(email);
     LocalDateTime createdDateUser = userFromDb.getCreatedDate();
-    System.out.println(createdDateUser);
     user.setFirstName(userDtoIn.getFirstName());
     user.setLastName(userDtoIn.getLastName());
     user.setBirthday(userDtoIn.getBirthday());
@@ -53,7 +52,7 @@ public class UserService implements UserDetailsService {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
 
     if (userFromDb != null) {
-      return mapper.map(userFromDb, UserDtoOut.class); // need to correct
+      return mapper.map(userFromDb, UserDtoOut.class);
     }
 
     userDtoIn.setActive(false);
@@ -70,7 +69,7 @@ public class UserService implements UserDetailsService {
       );
       mailService.send(userDtoIn.getEmail(), "Activation code", message);
     }
-    return mapper.map(user1, UserDtoOut.class);// need to correct
+    return mapper.map(user1, UserDtoOut.class);
   }
 
   public boolean activateUser(String code) {
