@@ -110,7 +110,6 @@ class UserControllerTest {
     verify(userService, times(1)).addUser(userDtoIn);
   }
 
-
 //  @Test
 //  void testActivate() {
 //    // Arrange

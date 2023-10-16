@@ -32,7 +32,6 @@ public class UserDtoIn {
   private boolean active;
   private String activationCode;
   private String roles;
-  private boolean loginStatus;
 
 
   public UserDtoIn() {
