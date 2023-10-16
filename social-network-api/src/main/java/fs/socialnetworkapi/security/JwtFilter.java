@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
   private final SecurityService tokenService;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+  public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
     try {
       Optional<String> token = extractTokenFromRequest(request);
@@ -49,7 +49,6 @@ public class JwtFilter extends OncePerRequestFilter {
         User user = new User();
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user,null,
           user.getAuthorities()));
-        response.setStatus(403);
       }
       filterChain.doFilter(request, response);
     } catch (Exception x) {

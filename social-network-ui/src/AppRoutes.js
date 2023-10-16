@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
+import ResetPasswordConfirmPage from "./pages/ResetPasswordConfirmPage/ResetPasswordConfirmPage";
 import FavPage from "./pages/FavPage/FavPage";
 
 const AppRoutes = () => {
@@ -15,6 +17,11 @@ const AppRoutes = () => {
 
       {/* Auth Routes */}
       <Route path="/signIn" element={<LoginPage />} />
+      <Route path="/resetPassword" element={<ResetPasswordPage />} />
+      <Route
+        path="/resetPassword/confirm"
+        element={<ResetPasswordConfirmPage />}
+      />
 
       {/* Profile Routes */}
       <Route path="/notifications" element={<HomePage />} />

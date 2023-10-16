@@ -11,3 +11,15 @@ export default async function postRegistrationData(newUserObject) {
 		throw error
 	}
 }
+
+export async function postLoginData(loginObject) {
+	try {
+		const { data } = await axios.post(
+			`${process.env.REACT_APP_SERVER_URL}/login`,
+			loginObject
+		)
+		return data
+	} catch (error) {
+		throw error
+	}
+}

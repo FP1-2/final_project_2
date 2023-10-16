@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebConfigSecurity {
+public class WebConfigSecurity{
 
   @Value("${jwt.secret}")
   private String secret;
@@ -39,16 +39,26 @@ public class WebConfigSecurity {
           .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
-
       )
-      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+    ;
 
     return http.build();
   }
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
-    return (WebSecurity web)-> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2/**"));
+    return (WebSecurity web)-> web.ignoring()
+            .requestMatchers(new AntPathRequestMatcher("/h2/**"))
+            .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"))
+            .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**"))
+            .requestMatchers(new AntPathRequestMatcher("/index*"))
+            .requestMatchers(new AntPathRequestMatcher("/static/**"))
+            .requestMatchers(new AntPathRequestMatcher("/"))
+            .requestMatchers(new AntPathRequestMatcher("/*.js"))
+            .requestMatchers(new AntPathRequestMatcher("/*.json"))
+            .requestMatchers(new AntPathRequestMatcher("/*.ico"))
+            ;
   }
 
   @Bean

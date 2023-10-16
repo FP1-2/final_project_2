@@ -154,7 +154,6 @@ const ModalRegisterWindowFrstStep = ({
 		<Box
 			sx={{
 				'@media (max-width: 600px)': {
-					height: '80vh',
 					pb: 10,
 					display: 'flex',
 					flexDirection: 'column',

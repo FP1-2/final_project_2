@@ -1,18 +1,17 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.dto.Mapper;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.enums.TypePost;
 import fs.socialnetworkapi.exception.PostNotFoundException;
-import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
-import fs.socialnetworkapi.repos.UserRepo;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,12 +22,13 @@ import java.util.Set;
 public class PostService {
 
   private final PostRepo postRepo;
-  private final UserRepo userRepo;
-  private final Mapper mapper;
+  private final ModelMapper mapper;
   private final LikeService likeService;
 
   public PostDtoOut findById(Long postId) {
-    return mapper.map(postRepo.findById(postId).orElseThrow(() -> new PostNotFoundException("No such post")));
+
+    return mapper.map(postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException("No such post")),PostDtoOut.class);
   }
 
   public List<PostDtoOut> findByIds(List<Long> postIds) {
@@ -36,105 +36,94 @@ public class PostService {
   }
 
   public List<PostDtoOut> findLikedPostsByUserId(Long userId) {
-    return likeService.getLikesForUser(userId).stream().map(like -> mapper.map(like.getPost())).toList();
+    return likeService.getLikesForUser(userId)
+            .stream()
+            .map(like -> mapper.map(like.getPost(),PostDtoOut.class))
+            .toList();
   }
 
   public List<PostDtoOut> getAllPost(Integer page, Integer size) {
 
-    return postRepo.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate")))
-            .stream()
-            .map(mapper::map)
-            .toList();
-  }
-
-  public List<PostDtoOut> getAllUserPosts(Long idUser, Integer page, Integer size) {
-
-    User user = userRepo.findById(idUser)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
-
-    Set<User> followings = user.getFollowings();
-    followings.add(user);
-    List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
-
-    List<Long> idList = user.getReposts().stream().map(Post::getId).toList();
     PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
-    return postRepo.findByUserInOrIdIn(users, idList, pageRequest)
+    return postRepo.findByTypePost(TypePost.POST, pageRequest)
             .stream()
-            .map(mapper::map)
-            .peek(postDtoOut -> {
-              if (!postDtoOut.getUser().getId().equals(idUser)) {
-                postDtoOut.setIsRepost(true);
-                postDtoOut.setUsersReposts(List.of());
-              }
-            })
+            .map(p -> mapper.map(p,PostDtoOut.class))
+            .peek(postDtoOut -> postDtoOut.setComments(List.of()))
+            .toList();
+
+  }
+
+  public List<PostDtoOut> getProfilePosts(Integer page, Integer size) {
+
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+    return postRepo.findByUser(user, pageRequest)
+            .stream()
+            .map(p -> mapper.map(p, PostDtoOut.class))
+            .peek(postDtoOut -> postDtoOut.setComments(List.of()))
             .toList();
   }
 
-  public List<PostDtoOut> getFollowingsPosts(Long idUser, Integer page, Integer size) {
+  public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
 
-    User user = userRepo.findById(idUser)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     Set<User> followings = user.getFollowings();
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-    return postRepo.findByUserIn(users, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate")))
+    return postRepo.findByUserInAndTypePost(users, TypePost.POST, pageRequest)
             .stream()
-            .map(mapper::map)
+            .map(post -> mapper.map(post, PostDtoOut.class))
             .toList();
   }
 
-  public PostDtoOut save(Long idUser, PostDtoIn postDtoIn) {
+  public PostDtoOut savePost(PostDtoIn postDtoIn) {
 
-    User user = userRepo.findById(idUser)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", idUser)));
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    Post post = mapper.map(postDtoIn);
+    Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
-    return mapper.map(postRepo.save(post));
+    post.setTypePost(TypePost.POST);
+    return mapper.map(postRepo.save(post), PostDtoOut.class);
   }
 
-  public void deletePost(Long idPost) {
+  public void deletePost(Long postId) {
 
-    postRepo.deleteById(idPost);
+    postRepo.deleteById(postId);
   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
 
-    try {
-      Post post = postRepo.getReferenceById(postDtoIn.getId());
-      post.setDescription(postDtoIn.getDescription());
-      post.setPhoto(postDtoIn.getPhoto());
+    Post post = postRepo.findById(postDtoIn.getId())
+            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postDtoIn.getId())));
 
-      return mapper.map(postRepo.save(post));
-    } catch (EntityNotFoundException ex) {
-      throw new PostNotFoundException("Post is not found with id:" + postDtoIn.getId());
-    }
+    post.setDescription(postDtoIn.getDescription());
+    post.setPhoto(postDtoIn.getPhoto());
+    return mapper.map(postRepo.save(post), PostDtoOut.class);
   }
 
-  public PostDtoOut saveRepost(Long userId, Long postId) {
-    User user = userRepo.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+  public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
+
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    Post originalPost = postRepo.findById(originalPostId)
+            .orElseThrow(() -> new PostNotFoundException(
+                    String.format("Original post with id: %d not found", originalPostId)));
+
+    Post post = mapper.map(postDtoIn, Post.class);
+    post.setUser(user);
+    post.setTypePost(typePost);
+    post.setOriginalPost(originalPost);
+
+    return mapper.map(postRepo.save(post), PostDtoOut.class);
+  }
+
+  public PostDtoOut getPostById(Long postId) {
     Post post = postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
-
-    post.getUsersReposts().add(user);
-
-    return mapper.map(postRepo.save(post));
+    return mapper.map(post, PostDtoOut.class);
   }
-
-  public void deleteRepost(Long userId, Long postId) {
-
-    User user = userRepo.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
-    Post post = postRepo.findById(postId)
-            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
-
-    post.getUsersReposts().remove(user);
-
-    postRepo.save(post);
-
-  }
-
-
 }
