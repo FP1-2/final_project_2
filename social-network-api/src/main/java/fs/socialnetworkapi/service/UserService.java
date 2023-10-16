@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,8 +24,10 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
   private final UserRepo userRepo;
   private final MailService mailService;
-  private final Mapper mapper;
+  private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
+
+
 
   public UserDtoOut editUser(UserDtoIn userDtoIn) {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -44,15 +46,14 @@ public class UserService implements UserDetailsService {
     user.setActive(true);
     user.setCreatedDate(createdDateUser);
     user.setUsername(String.format("%s_%s", userDtoIn.getFirstName(), userDtoIn.getLastName()));
-    return mapper.map(userRepo.save(user));
+    return mapper.map(userRepo.save(user), UserDtoOut.class);
 
-
-
+  }
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
 
     if (userFromDb != null) {
-      return mapper.map(userFromDb, UserDtoOut.class);
+      return mapper.map(userFromDb, UserDtoOut.class); // need to correct
     }
 
     userDtoIn.setActive(false);
@@ -69,7 +70,7 @@ public class UserService implements UserDetailsService {
       );
       mailService.send(userDtoIn.getEmail(), "Activation code", message);
     }
-    return mapper.map(user1, UserDtoOut.class);
+    return mapper.map(user1, UserDtoOut.class);// need to correct
   }
 
   public boolean activateUser(String code) {
@@ -140,7 +141,6 @@ public class UserService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return userRepo.findByEmail(username);
   }
-
   public boolean changePassword(PasswordResetRequest request) {
     User findUser = userRepo.findByActivationCode(request.getActivationCode());
     findUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
