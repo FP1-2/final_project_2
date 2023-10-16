@@ -1,10 +1,8 @@
 package fs.socialnetworkapi.entity;
 
-
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
@@ -77,7 +75,4 @@ public class User extends AbstractEntity implements UserDetails {
     return false;
   }
 
-
 }
-
-

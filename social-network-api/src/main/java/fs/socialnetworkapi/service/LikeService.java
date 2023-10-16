@@ -26,8 +26,10 @@ public class LikeService {
   }
 
   public void likePost(Long postId, Long userId) {
-    User user = userRepo.findById(userId).orElseThrow(() -> new UserNotFoundException("No such user"));
-    Post post = postRepo.findById(postId).orElseThrow(() -> new PostNotFoundException("No such post"));
+    User user = userRepo.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("No such user"));
+    Post post = postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException("No such post"));
     likeRepo.findByPostIdAndUserId(postId, userId)
             .ifPresentOrElse(likeRepo::delete, () -> likeRepo.save(new Like(user, post)));
   }
