@@ -27,7 +27,6 @@ public class AuthorizationService {
     User userByEmail = userService.findByEmail(loginDtoIn.getEmail());
     if (passwordEncoder.matches(loginDtoIn.getPassword(), userByEmail.getPassword()) & userByEmail.isActive()) {
       TokenDetails tokenDetails = securityService.authenticate(loginDtoIn.getEmail());
-      userByEmail.setLoginStatus(true);
       mapper.map(userRepo.save(userByEmail));
       return LoginDtoOut
         .builder()

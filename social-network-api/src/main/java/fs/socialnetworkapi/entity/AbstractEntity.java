@@ -30,4 +30,4 @@ public abstract class AbstractEntity {
   @UpdateTimestamp
   private LocalDateTime lastModifiedDate;
 
-  }
+}

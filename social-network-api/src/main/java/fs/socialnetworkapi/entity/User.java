@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +25,6 @@ import java.util.Set;
 @Getter
 public class User extends AbstractEntity implements UserDetails {
 
-//  public boolean isLoginStatus;
   private String username;
   private String firstName;
   private String lastName;
@@ -39,7 +37,6 @@ public class User extends AbstractEntity implements UserDetails {
   private boolean active;
   private String activationCode;
   private String roles;
-  private boolean loginStatus;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Post> posts;
