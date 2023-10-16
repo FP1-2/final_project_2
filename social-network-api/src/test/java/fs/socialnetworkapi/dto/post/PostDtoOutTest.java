@@ -29,9 +29,6 @@ class PostDtoOutTest {
             .description("Description")
             .photo("Photo")
             .createdDate(LocalDateTime.now())
-            .timeWhenWasPost("")
-            .usersReposts(List.of())
-            .isRepost(false)
             .likes(List.of())
             .build();
   }
@@ -117,13 +114,13 @@ class PostDtoOutTest {
     PostDtoIn postDtoIn = PostDtoIn.builder().build();
 
     assertEquals(postDtoOut1,postDtoOut2);
-    assertEquals(postDtoOut1,postDtoOut4);
+    assertNotEquals(postDtoOut1,postDtoOut4);
 
     assertNotEquals(postDtoOut1,postDtoOut3);
     assertNotEquals(postDtoOut1,null);
     assertNotEquals(postDtoOut1,postDtoOut5);
     assertNotEquals(postDtoOut1,postDtoOut6);
-    assertNotEquals(postDtoOut1, postDtoIn);
+    assertFalse(postDtoOut1.equals(postDtoIn));
   }
 
   @Test
@@ -150,6 +147,6 @@ class PostDtoOutTest {
 
     assertEquals(postDtoOut1.hashCode(),postDtoOut2.hashCode());
     assertNotEquals(postDtoOut1.hashCode(),postDtoOut3.hashCode());
-    assertEquals(postDtoOut1.hashCode(),postDtoOut4.hashCode());
+    assertNotEquals(postDtoOut1.hashCode(),postDtoOut4.hashCode());
   }
 }

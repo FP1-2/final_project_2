@@ -38,16 +38,6 @@ public class User extends AbstractEntity implements UserDetails {
   private String activationCode;
   private String roles;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-  private List<Post> posts;
-
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-          name = "reposts",
-          joinColumns = {@JoinColumn(name = "user_id")},
-          inverseJoinColumns = {@JoinColumn(name = "original_post_id")})
-  private Set<Post> reposts = new HashSet<>();
-
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
           name = "subscriptions",
