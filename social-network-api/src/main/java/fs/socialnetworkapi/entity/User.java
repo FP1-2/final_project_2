@@ -77,7 +77,4 @@ public class User extends AbstractEntity implements UserDetails {
     return false;
   }
 
-
 }
-
-

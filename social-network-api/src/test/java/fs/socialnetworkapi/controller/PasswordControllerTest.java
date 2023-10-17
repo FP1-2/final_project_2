@@ -29,7 +29,7 @@ public class PasswordControllerTest {
   private PasswordResetService passwordResetService;
 
   @InjectMocks
-  private PasswordController passwordController;
+  private UserController passwordController;
 
   @BeforeEach
   public void setUp() {

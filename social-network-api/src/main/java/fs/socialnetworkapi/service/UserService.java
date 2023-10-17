@@ -7,13 +7,15 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +30,31 @@ public class UserService implements UserDetailsService {
 
 
 
+  public UserDtoOut showUser(Long userId) {
+    User user = userRepo.getReferenceById(userId);
+    return mapper.map(user, UserDtoOut.class);
+  }
+
+
+
+  public UserDtoOut editUser(UserDtoIn userDtoIn) {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    String email = user.getEmail();
+    User userFromDb = userRepo.findByEmail(email);
+    LocalDateTime createdDateUser = userFromDb.getCreatedDate();
+    user.setFirstName(userDtoIn.getFirstName());
+    user.setLastName(userDtoIn.getLastName());
+    user.setBirthday(userDtoIn.getBirthday());
+    user.setMainPhoto(userDtoIn.getMainPhoto());
+    user.setAvatar(userDtoIn.getAvatar());
+    user.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
+    user.setAddress(userDtoIn.getAddress());
+    user.setRoles("USER");
+    user.setActive(true);
+    user.setCreatedDate(createdDateUser);
+    user.setUsername(userDtoIn.getUsername());
+    return mapper.map(userRepo.save(user), UserDtoOut.class);
+  }
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = userRepo.findByEmail(userDtoIn.getEmail());
