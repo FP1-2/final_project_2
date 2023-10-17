@@ -143,11 +143,4 @@ public class UserService implements UserDetailsService {
     return findByEmail(username);
   }
 
-//  public boolean changePassword(PasswordResetRequest request) {
-//    User findUser = userRepo.findByActivationCode(request.getActivationCode());
-//    findUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
-//    userRepo.save(findUser);
-//    return true;
-//  }
-
 }

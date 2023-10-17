@@ -46,7 +46,7 @@ class LikeControllerTest {
     ResponseEntity<String> response = likeController.likePost(postId, userId);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(response.getBody(),"Liked successfully");
+    assertEquals("Liked successfully", response.getBody());
 
     Mockito.verify(likeService, times(1)).likePost(postId, userId);
   }
@@ -61,7 +61,7 @@ class LikeControllerTest {
     ResponseEntity<String> response = likeController.likePost(postId, userId);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(response.getBody(),"Unliked successfully");
+    assertEquals("Unliked successfully", response.getBody());
 
     Mockito.verify(likeService, times(1)).likePost(postId, userId);
   }
@@ -76,7 +76,7 @@ class LikeControllerTest {
     ResponseEntity<String> response = likeController.likePost(postId, userId);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals(response.getBody(),"Failed: fs.socialnetworkapi.exception.PostNotFoundException: No such post");
+    assertEquals("Failed: fs.socialnetworkapi.exception.PostNotFoundException: No such post", response.getBody());
 
     Mockito.verify(likeService, times(1)).likePost(postId, userId);
   }
@@ -91,7 +91,7 @@ class LikeControllerTest {
     ResponseEntity<String> response = likeController.likePost(postId, userId);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals(response.getBody(),"Failed: fs.socialnetworkapi.exception.UserNotFoundException: No such user");
+    assertEquals("Failed: fs.socialnetworkapi.exception.UserNotFoundException: No such user", response.getBody());
 
     Mockito.verify(likeService, times(1)).likePost(postId, userId);
   }
