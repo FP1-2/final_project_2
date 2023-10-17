@@ -1,6 +1,5 @@
 package fs.socialnetworkapi.service;
 
-
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.login.LoginDtoOut;
 import fs.socialnetworkapi.entity.User;
