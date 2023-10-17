@@ -33,9 +33,6 @@ public class JwtFilter extends OncePerRequestFilter {
     throws ServletException, IOException {
     try {
       Optional<String> token = extractTokenFromRequest(request);
-
-      System.out.println(token);
-
       Optional<SecurityService.verificationResult> verificationResult = token.map(tokenService::check);
       Optional<UsernamePasswordAuthenticationToken> usernamePasswordAuthenticationToken = verificationResult
               .map(UserAuthenticationBearer::create);
@@ -44,7 +41,6 @@ public class JwtFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken at = usernamePasswordAuthenticationToken.get();
         at.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(at);
-        System.out.println("1");
       } else {
         User user = new User();
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user,null,

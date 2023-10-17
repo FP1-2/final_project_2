@@ -3,6 +3,7 @@ package fs.socialnetworkapi.dto.user;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Setter
@@ -16,6 +17,7 @@ public class UserDtoOut {
   private String birthday;
   private String avatar;
   private String address;
+  private LocalDateTime createdDate;
 
   @Override
   public boolean equals(Object obj) {
@@ -33,7 +35,8 @@ public class UserDtoOut {
             && Objects.equals(email, that.email)
             && Objects.equals(birthday, that.birthday)
             && Objects.equals(address, that.address)
-            && Objects.equals(avatar, that.avatar);
+            && Objects.equals(avatar, that.avatar)
+            && Objects.equals(createdDate, that.createdDate);
   }
 
   @Override

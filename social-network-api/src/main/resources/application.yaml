@@ -9,7 +9,7 @@ server:
 
 spring:
      profiles:
-       active: prod #local  # prod
+       active: prod #local #prod #
      mail:
        host: smtp.gmail.com
        port: 587
