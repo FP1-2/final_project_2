@@ -27,14 +27,10 @@ public class UserService implements UserDetailsService {
   private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
 
-
-
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
     return mapper.map(user, UserDtoOut.class);
   }
-
-
 
   public UserDtoOut editUser(UserDtoIn userDtoIn) {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
