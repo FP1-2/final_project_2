@@ -14,12 +14,12 @@ public class NotificationService {
 
   private final NotificationRepo notificationRepo;
 
-  public List<Notification> getNotificationsByUser(Long userId) {
+  public List<Notification> getAllNotifications(Long userId) {
     return notificationRepo.findByUserId(userId);
   }
 
   public List<Notification> getActiveNotifications(Long userId) {
-    return getNotificationsByUser(userId).stream().filter(Notification::isActive).toList();
+    return getAllNotifications(userId).stream().filter(Notification::isActive).toList();
   }
 
   public boolean markNotificationAsRead(Long notificationId) {

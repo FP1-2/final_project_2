@@ -11,6 +11,7 @@ import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class UserController {
   private final UserService userService;
   private final AuthorizationService authorizationService;
   private final PasswordResetService passwordResetService;
+  private final PasswordEncoder passwordEncoder;
 
   @GetMapping("user/{current_user_id}/subscribe/{user_id}")
   public ResponseEntity<?> subscribe(@PathVariable("current_user_id") Long currentUserId,
@@ -90,19 +92,14 @@ public class UserController {
 
   @PostMapping("reset/request")
   public ResponseEntity<?> requestPasswordReset(@RequestBody EmailRequest email) {
-    return passwordResetService.setNewActivationCode(email.getEmail())
-      ? ResponseEntity.ok().build()
-      : ResponseEntity.badRequest().body("No such email");
+    return ResponseEntity.ok(passwordResetService.setNewActivationCode(email.getEmail()));
   }
 
   @PostMapping("reset/confirm")
   public ResponseEntity<?> confirmPasswordReset(@RequestBody PasswordResetRequest request) {
-    //    return passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword())
-    //            ? ResponseEntity.ok().build()
-    //            : ResponseEntity.badRequest().body("Try again");
     return passwordResetService.changePassword(request)
       ? ResponseEntity.ok().build()
-      : ResponseEntity.badRequest().body("Try again");
+      : ResponseEntity.badRequest().body("Password reset failed. Please try again.");
   }
 
 }
