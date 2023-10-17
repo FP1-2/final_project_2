@@ -11,7 +11,6 @@ import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ public class UserController {
   private final UserService userService;
   private final AuthorizationService authorizationService;
   private final PasswordResetService passwordResetService;
-  private final PasswordEncoder passwordEncoder;
 
   @GetMapping("user/{current_user_id}/subscribe/{user_id}")
   public ResponseEntity<?> subscribe(@PathVariable("current_user_id") Long currentUserId,
