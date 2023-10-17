@@ -15,23 +15,23 @@ import lombok.Setter;
 @Table(name = "notifications")
 public class Notification extends AbstractEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+  @ManyToOne
+  @JoinColumn(name = "post_id")
+  private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "notifying_user_id")
-    private User notifyingUser;
+  @ManyToOne
+  @JoinColumn(name = "notifying_user_id")
+  private User notifyingUser;
 
-    private String message;
-    private boolean active = true;
+  private String message;
+  private boolean active = true;
 
-    public void markAsRead() {
-        this.active = false;
-    }
+  public void markAsRead() {
+    this.active = false;
+  }
 
 }

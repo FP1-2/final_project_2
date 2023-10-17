@@ -13,26 +13,25 @@ import java.util.List;
 @RequestMapping("/api/v1/notifications")
 @AllArgsConstructor
 public class NotificationController {
+  private final NotificationService notificationService;
 
-    private final NotificationService notificationService;
+  @GetMapping("/{userId}")
+  public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable Long userId) {
+    List<Notification> notifications = notificationService.getNotificationsByUser(userId);
+    return ResponseEntity.ok(notifications);
+  }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable Long userId) {
-        List<Notification> notifications = notificationService.getNotificationsByUser(userId);
-        return ResponseEntity.ok(notifications);
-    }
+  @GetMapping("/active/{userId}")
+  public ResponseEntity<List<Notification>> getActiveNotifications(@PathVariable Long userId) {
+    List<Notification> activeNotifications = notificationService.getActiveNotifications(userId);
+    return ResponseEntity.ok(activeNotifications);
+  }
 
-    @GetMapping("/active/{userId}")
-    public ResponseEntity<List<Notification>> getActiveNotifications(@PathVariable Long userId) {
-        List<Notification> activeNotifications = notificationService.getActiveNotifications(userId);
-        return ResponseEntity.ok(activeNotifications);
-    }
-
-    @PostMapping("/markAsRead/{notificationId}")
-    public ResponseEntity<String> markNotificationAsRead(@PathVariable Long notificationId) {
-        return notificationService.markNotificationAsRead(notificationId)
-                ? ResponseEntity.ok("Notification marked as read.")
-                : ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Notification is not active.");
-    }
+  @PostMapping("/markAsRead/{notificationId}")
+  public ResponseEntity<String> markNotificationAsRead(@PathVariable Long notificationId) {
+    return notificationService.markNotificationAsRead(notificationId)
+            ? ResponseEntity.ok("Notification marked as read.")
+            : ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Notification is not active.");
+  }
 
 }
