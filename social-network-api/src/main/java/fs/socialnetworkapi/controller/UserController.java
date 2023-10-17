@@ -30,29 +30,27 @@ public class UserController {
   private final AuthorizationService authorizationService;
   private final PasswordResetService passwordResetService;
 
-  @GetMapping("user/{current_user_id}/subscribe/{user_id}")
-  public ResponseEntity<?> subscribe(@PathVariable("current_user_id") Long currentUserId,
-                                     @PathVariable("user_id") Long userId) {
-    userService.subscribe(currentUserId, userId);
+  @GetMapping("subscribe/{subscribe_user_id}")
+  public ResponseEntity<?> subscribe(@PathVariable("subscribe_user_id") Long userId) {
+    userService.subscribe(userId);
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("user/{current_user_id}/unsubscribe/{user_id}")
-  public ResponseEntity<?> unsubscribe(@PathVariable("current_user_id") Long currentUserId,
-                                     @PathVariable("user_id") Long userId) {
-    userService.unsubscribe(currentUserId, userId);
+  @GetMapping("unsubscribe/{subscribe_user_id}")
+  public ResponseEntity<?> unsubscribe(@PathVariable("subscribe_user_id") Long userId) {
+    userService.unsubscribe(userId);
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("user/{current_user_id}/followers") //підписчики
-  public ResponseEntity<List<UserDtoOut>> getFollowers(@PathVariable("current_user_id") Long currentUserId) {
-    List<UserDtoOut> followers = userService.getFollowers(currentUserId);
+  @GetMapping("followers") //підписчики
+  public ResponseEntity<List<UserDtoOut>> getFollowers() {
+    List<UserDtoOut> followers = userService.getFollowers();
     return ResponseEntity.ok(followers);
   }
 
-  @GetMapping("user/{current_user_id}/followings") //підписки
-  public ResponseEntity<List<UserDtoOut>> getFollowings(@PathVariable("current_user_id") Long currentUserId) {
-    List<UserDtoOut> followings = userService.getFollowings(currentUserId);
+  @GetMapping("followings") //підписки
+  public ResponseEntity<List<UserDtoOut>> getFollowings() {
+    List<UserDtoOut> followings = userService.getFollowings();
     return ResponseEntity.ok(followings);
   }
 
@@ -97,9 +95,6 @@ public class UserController {
 
   @PostMapping("reset/confirm")
   public ResponseEntity<?> confirmPasswordReset(@RequestBody PasswordResetRequest request) {
-    //    return passwordResetService.changePassword(request.getActivationCode(), request.getNewPassword())
-    //            ? ResponseEntity.ok().build()
-    //            : ResponseEntity.badRequest().body("Try again");
     return passwordResetService.changePassword(request)
       ? ResponseEntity.ok().build()
       : ResponseEntity.badRequest().body("Try again");

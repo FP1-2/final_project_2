@@ -104,9 +104,9 @@ public class UserService implements UserDetailsService {
     return userRepo.findByActivationCode(activationCode);
   }
 
-  public void subscribe(Long currentUserId, Long userId) {
-    User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+  public void subscribe(Long userId) {
+
+    User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     User user = userRepo.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
 
@@ -114,9 +114,9 @@ public class UserService implements UserDetailsService {
     userRepo.save(user);
   }
 
-  public void unsubscribe(Long currentUserId, Long userId) {
-    User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+  public void unsubscribe(Long userId) {
+
+    User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     User user = userRepo.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
 
@@ -124,9 +124,8 @@ public class UserService implements UserDetailsService {
     userRepo.save(user);
   }
 
-  public List<UserDtoOut> getFollowers(Long currentUserId) {
-    User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+  public List<UserDtoOut> getFollowers() {
+    User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     return currentUser.getFollowers()
             .stream()
@@ -134,9 +133,8 @@ public class UserService implements UserDetailsService {
             .toList();
   }
 
-  public List<UserDtoOut> getFollowings(Long currentUserId) {
-    User currentUser = userRepo.findById(currentUserId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+  public List<UserDtoOut> getFollowings() {
+    User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     return currentUser.getFollowings()
             .stream()
