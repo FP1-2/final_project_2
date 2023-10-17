@@ -7,21 +7,20 @@ import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class LikeServiceTest {
 
   @Mock
@@ -35,17 +34,6 @@ class LikeServiceTest {
 
   @InjectMocks
   private LikeService likeService;
-  private AutoCloseable closeable;
-
-  @BeforeEach
-  void setup() {
-    closeable = MockitoAnnotations.openMocks(this);
-  }
-
-  @AfterEach
-  void close() throws Exception {
-    closeable.close();
-  }
 
   @Test
   void likePost_LikeExists_DeleteLike() {
@@ -60,9 +48,10 @@ class LikeServiceTest {
     when(postRepo.findById(2L)).thenReturn(Optional.of(post));
     when(likeRepo.findByPostIdAndUserId(2L, 1L)).thenReturn(Optional.of(like));
 
-    likeService.likePost(2L, 1L);
+    String result = likeService.likePost(2L, 1L);
 
     verify(likeRepo, times(1)).delete(like);
+    assertEquals("Unliked", result);
   }
 
   @Test
@@ -76,9 +65,10 @@ class LikeServiceTest {
     when(postRepo.findById(2L)).thenReturn(Optional.of(post));
     when(likeRepo.findByPostIdAndUserId(2L, 1L)).thenReturn(Optional.empty());
 
-    likeService.likePost(2L, 1L);
+    String result = likeService.likePost(2L, 1L);
 
     verify(likeRepo, times(1)).save(any(Like.class));
+    assertEquals("Liked", result);
   }
 
   @Test
@@ -101,7 +91,6 @@ class LikeServiceTest {
     likes.add(new Like(user, new Post()));
     likes.add(new Like(user, new Post()));
 
-    when(userRepo.findById(userId)).thenReturn(Optional.of(user));
     when(likeRepo.findByUserId(userId)).thenReturn(likes);
 
     List<Like> result = likeService.getLikesForUser(userId);
@@ -113,7 +102,7 @@ class LikeServiceTest {
   void getLikesForUser_LikeDoesNotExist_ReturnsEmptyList() {
     Long userId = 1L;
 
-    when(likeRepo.findByUserId(userId)).thenReturn(Collections.emptyList());
+    when(likeRepo.findByUserId(userId)).thenReturn(new ArrayList<>());
 
     List<Like> result = likeService.getLikesForUser(userId);
 

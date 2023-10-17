@@ -72,7 +72,7 @@ public class UserController {
   }
 
   @PostMapping("registration")
-  public ResponseEntity<UserDtoOut> create(@Valid @RequestBody UserDtoIn userDtoIn) {
+  public ResponseEntity<UserDtoOut> createNewUser(@Valid @RequestBody UserDtoIn userDtoIn) {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
 
@@ -90,14 +90,16 @@ public class UserController {
 
   @PostMapping("reset/request")
   public ResponseEntity<?> requestPasswordReset(@RequestBody EmailRequest email) {
-    return ResponseEntity.ok(passwordResetService.setNewActivationCode(email.getEmail()));
+    return passwordResetService.setNewActivationCode(email.getEmail())
+      ? ResponseEntity.ok().build()
+      : ResponseEntity.internalServerError().body("Email check failed");
   }
 
   @PostMapping("reset/confirm")
   public ResponseEntity<?> confirmPasswordReset(@RequestBody PasswordResetRequest request) {
     return passwordResetService.changePassword(request)
       ? ResponseEntity.ok().build()
-      : ResponseEntity.badRequest().body("Password reset failed. Please try again.");
+      : ResponseEntity.badRequest().body("Password reset failed");
   }
 
 }

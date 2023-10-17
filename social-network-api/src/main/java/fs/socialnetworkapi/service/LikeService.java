@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,13 +26,20 @@ public class LikeService {
     return likeRepo.findByUserId(userId);
   }
 
-  public void likePost(Long postId, Long userId) {
+  public String likePost(Long postId, Long userId) {
     User user = userRepo.findById(userId)
             .orElseThrow(() -> new UserNotFoundException("No such user"));
     Post post = postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException("No such post"));
-    likeRepo.findByPostIdAndUserId(postId, userId)
-            .ifPresentOrElse(likeRepo::delete, () -> likeRepo.save(new Like(user, post)));
+
+    Optional<Like> like = likeRepo.findByPostIdAndUserId(postId, userId);
+    if (like.isPresent()) {
+      likeRepo.delete(like.get());
+      return "Unliked";
+    } else {
+      likeRepo.save(new Like(user, post));
+      return "Liked";
+    }
   }
 
 }
