@@ -1,10 +1,9 @@
 .customFileInput {
-	display: none; /* Приховуємо стандартний input file */
+	display: none;
 }
 
 .customFileLabel {
 	display: inline-block;
 	padding: 5px;
-	// background-color: #ccc; /* Задайте бажаний колір фону */
 	cursor: pointer;
 }

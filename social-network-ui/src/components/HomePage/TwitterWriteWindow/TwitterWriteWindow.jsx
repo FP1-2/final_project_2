@@ -6,9 +6,8 @@ import MultilineTextFields from "../WriteInput/MultilineTextFields";
 import Avatar from "@mui/material/Avatar";
 import postApiPost from "../../../api/postApiPost";
 import PropTypes from "prop-types";
-import axios, { Axios } from "axios";
-import { Image, CloudinaryContext, Transformation } from "cloudinary-react";
-import cloudinaryCore from "../../../api/cloudinaryConfig";
+import axios from "axios";
+import { Image } from "cloudinary-react";
 
 const TwitterWriteWindow = ({
   setTweetPost,
@@ -22,12 +21,7 @@ const TwitterWriteWindow = ({
   const [photo, setPhoto] = useState(null);
   const [userId, setUserId] = useState(9); //токен
 
-  //   const handleTextInput = (event) => {
-  //     setDescription(event.target.value);
-  //   };
-
   const handlePhotoInput = (event) => {
-    //  console.log(files[0]);
     const formData = new FormData();
     formData.append("file", event.target.files[0]);
     formData.append("upload_preset", "danit2023");
@@ -36,29 +30,21 @@ const TwitterWriteWindow = ({
       .then((response) => {
         setPhoto(response.data.url);
       });
-
-    //   setPhoto(event.target.value);
-  }; // переписати для клаудінарі
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Form validation
     if (!description.trim()) {
       setError("Description is required");
       return;
     }
 
-    //  if (!photo) {
-    //    setError("Photo is required");
-    //    return;
-    //  }
     postApiPost(userId, photo, description)
       .then((response) => {
         setTweetPost([response.data, ...tweetPosts]);
-        setDescription(""); // Clear input fields on successful submission
+        setDescription("");
         setPhoto("");
-        //   setError("");
       })
       .catch((err) => console.log(err));
   };
@@ -66,14 +52,13 @@ const TwitterWriteWindow = ({
   return (
     <div>
       <form className={styles.writeWindow} onSubmit={handleSubmit}>
-        {userPhoto ? ( // Перевірка наявності фото у користувача
+        {userPhoto ? (
           <Avatar
             alt={`${firstName} ${lastName}`}
             src={userPhoto}
             sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
           />
         ) : (
-          // Якщо фото відсутнє, виводимо ініціали імені та прізвища
           <Avatar
             sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
           >
@@ -87,7 +72,6 @@ const TwitterWriteWindow = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          {/* <Image cloudName="dl4ihoods" src={photo} /> */}
 
           {photo && (
             <Image

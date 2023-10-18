@@ -8,6 +8,7 @@ import CustomInput from "../../components/CustomInput/CustomInput";
 import IconTwitter from "../../components/IconTwitter/IconTwitter";
 import LinkText from "../../components/LinkText/LinkText";
 import { postLoginData } from "../../api/authApi";
+import useUserToken from "../../hooks/useUserToken";
 
 const theme = createTheme({
   // custom theme
@@ -33,6 +34,7 @@ const initialValues = {
 };
 
 const LoginPage = () => {
+  const { token, saveToken } = useUserToken();
   const onSubmit = (values, { resetForm }) => {
     // submit handler
     (async () => {
@@ -40,6 +42,7 @@ const LoginPage = () => {
         const data = await postLoginData(values);
         console.log(data);
         if (data.error === null) {
+          saveToken(data.token);
           resetForm();
         }
       } catch (error) {
