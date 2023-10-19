@@ -2,6 +2,7 @@ package fs.socialnetworkapi.controller;
 
 import fs.socialnetworkapi.service.LikeService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +15,13 @@ public class LikeController {
   private final LikeService likeService;
 
   @PostMapping("/like/{postId}/{userId}")
-  public void likePost(@PathVariable Long postId, @PathVariable Long userId) {
-    likeService.likePost(postId, userId);
+  public ResponseEntity<String> likePost(@PathVariable Long postId, @PathVariable Long userId) {
+    try {
+      String result = likeService.likePost(postId, userId);
+      return ResponseEntity.ok(String.format("%s successfully", result));
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(String.format("Failed: %s", e));
+    }
   }
 
 }
