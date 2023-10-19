@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
   private final LikeService likeService;
 
-  @PostMapping("/like/{postId}/{userId}")
-  public ResponseEntity<String> likePost(@PathVariable Long postId, @PathVariable Long userId) {
+  @PostMapping("/like/{postId}")
+  public ResponseEntity<String> likePost(@PathVariable Long postId) {
     try {
-      String result = likeService.likePost(postId, userId);
+      String result = likeService.likePost(postId);
       return ResponseEntity.ok(String.format("%s successfully", result));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(String.format("Failed: %s", e));
