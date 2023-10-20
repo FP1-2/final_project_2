@@ -5,6 +5,7 @@ import AuthPage from './pages/AuthPage/AuthPage'
 import LoginPage from './pages/LoginPage/LoginPage'
 import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage/ResetPasswordConfirmPage'
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage'
+import ProfilePage from './pages/ProfilePage/ProfilePage'
 
 const AppRoutes = () => {
 	return (
@@ -23,7 +24,7 @@ const AppRoutes = () => {
 			/>
 
 			{/* Profile Routes */}
-
+			<Route path='/profile/:userId' element={<ProfilePage />} />
 			{/* Error Path */}
 			<Route path='*' element={<h1>error</h1>} />
 		</Routes>
