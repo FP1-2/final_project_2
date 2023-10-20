@@ -141,7 +141,8 @@ const LoginPage = () => {
 							width: '100%',
 						}}
 					>
-						<LinkText text='Forgot password?' />
+						<LinkText text='Forgot password?' link='/resetPassword' />
+						
 						<LinkText text='Sign up to Twitter' />
 					</Box>
 				</Box>

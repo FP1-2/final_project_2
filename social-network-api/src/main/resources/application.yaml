@@ -1,9 +1,42 @@
+MAIN_EMAIL:
+MAIN_EMAIL_PASSWORD:
+DB_URL:
+DB_USER:
+DB_PASSWORD:
+
 server:
   port: 5000
 
 spring:
-  profiles:
-    active:  local #prod
+     profiles:
+       active: prod #local #prod #
+     mail:
+       host: smtp.gmail.com
+       port: 587
+       username: ${MAIN_EMAIL} # логин от учётки
+       password: ${MAIN_EMAIL_PASSWORD} # специальный пароль для приложения
+       test-connection: true # проверка подключения при старте приложения
+       properties:
+         mail:
+     smtp:
+       auth: true
+       ssl:
+         enable: true
+       sender: # отправитель письма (его почта и имя)
+         email: test@gmail.com
+#      text: no-reply
+jwt:
+  password:
+    encoder:
+      secret: FZK2DZ82odqS13e8aENggaMdd_fAkl-nJL4EVBX43g
+      iteration: 64
+      keylength: 256
+  secret: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
+  expiration: 3600
+  issuer: finalproject
+
+myapp:
+  baseUrl: http://twitterdanit.us-east-1.elasticbeanstalk.com
 
 # local profile
 ---
@@ -19,7 +52,6 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred #default
-
   h2:
     console:
       enabled: true
@@ -34,26 +66,16 @@ spring:
         format_sql: true
       jdbc:
         time_zone: UTC
-
 # prod profile
 ---
-
 spring:
   config:
     activate:
       on-profile: prod
-  jpa:
-    hibernate:
-      ddl-auto: update #create-drop # update
-    generate-ddl: false
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc:
-          time_zone: UTC
   datasource:
-    url: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
-    username: postgres
-    password: postgres
-    initialization-mode: always # never
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  data:
+    jpa:
+      repositories:

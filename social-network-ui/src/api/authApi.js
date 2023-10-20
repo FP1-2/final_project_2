@@ -3,7 +3,7 @@ import axios from 'axios'
 export default async function postRegistrationData(newUserObject) {
 	try {
 		const { data } = await axios.post(
-			`${process.env.REACT_APP_SERVER_URL}/registration`,
+			`api/v1/registration`,
 			newUserObject
 		)
 		return data
