@@ -36,10 +36,7 @@ public class PostService {
   }
 
   public List<PostDtoOut> findLikedPostsByUserId(Long userId) {
-    return likeService.getLikesForUser(userId)
-            .stream()
-            .map(like -> mapper.map(like.getPost(),PostDtoOut.class))
-            .toList();
+    return likeService.getLikesForUser();
   }
 
   public List<PostDtoOut> getAllPost(Integer page, Integer size) {
