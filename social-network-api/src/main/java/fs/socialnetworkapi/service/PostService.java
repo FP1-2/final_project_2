@@ -7,7 +7,6 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.enums.TypePost;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
-import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;

@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
     user.setUserFollowersCount(getFollowers(userId).size());
     user.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
 
-    return mapper.map(user, UserDtoOut.class);
+    return mapper.map(userRepo.save(user), UserDtoOut.class);
   }
 
   public List<PostDtoOut> getUserPosts(Long currentUserId, Integer page, Integer size) {
