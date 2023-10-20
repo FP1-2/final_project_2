@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.repos;
 
 import fs.socialnetworkapi.entity.Like;
+import fs.socialnetworkapi.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,5 @@ public interface LikeRepo extends JpaRepository<Like, Long> {
 
   List<Like> findByPostId(Long postId);
 
+  List<Like> findByPostIn(List<Post> posts);
 }

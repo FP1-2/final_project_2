@@ -105,7 +105,7 @@ public class PostServiceTest {
                 .description("Description")
                 .photo("Photo")
                 .createdDate(LocalDateTime.now())
-                .likes(List.of())
+                //.likes(List.of())
                 .build();
 
         postDtoOut2 = PostDtoOut.builder()
@@ -114,7 +114,7 @@ public class PostServiceTest {
                 .description("Description")
                 .photo("Photo")
                 .createdDate(LocalDateTime.now())
-                .likes(List.of())
+                //.likes(List.of())
                 .build();
 
         like1 = new Like(user1, post);

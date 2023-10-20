@@ -29,7 +29,7 @@ class PostDtoOutTest {
             .description("Description")
             .photo("Photo")
             .createdDate(LocalDateTime.now())
-            .likes(List.of())
+            //.likes(List.of())
             .build();
   }
 
