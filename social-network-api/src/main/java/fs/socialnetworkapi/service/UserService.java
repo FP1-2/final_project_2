@@ -36,16 +36,15 @@ public class UserService implements UserDetailsService {
 
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
-    user.setUserFollowingsCount(getFollowings(userId).size());
 
-    System.out.println(getFollowings(userId).size());
-    System.out.println(getFollowers(userId).size());
-    System.out.println(getProfilePosts(userId, 0, 100).size());
-//    user.setUserTweetCount();
+    user.setUserFollowingCount(getFollowings(userId).size());
+    user.setUserFollowersCount(getFollowers(userId).size());
+    user.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
+
     return mapper.map(user, UserDtoOut.class);
   }
 
-  public List<PostDtoOut> getProfilePosts(Long currentUserId, Integer page, Integer size) {
+  public List<PostDtoOut> getUserPosts(Long currentUserId, Integer page, Integer size) {
 
     User user = userRepo.findById(currentUserId)
       .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
@@ -58,8 +57,6 @@ public class UserService implements UserDetailsService {
       .peek(postDtoOut -> postDtoOut.setComments(List.of()))
       .toList();
   }
-
-
 
   public UserDtoOut editUser(UserDtoIn userDtoIn) {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

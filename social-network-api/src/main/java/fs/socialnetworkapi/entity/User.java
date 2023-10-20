@@ -1,7 +1,11 @@
 package fs.socialnetworkapi.entity;
 
-
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +38,9 @@ public class User extends AbstractEntity implements UserDetails {
   private String userDescribe;
   private String bgProfileImage;
   private String userLink;
+  private Integer userTweetCount;
+  private Integer userFollowersCount;
+  private Integer userFollowingCount;
 
 
   @ManyToMany(fetch = FetchType.LAZY)
@@ -49,13 +56,6 @@ public class User extends AbstractEntity implements UserDetails {
           joinColumns = {@JoinColumn(name = "following_id")},
           inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followings = new HashSet<>();
-
-//  @OneToMany(fetch = FetchType.LAZY)
-//  @JoinTable(
-//    name = "posts",
-//    joinColumns = {@JoinColumn(name = "id")},
-//    inverseJoinColumns = {@JoinColumn(name = "user_id")})
-//  private Set<User> posts = new HashSet<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -82,16 +82,4 @@ public class User extends AbstractEntity implements UserDetails {
     return false;
   }
 
-  public void setUserFollowingsCount(int size) {
-  }
-//
-//
-//  public void setUserTweetCount() {
-//  }
-//
-//  public void setUserFollowingsCount() {
-//  }
-//
-//  public void setUserFollowersCount(int i) {
-//  }
 }

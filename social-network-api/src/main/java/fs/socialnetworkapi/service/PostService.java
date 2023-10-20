@@ -25,7 +25,6 @@ public class PostService {
   private final PostRepo postRepo;
   private final ModelMapper mapper;
   private final LikeService likeService;
-//  private final UserRepo userRepo;
 
   public PostDtoOut findById(Long postId) {
 
@@ -52,7 +51,6 @@ public class PostService {
             .map(p -> mapper.map(p,PostDtoOut.class))
             .peek(postDtoOut -> postDtoOut.setComments(List.of()))
             .toList();
-
   }
 
   public List<PostDtoOut> getProfilePosts(Integer page, Integer size) {
