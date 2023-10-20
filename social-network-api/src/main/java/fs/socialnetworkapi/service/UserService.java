@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
     return postRepo.findByUser(user, pageRequest)
       .stream()
       .map(p -> mapper.map(p, PostDtoOut.class))
-      .peek(postDtoOut -> postDtoOut.setComments(List.of()))
+//      .peek(postDtoOut -> postDtoOut.setComments(List.of()))
       .toList();
   }
 
