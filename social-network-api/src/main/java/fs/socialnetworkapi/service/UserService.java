@@ -1,12 +1,16 @@
 package fs.socialnetworkapi.service;
 
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
+import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
+import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,12 +30,33 @@ public class UserService implements UserDetailsService {
   private final MailService mailService;
   private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
+  private final PostRepo postRepo;
 
 
 
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
+    user.setUserFollowingsCount(getFollowings(userId).size());
+
+    System.out.println(getFollowings(userId).size());
+    System.out.println(getFollowers(userId).size());
+    System.out.println(getProfilePosts(userId, 0, 100).size());
+//    user.setUserTweetCount();
     return mapper.map(user, UserDtoOut.class);
+  }
+
+  public List<PostDtoOut> getProfilePosts(Long currentUserId, Integer page, Integer size) {
+
+    User user = userRepo.findById(currentUserId)
+      .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", currentUserId)));
+
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+    return postRepo.findByUser(user, pageRequest)
+      .stream()
+      .map(p -> mapper.map(p, PostDtoOut.class))
+      .peek(postDtoOut -> postDtoOut.setComments(List.of()))
+      .toList();
   }
 
 
@@ -52,6 +77,9 @@ public class UserService implements UserDetailsService {
     user.setActive(true);
     user.setCreatedDate(createdDateUser);
     user.setUsername(userDtoIn.getUsername());
+    user.setUserDescribe(userDtoIn.getUserDescribe());
+    user.setBgProfileImage(userDtoIn.getBgProfileImage());
+    user.setUserLink(userDtoIn.getUserLink());
     return mapper.map(userRepo.save(user), UserDtoOut.class);
   }
 
@@ -154,6 +182,5 @@ public class UserService implements UserDetailsService {
     userRepo.save(findUser);
     return true;
   }
-
 
 }

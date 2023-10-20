@@ -22,7 +22,7 @@ public interface PostRepo extends JpaRepository<Post, Long> {
 
   Page<Post> findByUser(User user, Pageable pageable);
 
-  Optional<Post> findByIdAndUser(Long postId, User user);
+    Optional<Post> findByIdAndUser(Long postId, User user);
 
   Page<Post> findByOriginalPostAndTypePost(Post post, TypePost comment, PageRequest pageRequest);
 

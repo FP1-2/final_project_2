@@ -18,6 +18,12 @@ public class UserDtoOut {
   private String avatar;
   private String address;
   private LocalDateTime createdDate;
+  private String userDescribe;
+  private String bgProfileImage;
+  private String userLink;
+  private Integer userTweetCount;
+  private Integer userFollowersCount;
+  private Integer userFollowingCount;
 
   @Override
   public boolean equals(Object obj) {
@@ -36,7 +42,13 @@ public class UserDtoOut {
             && Objects.equals(birthday, that.birthday)
             && Objects.equals(address, that.address)
             && Objects.equals(avatar, that.avatar)
-            && Objects.equals(createdDate, that.createdDate);
+            && Objects.equals(createdDate, that.createdDate)
+            && Objects.equals(userDescribe, that.userDescribe)
+            && Objects.equals(bgProfileImage, that.bgProfileImage)
+            && Objects.equals(userLink, that.userLink)
+            && Objects.equals(userTweetCount, that.userTweetCount)
+            && Objects.equals(userFollowersCount, that.userFollowersCount)
+            && Objects.equals(userFollowingCount, that.userFollowingCount);
   }
 
   @Override

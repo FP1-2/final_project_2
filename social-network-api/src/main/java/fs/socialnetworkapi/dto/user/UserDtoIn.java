@@ -32,6 +32,9 @@ public class UserDtoIn {
   private boolean active;
   private String activationCode;
   private String roles;
+  private String userDescribe;
+  private String bgProfileImage;
+  private String userLink;
 
 
   public UserDtoIn() {
@@ -56,4 +59,3 @@ public class UserDtoIn {
   }
 
 }
-
