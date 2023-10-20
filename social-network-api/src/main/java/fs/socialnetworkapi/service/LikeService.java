@@ -22,9 +22,13 @@ public class LikeService {
   private final LikeRepo likeRepo;
   private final PostRepo postRepo;
   private final ModelMapper mapper;
-  private final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+  private User getUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
 
   public List<PostDtoOut> getLikesForUser() {
+    User user = getUser();
     return likeRepo.findByUserId(user.getId())
       .stream()
       .map(Like::getPost)
@@ -33,6 +37,7 @@ public class LikeService {
   }
 
   public String likePost(Long postId) {
+    User user = getUser();
     Post post = postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException("No such post"));
     Optional<Like> like = likeRepo.findByPostIdAndUserId(postId, user.getId());
