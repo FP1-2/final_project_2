@@ -8,6 +8,7 @@ import postApiPost from "../../../api/postApiPost";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Image } from "cloudinary-react";
+import UseUserToken from "../../../hooks/useUserToken";
 
 const TwitterWriteWindow = ({
   setTweetPost,
@@ -17,9 +18,10 @@ const TwitterWriteWindow = ({
   lastName,
 }) => {
   console.log(userPhoto);
+  const { token } = UseUserToken();
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
-  const [userId, setUserId] = useState(9); //токен
+  //   const [userId, setUserId] = useState(token); //токен
 
   const handlePhotoInput = (event) => {
     const formData = new FormData();
@@ -40,7 +42,7 @@ const TwitterWriteWindow = ({
       return;
     }
 
-    postApiPost(userId, photo, description)
+    postApiPost(token, photo, description)
       .then((response) => {
         setTweetPost([response.data, ...tweetPosts]);
         setDescription("");
