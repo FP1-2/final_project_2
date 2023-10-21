@@ -53,11 +53,9 @@ public class UserService implements UserDetailsService {
 
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
-
     user.setUserFollowingCount(getFollowings(userId).size());
     user.setUserFollowersCount(getFollowers(userId).size());
     user.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
-
     return mapper.map(user, UserDtoOut.class);
   }
 
