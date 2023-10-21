@@ -57,7 +57,7 @@ public class PostService {
 
   public List<PostDtoOut> getProfilePosts(Integer page, Integer size) {
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 
@@ -70,7 +70,7 @@ public class PostService {
 
   public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     Set<User> followings = user.getFollowings();
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
@@ -84,7 +84,7 @@ public class PostService {
 
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
@@ -109,7 +109,7 @@ public class PostService {
 
   public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     Post originalPost = postRepo.findById(originalPostId)
             .orElseThrow(() -> new PostNotFoundException(
