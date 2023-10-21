@@ -1,8 +1,11 @@
 package fs.socialnetworkapi.entity;
 
-import jakarta.persistence.Entity;
+
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
@@ -16,6 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -82,4 +86,20 @@ public class User extends AbstractEntity implements UserDetails {
     return false;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    User user = (User) obj;
+    return Objects.equals(this.getId(), user.getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.getId());
+  }
 }

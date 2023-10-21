@@ -79,3 +79,6 @@ spring:
   data:
     jpa:
       repositories:
+  jpa:
+    hibernate:
+      ddl-auto: update
