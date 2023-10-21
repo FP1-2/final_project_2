@@ -50,4 +50,11 @@ public class LikeService {
     }
   }
 
+  public List<Like> findByPostId(Long postId) {
+    return likeRepo.findByPostId(postId);
+  }
+
+  public List<Like> findByPostIn(List<Post> posts) {
+    return likeRepo.findByPostIn(posts);
+  }
 }

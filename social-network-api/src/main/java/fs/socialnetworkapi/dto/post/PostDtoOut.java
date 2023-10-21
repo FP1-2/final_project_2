@@ -24,15 +24,15 @@ public class PostDtoOut {
   private String description;
   private String photo;
   private LocalDateTime createdDate;
-  private List<Like> likes;
   private TypePost typePost;
   private int countRepost;
   private int countComments;
   private int countLikes;
   private OriginalPostDto originalPost;
   private List<PostDtoOut> comments;
-  //private boolean yourRepost;
-  //private boolean thisUserHasRepost;
+  private boolean hasMyRepost;
+  private boolean hasMyComment;
+  private boolean hasMyLike;
 
   @Override
   public boolean equals(Object obj) {
