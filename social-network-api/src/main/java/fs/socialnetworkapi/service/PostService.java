@@ -61,11 +61,9 @@ public class PostService {
 
     PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-    return postRepo.findByUser(user, pageRequest)
-            .stream()
-            .map(p -> mapper.map(p, PostDtoOut.class))
-            .peek(postDtoOut -> postDtoOut.setComments(List.of()))
-            .toList();
+    List<Post> allPosts = postRepo.findByUser(user, pageRequest).stream().toList();
+
+    return mapListPostToListPostDtoOut(allPosts);
   }
 
   public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
