@@ -27,6 +27,7 @@ public class UserDtoIn {
   private String birthday;
   private String avatar;
   private String mainPhoto;
+  @NotNull
   private String password;
   private String address;
   private boolean active;
