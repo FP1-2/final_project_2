@@ -1,6 +1,6 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.dto.password.PasswordResetRequest;
+import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
@@ -9,6 +9,8 @@ import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +18,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -70,7 +71,6 @@ public class UserService implements UserDetailsService {
     return postRepo.findByUser(user, pageRequest)
       .stream()
       .map(p -> mapper.map(p, PostDtoOut.class))
-      // .peek(postDtoOut -> postDtoOut.setComments(List.of()))
       .toList();
   }
 
@@ -93,7 +93,6 @@ public class UserService implements UserDetailsService {
     user.setUserDescribe(userDtoIn.getUserDescribe());
     user.setBgProfileImage(userDtoIn.getBgProfileImage());
     user.setUserLink(userDtoIn.getUserLink());
-    return mapper.map(userRepo.save(user), UserDtoOut.class);
     return mapper.map(saveUser(user), UserDtoOut.class);
   }
 
@@ -138,14 +137,6 @@ public class UserService implements UserDetailsService {
 
   public void upgradeUser(User user) {
     userRepo.save(user);
-  }
-
-  public User findByEmail(String email) {
-    return userRepo.findByEmail(email);
-  }
-
-  public User findByActivationCode(String activationCode) {
-    return userRepo.findByActivationCode(activationCode);
   }
 
   public void subscribe(Long currentUserId, Long userId) {
