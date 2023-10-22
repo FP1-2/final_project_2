@@ -21,9 +21,9 @@ public class UserDtoOut {
   private String userDescribe;
   private String bgProfileImage;
   private String userLink;
-  private Integer userTweetCount;
-  private Integer userFollowersCount;
-  private Integer userFollowingCount;
+  private int userTweetCount;
+  private int userFollowersCount;
+  private int userFollowingCount;
 
   @Override
   public boolean equals(Object obj) {

@@ -40,10 +40,6 @@ public class User extends AbstractEntity implements UserDetails {
   private String userDescribe;
   private String bgProfileImage;
   private String userLink;
-//  private Integer userTweetCount;
-//  private Integer userFollowersCount;
-//  private Integer userFollowingCount;
-
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
