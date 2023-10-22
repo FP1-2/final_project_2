@@ -11,11 +11,10 @@ import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import CardActions from '@mui/material/CardActions'
-import ImageList from '@mui/material/ImageList'
+// import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import Link from '@mui/material/Link'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
 import UseUserToken from '../../hooks/useUserToken'
 
 function Post({ post }) {
@@ -108,11 +107,9 @@ function Post({ post }) {
       </CardContent>
       <CardContent>
         <Typography paragraph={true}>{post.description}</Typography>
-        <ImageList>
           <ImageListItem>
             <img src={post.photo}></img>
           </ImageListItem>
-        </ImageList>
         <CardActions>
           <Button>
             <MapsUgcRoundedIcon sx={{ color: 'grey' }} />

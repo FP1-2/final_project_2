@@ -159,7 +159,7 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
         </Drawer>
         <Box
           component='main'
-          sx={{ flexGrow: 1, bgcolor: 'background.default'}}
+          sx={{ flexGrow: 1, bgcolor: 'background.default', mt: '64px'}}
         >
           {children}
           <Toolbar />
