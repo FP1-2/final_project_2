@@ -14,7 +14,6 @@ const registerSlice = createSlice({
 				...action.payload,
 			}
 			state.registerData = newObj
-			console.log('registerData', state.registerData)
 		},
 		resetRegisterData: state => {
 			state.registerData = {}

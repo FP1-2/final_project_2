@@ -14,6 +14,9 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import LinkText from '../../components/LinkText/LinkText'
 import { format } from 'date-fns'
 import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
+import getUserData from '../../api/getUserInfo'
+import { useState } from 'react'
+import Avatar from '@mui/material/Avatar'
 
 const theme = createTheme({
 	typography: {
@@ -31,24 +34,6 @@ const theme = createTheme({
 	},
 })
 
-const user = {
-	id: 50,
-	username: 'Camel_wafas',
-	firstName: 'Jack',
-	lastName: 'Petrov',
-	email: 'asda@gmail.com',
-	birthday: '1992-04-04',
-	avatar: null,
-	address: 'Poltava',
-	createdDate: '2023-10-16T10:59:39.842808',
-	userDescribe: 'I am a good person',
-	userLink: 't.me/adadsa',
-	bgProfileImage: null,
-	userTweetCount: 55,
-	userFollowersCount: 12,
-	userFollowingCount: 34,
-}
-
 const infoBoxStyles = {
 	display: 'flex',
 	alignItems: 'flex-end',
@@ -64,9 +49,31 @@ const typographyInfoUser = {
 
 const ProfilePage = () => {
 	const { token } = useUserToken()
+	const params = useParams()
+	const [user, setUser] = useState(null)
 	let userBirthdayData = null
 	let userJoinedData = null
-
+	useEffect(() => {
+		if (token) {
+			;(async () => {
+				const userData = await getUserData(params.userId, token)
+				setUser(userData)
+			})()
+		}
+	}, [])
+	// useEffect(() => {
+	// 	if (user) {
+	// 		userBirthdayData = `Born ${format(
+	// 			new Date(user.birthday),
+	// 			'MMMM d, yyyy'
+	// 		)}`
+	// 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
+	// 			month: 'short',
+	// 		}).format(new Date(user.createdDate))} ${new Date(
+	// 			user.createdDate
+	// 		).getFullYear()}`
+	// 	}
+	// }, [user])
 	if (user) {
 		userBirthdayData = `Born ${format(new Date(user.birthday), 'MMMM d, yyyy')}`
 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
@@ -75,7 +82,6 @@ const ProfilePage = () => {
 			user.createdDate
 		).getFullYear()}`
 	}
-
 	return (
 		<ThemeProvider theme={theme}>
 			<Box>
@@ -98,9 +104,14 @@ const ProfilePage = () => {
 							<Typography
 								variant='h3'
 								sx={{
+									paddingX: '1rem',
 									wordSpacing: '0.5rem',
 									letterSpacing: '0.4rem',
 									color: 'white',
+									textOverflow: 'ellipsis',
+									overflow: 'hidden',
+									whiteSpace: 'nowrap',
+									userSelect: 'none',
 								}}
 							>
 								{user.firstName} {user.lastName}
@@ -129,11 +140,23 @@ const ProfilePage = () => {
 										transform: 'translateY(-50%)',
 									}}
 								>
-									<AvatarWithoutImg
-										border={true}
-										userName={user.firstName}
-										big={true}
-									/>
+									{user.avatar ? (
+										<Avatar
+											sx={{
+												width: '8rem',
+												height: '8rem',
+												mb: 1,
+												border: '3px solid white',
+											}}
+											src={user.avatar}
+										></Avatar>
+									) : (
+										<AvatarWithoutImg
+											border={true}
+											userName={user.firstName}
+											big={true}
+										/>
+									)}
 								</Box>
 								<Button
 									sx={{
@@ -195,16 +218,18 @@ const ProfilePage = () => {
 											{user.address}
 										</Typography>
 									</Box>
-									<Box sx={infoBoxStyles}>
-										<LinkIcon sx={{ transform: 'rotate(-60deg)' }} />
-										<Box sx={typographyInfoUser}>
-											<LinkText
-												href={true}
-												link={user.userLink}
-												text={user.userLink}
-											/>
+									{user.userLink && (
+										<Box sx={infoBoxStyles}>
+											<LinkIcon sx={{ transform: 'rotate(-60deg)' }} />
+											<Box sx={typographyInfoUser}>
+												<LinkText
+													href={true}
+													link={user.userLink}
+													text={user.userLink}
+												/>
+											</Box>
 										</Box>
-									</Box>
+									)}
 									<Box sx={infoBoxStyles}>
 										<CakeOutlinedIcon />
 										{userBirthdayData && (
