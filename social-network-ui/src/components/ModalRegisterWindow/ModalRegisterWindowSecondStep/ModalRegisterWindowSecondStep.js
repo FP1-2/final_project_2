@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import postRegistrationData from "../../../api/authApi";
 
 import axios from "axios";
+import AvatarWithoutImg from "../../AvatarWithoutImg/AvatarWithoutImg";
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -218,18 +219,7 @@ const ModalRegisterWindowSecondStep = ({
               }}
             >
               {imageUrl === "" ? (
-                <Avatar
-                  sx={{
-                    width: "6rem",
-                    height: "6rem",
-                    bgcolor: "rgb(29, 161, 241)",
-                    p: 5,
-                    fontSize: "3rem",
-                    mb: 1,
-                  }}
-                >
-                  {registerName?.charAt(0).toUpperCase()}
-                </Avatar>
+                <AvatarWithoutImg userName={registerName} />
               ) : (
                 <Avatar
                   sx={{

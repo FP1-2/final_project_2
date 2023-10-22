@@ -3,9 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import ResetPasswordConfirmPage from "./pages/ResetPasswordConfirmPage/ResetPasswordConfirmPage";
-import FavPage from "./pages/FavPage/FavPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 const AppRoutes = () => {
   return (
@@ -24,11 +24,7 @@ const AppRoutes = () => {
       />
 
       {/* Profile Routes */}
-      <Route path="/notifications" element={<HomePage />} />
-      <Route path="/messages" element={<HomePage />} />
-      <Route path="/favourites" element={<FavPage />} />
-      <Route path="/profile" element={<HomePage />} />
-
+      <Route path="/profile/:userId" element={<ProfilePage />} />
       {/* Error Path */}
       <Route path="*" element={<h1>error</h1>} />
     </Routes>
