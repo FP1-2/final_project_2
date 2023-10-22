@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
   public UserDtoOut editUser(UserDtoIn userDtoIn) {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     String email = user.getEmail();
-    User userFromDb = userRepo.findByEmail(email);
+    User userFromDb = findByEmail(email);
     LocalDateTime createdDateUser = userFromDb.getCreatedDate();
     user.setFirstName(userDtoIn.getFirstName());
     user.setLastName(userDtoIn.getLastName());
