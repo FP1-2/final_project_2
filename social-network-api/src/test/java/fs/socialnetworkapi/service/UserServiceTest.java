@@ -110,7 +110,7 @@ class UserServiceTest {
   @Test
   public void testUpgradeUser() {
     User user = new User();
-    userService.upgradeUser(user);
+    userService.saveUser(user);
     verify(userRepo, times(1)).save(user);
   }
 
