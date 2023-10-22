@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage'
 import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage/ResetPasswordConfirmPage'
 import FavPage from './pages/FavPage/FavPage'
+import MessagePage from './pages/MessagePage/MessagePage'
 
 const AppRoutes = () => {
   return (
@@ -23,7 +24,7 @@ const AppRoutes = () => {
 
       {/* Profile Routes */}
       <Route path='/notifications' element={<HomePage />} />
-      <Route path='/messages' element={<HomePage />} />
+      <Route path='/messages' element={<MessagePage />} />
       <Route path='/favourites' element={<FavPage />} />
       <Route path='/profile' element={<HomePage />} />
 
