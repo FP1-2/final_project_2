@@ -69,6 +69,7 @@ const ModalRegisterWindowSecondStep = ({
 	isModalOpen,
 	handleClose,
 	setIsRegisterDone,
+	setIsOkayAlert,
 }) => {
 	const dispatch = useDispatch()
 
@@ -170,10 +171,11 @@ const ModalRegisterWindowSecondStep = ({
 		setIsLoading(true)
 		resetForm()
 		;(async () => {
-			const response = await postRegistrationData({ ...userObj, ...obj })
-			console.log(response)
+			// const response = await postRegistrationData({ ...userObj, ...obj })
+			// console.log(response)
 			setIsLoading(false)
 			setIsRegisterDone(true)
+			setIsOkayAlert(true)
 			setTimeout(() => {
 				if (isModalOpen) {
 					setIsRegisterDone(false)
@@ -182,7 +184,7 @@ const ModalRegisterWindowSecondStep = ({
 					dispatch(resetRegisterData())
 					navigate('/signIn')
 				}
-			}, 3000)
+			}, 5000)
 		})()
 	}
 	return (
@@ -350,6 +352,7 @@ ModalRegisterWindowSecondStep.propTypes = {
 	setRegisterStep: PropTypes.func.isRequired,
 	handleClose: PropTypes.func.isRequired,
 	isModalOpen: PropTypes.bool.isRequired,
+	setIsOkayAlert: PropTypes.func.isRequired,
 }
 
 export default ModalRegisterWindowSecondStep
