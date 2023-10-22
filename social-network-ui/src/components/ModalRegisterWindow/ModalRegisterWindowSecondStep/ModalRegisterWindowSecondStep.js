@@ -171,8 +171,8 @@ const ModalRegisterWindowSecondStep = ({
 		setIsLoading(true)
 		resetForm()
 		;(async () => {
-			// const response = await postRegistrationData({ ...userObj, ...obj })
-			// console.log(response)
+			const response = await postRegistrationData({ ...userObj, ...obj })
+			console.log(response)
 			setIsLoading(false)
 			setIsRegisterDone(true)
 			setIsOkayAlert(true)

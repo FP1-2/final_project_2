@@ -54,7 +54,7 @@ const ModalRegisterWindow = () => {
 	const modalHeight = useRef(null)
 
 	const [isLoading, setIsLoading] = useState(false)
-	const [registerStep, setRegisterStep] = useState(2) // register step
+	const [registerStep, setRegisterStep] = useState(1) // register step
 	const [heightModalBelow, setHeightModalBelow] = useState(false)
 	const [heightModalCountBelow, setHeightModalCountBelow] = useState(0)
 	const [isRegisterDone, setIsRegisterDone] = useState(false) // register done status
