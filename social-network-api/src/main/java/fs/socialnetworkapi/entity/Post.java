@@ -34,14 +34,17 @@ public class Post extends AbstractEntity {
   @Transient
   private int countReposts;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "originalPost", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "originalPost",
+          fetch = FetchType.LAZY,
+          cascade = CascadeType.ALL,
+          orphanRemoval = true)
   private Set<Post> reposts = new HashSet<>();
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "original_post_id", referencedColumnName = "id")
   private Post originalPost;
 
@@ -65,7 +68,10 @@ public class Post extends AbstractEntity {
     return Objects.hash(this.getId(),description, photo, user);
   }
 
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "post",
+          fetch = FetchType.LAZY,
+          cascade = CascadeType.ALL,
+          orphanRemoval = true)
   private List<Like> likes = new ArrayList<>();
 
 }

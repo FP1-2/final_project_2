@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Setter
 @Getter
 public class UserDtoIn {
@@ -21,18 +20,22 @@ public class UserDtoIn {
   @Size(min = 2, message = "User lastname should have at least 2 characters")
   private String lastName;
   @Email
+  //  @NotNull
   private String email;
   @NotNull
   @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "birthday should be in format '1990-01-01'")
   private String birthday;
   private String avatar;
   private String mainPhoto;
+  @NotNull
   private String password;
   private String address;
   private boolean active;
   private String activationCode;
   private String roles;
-
+  private String userDescribe;
+  private String bgProfileImage;
+  private String userLink;
 
   public UserDtoIn() {
   }
@@ -49,11 +52,8 @@ public class UserDtoIn {
     this.address = address;
   }
 
-
-
   public String getUsername() {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
   }
 
 }
-
