@@ -8,10 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +19,12 @@ public interface PostRepo extends JpaRepository<Post, Long> {
 
   Page<Post> findByUser(User user, Pageable pageable);
 
-  Optional<Post> findByIdAndUser(Long postId, User user);
+  List<Post> findByOriginalPostIn(List<Post> posts);
+
+  List<Post> findByOriginalPost(Post originalPost);
 
   Page<Post> findByOriginalPostAndTypePost(Post post, TypePost comment, PageRequest pageRequest);
 
   Page<Post> findByTypePost(TypePost post, PageRequest pageRequest);
+
 }
