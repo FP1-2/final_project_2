@@ -17,25 +17,28 @@ import Link from '@mui/material/Link'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
-function Post ({ post }) {
-  const userId = useSelector(state => state.auth.user)
-  const [isLiked, setIsLiked] = useState(post.likes.includes(userId))
-  const [likes, setLikes] = useState(post.likes.length || false)
-  const [isReposted, setIsReposted] = useState(post.isReposted || false)
-  const [reposts, setReposts] = useState(post.usersReposts || false)
+function Post({ post }) {
+  // const userId = useSelector(state => state.auth.user)
+  const userId = 51
+  const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnbG9yeW9uODdAZ21haWwuY29tIiwicm9sZXMiOiJVU0VSIiwiaXNzIjoiZmluYWxwcm9qZWN0IiwiZXhwIjoxNzAxMjM3NzE5LCJpYXQiOjE2OTc2Mzc3MTksImVtYWlsIjoiZ2xvcnlvbjg3QGdtYWlsLmNvbSIsImp0aSI6IjUxIn0.ziP2FhBhq4ZRSwGoVT_tZcO7jhNoIQ7fozEPHWAGoZs"
+  const [isLiked, setIsLiked] = useState(post?.hasMyLike)
+  const [likes, setLikes] = useState(post?.countLikes)
+  const [isReposted, setIsReposted] = useState(post.hasMyRepost)
+  const [reposts, setReposts] = useState(post.countRepost)
   const [error, setError] = useState(null)
 
   async function like () {
     try {
       const response = await axios.post(
-        `http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/likes/like/${post.id}/${userId}`,
+        `http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/likes/like/${post.id}`, {},
         {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           }
         }
       )
-      response.status === '200'
+      response.status === 200
         ? toggleLiked()
         : setError(`Error ${response.status}: ${response.error}`)
       console.log(error);

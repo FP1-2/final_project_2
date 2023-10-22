@@ -15,7 +15,12 @@ function Favourites() {
     useEffect(() => {
         async function getPosts() {
             try {
-                const {data} = await axios.get('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/all-posts');
+                const {data} = await axios.get('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/all-posts', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnbG9yeW9uODdAZ21haWwuY29tIiwicm9sZXMiOiJVU0VSIiwiaXNzIjoiZmluYWxwcm9qZWN0IiwiZXhwIjoxNzAxMjM3NzE5LCJpYXQiOjE2OTc2Mzc3MTksImVtYWlsIjoiZ2xvcnlvbjg3QGdtYWlsLmNvbSIsImp0aSI6IjUxIn0.ziP2FhBhq4ZRSwGoVT_tZcO7jhNoIQ7fozEPHWAGoZs'
+          }
+        });
                 setFavourites(data);
                 console.log(data);
             } catch (error) {
