@@ -3,22 +3,21 @@ import styles from './favourites.module.scss'
 import Post from '../Post/post'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
-
-// const posts = [{ id: 1, userId: 1, userName: 'John', content: 'text', isLiked: true, likes: 1, isReposted: true, reposts: 1 },
-//         { id: 2, userId: 1, userName: 'John', content: 'text2', isLiked: true, likes: 2, reposts: 2 },
-//     { id: 3, userId: 2, userName: 'Bob', content: 'text3', isLiked: true, likes: 3, reposts: 3 }]
+import UseUserToken from '../../hooks/useUserToken'
         
 function Favourites() {
     const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
     const [favourites, setFavourites] = useState([])
     const [error, setError] = useState(null);
+      const { token } = UseUserToken()
+
     useEffect(() => {
         async function getPosts() {
             try {
-                const {data} = await axios.get('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/all-posts', {
+                const { data } = await axios.get('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/likes/user', {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnbG9yeW9uODdAZ21haWwuY29tIiwicm9sZXMiOiJVU0VSIiwiaXNzIjoiZmluYWxwcm9qZWN0IiwiZXhwIjoxNzAxMjM3NzE5LCJpYXQiOjE2OTc2Mzc3MTksImVtYWlsIjoiZ2xvcnlvbjg3QGdtYWlsLmNvbSIsImp0aSI6IjUxIn0.ziP2FhBhq4ZRSwGoVT_tZcO7jhNoIQ7fozEPHWAGoZs'
+            'Authorization': `Bearer ${token}`
           }
         });
                 setFavourites(data);

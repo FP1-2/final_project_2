@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage/ResetPasswordConfirmPage'
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
+import FavPage from './pages/FavPage/FavPage';
 
 const AppRoutes = () => {
 	return (
@@ -14,6 +15,8 @@ const AppRoutes = () => {
 			<Route path='/' element={<AuthPage />} />
 			<Route path='/home' element={<HomePage />} />
 			<Route path='/explore' element={<HomePage />} />
+			;<Route path='/favourites' element={<FavPage />} />
+
 
 			{/* Auth Routes */}
 			<Route path='/signIn' element={<LoginPage />} />

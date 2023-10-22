@@ -16,16 +16,16 @@ import ImageListItem from '@mui/material/ImageListItem'
 import Link from '@mui/material/Link'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
+import UseUserToken from '../../hooks/useUserToken'
 
 function Post({ post }) {
-  // const userId = useSelector(state => state.auth.user)
-  const userId = 51
-  const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnbG9yeW9uODdAZ21haWwuY29tIiwicm9sZXMiOiJVU0VSIiwiaXNzIjoiZmluYWxwcm9qZWN0IiwiZXhwIjoxNzAxMjM3NzE5LCJpYXQiOjE2OTc2Mzc3MTksImVtYWlsIjoiZ2xvcnlvbjg3QGdtYWlsLmNvbSIsImp0aSI6IjUxIn0.ziP2FhBhq4ZRSwGoVT_tZcO7jhNoIQ7fozEPHWAGoZs"
+  // const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnbG9yeW9uODdAZ21haWwuY29tIiwicm9sZXMiOiJVU0VSIiwiaXNzIjoiZmluYWxwcm9qZWN0IiwiZXhwIjoxNzAxMjM3NzE5LCJpYXQiOjE2OTc2Mzc3MTksImVtYWlsIjoiZ2xvcnlvbjg3QGdtYWlsLmNvbSIsImp0aSI6IjUxIn0.ziP2FhBhq4ZRSwGoVT_tZcO7jhNoIQ7fozEPHWAGoZs"
   const [isLiked, setIsLiked] = useState(post?.hasMyLike)
   const [likes, setLikes] = useState(post?.countLikes)
   const [isReposted, setIsReposted] = useState(post.hasMyRepost)
   const [reposts, setReposts] = useState(post.countRepost)
   const [error, setError] = useState(null)
+  const { token } = UseUserToken()
 
   async function like () {
     try {
@@ -41,10 +41,8 @@ function Post({ post }) {
       response.status === 200
         ? toggleLiked()
         : setError(`Error ${response.status}: ${response.error}`)
-      console.log(error);
     } catch (err) {
       setError(`Error: ${err}`)
-      console.log(error);
     }
   }
 
