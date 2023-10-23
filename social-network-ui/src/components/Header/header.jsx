@@ -31,11 +31,12 @@ import { ReactComponent as Logo } from '../../logo.svg'
 // import useMediaQuery from '@mui/material/useMediaQuery'
 // import { MIN_WIDTH } from './../../constants'
 import useScreenSize from '../../hooks/useScreenSize'
+import useIsAuthenticated from './../../hooks/useIsAuthenticated';
 
 const drawerWidth = 240
 
 export default function PermanentDrawerLeft ({ pageName, children }) {
-  const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
+  const isLoggedIn = useIsAuthenticated();
   const screenSize = useScreenSize();
   let links = []
   isLoggedIn
@@ -204,7 +205,7 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
         </AppBar>
         <Box
           component='main'
-          sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+          sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3, mb: '20px' }}
         >
           {children}
         </Box>
