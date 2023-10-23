@@ -200,8 +200,8 @@ public class PostService {
             .filter(p -> p.getUser().equals(user)
                     && p.getTypePost().equals(TypePost.REPOST))
             .collect(Collectors.toMap(
-               p -> p.getOriginalPost().getId(),
-               p -> true
+              p -> p.getOriginalPost().getId(),
+              p -> true
             ));
   }
 
