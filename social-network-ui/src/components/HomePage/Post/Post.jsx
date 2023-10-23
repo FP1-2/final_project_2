@@ -32,7 +32,7 @@ const Post = ({ tweet }) => {
           </span>
           <span className={styles.header__tagName}>{tweet.user.username}</span>
           <FiberManualRecordIcon style={{ fontSize: 10, color: "#737373" }} />
-          <span className={styles.header__time}>{tweet.timeWhenWasPost}</span>
+          <span className={styles.header__time}>{tweet.createdDate}</span>
         </div>
         <div className={styles.body__main}>
           <p className={styles.main__twitte}>{tweet.description}</p>

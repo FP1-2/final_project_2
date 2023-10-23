@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import getApiPosts from "../../api/getApiPosts";
 import Header from "../../components/Header/header";
 import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
-import PostWrapper from "../../components/PostWrapper/PostWrapper";
+import PostWrapper from "../../components/HomePage/PostWrapper/PostWrapper";
 import UseUserToken from "../../hooks/useUserToken";
 
 const Home = () => {

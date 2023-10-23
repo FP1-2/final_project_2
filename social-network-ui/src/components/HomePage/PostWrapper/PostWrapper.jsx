@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "../../components/HomePage/Post/Post";
+import Post from "../Post/Post";
 import PropTypes from "prop-types";
 
 const PostWrapper = ({ tweets }) => {
