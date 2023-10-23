@@ -9,6 +9,7 @@ import IconTwitter from "../../components/IconTwitter/IconTwitter";
 import LinkText from "../../components/LinkText/LinkText";
 import { postLoginData } from "../../api/authApi";
 import useUserToken from "../../hooks/useUserToken";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme({
   // custom theme
@@ -34,7 +35,9 @@ const initialValues = {
 };
 
 const LoginPage = () => {
-  const { token, saveToken } = useUserToken();
+  const { token, saveToken, removeToken } = useUserToken();
+  const navigate = useNavigate();
+
   const onSubmit = (values, { resetForm }) => {
     // submit handler
     (async () => {
@@ -42,8 +45,10 @@ const LoginPage = () => {
         const data = await postLoginData(values);
         console.log(data);
         if (data.error === null) {
+          removeToken();
           saveToken(data.token);
           resetForm();
+          navigate(`/profile/${data.id}`);
         }
       } catch (error) {
         console.log(error);

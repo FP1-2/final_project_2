@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.entity;
 
+
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -36,6 +37,9 @@ public class User extends AbstractEntity implements UserDetails {
   private boolean active;
   private String activationCode;
   private String roles;
+  private String userDescribe;
+  private String bgProfileImage;
+  private String userLink;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
