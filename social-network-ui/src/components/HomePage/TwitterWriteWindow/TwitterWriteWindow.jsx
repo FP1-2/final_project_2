@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { Image } from "cloudinary-react";
 // import UseUserToken from "../../../hooks/useUserToken";
+import jwt from 'jwt-decode'
 
 const TwitterWriteWindow = ({
   setTweetPost,
@@ -23,7 +24,7 @@ const TwitterWriteWindow = ({
   console.log(token);
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
-  const [userId, setUserId] = useState(token); //токен
+  const [userId, setUserId] = useState(jwt(token).id); //токен
   console.log(token);
 
   const handlePhotoInput = (event) => {
