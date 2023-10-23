@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,6 +34,10 @@ public class UserService implements UserDetailsService {
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
+
+  public User getUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
 
   private User findById(Long userId) {
     return userRepo.findById(userId)
@@ -74,7 +79,7 @@ public class UserService implements UserDetailsService {
   }
 
   public UserDtoOut editUser(UserDtoIn userDtoIn) {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
     String email = user.getEmail();
     User userFromDb = findByEmail(email);
     LocalDateTime createdDateUser = userFromDb.getCreatedDate();
@@ -138,29 +143,30 @@ public class UserService implements UserDetailsService {
     userRepo.save(user);
   }
 
-  public void subscribe(Long currentUserId, Long userId) {
-    User currentUser = findById(currentUserId);
+  public void subscribe(Long userId) {
+    User currentUser = getUser();
+
     User user = findById(userId);
     user.getFollowers().add(currentUser);
     saveUser(user);
   }
 
-  public void unsubscribe(Long currentUserId, Long userId) {
-    User currentUser = findById(currentUserId);
+  public void unsubscribe(Long userId) {
+    User currentUser = getUser();
     User user = findById(userId);
     user.getFollowers().remove(currentUser);
     saveUser(user);
   }
 
-  public List<UserDtoOut> getFollowers(Long currentUserId) {
-    return findById(currentUserId).getFollowers()
+  public List<UserDtoOut> getFollowers(Long userId) {
+    return findById(userId).getFollowers()
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
   }
 
-  public List<UserDtoOut> getFollowings(Long currentUserId) {
-    return findById(currentUserId).getFollowings()
+  public List<UserDtoOut> getFollowings(Long userId) {
+    return findById(userId).getFollowings()
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
