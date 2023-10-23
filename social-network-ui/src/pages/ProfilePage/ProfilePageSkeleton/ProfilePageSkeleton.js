@@ -60,8 +60,8 @@ const ProfilePageSkeleton = () => {
 						>
 							<Skeleton
 								variant='circular'
-								width={160}
-								height={160}
+								width='8rem'
+								height='8rem'
 								sx={{
 									mb: 1,
 									border: '3px solid white',

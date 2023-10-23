@@ -66,7 +66,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
 						width: drawerWidth,
 						flexShrink: 0,
 						'& .MuiDrawer-paper': {
-							width: drawerWidth,
+							// width: drawerWidth,
 							// width: '100%',
 							boxSizing: 'border-box',
 						},
