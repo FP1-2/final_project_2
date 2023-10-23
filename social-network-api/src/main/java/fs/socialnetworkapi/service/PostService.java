@@ -200,8 +200,8 @@ public class PostService {
             .filter(p -> p.getUser().equals(user)
                     && p.getTypePost().equals(TypePost.REPOST))
             .collect(Collectors.toMap(
-                    p -> p.getOriginalPost().getId(),
-                    p -> true
+               p -> p.getOriginalPost().getId(),
+               p -> true
             ));
   }
 
@@ -211,8 +211,8 @@ public class PostService {
             .filter(p -> p.getUser().equals(user)
                     && p.getTypePost().equals(TypePost.COMMENT))
             .collect(Collectors.toMap(
-                    p -> p.getOriginalPost().getId(),
-                    p -> true
+              p -> p.getOriginalPost().getId(),
+              p -> true
             ));
   }
 
@@ -220,8 +220,8 @@ public class PostService {
     return likes.stream()
             .filter(like -> like.getUser().equals(user))
             .collect(Collectors.toMap(
-                    like -> like.getPost().getId(),
-                    like -> true
+              like -> like.getPost().getId(),
+              like -> true
             ));
   }
 
@@ -230,8 +230,8 @@ public class PostService {
             .stream()
             .filter(repost -> repost.getTypePost().equals(TypePost.REPOST))
             .collect(Collectors.groupingBy(
-                    repost -> repost.getOriginalPost().getId(),
-                    Collectors.counting()));
+              repost -> repost.getOriginalPost().getId(),
+              Collectors.counting()));
   }
 
   private Map<Long, Long> getPostCommentCountMap(List<Post> listOriginalPosts) {
@@ -239,15 +239,15 @@ public class PostService {
             .stream()
             .filter(comment -> comment.getTypePost().equals(TypePost.COMMENT))
             .collect(Collectors.groupingBy(
-                    comment -> comment.getOriginalPost().getId(),
-                    Collectors.counting()));
+              comment -> comment.getOriginalPost().getId(),
+              Collectors.counting()));
   }
 
   private Map<Long, Long> getPostLikesCountMap(List<Like> likes) {
     return likes
             .stream()
             .collect(Collectors.groupingBy(
-                    like -> like.getPost().getId(),
-                    Collectors.counting()));
+              like -> like.getPost().getId(),
+              Collectors.counting()));
   }
 }
