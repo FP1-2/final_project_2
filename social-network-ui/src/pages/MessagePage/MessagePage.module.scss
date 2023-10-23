@@ -1,9 +1,10 @@
+
 .messagesContainer {
   display: grid;
   grid-template-columns: 400px 600px auto;
   overflow: hidden;
   height: 100vh;
-  margin: 0 10%;
+  // margin: 0 10%;
 
   @media (max-width: 1900px) {
     grid-template-columns: 400px 500px auto;
@@ -14,18 +15,18 @@
   }
 
   @media (max-width: 1500px) {
-    grid-template-columns: 200px 400px auto;
-    margin: 0 5%;
+    grid-template-columns: 260px 400px auto;
+    // margin: 0 5%;
   }
 
   @media (max-width: 1200px) {
     grid-template-columns: 100px 400px auto;
-    margin: 0 5%;
+    // margin: 0 5%;
   }
 
   @media (max-width: 1000px) {
     grid-template-columns: 100px auto;
-    margin: 0 5%;
+    // margin: 0 5%;
   }
 
   @media (max-width: 600px) {
@@ -50,7 +51,7 @@
   .leftGrid {
     overflow: auto;
     height: 100vh;
-    border-right: 1px solid rgb(47, 51, 54);
+border-right: 1px solid rgba(0, 0, 0, 0.12);
     position: relative;
 
     h1 {
@@ -103,22 +104,23 @@
   .centerGridContainer {
     overflow: auto;
     height: 100vh;
-    border-right: 1px solid rgb(47, 51, 54);
-    border-left: 1px solid rgb(47, 51, 54);
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    // border-left: 1px solid rgb(47, 51, 54);
 
     header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 25px;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(7.6px);
-      -webkit-backdrop-filter: blur(7.6px);
-      position: sticky;
-      top: 0;
-      left: 0;
-      padding: 15px;
+      justify-content: space-evenly;
+      // gap: 25px;
+      color: #fff;
+      // background: rgba(255, 255, 255, 0.1);
+      // box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      // backdrop-filter: blur(7.6px);
+     
+      // position: sticky;
+      // top: 0;
+      // left: 0;
+      // padding: 15px;
       z-index: 99;
       width: 100%;
 
@@ -149,7 +151,7 @@
 
     .searchInput {
       padding: 10px 20px;
-      border: 1px rgb(113, 118, 123) solid;
+      // border: 1px rgb(113, 118, 123) solid;
       outline: none;
       margin-top: 20px;
       font-size: 28px;
@@ -170,8 +172,11 @@
       align-items: flex-start;
       gap: 10px;
       padding: 20px 5px;
-      margin-top: 30px;
-      border: 1px rgb(113, 118, 123) solid;
+      // margin-top: 30px;
+      // border: 1px rgb(113, 118, 123) solid; 
+      :hover {
+        background-color:rgb(230, 236, 242);
+      }
 
       .profilePic {
         width: 50px;
