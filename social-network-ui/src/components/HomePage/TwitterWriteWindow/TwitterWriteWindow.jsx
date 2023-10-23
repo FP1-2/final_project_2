@@ -8,7 +8,7 @@ import postApiPost from "../../../api/postApiPost";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Image } from "cloudinary-react";
-import UseUserToken from "../../../hooks/useUserToken";
+// import UseUserToken from "../../../hooks/useUserToken";
 
 const TwitterWriteWindow = ({
   setTweetPost,
@@ -16,12 +16,15 @@ const TwitterWriteWindow = ({
   userPhoto,
   firstName,
   lastName,
+  token,
 }) => {
-  console.log(userPhoto);
-  const { token } = UseUserToken();
+  //   console.log(userPhoto);
+  //   const { token } = UseUserToken();
+  console.log(token);
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
-  //   const [userId, setUserId] = useState(token); //токен
+  const [userId, setUserId] = useState(token); //токен
+  console.log(token);
 
   const handlePhotoInput = (event) => {
     const formData = new FormData();
@@ -42,11 +45,12 @@ const TwitterWriteWindow = ({
       return;
     }
 
-    postApiPost(token, photo, description)
+    postApiPost(userId, photo, description, token)
       .then((response) => {
         setTweetPost([response.data, ...tweetPosts]);
         setDescription("");
         setPhoto("");
+        console.log(token);
       })
       .catch((err) => console.log(err));
   };
@@ -101,6 +105,7 @@ TwitterWriteWindow.propTypes = {
   userPhoto: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
 export default TwitterWriteWindow;

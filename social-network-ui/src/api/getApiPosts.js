@@ -1,7 +1,5 @@
 import axios from "axios";
 
-// const urlGETposts =
-//   "http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/profile-posts";
 const url = process.env.REACT_APP_SERVER_URL;
 
 const getApiPosts = async (token) => {

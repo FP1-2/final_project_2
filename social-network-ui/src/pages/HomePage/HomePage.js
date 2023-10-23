@@ -13,6 +13,7 @@ const Home = () => {
     getApiPosts(token).then((newTweets) => {
       setTweetPost(newTweets);
       console.log(newTweets);
+      console.log(token);
     });
   }, []);
 
@@ -29,6 +30,7 @@ const Home = () => {
           userPhoto={userPhoto}
           firstName={firstName}
           lastName={lastName}
+          token={token}
         />
         <PostWrapper tweets={tweetPosts} />
       </section>

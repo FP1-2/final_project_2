@@ -35,14 +35,14 @@ import { MIN_WIDTH } from "./../../constants";
 const drawerWidth = 240;
 
 export default function PermanentDrawerLeft({ pageName, children }) {
-  const [tweetPosts, setTweetPost] = useState([]);
+  //   const [tweetPosts, setTweetPost] = useState([]);
 
-  useEffect(() => {
-    getApiPosts().then((newTweets) => {
-      setTweetPost(newTweets);
-      console.log(newTweets);
-    });
-  }, []);
+  //   useEffect(() => {
+  //     getApiPosts().then((newTweets) => {
+  //       setTweetPost(newTweets);
+  //       console.log(newTweets);
+  //     });
+  //   }, []);
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
   let links = [];
   isLoggedIn
