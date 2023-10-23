@@ -2,24 +2,19 @@ import React, {useState, useEffect} from 'react'
 import styles from './favourites.module.scss'
 import Post from '../Post/post'
 import { useSelector } from 'react-redux'
-import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
+import getLikedPosts from '../../api/getLikedPosts'
         
 function Favourites() {
     const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
     const [favourites, setFavourites] = useState([])
     const [error, setError] = useState(null);
-      const { token } = UseUserToken()
+    const { token } = UseUserToken()
 
     useEffect(() => {
         async function getPosts() {
             try {
-                const { data } = await axios.get('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/likes/user', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
+                const data = await getLikedPosts(token);
                 setFavourites(data);
                 console.log(data);
             } catch (error) {

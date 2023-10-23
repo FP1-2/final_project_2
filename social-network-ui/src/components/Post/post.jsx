@@ -24,11 +24,13 @@ function Post({ post }) {
   const [reposts, setReposts] = useState(post.countRepost)
   const [error, setError] = useState(null)
   const { token } = UseUserToken()
+  // const url = process.env.REACT_APP_SERVER_URL
+const url = 'http://twitterdanit.us-east-1.elasticbeanstalk.com'
 
   async function like () {
     try {
       const response = await axios.post(
-        `http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/likes/like/${post.id}`, {},
+        url + `/api/v1/likes/like/${post.id}`, {},
         {
           headers: {
             'Content-Type': 'application/json',
@@ -38,6 +40,25 @@ function Post({ post }) {
       )
       response.status === 200
         ? toggleLiked()
+        : setError(`Error ${response.status}: ${response.error}`)
+    } catch (err) {
+      setError(`Error: ${err}`)
+    }
+  }
+
+    async function repost () {
+    try {
+      const response = await axios.post(
+        url + `/api/v1/post/${post.id}/repost`, {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      response.status === 200
+        ? toggleRepost()
         : setError(`Error ${response.status}: ${response.error}`)
     } catch (err) {
       setError(`Error: ${err}`)
@@ -113,7 +134,7 @@ function Post({ post }) {
           <Button>
             <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
           </Button>
-          <Button onClick={() => toggleRepost()}>
+          <Button onClick={() => repost()}>
             <AutorenewRoundedIcon
               sx={{ color: isReposted ? 'green' : 'grey' }}
             />
