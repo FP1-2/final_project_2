@@ -7,21 +7,19 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ShareIcon from "@mui/icons-material/Share";
 import Avatar from "@mui/material/Avatar";
-
 import PropTypes from "prop-types";
 
 const Post = ({ tweet }) => {
   console.log(tweet);
   return (
     <div className={styles.post}>
-      {tweet.user.avatar ? ( // Перевірка наявності фото у користувача
+      {tweet.user.avatar ? (
         <Avatar
           alt={`${tweet.user.firstName} ${tweet.user.lastName}`}
           src={tweet.user.avatar}
           sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
         />
       ) : (
-        // Якщо фото відсутнє, виводимо ініціали імені та прізвища
         <Avatar sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}>
           {tweet.user.firstName.charAt(0)}
           {tweet.user.lastName.charAt(0)}
@@ -38,7 +36,6 @@ const Post = ({ tweet }) => {
         </div>
         <div className={styles.body__main}>
           <p className={styles.main__twitte}>{tweet.description}</p>
-
           {tweet.photo && (
             <img src={tweet.photo} alt="" width={350} height={250} />
           )}
@@ -60,8 +57,7 @@ const Post = ({ tweet }) => {
   );
 };
 Post.propTypes = {
-  tweet: PropTypes.object.isRequired, // Пропс 'text' має бути рядком і обов'язковим
-  //   onChange: PropTypes.func.isRequired, // Пропс 'onChange' має бути функцією і обов'язковим
+  tweet: PropTypes.object.isRequired,
 };
 
 export default Post;

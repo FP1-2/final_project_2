@@ -21,7 +21,7 @@ const ImageInput = (props) => {
   );
 };
 ImageInput.propTypes = {
-  value: PropTypes.string.isRequired, // Пропс 'text' має бути рядком і обов'язковим
-  onChange: PropTypes.func.isRequired, // Пропс 'onChange' має бути функцією і обов'язковим
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 export default ImageInput;

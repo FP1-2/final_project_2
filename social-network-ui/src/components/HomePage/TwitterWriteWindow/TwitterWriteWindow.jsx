@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 import styles from "./TwitterWriteWindow.module.scss";
 import ImageInput from "../ImageInput/ImageInput";
 import MultilineTextFields from "../WriteInput/MultilineTextFields";
@@ -8,7 +7,7 @@ import postApiPost from "../../../api/postApiPost";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { Image } from "cloudinary-react";
-// import UseUserToken from "../../../hooks/useUserToken";
+import jwt from "jwt-decode";
 
 const TwitterWriteWindow = ({
   setTweetPost,
@@ -18,13 +17,9 @@ const TwitterWriteWindow = ({
   lastName,
   token,
 }) => {
-  //   console.log(userPhoto);
-  //   const { token } = UseUserToken();
-  console.log(token);
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
-  const [userId, setUserId] = useState(token); //токен
-  console.log(token);
+  const [userId, setUserId] = useState(jwt(token).id);
 
   const handlePhotoInput = (event) => {
     const formData = new FormData();
