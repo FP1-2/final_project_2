@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.controller;
 
+
 import fs.socialnetworkapi.dto.EmailRequest;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
@@ -42,15 +43,15 @@ public class UserController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("followers") //підписчики
-  public ResponseEntity<List<UserDtoOut>> getFollowers() {
-    List<UserDtoOut> followers = userService.getFollowers();
+  @GetMapping("followers/{user_id}") //підписчики
+  public ResponseEntity<List<UserDtoOut>> getFollowers(@PathVariable(value = "user_id") Long userId) {
+    List<UserDtoOut> followers = userService.getFollowers(userId);
     return ResponseEntity.ok(followers);
   }
 
-  @GetMapping("followings") //підписки
-  public ResponseEntity<List<UserDtoOut>> getFollowings() {
-    List<UserDtoOut> followings = userService.getFollowings();
+  @GetMapping("followings/{user_id}") //підписки
+  public ResponseEntity<List<UserDtoOut>> getFollowings(@PathVariable(value = "user_id") Long userId) {
+    List<UserDtoOut> followings = userService.getFollowings(userId);
     return ResponseEntity.ok(followings);
   }
 

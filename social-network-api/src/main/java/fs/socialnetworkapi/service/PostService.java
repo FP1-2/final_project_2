@@ -168,46 +168,17 @@ public class PostService {
     List<Post> listOriginalPosts = postRepo.findByOriginalPostIn(allPosts);
     List<Like> likes = likeService.findByPostIn(allPosts);
 
-    Map<Long, Long> postLikesCountMap = likes.stream()
-            .collect(Collectors.groupingBy(
-              like -> like.getPost().getId(),
-              Collectors.counting()
-            ));
+    Map<Long, Long> postLikesCountMap = getPostLikesCountMap(likes);
 
-    Map<Long, Long> postCommentCountMap = listOriginalPosts.stream()
-            .filter(comment -> comment.getTypePost().equals(TypePost.COMMENT))
-            .collect(Collectors.groupingBy(
-              comment -> comment.getOriginalPost().getId(),
-              Collectors.counting()));
+    Map<Long, Long> postCommentCountMap = getPostCommentCountMap(listOriginalPosts);
 
-    Map<Long, Long> postRepostCountMap = listOriginalPosts.stream()
-            .filter(repost -> repost.getTypePost().equals(TypePost.REPOST))
-            .collect(Collectors.groupingBy(
-              repost -> repost.getOriginalPost().getId(),
-              Collectors.counting()));
+    Map<Long, Long> postRepostCountMap = getPostRepostCountMap(listOriginalPosts);
 
-    Map<Long, Boolean> userLikesMap = likes.stream()
-            .filter(like -> like.getUser().equals(user))
-            .collect(Collectors.toMap(
-              like -> like.getPost().getId(),
-              like -> true
-            ));
+    Map<Long, Boolean> userLikesMap = getUserLikesStatusMap(likes, user);
 
-    Map<Long, Boolean> userCommentsMap = listOriginalPosts.stream()
-            .filter(p -> p.getUser().equals(user)
-              && p.getTypePost().equals(TypePost.COMMENT))
-            .collect(Collectors.toMap(
-              p -> p.getOriginalPost().getId(),
-              p -> true
-            ));
+    Map<Long, Boolean> userCommentsMap = getUserCommentsStatusMap(listOriginalPosts, user);
 
-    Map<Long, Boolean> userRepostsMap = listOriginalPosts.stream()
-            .filter(p -> p.getUser().equals(user)
-                    && p.getTypePost().equals(TypePost.REPOST))
-            .collect(Collectors.toMap(
-              p -> p.getOriginalPost().getId(),
-              p -> true
-            ));
+    Map<Long, Boolean> userRepostsMap = getUserRepostsStatusMap(listOriginalPosts, user);
 
     return allPosts
             .stream()
@@ -221,5 +192,62 @@ public class PostService {
               postDtoOut.setHasMyRepost(userRepostsMap.getOrDefault(postDtoOut.getId(),false));
             })
             .toList();
+  }
+
+  private Map<Long, Boolean> getUserRepostsStatusMap(List<Post> listOriginalPosts, User user) {
+    return listOriginalPosts
+            .stream()
+            .filter(p -> p.getUser().equals(user)
+                    && p.getTypePost().equals(TypePost.REPOST))
+            .collect(Collectors.toMap(
+                    p -> p.getOriginalPost().getId(),
+                    p -> true
+            ));
+  }
+
+  private Map<Long, Boolean> getUserCommentsStatusMap(List<Post> listOriginalPosts, User user) {
+    return listOriginalPosts
+            .stream()
+            .filter(p -> p.getUser().equals(user)
+                    && p.getTypePost().equals(TypePost.COMMENT))
+            .collect(Collectors.toMap(
+                    p -> p.getOriginalPost().getId(),
+                    p -> true
+            ));
+  }
+
+  private Map<Long, Boolean> getUserLikesStatusMap(List<Like> likes, User user) {
+    return likes.stream()
+            .filter(like -> like.getUser().equals(user))
+            .collect(Collectors.toMap(
+                    like -> like.getPost().getId(),
+                    like -> true
+            ));
+  }
+
+  private Map<Long, Long> getPostRepostCountMap(List<Post> listOriginalPosts) {
+    return listOriginalPosts
+            .stream()
+            .filter(repost -> repost.getTypePost().equals(TypePost.REPOST))
+            .collect(Collectors.groupingBy(
+                    repost -> repost.getOriginalPost().getId(),
+                    Collectors.counting()));
+  }
+
+  private Map<Long, Long> getPostCommentCountMap(List<Post> listOriginalPosts) {
+    return listOriginalPosts
+            .stream()
+            .filter(comment -> comment.getTypePost().equals(TypePost.COMMENT))
+            .collect(Collectors.groupingBy(
+                    comment -> comment.getOriginalPost().getId(),
+                    Collectors.counting()));
+  }
+
+  private Map<Long, Long> getPostLikesCountMap(List<Like> likes) {
+    return likes
+            .stream()
+            .collect(Collectors.groupingBy(
+                    like -> like.getPost().getId(),
+                    Collectors.counting()));
   }
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,11 +61,11 @@ class UserControllerTest {
     Long userId = 2L;
 
     // Act
-    ResponseEntity<?> responseEntity = userController.subscribe(currentUserId, userId);
+    ResponseEntity<?> responseEntity = userController.subscribe(userId);
 
     // Assert
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    verify(userService, times(1)).subscribe(currentUserId, userId);
+    verify(userService, times(1)).subscribe(userId);
   }
 
   @Test
@@ -74,11 +75,11 @@ class UserControllerTest {
     Long userId = 2L;
 
     // Act
-    ResponseEntity<?> responseEntity = userController.unsubscribe(currentUserId, userId);
+    ResponseEntity<?> responseEntity = userController.unsubscribe(userId);
 
     // Assert
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    verify(userService, times(1)).unsubscribe(currentUserId, userId);
+    verify(userService, times(1)).unsubscribe(userId);
   }
 
   @Test
