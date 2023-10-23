@@ -74,10 +74,10 @@ public class PostService {
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
     PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-    return postRepo.findByUserInAndTypePost(users, TypePost.POST, pageRequest)
-            .stream()
-            .map(post -> mapper.map(post, PostDtoOut.class))
-            .toList();
+    List<Post> allPosts = postRepo.findByUserInAndTypePost(users, TypePost.POST, pageRequest).stream().toList();
+
+    return mapListPostToListPostDtoOut(allPosts);
+
   }
 
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
