@@ -31,7 +31,7 @@ import { ReactComponent as Logo } from '../../logo.svg'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { MIN_WIDTH } from './../../constants'
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
 export default function PermanentDrawerLeft({ pageName, children }) {
 	const isLoggedIn = useSelector(state => state.user.isAuthenticated)

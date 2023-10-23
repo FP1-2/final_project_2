@@ -14,27 +14,27 @@ import { useDispatch } from 'react-redux'
 import { login } from './../../redux/slices/userSlice'
 
 const theme = createTheme({
-	// custom theme
-	typography: {
-		h3: {
-			fontSize: '2.5rem',
-			fontWeight: 700,
-		},
-	},
-})
+  // custom theme
+  typography: {
+    h3: {
+      fontSize: "2.5rem",
+      fontWeight: 700,
+    },
+  },
+});
 const validationSchema = Yup.object({
-	email: Yup.string()
-		.email('invalid email address')
-		.required('Email is required'),
-	password: Yup.string()
-		.required('Password is required')
-		.min(6, 'Password is too short'),
-})
+  email: Yup.string()
+    .email("invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password is too short"),
+});
 
 const initialValues = {
-	email: '',
-	password: '',
-}
+  email: "",
+  password: "",
+};
 
 const LoginPage = () => {
 	const { token, saveToken, removeToken } = useUserToken()
@@ -152,12 +152,12 @@ const LoginPage = () => {
 					>
 						<LinkText text='Forgot password?' link='/resetPassword' />
 
-						<LinkText text='Sign up to Twitter' />
-					</Box>
-				</Box>
-			</Box>
-		</ThemeProvider>
-	)
-}
+            <LinkText text="Sign up to Twitter" />
+          </Box>
+        </Box>
+      </Box>
+    </ThemeProvider>
+  );
+};
 
-export default LoginPage
+export default LoginPage;

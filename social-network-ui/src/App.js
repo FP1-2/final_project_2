@@ -1,3 +1,4 @@
+
 import AppRoutes from './AppRoutes'
 import React, { useEffect } from 'react'
 import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
@@ -56,6 +57,7 @@ function App() {
 			)}
 		</>
 	)
+
 }
 
-export default App
+export default App;
