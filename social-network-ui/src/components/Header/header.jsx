@@ -28,13 +28,15 @@ import PropTypes from 'prop-types'
 import { setIsLogin } from '../../redux/slices/authSlice'
 import deleteAllCookies from '../../utils/deleteAllCookies'
 import { ReactComponent as Logo } from '../../logo.svg'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { MIN_WIDTH } from './../../constants'
+// import useMediaQuery from '@mui/material/useMediaQuery'
+// import { MIN_WIDTH } from './../../constants'
+import useScreenSize from '../../hooks/useScreenSize'
 
 const drawerWidth = 240
 
 export default function PermanentDrawerLeft ({ pageName, children }) {
   const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
+  const screenSize = useScreenSize();
   let links = []
   isLoggedIn
     ? (links = [
@@ -54,9 +56,10 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
     dispatch(setIsLogin(!isLoggedIn))
   }
 
-  const matches = useMediaQuery(MIN_WIDTH)
+  // const matches = useMediaQuery(MIN_WIDTH)
+  console.log(screenSize);
 
-  if (matches) {
+  if (screenSize !== 'mobile') {
     return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
