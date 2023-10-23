@@ -20,6 +20,7 @@ import Avatar from '@mui/material/Avatar'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
 
 const theme = createTheme({
 	typography: {
@@ -55,6 +56,9 @@ const ProfilePage = () => {
 	const params = useParams()
 	const localUserId = useSelector(state => state.user?.userId)
 	const [user, setUser] = useState(null)
+	const [notEqual, setNotEqual] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+
 	const navigate = useNavigate()
 
 	let userBirthdayData = null
@@ -63,11 +67,24 @@ const ProfilePage = () => {
 	useEffect(() => {
 		if (token) {
 			;(async () => {
+				setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
 				setUser(userData)
+				setIsLoading(false)
 			})()
 		}
-	}, [])
+		if (Number(localUserId) !== Number(params.userId)) {
+			console.log('true')
+			console.log(localUserId)
+			console.log(params.userId)
+			setNotEqual(false)
+		} else {
+			console.log('false')
+			console.log(Number(localUserId))
+			console.log(Number(params.userId))
+			setNotEqual(true)
+		}
+	}, [params.userId])
 
 	if (user) {
 		userBirthdayData = `Born ${format(new Date(user.birthday), 'MMMM d, yyyy')}`
@@ -79,9 +96,12 @@ const ProfilePage = () => {
 	}
 
 	const goBackFunc = () => {
-		if (localUserId !== params.userId) {
+		if (!notEqual) {
 			navigate(-1)
 		}
+	}
+	if (isLoading) {
+		return <ProfilePageSkeleton />
 	}
 	return (
 		<ThemeProvider theme={theme}>
@@ -93,7 +113,7 @@ const ProfilePage = () => {
 							width: '100%',
 						}}
 					>
-						{localUserId !== params.userId && (
+						{!notEqual && (
 							<Box
 								sx={{
 									display: 'flex',
@@ -217,6 +237,7 @@ const ProfilePage = () => {
 										textTransform: 'none',
 										color: 'black',
 									}}
+									onClick={() => navigate('/profile/50')}
 								>
 									<Typography sx={{ fontSize: '0.9rem' }}>
 										Edit Profile
