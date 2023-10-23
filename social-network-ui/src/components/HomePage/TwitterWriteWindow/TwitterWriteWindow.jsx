@@ -78,7 +78,7 @@ const TwitterWriteWindow = ({
 
           {photo && (
             <Image
-              style={{ width: 360, height: 300 }}
+              style={{ width: 360, height: 300, objectFit: "cover" }}
               cloudName="dl4ihoods"
               publicId={photo}
             ></Image>
