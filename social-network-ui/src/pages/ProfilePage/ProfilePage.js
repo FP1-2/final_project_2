@@ -17,6 +17,9 @@ import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
 import getUserData from '../../api/getUserInfo'
 import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
 const theme = createTheme({
 	typography: {
@@ -50,9 +53,13 @@ const typographyInfoUser = {
 const ProfilePage = () => {
 	const { token } = useUserToken()
 	const params = useParams()
+	const localUserId = useSelector(state => state.user?.userId)
 	const [user, setUser] = useState(null)
+	const navigate = useNavigate()
+
 	let userBirthdayData = null
 	let userJoinedData = null
+
 	useEffect(() => {
 		if (token) {
 			;(async () => {
@@ -61,19 +68,7 @@ const ProfilePage = () => {
 			})()
 		}
 	}, [])
-	// useEffect(() => {
-	// 	if (user) {
-	// 		userBirthdayData = `Born ${format(
-	// 			new Date(user.birthday),
-	// 			'MMMM d, yyyy'
-	// 		)}`
-	// 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
-	// 			month: 'short',
-	// 		}).format(new Date(user.createdDate))} ${new Date(
-	// 			user.createdDate
-	// 		).getFullYear()}`
-	// 	}
-	// }, [user])
+
 	if (user) {
 		userBirthdayData = `Born ${format(new Date(user.birthday), 'MMMM d, yyyy')}`
 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
@@ -81,6 +76,12 @@ const ProfilePage = () => {
 		}).format(new Date(user.createdDate))} ${new Date(
 			user.createdDate
 		).getFullYear()}`
+	}
+
+	const goBackFunc = () => {
+		if (localUserId !== params.userId) {
+			navigate(-1)
+		}
 	}
 	return (
 		<ThemeProvider theme={theme}>
@@ -92,6 +93,54 @@ const ProfilePage = () => {
 							width: '100%',
 						}}
 					>
+						{localUserId !== params.userId && (
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: '1.5rem',
+									width: '100%',
+									paddingX: '1.5rem',
+									height: '4.5rem',
+									bgcolor: 'white',
+								}}
+							>
+								<Box>
+									<KeyboardBackspaceIcon
+										sx={{
+											fontSize: '28px',
+										}}
+										onClick={goBackFunc}
+									/>
+								</Box>
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: '0.3rem',
+									}}
+								>
+									<Typography
+										sx={{
+											fontWeight: 700,
+											fontSize: '1.1rem',
+										}}
+										variant='p'
+									>
+										{user.firstName}
+									</Typography>
+									<Typography
+										sx={{
+											fontSize: '0.95rem',
+											opacity: 0.6,
+										}}
+										variant='p'
+									>
+										{user.userTweetCount} Tweets
+									</Typography>
+								</Box>
+							</Box>
+						)}
 						<Box
 							sx={{
 								display: 'flex',

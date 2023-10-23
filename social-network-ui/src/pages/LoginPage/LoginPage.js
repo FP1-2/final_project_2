@@ -10,6 +10,8 @@ import LinkText from '../../components/LinkText/LinkText'
 import { postLoginData } from '../../api/authApi'
 import useUserToken from '../../hooks/useUserToken'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { login } from './../../redux/slices/userSlice'
 
 const theme = createTheme({
 	// custom theme
@@ -37,6 +39,7 @@ const initialValues = {
 const LoginPage = () => {
 	const { token, saveToken, removeToken } = useUserToken()
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	const onSubmit = (values, { resetForm }) => {
 		// submit handler
@@ -47,6 +50,7 @@ const LoginPage = () => {
 				if (data.error === null) {
 					removeToken()
 					saveToken(data.token)
+					dispatch(login(data.id))
 					resetForm()
 					navigate(`/profile/${data.id}`)
 				}
