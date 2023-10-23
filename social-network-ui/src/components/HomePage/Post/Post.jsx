@@ -37,7 +37,13 @@ const Post = ({ tweet }) => {
         <div className={styles.body__main}>
           <p className={styles.main__twitte}>{tweet.description}</p>
           {tweet.photo && (
-            <img src={tweet.photo} alt="" width={350} height={250} />
+            <img
+              className={styles.main__photo}
+              src={tweet.photo}
+              alt=""
+              width={350}
+              height={250}
+            />
           )}
         </div>
         <div className={styles.body__footer}>
