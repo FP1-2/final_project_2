@@ -5,7 +5,8 @@ import './FavPage.scss'
 
 const FavPage = () => {
   return (
-    <Header pageName='Favourites'> <Favourites/> </Header>
+    // <Header pageName='Favourites'> <Favourites/> </Header>
+    <Favourites/>
   )
 }
 

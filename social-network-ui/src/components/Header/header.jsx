@@ -25,17 +25,17 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import LoginIcon from '@mui/icons-material/Login'
 import styles from './header.module.scss'
 import PropTypes from 'prop-types'
-import { setIsLogin } from '../../redux/slices/authSlice'
+import { setIsLogin } from '../../redux/slices/userSlice'
 import deleteAllCookies from '../../utils/deleteAllCookies'
 import { ReactComponent as Logo } from '../../logo.svg'
-// import useMediaQuery from '@mui/material/useMediaQuery'
-// import { MIN_WIDTH } from './../../constants'
 import useScreenSize from '../../hooks/useScreenSize'
 import useIsAuthenticated from './../../hooks/useIsAuthenticated';
 
 const drawerWidth = 240
 
 export default function PermanentDrawerLeft({ pageName, children }) {
+  const isLoggedIn = useIsAuthenticated();
+  const screenSize = useScreenSize();
   let links = [];
   isLoggedIn
     ? (links = [
@@ -54,9 +54,6 @@ export default function PermanentDrawerLeft({ pageName, children }) {
 		isLoggedIn && deleteAllCookies()
 		dispatch(setIsLogin(!isLoggedIn))
 	}
-
-  const isLoggedIn = useIsAuthenticated();
-  const screenSize = useScreenSize();
 
   if (screenSize !== 'mobile') {
     return (

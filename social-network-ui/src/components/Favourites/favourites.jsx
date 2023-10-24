@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import styles from './favourites.module.scss'
 import Post from '../Post/post'
-import { useSelector } from 'react-redux'
 import UseUserToken from '../../hooks/useUserToken'
 import getLikedPosts from '../../api/getLikedPosts'
+import useIsAuthenticated from '../../hooks/useIsAuthenticated'
         
 function Favourites() {
-    const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
+    const isLoggedIn = useIsAuthenticated();
     const [favourites, setFavourites] = useState([])
     const [error, setError] = useState(null);
     const { token } = UseUserToken()
