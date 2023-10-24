@@ -44,7 +44,9 @@ const style = {
 	},
 	'@media (max-width: 600px)': {
 		width: '100%',
-		minHeight: '100vh',
+		height: '100vh',
+		pb: 0,
+		pt: 2,
 	},
 }
 
@@ -97,19 +99,7 @@ const ModalRegisterWindow = () => {
 				overflow: 'scroll',
 			}}
 		>
-			<Box
-				ref={modalHeight}
-				sx={[
-					style,
-					{
-						pt: heightModalBelow
-							? heightModalCountBelow < 600
-								? '15rem'
-								: '10rem'
-							: '',
-					},
-				]}
-			>
+			<Box ref={modalHeight} sx={[style]}>
 				<Box
 					sx={{
 						position: 'relative',

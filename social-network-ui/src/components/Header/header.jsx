@@ -19,7 +19,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import SearchIcon from '@mui/icons-material/Search'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import PermIdentityIcon from '@mui/icons-material/PermIdentity'
 import LogoutIcon from '@mui/icons-material/Logout'
 import LoginIcon from '@mui/icons-material/Login'
@@ -33,7 +33,7 @@ import { ReactComponent as Logo } from '../../logo.svg'
 import useScreenSize from '../../hooks/useScreenSize'
 import useIsAuthenticated from './../../hooks/useIsAuthenticated';
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 export default function PermanentDrawerLeft({ pageName, children }) {
   let links = [];
@@ -48,12 +48,12 @@ export default function PermanentDrawerLeft({ pageName, children }) {
       ])
     : (links = ["home", "explore"]);
 
-  const dispatch = useDispatch();
+	const dispatch = useDispatch()
 
-  function toggleLogin() {
-    isLoggedIn && deleteAllCookies();
-    dispatch(setIsLogin(!isLoggedIn));
-  }
+	function toggleLogin() {
+		isLoggedIn && deleteAllCookies()
+		dispatch(setIsLogin(!isLoggedIn))
+	}
 
   const isLoggedIn = useIsAuthenticated();
   const screenSize = useScreenSize();
@@ -256,6 +256,6 @@ export default function PermanentDrawerLeft({ pageName, children }) {
 }
 
 PermanentDrawerLeft.propTypes = {
-  pageName: PropTypes.string,
-  children: PropTypes.node,
-};
+	pageName: PropTypes.string,
+	children: PropTypes.node,
+}
