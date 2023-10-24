@@ -86,5 +86,11 @@ public class PostController {
     return ResponseEntity.ok(post);
   }
 
+  @GetMapping("post-user-likes")
+  public ResponseEntity<List<PostDtoOut>> getPostByUserLikes() {
+    List<PostDtoOut> posts = postService.getPostByUserLikes();
+    return ResponseEntity.ok(posts);
+  }
+
 
 }
