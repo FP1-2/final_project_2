@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.advice;
 
+import fs.socialnetworkapi.exception.ChatNotFoundException;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,16 @@ public class ApplicationExceptionHandler {
   @ExceptionHandler(UserNotFoundException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public Map<String, Object> handelBusinessEx(UserNotFoundException ex) {
+
+    Map<String, Object> errorMap = new HashMap<>();
+
+    errorMap.put("errorMessage", ex.getMessage());
+    return errorMap;
+  }
+
+  @ExceptionHandler(ChatNotFoundException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, Object> handelBusinessEx(ChatNotFoundException ex) {
 
     Map<String, Object> errorMap = new HashMap<>();
 

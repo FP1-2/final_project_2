@@ -15,23 +15,23 @@ const AppRoutes = () => {
 			<Route path='/' element={<AuthPage />} />
 			<Route path='/home' element={<HomePage />} />
 			<Route path='/explore' element={<HomePage />} />
-			;<Route path='/favourites' element={<FavPage />} />
+			<Route path='/favourites' element={<FavPage />} />
 
 
-			{/* Auth Routes */}
-			<Route path='/signIn' element={<LoginPage />} />
-			<Route path='/resetPassword' element={<ResetPasswordPage />} />
-			<Route
-				path='/resetPassword/confirm'
-				element={<ResetPasswordConfirmPage />}
-			/>
+      {/* Auth Routes */}
+      <Route path="/signIn" element={<LoginPage />} />
+      <Route path="/resetPassword" element={<ResetPasswordPage />} />
+      <Route
+        path="/resetPassword/confirm"
+        element={<ResetPasswordConfirmPage />}
+      />
 
-			{/* Profile Routes */}
-			<Route path='/profile/:userId' element={<ProfilePage />} />
-			{/* Error Path */}
-			<Route path='*' element={<h1>error</h1>} />
-		</Routes>
-	)
-}
+      {/* Profile Routes */}
+      <Route path="/profile/:userId" element={<ProfilePage />} />
+      {/* Error Path */}
+      <Route path="*" element={<h1>error</h1>} />
+    </Routes>
+  );
+};
 
-export default AppRoutes
+export default AppRoutes;

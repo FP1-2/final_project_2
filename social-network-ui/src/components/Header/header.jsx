@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
@@ -33,87 +33,89 @@ import { ReactComponent as Logo } from '../../logo.svg'
 import useScreenSize from '../../hooks/useScreenSize'
 import useIsAuthenticated from './../../hooks/useIsAuthenticated';
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
-export default function PermanentDrawerLeft ({ pageName, children }) {
-  const isLoggedIn = useIsAuthenticated();
-  const screenSize = useScreenSize();
-  let links = []
+export default function PermanentDrawerLeft({ pageName, children }) {
+  let links = [];
   isLoggedIn
     ? (links = [
-        'home',
-        'explore',
-        'notifications',
-        'messages',
-        'favourites',
-        'profile'
+        "home",
+        "explore",
+        "notifications",
+        "messages",
+        "favourites",
+        "profile",
       ])
-    : (links = ['home', 'explore'])
+    : (links = ["home", "explore"]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  function toggleLogin () {
-    isLoggedIn && deleteAllCookies()
-    dispatch(setIsLogin(!isLoggedIn))
+  function toggleLogin() {
+    isLoggedIn && deleteAllCookies();
+    dispatch(setIsLogin(!isLoggedIn));
   }
 
-  // const matches = useMediaQuery(MIN_WIDTH)
-  console.log(screenSize);
+  const isLoggedIn = useIsAuthenticated();
+  const screenSize = useScreenSize();
 
   if (screenSize !== 'mobile') {
     return (
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        
+
         <Drawer
           sx={{
             width: drawerWidth,
             flexShrink: 0,
-            '& .MuiDrawer-paper': {
+            "& .MuiDrawer-paper": {
               width: drawerWidth,
               // width: '100%',
-              boxSizing: 'border-box'
-            }
+              boxSizing: "border-box",
+            },
           }}
-          variant='permanent'
-          anchor='left'
+          variant="permanent"
+          anchor="left"
         >
-          <Toolbar>
-            {' '}
-            
-          </Toolbar>
+          <Toolbar> </Toolbar>
           <AppBar
-          position='fixed'
-          sx={{
-            // width: `calc(100% - ${drawerWidth}px)`,
-            // ml: `${drawerWidth}px`
-          }}
-        >
+            position="fixed"
+            sx={
+              {
+                // width: `calc(100% - ${drawerWidth}px)`,
+                // ml: `${drawerWidth}px`
+              }
+            }
+          >
             <Toolbar>
-              <Link to='/home' className={styles.link}>
-              {' '}
-              <div className={styles.logo}>
-                <Logo height='3rem' color='white' />
-              </div>
-            </Link>
-            <Typography sx={{ml: '24px'}} variant='h6' noWrap component='div'>
-              {pageName}
-            </Typography>
-          </Toolbar>
-        </AppBar>
+              <Link to="/home" className={styles.link}>
+                {""}
+                <div className={styles.logo}>
+                  <Logo height="3rem" color="white" />
+                </div>
+              </Link>
+              <Typography
+                sx={{ ml: "24px" }}
+                variant="h6"
+                noWrap
+                component="div"
+              >
+                {pageName}
+              </Typography>
+            </Toolbar>
+          </AppBar>
           <Divider />
           <List>
-            {links.map(text => (
-              <NavLink to={'/' + text} key={text} className={styles.navlink}>
+            {links.map((text) => (
+              <NavLink to={"/" + text} key={text} className={styles.navlink}>
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
-                      {text === 'home' && <HomeIcon />}
-                      {text === 'explore' && <SearchIcon />}
-                      {text === 'notifications' && <NotificationsNoneIcon />}
-                      {text === 'messages' && <MailOutlineIcon />}
-                      {text === 'favourites' && <FavoriteBorderIcon />}
-                      {text === 'profile' && <PermIdentityIcon />}
+                      {text === "home" && <HomeIcon />}
+                      {text === "explore" && <SearchIcon />}
+                      {text === "notifications" && <NotificationsNoneIcon />}
+                      {text === "messages" && <MailOutlineIcon />}
+                      {text === "favourites" && <FavoriteBorderIcon />}
+                      {text === "profile" && <PermIdentityIcon />}
                     </ListItemIcon>
                     {text}
                   </ListItemButton>
@@ -126,14 +128,14 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
             <Button
               onClick={() => toggleLogin()}
               sx={{
-                justifyContent: 'left',
-                mt: '5px',
-                width: '100%',
-                pl: '16px',
-                color: 'rgb(108, 101, 101)',
-                textTransform: 'none',
-                fontWeight: '700',
-                fontSize: '1rem'
+                justifyContent: "left",
+                mt: "5px",
+                width: "100%",
+                pl: "16px",
+                color: "rgb(108, 101, 101)",
+                textTransform: "none",
+                fontWeight: "700",
+                fontSize: "1rem",
               }}
             >
               <div className={styles.logoutIcon}>
@@ -145,13 +147,13 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
             <Button
               onClick={() => toggleLogin()}
               sx={{
-                justifyContent: 'left',
-                mt: '5px',
-                width: '100%',
-                pl: '16px',
-                textTransform: 'none',
-                fontWeight: '700',
-                fontSize: '1rem'
+                justifyContent: "left",
+                mt: "5px",
+                width: "100%",
+                pl: "16px",
+                textTransform: "none",
+                fontWeight: "700",
+                fontSize: "1rem",
               }}
             >
               <div className={styles.logoutIcon}>
@@ -169,22 +171,22 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
           <Toolbar />
         </Box>
       </Box>
-    )
+    );
   } else {
     return (
       <>
-        <AppBar position='static'>
-          <Container maxWidth='xl'>
+        <AppBar position="static">
+          <Container maxWidth="xl">
             <Toolbar disableGutters>
               <Box
                 sx={{
                   flexGrow: 1,
-                  display: 'flex',
-                  justifyContent: 'space-between'
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
-                <Link to='/home' className={styles.link}>
-                  <Logo height='40px' />
+                <Link to="/home" className={styles.link}>
+                  <Logo height="40px" />
                 </Link>
                 {isLoggedIn ? (
                   <Button onClick={() => toggleLogin()}>
@@ -210,36 +212,36 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
           {children}
         </Box>
         <AppBar
-          position='fixed'
-          color='primary'
-          sx={{ top: 'auto', bottom: 0 }}
+          position="fixed"
+          color="primary"
+          sx={{ top: "auto", bottom: 0 }}
         >
           <Toolbar>
             <div className={styles.toolbar}>
               <NavLink
-                to='/home'
+                to="/home"
                 style={({ isActive }) => ({
-                  color: isActive ? 'red' : 'white',
+                  color: isActive ? "red" : "white",
                 })}
               >
-                <IconButton color='inherit' aria-label='home'>
+                <IconButton color="inherit" aria-label="home">
                   <HomeIcon />
                 </IconButton>
               </NavLink>
-              <NavLink to='/explore'>
-                <IconButton color='inherit' aria-label='explore'>
+              <NavLink to="/explore">
+                <IconButton color="inherit" aria-label="explore">
                   <SearchIcon />
                 </IconButton>
               </NavLink>
               {isLoggedIn ? (
                 <>
-                  <NavLink to='/notifications'>
-                    <IconButton color='inherit' aria-label='notifications'>
+                  <NavLink to="/notifications">
+                    <IconButton color="inherit" aria-label="notifications">
                       <NotificationsNoneIcon />
                     </IconButton>
                   </NavLink>
-                  <NavLink to='/messages'>
-                    <IconButton color='inherit' aria-label='messages'>
+                  <NavLink to="/messages">
+                    <IconButton color="inherit" aria-label="messages">
                       <MailOutlineIcon />
                     </IconButton>
                   </NavLink>
@@ -249,11 +251,11 @@ export default function PermanentDrawerLeft ({ pageName, children }) {
           </Toolbar>
         </AppBar>
       </>
-    )
+    );
   }
 }
 
 PermanentDrawerLeft.propTypes = {
   pageName: PropTypes.string,
-  children: PropTypes.node
-}
+  children: PropTypes.node,
+};
