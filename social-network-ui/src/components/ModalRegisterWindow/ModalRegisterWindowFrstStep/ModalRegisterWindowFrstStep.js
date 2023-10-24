@@ -154,7 +154,6 @@ const ModalRegisterWindowFrstStep = ({
 		<Box
 			sx={{
 				'@media (max-width: 600px)': {
-					pb: 10,
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'center',
@@ -219,6 +218,9 @@ const ModalRegisterWindowFrstStep = ({
 						<Box
 							sx={{
 								marginBottom: '2rem',
+								'@media (max-width: 600px)': {
+									marginBottom: '1.5rem',
+								},
 							}}
 						>
 							<Typography
@@ -226,6 +228,9 @@ const ModalRegisterWindowFrstStep = ({
 								sx={{
 									fontWeight: '700',
 									marginBottom: '0.1rem',
+									'@media (max-width: 600px)': {
+										marginBottom: '0.3rem',
+									},
 								}}
 							>
 								Date of birth
@@ -234,6 +239,15 @@ const ModalRegisterWindowFrstStep = ({
 								variant='p'
 								sx={{
 									fontSize: '0.90rem',
+									'@media (max-width: 600px)': {
+										lineHeight: `1.6em`,
+										maxHeight: `130px`,
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+										display: '-webkit-box',
+										WebkitLineClamp: 4,
+										WebkitBoxOrient: 'vertical',
+									},
 								}}
 							>
 								Facilisi sem pulvinar velit nunc, gravida scelerisque amet nibh
