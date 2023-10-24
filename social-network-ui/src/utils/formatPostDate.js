@@ -12,7 +12,7 @@ function formatPostDate (dateString) {
   const hoursDiff = differenceInHours(now, postDate)
   const minutesDiff = differenceInMinutes(now, postDate)
   const secondsDiff = differenceInSeconds(now, postDate)
-  const formatedPostDate = format(postDate, 'dd MMM yyyy.')
+  const formatedPostDate = format(postDate, 'dd MMM. yyyy')
     
     switch (true) {
         case minutesDiff > 1440:
