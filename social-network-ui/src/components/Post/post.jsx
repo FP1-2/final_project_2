@@ -17,7 +17,7 @@ import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
 
-function Post({ post }) {
+function Post ({ post }) {
   const [isLiked, setIsLiked] = useState(post?.hasMyLike)
   const [likes, setLikes] = useState(post?.countLikes)
   const [isReposted, setIsReposted] = useState(post.hasMyRepost)
@@ -30,11 +30,12 @@ function Post({ post }) {
   async function like () {
     try {
       const response = await axios.post(
-        url + `/api/v1/likes/like/${post.id}`, {},
+        url + `/api/v1/likes/like/${post.id}`,
+        {},
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         }
       )
@@ -46,14 +47,20 @@ function Post({ post }) {
     }
   }
 
-    async function repost () {
+  async function repost () {
     try {
       const response = await axios.post(
-        url + `/api/v1/post/${post.id}/repost`, {},
+        url + `/api/v1/post/${post.id}/repost`,
+        {
+          id: 0,
+          userId: 0,
+          photo: 'string',
+          description: 'string'
+        },
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         }
       )
@@ -100,18 +107,26 @@ function Post({ post }) {
               }
             }}
           >
-            <Avatar
-              size='sm'
-              src={post.user.avatar}
-              sx={{
-                p: 0.5,
-                border: '2px solid',
-                borderColor: 'background.body'
-              }}
-            />
+            {post.user.avatar ? (
+              <Avatar
+                alt={`${post.user.firstName} ${post.user.lastName}`}
+                src={post.user.avatar}
+                sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
+              />
+            ) : (
+              <Avatar
+                sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
+              >
+                {post.user.firstName.charAt(0)}
+                {post.user.lastName.charAt(0)}
+              </Avatar>
+            )}
           </Box>
-          <Typography variant='h5'>
-            {post.user?.firstName} {post.user?.lastName}
+          <Typography
+            variant='h6'
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            {post.user.firstName} {post.user.lastName}
           </Typography>
           <Typography sx={{ display: 'flex', alignItems: 'center' }}>
             @{post.user.username}
@@ -127,9 +142,9 @@ function Post({ post }) {
       </CardContent>
       <CardContent>
         <Typography paragraph={true}>{post.description}</Typography>
-          <ImageListItem>
-            <img src={post.photo}></img>
-          </ImageListItem>
+        <ImageListItem>
+          <img src={post.photo}></img>
+        </ImageListItem>
         <CardActions>
           <Button>
             <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
@@ -153,8 +168,7 @@ function Post({ post }) {
             </Typography>
           </Button>
         </CardActions>
-        <Typography sx={{ color: 'red' }}> {error}
-            </Typography>
+        <Typography sx={{ color: 'red' }}> {error}</Typography>
       </CardContent>
     </Card>
   )

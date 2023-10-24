@@ -15,6 +15,7 @@ function Favourites() {
         async function getPosts() {
             try {
                 const data = await getLikedPosts(token);
+                console.log(data);
                 setFavourites(data);
             } catch (error) {
                 if (error.response) {
