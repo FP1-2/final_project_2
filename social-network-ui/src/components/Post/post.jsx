@@ -15,17 +15,17 @@ import ImageListItem from '@mui/material/ImageListItem'
 import Link from '@mui/material/Link'
 import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
+import formatPostDate from '../../utils/formatPostDate'
 
 function Post({ post }) {
-  // const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnbG9yeW9uODdAZ21haWwuY29tIiwicm9sZXMiOiJVU0VSIiwiaXNzIjoiZmluYWxwcm9qZWN0IiwiZXhwIjoxNzAxMjM3NzE5LCJpYXQiOjE2OTc2Mzc3MTksImVtYWlsIjoiZ2xvcnlvbjg3QGdtYWlsLmNvbSIsImp0aSI6IjUxIn0.ziP2FhBhq4ZRSwGoVT_tZcO7jhNoIQ7fozEPHWAGoZs"
   const [isLiked, setIsLiked] = useState(post?.hasMyLike)
   const [likes, setLikes] = useState(post?.countLikes)
   const [isReposted, setIsReposted] = useState(post.hasMyRepost)
   const [reposts, setReposts] = useState(post.countRepost)
   const [error, setError] = useState(null)
   const { token } = UseUserToken()
-  // const url = process.env.REACT_APP_SERVER_URL
-const url = 'http://twitterdanit.us-east-1.elasticbeanstalk.com'
+  const url = process.env.REACT_APP_SERVER_URL
+  const postDate = formatPostDate(post.createdDate)
 
   async function like () {
     try {
@@ -122,7 +122,7 @@ const url = 'http://twitterdanit.us-east-1.elasticbeanstalk.com'
           color='rgba(0, 0, 0, 0.87)'
           underline='hover'
         >
-          <Typography>{post.timeWhenWasPost}</Typography>
+          <Typography>{postDate}</Typography>
         </Link>
       </CardContent>
       <CardContent>

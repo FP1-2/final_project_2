@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-// const url = process.env.REACT_APP_SERVER_URL
-const url = 'http://twitterdanit.us-east-1.elasticbeanstalk.com'
+const url = process.env.REACT_APP_SERVER_URL
 
 const getLikedPosts = async (token) => {
     const { data } = await axios.get(
