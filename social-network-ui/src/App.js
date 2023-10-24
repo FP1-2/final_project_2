@@ -1,4 +1,3 @@
-
 import AppRoutes from './AppRoutes'
 import React, { useEffect } from 'react'
 import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
@@ -31,21 +30,52 @@ function App() {
 						minHeight: '100vh',
 					}}
 					container
-					spacing={1}
 				>
+					<Grid
+						sx={{
+							bgcolor: 'red',
+						}}
+						item
+						xs={0}
+						lg={2}
+					>
+						<Box></Box>
+					</Grid>
 					<Grid
 						sx={{
 							border: '1px solid black',
 							borderBottom: 'none',
+							bgcolor: 'green',
 						}}
+						item
 						xs={2}
+						md={3}
+						lg={2}
 					>
 						<PermanentDrawerLeft />
 					</Grid>
-					<Grid xs={8}>
+					<Grid item xs={8} md={6} lg={4}>
 						<AppRoutes />
 					</Grid>
-					<Grid xs={2}>
+					<Grid
+						sx={{
+							bgcolor: 'green',
+						}}
+						item
+						xs={2}
+						md={3}
+						lg={2}
+					>
+						<Box></Box>
+					</Grid>
+					<Grid
+						sx={{
+							bgcolor: 'red',
+						}}
+						item
+						xs={0}
+						lg={2}
+					>
 						<Box></Box>
 					</Grid>
 				</Grid>
@@ -57,7 +87,6 @@ function App() {
 			)}
 		</>
 	)
-
 }
 
-export default App;
+export default App

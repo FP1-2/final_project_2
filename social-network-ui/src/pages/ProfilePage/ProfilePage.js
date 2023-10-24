@@ -44,6 +44,7 @@ const infoBoxStyles = {
 	gap: '.2rem',
 	overflow: 'hidden',
 	opacity: 0.6,
+	verticalAlign: 'bottom',
 }
 const typographyInfoUser = {
 	textOverflow: 'ellipsis',
