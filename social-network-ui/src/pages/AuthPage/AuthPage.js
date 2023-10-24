@@ -149,7 +149,16 @@ const AuthPage = () => {
 						>
 							Happening now
 						</Typography>
-						<Typography variant='h3' noWrap={true}>
+						<Typography
+							sx={{
+								'@media (max-width: 600px)': {
+									margin: '0 auto',
+									mb: 2,
+								},
+							}}
+							variant='h3'
+							noWrap={true}
+						>
 							Join Twitter today
 						</Typography>
 						<Box
