@@ -283,7 +283,7 @@ public class PostServiceTest {
         when(mapper.map(post1, PostDtoOut.class)).thenReturn(postDto1);
         when(mapper.map(post2, PostDtoOut.class)).thenReturn(postDto2);
 
-        List<PostDtoOut> result = postService.getProfilePosts(page, size);
+        List<PostDtoOut> result = postService.getProfilePosts(userId, page, size);
 
         assertEquals(expectedPostDtoOutList, result);
     }

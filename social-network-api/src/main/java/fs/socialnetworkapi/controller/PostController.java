@@ -34,10 +34,11 @@ public class PostController {
     return ResponseEntity.ok(allPosts);
   }
 
-  @GetMapping("profile-posts")
-  public ResponseEntity<List<PostDtoOut>> getUserPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
+  @GetMapping("profile-posts/{user_id}")
+  public ResponseEntity<List<PostDtoOut>> getUserPosts(@RequestParam(value = "user_id") Long userId,
+                                                       @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-    List<PostDtoOut> allPosts = postService.getProfilePosts(page, size);
+    List<PostDtoOut> allPosts = postService.getProfilePosts(userId, page, size);
     return ResponseEntity.ok(allPosts);
   }
 

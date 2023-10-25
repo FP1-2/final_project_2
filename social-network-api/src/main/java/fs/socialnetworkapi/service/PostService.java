@@ -27,6 +27,7 @@ public class PostService {
   private final PostRepo postRepo;
   private final ModelMapper mapper;
   private final LikeService likeService;
+  private final UserService userService;
 
   private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -55,9 +56,9 @@ public class PostService {
 
   }
 
-  public List<PostDtoOut> getProfilePosts(Integer page, Integer size) {
+  public List<PostDtoOut> getProfilePosts(Long userId, Integer page, Integer size) {
 
-    User user = getUser();
+    User user = userService.findById(userId);
 
     PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 
