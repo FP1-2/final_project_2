@@ -30,12 +30,14 @@ import deleteAllCookies from '../../utils/deleteAllCookies'
 import { ReactComponent as Logo } from '../../logo.svg'
 import useScreenSize from '../../hooks/useScreenSize'
 import useIsAuthenticated from './../../hooks/useIsAuthenticated';
+import UseUserToken from '../../hooks/useUserToken'
 
 const drawerWidth = 240
 
 export default function PermanentDrawerLeft({ pageName, children }) {
   const isLoggedIn = useIsAuthenticated();
   const screenSize = useScreenSize();
+  const { removeToken } = UseUserToken();
   let links = [];
   isLoggedIn
     ? (links = [
@@ -53,7 +55,13 @@ export default function PermanentDrawerLeft({ pageName, children }) {
 	function toggleLogin() {
 		isLoggedIn && deleteAllCookies()
 		dispatch(setIsLogin(!isLoggedIn))
-	}
+  }
+  
+  function logOut() {
+    deleteAllCookies()
+    removeToken()
+    dispatch(setIsLogin(false))
+  }
 
   if (screenSize !== 'mobile') {
     return (
@@ -77,7 +85,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
           <AppBar
             position="fixed"
             sx={
-              {
+				{
                 // width: `calc(100% - ${drawerWidth}px)`,
                 // ml: `${drawerWidth}px`
               }
@@ -123,7 +131,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
           <Divider />
           {isLoggedIn ? (
             <Button
-              onClick={() => toggleLogin()}
+              onClick={() => logOut()}
               sx={{
                 justifyContent: "left",
                 mt: "5px",
@@ -142,7 +150,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
             </Button>
           ) : (
             <Button
-              onClick={() => toggleLogin()}
+              href='/signIn'
               sx={{
                 justifyContent: "left",
                 mt: "5px",
