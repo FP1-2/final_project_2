@@ -80,6 +80,18 @@ public class PostService {
 
   }
 
+  public List<PostDtoOut> getPostByUserLikes() {
+    List<Like> likeList = likeService.findByUserId();
+    return findByLikesIn(likeList);
+
+  }
+
+  public List<PostDtoOut> findByLikesIn(List<Like> likes) {
+    List<Post> allPosts = postRepo.findByLikesIn(likes);
+
+    return mapListPostToListPostDtoOut(allPosts);
+  }
+
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
 
     User user = getUser();
@@ -117,8 +129,10 @@ public class PostService {
     post.setUser(user);
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
+    postRepo.save(post);
+    //mapper.map(postRepo.save(post), PostDtoOut.class);
 
-    return mapper.map(postRepo.save(post), PostDtoOut.class);
+    return getPostById(originalPostId);
   }
 
   public PostDtoOut getPostById(Long postId) {

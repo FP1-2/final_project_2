@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.repos;
 
 
+import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.enums.TypePost;
@@ -26,5 +27,7 @@ public interface PostRepo extends JpaRepository<Post, Long> {
   Page<Post> findByOriginalPostAndTypePost(Post post, TypePost comment, PageRequest pageRequest);
 
   Page<Post> findByTypePost(TypePost post, PageRequest pageRequest);
+
+  List<Post> findByLikesIn(List<Like> likes);
 
 }

@@ -57,4 +57,11 @@ public class LikeService {
   public List<Like> findByPostIn(List<Post> posts) {
     return likeRepo.findByPostIn(posts);
   }
+
+  public List<Like> findByUserId() {
+    User user = getUser();
+    return likeRepo.findByUserId(user.getId())
+            .stream()
+            .toList();
+  }
 }
