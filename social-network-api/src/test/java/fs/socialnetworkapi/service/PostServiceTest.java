@@ -54,6 +54,9 @@ public class PostServiceTest {
     private ModelMapper mapper;
 
     @Mock
+    private UserService userService;
+
+    @Mock
     private LikeService likeService;
 
     @InjectMocks
@@ -282,8 +285,8 @@ public class PostServiceTest {
 
         when(mapper.map(post1, PostDtoOut.class)).thenReturn(postDto1);
         when(mapper.map(post2, PostDtoOut.class)).thenReturn(postDto2);
-
-        List<PostDtoOut> result = postService.getProfilePosts(page, size);
+        when(userService.findById(userId)).thenReturn(user1);
+        List<PostDtoOut> result = postService.getProfilePosts(userId, page, size);
 
         assertEquals(expectedPostDtoOutList, result);
     }

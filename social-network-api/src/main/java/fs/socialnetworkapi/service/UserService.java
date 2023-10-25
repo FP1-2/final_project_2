@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  private User findById(Long userId) {
+  public User findById(Long userId) {
     return userRepo.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
   }
