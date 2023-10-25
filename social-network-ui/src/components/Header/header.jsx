@@ -51,11 +51,6 @@ export default function PermanentDrawerLeft({ pageName, children }) {
     : (links = ["home", "explore"]);
 
 	const dispatch = useDispatch()
-
-	function toggleLogin() {
-		isLoggedIn && deleteAllCookies()
-		dispatch(setIsLogin(!isLoggedIn))
-  }
   
   function logOut() {
     deleteAllCookies()
