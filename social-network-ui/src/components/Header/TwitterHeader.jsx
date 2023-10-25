@@ -56,22 +56,52 @@ function TwitterHeader() {
 
       <List>
         <ListItem button sx={{ gap: "1rem" }} component={Link} to="/home">
-          <HomeIcon /> <ListItemText primary="Home" />
+          <HomeIcon
+            sx={{
+              strokeWidth: 1,
+            }}
+          />
+          <ListItemText primary="Home" />
         </ListItem>
         <ListItem button sx={{ gap: "1rem" }} component={Link} to="/explore">
-          <SearchIcon /> <ListItemText primary="Explore" />
+          <SearchIcon
+            sx={{
+              strokeWidth: 1,
+            }}
+          />
+          <ListItemText primary="Explore" />
         </ListItem>
         <ListItem button sx={{ gap: "1rem" }} component={Link} to="/explore">
-          <NotificationsNoneIcon /> <ListItemText primary="Notifications" />
+          <NotificationsNoneIcon
+            sx={{
+              strokeWidth: 1,
+            }}
+          />
+          <ListItemText primary="Notifications" />
         </ListItem>
         <ListItem button sx={{ gap: "1rem" }} component={Link} to="/explore">
-          <MailOutlineIcon /> <ListItemText primary="Messages" />
+          <MailOutlineIcon
+            sx={{
+              strokeWidth: 1,
+            }}
+          />
+          <ListItemText primary="Messages" />
         </ListItem>
         <ListItem button sx={{ gap: "1rem" }} component={Link} to="/favourites">
-          <FavoriteBorderIcon /> <ListItemText primary="Favourites" />
+          <FavoriteBorderIcon
+            sx={{
+              strokeWidth: 1,
+            }}
+          />
+          <ListItemText primary="Favourites" />
         </ListItem>
         <ListItem button sx={{ gap: "1rem" }} component={Link} to="/explore">
-          <PermIdentityIcon /> <ListItemText primary="Profile" />
+          <PermIdentityIcon
+            sx={{
+              strokeWidth: 1,
+            }}
+          />
+          <ListItemText primary="Profile" />
         </ListItem>
         <ListItem button sx={{ gap: "1rem" }} component={Link} to="/explore">
           <ListItemText primary="More" />
