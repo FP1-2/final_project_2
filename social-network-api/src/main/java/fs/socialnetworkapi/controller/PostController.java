@@ -35,7 +35,7 @@ public class PostController {
   }
 
   @GetMapping("profile-posts/{user_id}")
-  public ResponseEntity<List<PostDtoOut>> getUserPosts(@RequestParam(value = "user_id") Long userId,
+  public ResponseEntity<List<PostDtoOut>> getUserPosts(@PathVariable(value = "user_id") Long userId,
                                                        @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
     List<PostDtoOut> allPosts = postService.getProfilePosts(userId, page, size);
