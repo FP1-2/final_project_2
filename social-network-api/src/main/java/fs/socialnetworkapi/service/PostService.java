@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,10 +27,6 @@ public class PostService {
   private final ModelMapper mapper;
   private final LikeService likeService;
   private final UserService userService;
-
-  private User getUser() {
-    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-  }
 
   public PostDtoOut findById(Long postId) {
 
@@ -60,20 +55,30 @@ public class PostService {
 
     User user = userService.findById(userId);
 
-    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    PageRequest pageRequest = getPageRequest(page, size);
 
     List<Post> allPosts = postRepo.findByUser(user, pageRequest).stream().toList();
 
     return mapListPostToListPostDtoOut(allPosts);
   }
 
+  public List<PostDtoOut> getProfileType(Long userId, TypePost typePost,  Integer page, Integer size ) {
+    User user = userService.findById(userId);
+
+    PageRequest pageRequest = getPageRequest(page, size);
+
+    List<Post> allPosts = postRepo.findByUserAndTypePost(user, typePost, pageRequest).stream().toList();
+
+    return mapListPostToListPostDtoOut(allPosts);
+  }
+
   public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
 
-    User user = getUser();
+    User user = userService.getUser();
 
     Set<User> followings = user.getFollowings();
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
-    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    PageRequest pageRequest = getPageRequest(page, size);
 
     List<Post> allPosts = postRepo.findByUserInAndTypePost(users, TypePost.POST, pageRequest).stream().toList();
 
@@ -81,8 +86,8 @@ public class PostService {
 
   }
 
-  public List<PostDtoOut> getPostByUserLikes() {
-    List<Like> likeList = likeService.findByUserId();
+  public List<PostDtoOut> getPostByUserLikes(Long userId) {
+    List<Like> likeList = likeService.findByUserId(userId);
     return findByLikesIn(likeList);
 
   }
@@ -95,7 +100,7 @@ public class PostService {
 
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
 
-    User user = getUser();
+    User user = userService.getUser();
 
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
@@ -120,7 +125,7 @@ public class PostService {
 
   public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
 
-    User user = getUser();
+    User user = userService.getUser();
 
     Post originalPost = postRepo.findById(originalPostId)
             .orElseThrow(() -> new PostNotFoundException(
@@ -131,7 +136,6 @@ public class PostService {
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
     postRepo.save(post);
-    //mapper.map(postRepo.save(post), PostDtoOut.class);
 
     return getPostById(originalPostId);
   }
@@ -139,7 +143,7 @@ public class PostService {
   public PostDtoOut getPostById(Long postId) {
     Post post = postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
-    User user = getUser();
+    User user = userService.getUser();
 
     PostDtoOut postDtoOut = mapper.map(post, PostDtoOut.class);
 
@@ -176,9 +180,13 @@ public class PostService {
     return postDtoOut;
   }
 
+  private PageRequest getPageRequest(Integer page, Integer size) {
+    return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+  }
+
   private List<PostDtoOut> mapListPostToListPostDtoOut(List<Post> allPosts) {
 
-    User user = getUser();
+    User user = userService.getUser();
 
     List<Post> listOriginalPosts = postRepo.findByOriginalPostIn(allPosts);
     List<Like> likes = likeService.findByPostIn(allPosts);
