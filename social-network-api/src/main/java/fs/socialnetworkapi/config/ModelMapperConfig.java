@@ -1,8 +1,11 @@
 package fs.socialnetworkapi.config;
 
+import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.dto.post.OriginalPostDto;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
+import fs.socialnetworkapi.entity.Chat;
+import fs.socialnetworkapi.entity.Message;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.enums.TypePost;
@@ -30,6 +33,12 @@ public class ModelMapperConfig {
 
     modelMapper.createTypeMap(Post.class, OriginalPostDto.class);
 
+    //Message
+    Converter<Chat, Long> convertChatToChatId = (src) -> src.getSource().getId();
+
+    modelMapper.createTypeMap(Message.class, MessageDtoOut.class)
+            .addMappings(mapper -> mapper.using(convertChatToChatId)
+                    .map(Message::getChat, MessageDtoOut::setChatId));
 
     return modelMapper;
   }

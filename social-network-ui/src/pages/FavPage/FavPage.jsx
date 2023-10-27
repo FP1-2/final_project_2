@@ -1,12 +1,12 @@
 import React from 'react'
 import Header from '../../components/Header/header'
-// import Favourites from '../../components/Favourites/favourites'
+import Favourites from '../../components/Favourites/favourites'
+import './FavPage.scss'
 
 const FavPage = () => {
   return (
-    <Header pageName='Favourites'>
-      {/* <Favourites /> */}
-    </Header>
+    // <Header pageName='Favourites'> <Favourites/> </Header>
+    <Favourites/>
   )
 }
 
