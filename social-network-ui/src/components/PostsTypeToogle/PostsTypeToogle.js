@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import { Box } from '@mui/material'
 import PropTypes from 'prop-types'
 import PostsTypeVariant from './PostsTypeVariant/PostsTypeVariant'
+import { useEffect } from 'react'
 
-const postTypesArray = ['Tweets', 'Tweets & replies', 'Media', 'Likes']
+const postTypesArray = ['Tweets', 'Tweets & replies', 'Likes']
 
-const PostsTypeToogle = () => {
+const PostsTypeToogle = ({ setUserPosts }) => {
 	const [isChosen, setisChosen] = useState(0)
+	useEffect(() => {
+		setUserPosts(isChosen)
+	}, [isChosen])
 	return (
 		<Box
 			sx={{
@@ -27,6 +31,9 @@ const PostsTypeToogle = () => {
 			})}
 		</Box>
 	)
+}
+PostsTypeToogle.propTypes = {
+	setUserPosts: PropTypes.func.isRequired,
 }
 
 export default PostsTypeToogle

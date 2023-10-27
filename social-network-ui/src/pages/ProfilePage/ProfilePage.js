@@ -21,6 +21,12 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
+import getPostsById from '../../api/getPostsById'
+import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper'
+import CircularProgress from '@mui/material/CircularProgress'
+import ModalEdit from '../../components/ModalEdit/ModalEdit'
+import { useDispatch } from 'react-redux'
+import { openModal } from '../../redux/slices/modalEditSlice'
 
 const theme = createTheme({
 	typography: {
@@ -37,6 +43,12 @@ const theme = createTheme({
 		},
 	},
 })
+
+const objPosts = {
+	0: '/api/v1/profile-posts/',
+	1: '/api/v1/profile-posts/',
+	2: '/api/v1/profile-posts/',
+}
 
 const infoBoxStyles = {
 	display: 'flex',
@@ -55,12 +67,16 @@ const typographyInfoUser = {
 const ProfilePage = () => {
 	const { token } = useUserToken()
 	const params = useParams()
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
+
 	const localUserId = useSelector(state => state.user?.userId)
+
 	const [user, setUser] = useState(null)
 	const [notEqual, setNotEqual] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
-
-	const navigate = useNavigate()
+	const [isLoadingPosts, setIsLoadingPosts] = useState(false)
+	const [userPosts, setUserPosts] = useState([])
 
 	let userBirthdayData = null
 	let userJoinedData = null
@@ -75,15 +91,12 @@ const ProfilePage = () => {
 			})()
 		}
 		if (Number(localUserId) !== Number(params.userId)) {
-			console.log('true')
-			console.log(localUserId)
-			console.log(params.userId)
 			setNotEqual(false)
 		} else {
-			console.log('false')
-			console.log(Number(localUserId))
-			console.log(Number(params.userId))
 			setNotEqual(true)
+		}
+		if (!userPosts.length) {
+			loadNewPosts()
 		}
 	}, [params.userId])
 
@@ -96,6 +109,28 @@ const ProfilePage = () => {
 		).getFullYear()}`
 	}
 
+	const loadNewPosts = (btnNum = 0) => {
+		;(async () => {
+			try {
+				setIsLoadingPosts(true)
+				const { data } = await axios.get(
+					`${process.env.REACT_APP_SERVER_URL || ''}${objPosts[btnNum]}${
+						params.userId
+					}`,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				)
+				setUserPosts([...data])
+				setIsLoadingPosts(false)
+			} catch (error) {
+				throw error
+			}
+		})()
+	}
+
 	const goBackFunc = () => {
 		if (!notEqual) {
 			navigate(-1)
@@ -106,6 +141,7 @@ const ProfilePage = () => {
 	}
 	return (
 		<ThemeProvider theme={theme}>
+			{user && <ModalEdit user={user} />}
 			<Box>
 				{user && (
 					<Box
@@ -121,6 +157,7 @@ const ProfilePage = () => {
 									alignItems: 'center',
 									gap: '1.5rem',
 									width: '100%',
+									maxHeight: '10%',
 									paddingX: '1.5rem',
 									height: '4.5rem',
 									bgcolor: 'white',
@@ -167,7 +204,7 @@ const ProfilePage = () => {
 								display: 'flex',
 								justifyContent: 'center',
 								alignItems: 'center',
-								height: '45%',
+								height: !notEqual ? '35%' : '45%',
 								bgcolor: 'rgb(29, 161, 241)',
 							}}
 						>
@@ -228,22 +265,39 @@ const ProfilePage = () => {
 										/>
 									)}
 								</Box>
-								<Button
-									sx={{
-										marginTop: '1rem',
-										p: 1,
-										paddingX: '1.1rem',
-										border: '1px solid black',
-										borderRadius: '3rem',
-										textTransform: 'none',
-										color: 'black',
-									}}
-									onClick={() => navigate('/profile/50')}
-								>
-									<Typography sx={{ fontSize: '0.9rem' }}>
-										Edit Profile
-									</Typography>
-								</Button>
+								{notEqual && (
+									<Button
+										sx={{
+											marginTop: '1rem',
+											p: 1,
+											paddingX: '1.1rem',
+											border: '1px solid black',
+											borderRadius: '3rem',
+											textTransform: 'none',
+											color: 'black',
+										}}
+										onClick={() => dispatch(openModal())}
+									>
+										<Typography sx={{ fontSize: '0.9rem' }}>
+											Edit Profile
+										</Typography>
+									</Button>
+								)}
+								{!notEqual && (
+									<Button
+										sx={{
+											marginTop: '1rem',
+											p: 1,
+											paddingX: '1.1rem',
+											border: '1px solid black',
+											borderRadius: '3rem',
+											textTransform: 'none',
+											color: 'black',
+										}}
+									>
+										<Typography sx={{ fontSize: '0.9rem' }}>Follow</Typography>
+									</Button>
+								)}
 							</Box>
 							<Box
 								sx={{
@@ -348,8 +402,23 @@ const ProfilePage = () => {
 					</Box>
 				)}
 				<Box sx={{ paddingX: '1rem', borderBottom: '1px solid #C4C4C4' }}>
-					<PostsTypeToogle />
+					<PostsTypeToogle setUserPosts={loadNewPosts} />
 				</Box>
+				{isLoadingPosts ? (
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							width: '100%',
+							minHeight: '25vh',
+						}}
+					>
+						<CircularProgress size={80} />
+					</Box>
+				) : (
+					<PostWrapper tweets={userPosts} />
+				)}
 			</Box>
 		</ThemeProvider>
 	)

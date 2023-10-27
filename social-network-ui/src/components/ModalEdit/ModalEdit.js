@@ -1,0 +1,371 @@
+import React, { useState } from 'react'
+import { Button, Modal, Box, InputLabel, Avatar } from '@mui/material'
+import { Formik, Form, Field } from 'formik'
+import { closeModal } from '../../redux/slices/modalEditSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import CustomInput from '../CustomInput/CustomInput'
+import * as Yup from 'yup'
+import PropTypes from 'prop-types'
+import { Typography } from '@mui/material'
+import AvatarWithoutImg from '../AvatarWithoutImg/AvatarWithoutImg'
+import styled from '@emotion/styled'
+import axios from 'axios'
+import IconTwitter from '../IconTwitter/IconTwitter'
+import editUserProfile from '../../api/editUserProfile'
+import UseUserToken from '../../hooks/useUserToken'
+
+const validationSchema = Yup.object({
+	firstName: Yup.string().min(3, 'Please enter at least 3 characters'),
+	lastName: Yup.string().min(3, 'Please enter at least 3 characters'),
+	address: Yup.string().min(3, 'Please enter at least 3 characters'),
+	username: Yup.string().min(8, 'Please enter at least 8 characters'),
+	birthday: Yup.string().matches(
+		/^\d{4}-\d{2}-\d{2}$/,
+		'Please enter a correct date'
+	),
+})
+
+const VisuallyHiddenInput = styled('input')`
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	white-space: nowrap;
+	width: 1px;
+`
+
+const ModalEdit = ({ user }) => {
+	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
+	const dispatch = useDispatch()
+
+	const { token } = UseUserToken()
+
+	const [imageUrl, setImageUrl] = useState('') // image url
+	const [backgroundImageUrl, setBackgroundImageUrl] = useState('') // bg
+	const [error, setError] = useState('') // error
+
+	const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME // Cloudinary cloud name
+
+	const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Cloudinary upload preset
+
+	const handleImageUpload = async (event, type) => {
+		// image upload
+		const file = event.target.files[0]
+
+		if (!file) return
+
+		const formData = new FormData()
+		formData.append('file', file)
+		formData.append('upload_preset', uploadPreset)
+
+		try {
+			const response = await axios.post(
+				`https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+				formData
+			)
+
+			if (response.status === 200) {
+				const uploadedImageUrl = response.data.secure_url
+				if (type === 'avatar') {
+					console.log('321')
+
+					setImageUrl(uploadedImageUrl)
+				} else if (type === 'background') {
+					console.log('123')
+					setBackgroundImageUrl(uploadedImageUrl)
+				}
+				setError('')
+			} else {
+				setError('Something went wrong')
+			}
+		} catch (err) {
+			setError('Something went wrong')
+		}
+	}
+
+	return (
+		<Modal open={isOpen} onClose={() => dispatch(closeModal())}>
+			<Box
+				sx={{
+					position: 'absolute',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+					width: '70%',
+					bgcolor: 'white',
+					boxShadow: 24,
+					p: 2,
+					pt: 19,
+					top: '50%',
+					left: '50%',
+					transform: 'translate(-50%, -50%)',
+					maxHeight: '95vh',
+					overflowY: 'auto',
+					'@media (max-width: 600px)': {
+						width: '100%',
+						height: '100%',
+						maxHeight: '100vh',
+					},
+				}}
+			>
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						marginLeft: 'auto',
+					}}
+				>
+					<IconTwitter notLink={() => dispatch(closeModal())} />
+				</Box>
+
+				<Formik
+					initialValues={{
+						firstName: user.firstName,
+						lastName: user.lastName,
+						username: user.username,
+						address: user.address,
+						userLink: user.userLink || '',
+						birthday: user.birthday,
+					}}
+					onSubmit={async values => {
+						console.log(user.avatar)
+						const newValues = {
+							...values,
+							avatar: imageUrl || user.avatar,
+							bgProfileImage: backgroundImageUrl || user.bgProfileImage,
+						}
+
+						console.log(newValues)
+						const data = await editUserProfile(newValues, token)
+						console.log(data)
+					}}
+					validationSchema={validationSchema}
+				>
+					<Form>
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+									justifyContent: 'center',
+									width: '100%',
+									pt: 2,
+									borderRadius: '30px',
+									backgroundImage: backgroundImageUrl
+										? `url(${backgroundImageUrl})`
+										: 'none',
+									backgroundSize: 'cover',
+								}}
+							>
+								{!imageUrl && !user.avatar && (
+									<AvatarWithoutImg userName={user.firstName} />
+								)}
+								{(imageUrl || user.avatar) && (
+									<Avatar
+										sx={{
+											width: '6rem',
+											height: '6rem',
+											mb: 1,
+											border: '3px solid rgb(29, 161, 242)',
+										}}
+										src={imageUrl || user.avatar}
+									></Avatar>
+								)}
+								<Button
+									component='label'
+									variant='contained'
+									href='#file-upload'
+									sx={{
+										bgcolor: 'rgb(29, 161, 241)',
+										borderRadius: '2rem',
+										mb: 1,
+									}}
+								>
+									Update Avatar
+									<VisuallyHiddenInput
+										type='file'
+										onChange={e => handleImageUpload(e, 'avatar')}
+									/>
+								</Button>
+								<Button
+									component='label'
+									variant='contained'
+									href='#file-upload'
+									sx={{
+										bgcolor: 'rgb(29, 161, 241)',
+										borderRadius: '2rem',
+										mb: 4,
+									}}
+								>
+									Update Background Image
+									<VisuallyHiddenInput
+										type='file'
+										onChange={e => handleImageUpload(e, 'background')}
+									/>
+								</Button>
+							</Box>
+							<Box
+								sx={{
+									display: 'flex',
+									gap: 5,
+								}}
+							>
+								<Box>
+									<InputLabel
+										sx={{
+											p: 1,
+											cursor: 'pointer',
+										}}
+										htmlFor='firstName'
+									>
+										Your Name
+									</InputLabel>
+									<CustomInput type='text' id='firstName' name='firstName' />
+								</Box>
+								<Box sx={{}}>
+									<InputLabel
+										sx={{
+											p: 1,
+											cursor: 'pointer',
+										}}
+										htmlFor='lastName'
+									>
+										Your Surname
+									</InputLabel>
+									<CustomInput type='text' id='lastName' name='lastName' />
+								</Box>
+							</Box>
+							<Box
+								sx={{
+									width: '75%',
+								}}
+							>
+								<InputLabel
+									sx={{
+										p: 1,
+										cursor: 'pointer',
+									}}
+									htmlFor='username'
+								>
+									Your @Tag
+								</InputLabel>
+								<CustomInput type='text' id='username' name='username' />
+							</Box>
+							<Box
+								sx={{
+									display: 'flex',
+									gap: 5,
+								}}
+							>
+								<Box
+									sx={{
+										minWidth: '35%',
+									}}
+								>
+									<InputLabel
+										sx={{
+											p: 1,
+											cursor: 'pointer',
+										}}
+										htmlFor='address'
+									>
+										Your City
+									</InputLabel>
+									<CustomInput type='text' id='address' name='address' />
+								</Box>
+								<Box>
+									<InputLabel
+										sx={{
+											p: 1,
+											cursor: 'pointer',
+										}}
+										htmlFor='birthday'
+									>
+										Your Birthday{' '}
+										<Typography
+											variant='p'
+											sx={{
+												opacity: 0.3,
+												fontSize: 12,
+												textTransform: 'uppercase',
+												cursor: 'pointer',
+											}}
+										>
+											(yyyy-mm-dd)
+										</Typography>
+									</InputLabel>
+									<CustomInput type='text' id='birthday' name='birthday' />
+								</Box>
+							</Box>
+							<Box
+								sx={{
+									width: '75%',
+									textAlign: 'center',
+								}}
+							>
+								<InputLabel
+									sx={{
+										p: 1,
+										cursor: 'pointer',
+									}}
+									htmlFor='userLink'
+								>
+									Your Personal Site Link
+								</InputLabel>
+								<CustomInput type='text' id='userLink' name='userLink' />
+							</Box>
+						</Box>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								width: '100%',
+							}}
+						>
+							<Button
+								sx={{
+									width: '77%',
+									marginBottom: '1.3rem',
+									padding: '1.1rem 0',
+									borderRadius: '2rem',
+									fontSize: '1rem',
+									fontWeight: 700,
+									textTransform: 'none',
+									backgroundColor: '#1DA1F2',
+									color: 'white',
+									boxSizing: 'border-box',
+									':hover': {
+										color: '#1DA1F2',
+										backgroundColor: 'white',
+										border: '1px solid #1DA1F2',
+									},
+								}}
+								type='submit'
+							>
+								Save Updates
+							</Button>
+						</Box>
+					</Form>
+				</Formik>
+			</Box>
+		</Modal>
+	)
+}
+ModalEdit.propTypes = {
+	user: PropTypes.object.isRequired,
+}
+
+export default ModalEdit
