@@ -6,10 +6,11 @@ import { useEffect } from 'react'
 
 const postTypesArray = ['Tweets', 'Tweets & replies', 'Likes']
 
-const PostsTypeToogle = ({ setUserPosts }) => {
+const PostsTypeToogle = ({ setChoosenTypePost }) => {
 	const [isChosen, setisChosen] = useState(0)
+
 	useEffect(() => {
-		setUserPosts(isChosen)
+		setChoosenTypePost(isChosen)
 	}, [isChosen])
 	return (
 		<Box
@@ -33,7 +34,7 @@ const PostsTypeToogle = ({ setUserPosts }) => {
 	)
 }
 PostsTypeToogle.propTypes = {
-	setUserPosts: PropTypes.func.isRequired,
+	setChoosenTypePost: PropTypes.func.isRequired,
 }
 
 export default PostsTypeToogle

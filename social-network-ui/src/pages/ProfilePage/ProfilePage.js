@@ -46,8 +46,8 @@ const theme = createTheme({
 
 const objPosts = {
 	0: '/api/v1/profile-posts/',
-	1: '/api/v1/profile-posts/',
-	2: '/api/v1/profile-posts/',
+	1: '/api/v1/profile-reposts/',
+	2: '/api/v1/post-user-likes/',
 }
 
 const infoBoxStyles = {
@@ -77,6 +77,7 @@ const ProfilePage = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [isLoadingPosts, setIsLoadingPosts] = useState(false)
 	const [userPosts, setUserPosts] = useState([])
+	const [choosenTypePost, setChoosenTypePost] = useState(0)
 
 	let userBirthdayData = null
 	let userJoinedData = null
@@ -95,10 +96,11 @@ const ProfilePage = () => {
 		} else {
 			setNotEqual(true)
 		}
-		if (!userPosts.length) {
-			loadNewPosts()
-		}
 	}, [params.userId])
+
+	useEffect(() => {
+		loadNewPosts(choosenTypePost)
+	}, [choosenTypePost])
 
 	if (user) {
 		userBirthdayData = `Born ${format(new Date(user.birthday), 'MMMM d, yyyy')}`
@@ -123,6 +125,7 @@ const ProfilePage = () => {
 						},
 					}
 				)
+				console.log(data)
 				setUserPosts([...data])
 				setIsLoadingPosts(false)
 			} catch (error) {
@@ -402,11 +405,12 @@ const ProfilePage = () => {
 					</Box>
 				)}
 				<Box sx={{ paddingX: '1rem', borderBottom: '1px solid #C4C4C4' }}>
-					<PostsTypeToogle setUserPosts={loadNewPosts} />
+					<PostsTypeToogle setChoosenTypePost={setChoosenTypePost} />
 				</Box>
 				<Box
 					sx={{
 						display: 'flex',
+						flexDirection: 'column',
 						justifyContent: 'center',
 						alignItems: 'center',
 						width: '100%',
