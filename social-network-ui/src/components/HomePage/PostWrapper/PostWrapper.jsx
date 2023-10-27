@@ -3,7 +3,7 @@ import Post from '../Post/Post'
 import PropTypes from 'prop-types'
 
 const PostWrapper = ({ tweets }) => {
-	// console.log(tweets);
+	console.log(tweets)
 	return (
 		<>{tweets && tweets.map((tweet, id) => <Post tweet={tweet} key={id} />)}</>
 	)
