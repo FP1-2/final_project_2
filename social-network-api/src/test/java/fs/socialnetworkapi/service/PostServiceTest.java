@@ -146,16 +146,16 @@ public class PostServiceTest {
                 .photo("Photo")
                 .build();
 
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-
-        Authentication authentication = mock(Authentication.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        when(authentication.getPrincipal()).thenReturn(user1);
-
-        //Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(user1));
-        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user1);
+//        SecurityContext securityContext = mock(SecurityContext.class);
+//        SecurityContextHolder.setContext(securityContext);
+//
+//        Authentication authentication = mock(Authentication.class);
+//        when(securityContext.getAuthentication()).thenReturn(authentication);
+//
+//        when(authentication.getPrincipal()).thenReturn(user1);
+//
+//        //Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(user1));
+//        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user1);
         when(mapper.map(postDtoIn,Post.class)).thenReturn(post);
         when(postRepo.save(post)).thenReturn(post);
         when(mapper.map(eq(post), eq(PostDtoOut.class))).thenReturn(expectedPostDtoOut);
@@ -273,13 +273,13 @@ public class PostServiceTest {
                 postDto1,
                 postDto2);
 
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
+//        SecurityContext securityContext = mock(SecurityContext.class);
+//        SecurityContextHolder.setContext(securityContext);
+//
+//        Authentication authentication = mock(Authentication.class);
+//        when(securityContext.getAuthentication()).thenReturn(authentication);
 
-        Authentication authentication = mock(Authentication.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        when(authentication.getPrincipal()).thenReturn(user1);
+        //when(authentication.getPrincipal()).thenReturn(user1);
 
         Mockito.when(postRepo.findByUser(eq(user1), eq(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))))).thenReturn(pageOfPosts);
 
