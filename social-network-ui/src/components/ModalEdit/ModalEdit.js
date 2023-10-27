@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal, Box, InputLabel, Avatar } from '@mui/material'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form } from 'formik'
 import { closeModal } from '../../redux/slices/modalEditSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import CustomInput from '../CustomInput/CustomInput'
@@ -13,6 +13,7 @@ import axios from 'axios'
 import IconTwitter from '../IconTwitter/IconTwitter'
 import editUserProfile from '../../api/editUserProfile'
 import UseUserToken from '../../hooks/useUserToken'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const validationSchema = Yup.object({
 	firstName: Yup.string().min(3, 'Please enter at least 3 characters'),
@@ -37,7 +38,7 @@ const VisuallyHiddenInput = styled('input')`
 	width: 1px;
 `
 
-const ModalEdit = ({ user }) => {
+const ModalEdit = ({ user, setUser }) => {
 	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
 	const dispatch = useDispatch()
 
@@ -46,6 +47,10 @@ const ModalEdit = ({ user }) => {
 	const [imageUrl, setImageUrl] = useState('') // image url
 	const [backgroundImageUrl, setBackgroundImageUrl] = useState('') // bg
 	const [error, setError] = useState('') // error
+
+	const [isBtnLoading, setIsBtnLoading] = useState(false)
+	const [isAvatarLoading, setIsAvatarLoading] = useState(false)
+	const [isBgLoading, setIsBgLoading] = useState(false)
 
 	const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME // Cloudinary cloud name
 
@@ -60,6 +65,8 @@ const ModalEdit = ({ user }) => {
 		const formData = new FormData()
 		formData.append('file', file)
 		formData.append('upload_preset', uploadPreset)
+		if (type === 'avatar') setIsAvatarLoading(true)
+		if (type === 'background') setIsBgLoading(true)
 
 		try {
 			const response = await axios.post(
@@ -70,8 +77,6 @@ const ModalEdit = ({ user }) => {
 			if (response.status === 200) {
 				const uploadedImageUrl = response.data.secure_url
 				if (type === 'avatar') {
-					console.log('321')
-
 					setImageUrl(uploadedImageUrl)
 				} else if (type === 'background') {
 					console.log('123')
@@ -84,6 +89,8 @@ const ModalEdit = ({ user }) => {
 		} catch (err) {
 			setError('Something went wrong')
 		}
+		if (type === 'avatar') setIsAvatarLoading(false)
+		if (type === 'background') setIsBgLoading(false)
 	}
 
 	return (
@@ -96,19 +103,21 @@ const ModalEdit = ({ user }) => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					width: '70%',
-					bgcolor: 'white',
-					boxShadow: 24,
 					p: 2,
-					pt: 19,
+					pt: 21,
 					top: '50%',
 					left: '50%',
 					transform: 'translate(-50%, -50%)',
 					maxHeight: '95vh',
 					overflowY: 'auto',
+					bgcolor: 'white',
+					boxShadow: 24,
+					borderRadius: '7px',
 					'@media (max-width: 600px)': {
 						width: '100%',
 						height: '100%',
 						maxHeight: '100vh',
+						borderRadius: '0px',
 					},
 				}}
 			>
@@ -133,16 +142,20 @@ const ModalEdit = ({ user }) => {
 						birthday: user.birthday,
 					}}
 					onSubmit={async values => {
-						console.log(user.avatar)
+						setIsBtnLoading(true)
 						const newValues = {
 							...values,
 							avatar: imageUrl || user.avatar,
 							bgProfileImage: backgroundImageUrl || user.bgProfileImage,
 						}
 
-						console.log(newValues)
-						const data = await editUserProfile(newValues, token)
-						console.log(data)
+						try {
+							const data = await editUserProfile(newValues, token)
+							console.log(data)
+						} catch (error) {
+							console.log(error)
+						}
+						setIsBtnLoading(false)
 					}}
 					validationSchema={validationSchema}
 				>
@@ -189,12 +202,15 @@ const ModalEdit = ({ user }) => {
 									variant='contained'
 									href='#file-upload'
 									sx={{
+										display: 'flex',
+										gap: 2,
+										mb: 1,
 										bgcolor: 'rgb(29, 161, 241)',
 										borderRadius: '2rem',
-										mb: 1,
 									}}
 								>
 									Update Avatar
+									{isAvatarLoading && <CircularProgress size={25} />}
 									<VisuallyHiddenInput
 										type='file'
 										onChange={e => handleImageUpload(e, 'avatar')}
@@ -205,12 +221,15 @@ const ModalEdit = ({ user }) => {
 									variant='contained'
 									href='#file-upload'
 									sx={{
+										display: 'flex',
+										gap: 1,
 										bgcolor: 'rgb(29, 161, 241)',
 										borderRadius: '2rem',
 										mb: 4,
 									}}
 								>
 									Update Background Image
+									{isBgLoading && <CircularProgress size={25} />}
 									<VisuallyHiddenInput
 										type='file'
 										onChange={e => handleImageUpload(e, 'background')}
@@ -336,7 +355,10 @@ const ModalEdit = ({ user }) => {
 							}}
 						>
 							<Button
+								disabled={isBtnLoading}
 								sx={{
+									display: 'flex',
+									gap: 5,
 									width: '77%',
 									marginBottom: '1.3rem',
 									padding: '1.1rem 0',
@@ -356,6 +378,7 @@ const ModalEdit = ({ user }) => {
 								type='submit'
 							>
 								Save Updates
+								{isBtnLoading && <CircularProgress size={25} />}
 							</Button>
 						</Box>
 					</Form>
@@ -366,6 +389,7 @@ const ModalEdit = ({ user }) => {
 }
 ModalEdit.propTypes = {
 	user: PropTypes.object.isRequired,
+	setUser: PropTypes.func.isRequired,
 }
 
 export default ModalEdit

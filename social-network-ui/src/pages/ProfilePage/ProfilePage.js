@@ -141,7 +141,7 @@ const ProfilePage = () => {
 	}
 	return (
 		<ThemeProvider theme={theme}>
-			{user && <ModalEdit user={user} />}
+			{user && <ModalEdit user={user} setUser={setUser} />}
 			<Box>
 				{user && (
 					<Box
@@ -404,21 +404,30 @@ const ProfilePage = () => {
 				<Box sx={{ paddingX: '1rem', borderBottom: '1px solid #C4C4C4' }}>
 					<PostsTypeToogle setUserPosts={loadNewPosts} />
 				</Box>
-				{isLoadingPosts ? (
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							width: '100%',
-							minHeight: '25vh',
-						}}
-					>
-						<CircularProgress size={80} />
-					</Box>
-				) : (
-					<PostWrapper tweets={userPosts} />
-				)}
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						width: '100%',
+						minHeight: '35vh',
+					}}
+				>
+					{isLoadingPosts && <CircularProgress size={80} />}
+					{userPosts.length !== 0 && <PostWrapper tweets={userPosts} />}
+					{!isLoadingPosts && !userPosts.length && (
+						<Typography
+							sx={{
+								fontWeight: 700,
+								fontSize: '36px',
+								color: 'gray',
+								opacity: 0.5,
+							}}
+						>
+							No Posts Available
+						</Typography>
+					)}
+				</Box>
 			</Box>
 		</ThemeProvider>
 	)
