@@ -6,7 +6,8 @@ import {
 } from 'date-fns'
 import parseISO from 'date-fns/parseISO'
 
-function formatPostDate (dateString) {
+function formatPostDate(dateString) {
+    if (!dateString) return
   const now = new Date()
   const postDate = parseISO(dateString)
   const hoursDiff = differenceInHours(now, postDate)
