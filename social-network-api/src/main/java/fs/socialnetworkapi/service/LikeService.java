@@ -1,7 +1,9 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.dto.notification.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
@@ -27,6 +29,10 @@ public class LikeService {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
+  private void sendLikeNotification(Like like){
+    Notification notification = new NotificationCreator().likeNotification(like);
+  }
+
   public List<PostDtoOut> getLikesForUser() {
     User user = getUser();
     return likeRepo.findByUserId(user.getId())
@@ -45,7 +51,7 @@ public class LikeService {
       likeRepo.delete(like.get());
       return "Unliked";
     } else {
-      likeRepo.save(new Like(user, post));
+      sendLikeNotification(likeRepo.save(new Like(user, post)));
       return "Liked";
     }
   }
@@ -63,4 +69,5 @@ public class LikeService {
             .stream()
             .toList();
   }
+
 }

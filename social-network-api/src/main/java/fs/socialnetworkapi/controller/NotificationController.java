@@ -19,15 +19,15 @@ import java.util.List;
 public class NotificationController {
   private final NotificationService notificationService;
 
-  @GetMapping("/{userId}")
-  public ResponseEntity<List<Notification>> getAllNotifications(@PathVariable Long userId) {
-    List<Notification> notifications = notificationService.getAllNotifications(userId);
+  @GetMapping("/all")
+  public ResponseEntity<List<Notification>> getAllNotifications() {
+    List<Notification> notifications = notificationService.getAllNotifications();
     return ResponseEntity.ok(notifications);
   }
 
-  @GetMapping("/active/{userId}")
-  public ResponseEntity<List<Notification>> getActiveNotifications(@PathVariable Long userId) {
-    List<Notification> activeNotifications = notificationService.getActiveNotifications(userId);
+  @GetMapping("/active")
+  public ResponseEntity<List<Notification>> getActiveNotifications() {
+    List<Notification> activeNotifications = notificationService.getActiveNotifications();
     return ResponseEntity.ok(activeNotifications);
   }
 

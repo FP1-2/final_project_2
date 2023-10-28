@@ -1,7 +1,6 @@
 package fs.socialnetworkapi.dto.post;
 
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.enums.TypePost;
 import lombok.Getter;
 import lombok.Setter;

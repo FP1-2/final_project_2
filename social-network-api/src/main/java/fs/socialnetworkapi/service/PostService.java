@@ -1,8 +1,10 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.dto.notification.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.enums.TypePost;
@@ -27,6 +29,7 @@ public class PostService {
   private final ModelMapper mapper;
   private final LikeService likeService;
   private final UserService userService;
+  private final NotificationService notificationService;
 
   public PostDtoOut findById(Long postId) {
 
@@ -105,12 +108,14 @@ public class PostService {
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(TypePost.POST);
-    return mapper.map(postRepo.save(post), PostDtoOut.class);
+    Post postToSave = postRepo.save(post);
+    sendFeaturedNotification(postToSave);
+    return mapper.map(postToSave, PostDtoOut.class);
   }
 
   public void deletePost(Long postId) {
-
     postRepo.deleteById(postId);
+    notificationService.deleteByPostId(postId);
   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
@@ -135,8 +140,12 @@ public class PostService {
     post.setUser(user);
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
-    postRepo.save(post);
-
+    Post postToSave = postRepo.save(post);
+    switch (typePost) {
+      case POST -> sendFeaturedNotification(postToSave);
+      case REPOST -> sendRepostNotification(postToSave);
+      case COMMENT -> sendCommentNotification(postToSave);
+    }
     return getPostById(originalPostId);
   }
 
@@ -273,4 +282,17 @@ public class PostService {
               like -> like.getPost().getId(),
               Collectors.counting()));
   }
+
+  private void sendCommentNotification(Post post) {
+    Notification notification = new NotificationCreator().commentNotification(post);
+  }
+
+  private void sendRepostNotification(Post post) {
+    Notification notification = new NotificationCreator().repostNotification(post);
+  }
+
+  private void sendFeaturedNotification(Post post) {
+    List<Notification> notifications = new NotificationCreator().featuredNotification(post);
+  }
+
 }
