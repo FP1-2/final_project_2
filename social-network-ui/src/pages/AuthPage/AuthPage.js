@@ -37,12 +37,15 @@ const theme = createTheme({
 				fontSize: '3.5rem',
 			},
 			'@media (max-width: 600px)': {
-				fontSize: '3rem',
+				fontSize: '2.5rem',
 			},
 		},
 		h3: {
 			marginBottom: '2.5rem',
 			fontWeight: 700,
+			'@media (max-width: 600px)': {
+				fontSize: '2.8rem',
+			},
 		},
 	},
 	components: {
@@ -56,6 +59,9 @@ const theme = createTheme({
 					'@media (min-width: 1600px)': {
 						width: '90%',
 						marginRight: 'auto',
+					},
+					'@media (max-width: 600px)': {
+						width: '85%',
 					},
 				},
 			},
@@ -102,6 +108,9 @@ const AuthPage = () => {
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
+						'@media (max-width: 600px)': {
+							alignItems: 'flex-start',
+						},
 					}}
 				>
 					<Box
@@ -111,14 +120,45 @@ const AuthPage = () => {
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'flex-start',
+							'@media (max-width: 600px)': {
+								mt: 10,
+								mx: 3,
+							},
 						}}
 					>
-						<IconTwitter />
+						<Box
+							sx={{
+								'@media (max-width: 600px)': {
+									margin: '0 auto',
+									mb: 2,
+								},
+							}}
+						>
+							<IconTwitter />
+						</Box>
 
-						<Typography variant='h1' noWrap={true}>
+						<Typography
+							sx={{
+								'@media (max-width: 600px)': {
+									margin: '0 auto',
+									mb: 2,
+								},
+							}}
+							variant='h1'
+							noWrap={true}
+						>
 							Happening now
 						</Typography>
-						<Typography variant='h3' noWrap={true}>
+						<Typography
+							sx={{
+								'@media (max-width: 600px)': {
+									margin: '0 auto',
+									mb: 2,
+								},
+							}}
+							variant='h3'
+							noWrap={true}
+						>
 							Join Twitter today
 						</Typography>
 						<Box
@@ -181,6 +221,12 @@ const AuthPage = () => {
 								width: '85%',
 								fontSize: '1rem',
 								marginBottom: '1rem',
+								'@media (max-width: 600px)': {
+									width: '95%',
+									margin: '0 auto',
+									marginBottom: '1rem',
+									textAlign: 'center',
+								},
 							}}
 						>
 							By singing up you agree to the
@@ -191,6 +237,10 @@ const AuthPage = () => {
 						<Typography
 							sx={{
 								fontSize: '1.15rem',
+								'@media (max-width: 600px)': {
+									width: '100%',
+									textAlign: 'center',
+								},
 							}}
 						>
 							Already have an account?

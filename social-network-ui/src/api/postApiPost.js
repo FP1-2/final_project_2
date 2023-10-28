@@ -1,9 +1,8 @@
 import axios from "axios";
 
-const url = process.env.REACT_APP_SERVER_URL;
+const url = process.env.REACT_APP_SERVER_URL || "";
 
 const postApiPost = async (userId, photo, description, token) => {
-  console.log(token);
   if (!token) {
     throw new Error("Токен користувача не знайдено.");
   }

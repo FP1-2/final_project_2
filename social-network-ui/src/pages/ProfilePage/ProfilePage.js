@@ -17,6 +17,10 @@ import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
 import getUserData from '../../api/getUserInfo'
 import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
 
 const theme = createTheme({
 	typography: {
@@ -40,6 +44,7 @@ const infoBoxStyles = {
 	gap: '.2rem',
 	overflow: 'hidden',
 	opacity: 0.6,
+	verticalAlign: 'bottom',
 }
 const typographyInfoUser = {
 	textOverflow: 'ellipsis',
@@ -50,30 +55,38 @@ const typographyInfoUser = {
 const ProfilePage = () => {
 	const { token } = useUserToken()
 	const params = useParams()
+	const localUserId = useSelector(state => state.user?.userId)
 	const [user, setUser] = useState(null)
+	const [notEqual, setNotEqual] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+
+	const navigate = useNavigate()
+
 	let userBirthdayData = null
 	let userJoinedData = null
+
 	useEffect(() => {
 		if (token) {
 			;(async () => {
+				setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
 				setUser(userData)
+				setIsLoading(false)
 			})()
 		}
-	}, [])
-	// useEffect(() => {
-	// 	if (user) {
-	// 		userBirthdayData = `Born ${format(
-	// 			new Date(user.birthday),
-	// 			'MMMM d, yyyy'
-	// 		)}`
-	// 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
-	// 			month: 'short',
-	// 		}).format(new Date(user.createdDate))} ${new Date(
-	// 			user.createdDate
-	// 		).getFullYear()}`
-	// 	}
-	// }, [user])
+		if (Number(localUserId) !== Number(params.userId)) {
+			console.log('true')
+			console.log(localUserId)
+			console.log(params.userId)
+			setNotEqual(false)
+		} else {
+			console.log('false')
+			console.log(Number(localUserId))
+			console.log(Number(params.userId))
+			setNotEqual(true)
+		}
+	}, [params.userId])
+
 	if (user) {
 		userBirthdayData = `Born ${format(new Date(user.birthday), 'MMMM d, yyyy')}`
 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
@@ -81,6 +94,15 @@ const ProfilePage = () => {
 		}).format(new Date(user.createdDate))} ${new Date(
 			user.createdDate
 		).getFullYear()}`
+	}
+
+	const goBackFunc = () => {
+		if (!notEqual) {
+			navigate(-1)
+		}
+	}
+	if (isLoading) {
+		return <ProfilePageSkeleton />
 	}
 	return (
 		<ThemeProvider theme={theme}>
@@ -92,6 +114,54 @@ const ProfilePage = () => {
 							width: '100%',
 						}}
 					>
+						{!notEqual && (
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'center',
+									gap: '1.5rem',
+									width: '100%',
+									paddingX: '1.5rem',
+									height: '4.5rem',
+									bgcolor: 'white',
+								}}
+							>
+								<Box>
+									<KeyboardBackspaceIcon
+										sx={{
+											fontSize: '28px',
+										}}
+										onClick={goBackFunc}
+									/>
+								</Box>
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: '0.3rem',
+									}}
+								>
+									<Typography
+										sx={{
+											fontWeight: 700,
+											fontSize: '1.1rem',
+										}}
+										variant='p'
+									>
+										{user.firstName}
+									</Typography>
+									<Typography
+										sx={{
+											fontSize: '0.95rem',
+											opacity: 0.6,
+										}}
+										variant='p'
+									>
+										{user.userTweetCount} Tweets
+									</Typography>
+								</Box>
+							</Box>
+						)}
 						<Box
 							sx={{
 								display: 'flex',
@@ -168,6 +238,7 @@ const ProfilePage = () => {
 										textTransform: 'none',
 										color: 'black',
 									}}
+									onClick={() => navigate('/profile/50')}
 								>
 									<Typography sx={{ fontSize: '0.9rem' }}>
 										Edit Profile
