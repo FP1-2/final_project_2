@@ -29,6 +29,7 @@ public class WebConfigSecurity {
     http.csrf(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests((authorizeHttpRequests) ->
         authorizeHttpRequests
+          .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
           .requestMatchers("/api/v1/registration").permitAll()
           .requestMatchers("/h2/**").permitAll()
           .requestMatchers("/api/v1/login").permitAll()
@@ -59,6 +60,7 @@ public class WebConfigSecurity {
       .requestMatchers(new AntPathRequestMatcher("/*.js"))
       .requestMatchers(new AntPathRequestMatcher("/*.json"))
       .requestMatchers(new AntPathRequestMatcher("/*.ico"))
+      .requestMatchers(new AntPathRequestMatcher("/#/**"))
       ;
   }
 

@@ -27,11 +27,15 @@ public class UserDtoIn {
   private String birthday;
   private String avatar;
   private String mainPhoto;
+  @NotNull
   private String password;
   private String address;
   private boolean active;
   private String activationCode;
   private String roles;
+  private String userDescribe;
+  private String bgProfileImage;
+  private String userLink;
 
   public UserDtoIn() {
   }
@@ -48,11 +52,8 @@ public class UserDtoIn {
     this.address = address;
   }
 
-
-
   public String getUsername() {
     return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
   }
 
 }
-

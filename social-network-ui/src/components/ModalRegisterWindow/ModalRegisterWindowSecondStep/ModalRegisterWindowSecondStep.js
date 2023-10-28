@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom'
 import postRegistrationData from '../../../api/authApi'
 
 import axios from 'axios'
+import AvatarWithoutImg from '../../AvatarWithoutImg/AvatarWithoutImg'
 
 const VisuallyHiddenInput = styled('input')`
 	clip: rect(0 0 0 0);
@@ -68,6 +69,7 @@ const ModalRegisterWindowSecondStep = ({
 	isModalOpen,
 	handleClose,
 	setIsRegisterDone,
+	setIsOkayAlert,
 }) => {
 	const dispatch = useDispatch()
 
@@ -143,14 +145,17 @@ const ModalRegisterWindowSecondStep = ({
 		}
 
 		if (newValues.avatar === '') {
-			newValues.avatar = false
+			newValues.avatar = null
 		}
 
-		const { scndPassword, fstPassword, ...secondPart } = Object.assign(
+		const { scndPassword, fstPassword, city, ...secondPart } = Object.assign(
 			{},
 			newValues
 		)
 		secondPart.password = scndPassword
+		secondPart.address = city
+
+		console.log(secondPart)
 
 		const obj = {
 			// add secod part of register data
@@ -166,11 +171,11 @@ const ModalRegisterWindowSecondStep = ({
 		setIsLoading(true)
 		resetForm()
 		;(async () => {
-			console.log({ ...userObj, ...obj })
 			const response = await postRegistrationData({ ...userObj, ...obj })
 			console.log(response)
 			setIsLoading(false)
 			setIsRegisterDone(true)
+			setIsOkayAlert(true)
 			setTimeout(() => {
 				if (isModalOpen) {
 					setIsRegisterDone(false)
@@ -179,22 +184,24 @@ const ModalRegisterWindowSecondStep = ({
 					dispatch(resetRegisterData())
 					navigate('/signIn')
 				}
-			}, 3000)
+			}, 5000)
 		})()
 	}
 	return (
 		<Box
 			sx={{
 				'@media (max-width: 600px)': {
-					pb: 10,
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'center',
 				},
 			}}
 		>
-			<Typography variant='h4' sx={{ mb: 2, fontWeight: '700' }}>
-				Additional info
+			<Typography
+				variant='h4'
+				sx={{ mb: 2, fontWeight: '700', textAlign: 'center' }}
+			>
+				Additional Info
 			</Typography>
 			<Formik
 				initialValues={initialValues}
@@ -218,18 +225,7 @@ const ModalRegisterWindowSecondStep = ({
 							}}
 						>
 							{imageUrl === '' ? (
-								<Avatar
-									sx={{
-										width: '6rem',
-										height: '6rem',
-										bgcolor: 'rgb(29, 161, 241)',
-										p: 5,
-										fontSize: '3rem',
-										mb: 1,
-									}}
-								>
-									{registerName?.charAt(0).toUpperCase()}
-								</Avatar>
+								<AvatarWithoutImg userName={registerName} />
 							) : (
 								<Avatar
 									sx={{
@@ -292,11 +288,16 @@ const ModalRegisterWindowSecondStep = ({
 
 						<Box
 							sx={{
-								mb: 2,
+								mb: 5,
 							}}
 						>
 							<FormGroup>
 								<FormControlLabel
+									sx={{
+										'@media (max-width: 600px)': {
+											mb: 1.5,
+										},
+									}}
 									control={
 										<Checkbox
 											checked={dataProcessing}
@@ -358,6 +359,7 @@ ModalRegisterWindowSecondStep.propTypes = {
 	setRegisterStep: PropTypes.func.isRequired,
 	handleClose: PropTypes.func.isRequired,
 	isModalOpen: PropTypes.bool.isRequired,
+	setIsOkayAlert: PropTypes.func.isRequired,
 }
 
 export default ModalRegisterWindowSecondStep

@@ -61,11 +61,11 @@ class UserControllerTest {
     Long userId = 2L;
 
     // Act
-    ResponseEntity<?> responseEntity = userController.subscribe(currentUserId, userId);
+    ResponseEntity<?> responseEntity = userController.subscribe(userId);
 
     // Assert
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    verify(userService, times(1)).subscribe(currentUserId, userId);
+    verify(userService, times(1)).subscribe(userId);
   }
 
   @Test
@@ -75,11 +75,11 @@ class UserControllerTest {
     Long userId = 2L;
 
     // Act
-    ResponseEntity<?> responseEntity = userController.unsubscribe(currentUserId, userId);
+    ResponseEntity<?> responseEntity = userController.unsubscribe(userId);
 
     // Assert
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    verify(userService, times(1)).unsubscribe(currentUserId, userId);
+    verify(userService, times(1)).unsubscribe(userId);
   }
 
   @Test

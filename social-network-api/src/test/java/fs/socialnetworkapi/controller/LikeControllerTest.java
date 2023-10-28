@@ -39,61 +39,57 @@ class LikeControllerTest {
   @Test
   void testLikePostSuccess() {
     Long postId = 1L;
-    Long userId = 2L;
 
-    Mockito.when(likeService.likePost(postId, userId)).thenReturn("Liked");
+    Mockito.when(likeService.likePost(postId)).thenReturn("Liked");
 
-    ResponseEntity<String> response = likeController.likePost(postId, userId);
+    ResponseEntity<String> response = likeController.likePost(postId);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals("Liked successfully", response.getBody());
 
-    Mockito.verify(likeService, times(1)).likePost(postId, userId);
+    Mockito.verify(likeService, times(1)).likePost(postId);
   }
 
   @Test
   void testUnlikePostSuccess() {
     Long postId = 1L;
-    Long userId = 2L;
 
-    Mockito.when(likeService.likePost(postId, userId)).thenReturn("Unliked");
+    Mockito.when(likeService.likePost(postId)).thenReturn("Unliked");
 
-    ResponseEntity<String> response = likeController.likePost(postId, userId);
+    ResponseEntity<String> response = likeController.likePost(postId);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals("Unliked successfully", response.getBody());
 
-    Mockito.verify(likeService, times(1)).likePost(postId, userId);
+    Mockito.verify(likeService, times(1)).likePost(postId);
   }
 
   @Test
   void testLikePostFailurePostNotFound() {
     Long postId = 1L;
-    Long userId = 2L;
 
-    Mockito.when(likeService.likePost(postId, userId)).thenThrow(new PostNotFoundException("No such post"));
+    Mockito.when(likeService.likePost(postId)).thenThrow(new PostNotFoundException("No such post"));
 
-    ResponseEntity<String> response = likeController.likePost(postId, userId);
+    ResponseEntity<String> response = likeController.likePost(postId);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertEquals("Failed: fs.socialnetworkapi.exception.PostNotFoundException: No such post", response.getBody());
 
-    Mockito.verify(likeService, times(1)).likePost(postId, userId);
+    Mockito.verify(likeService, times(1)).likePost(postId);
   }
 
    @Test
   void testLikePostFailureUserNotFound() {
     Long postId = 1L;
-    Long userId = 2L;
 
-    Mockito.when(likeService.likePost(postId, userId)).thenThrow(new UserNotFoundException("No such user"));
+    Mockito.when(likeService.likePost(postId)).thenThrow(new UserNotFoundException("No such user"));
 
-    ResponseEntity<String> response = likeController.likePost(postId, userId);
+    ResponseEntity<String> response = likeController.likePost(postId);
 
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertEquals("Failed: fs.socialnetworkapi.exception.UserNotFoundException: No such user", response.getBody());
 
-    Mockito.verify(likeService, times(1)).likePost(postId, userId);
+    Mockito.verify(likeService, times(1)).likePost(postId);
   }
 
 }

@@ -1,7 +1,7 @@
-import Box from '@mui/material/Box'
+import * as React from 'react'
+import { Box, Typography } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import Modal from '@mui/material/Modal'
-import * as React from 'react'
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetRegisterData } from '../../redux/slices/registerSlice'
@@ -44,7 +44,9 @@ const style = {
 	},
 	'@media (max-width: 600px)': {
 		width: '100%',
-		minHeight: '100vh',
+		height: '100vh',
+		pb: 0,
+		pt: 2,
 	},
 }
 
@@ -58,6 +60,7 @@ const ModalRegisterWindow = () => {
 	const [heightModalBelow, setHeightModalBelow] = useState(false)
 	const [heightModalCountBelow, setHeightModalCountBelow] = useState(0)
 	const [isRegisterDone, setIsRegisterDone] = useState(false) // register done status
+	const [isOkayAlert, setIsOkayAlert] = useState(false)
 
 	const isModalOpen = useSelector(state => state.modal.modalProps.isOpen) // modal status
 
@@ -96,19 +99,7 @@ const ModalRegisterWindow = () => {
 				overflow: 'scroll',
 			}}
 		>
-			<Box
-				ref={modalHeight}
-				sx={[
-					style,
-					{
-						pt: heightModalBelow
-							? heightModalCountBelow < 600
-								? '15rem'
-								: '10rem'
-							: '',
-					},
-				]}
-			>
+			<Box ref={modalHeight} sx={[style]}>
 				<Box
 					sx={{
 						position: 'relative',
@@ -170,24 +161,37 @@ const ModalRegisterWindow = () => {
 								handleClose={handleClose}
 								isModalOpen={isModalOpen}
 								setIsRegisterDone={setIsRegisterDone}
+								setIsOkayAlert={setIsOkayAlert}
 							/>
 						)
 					) : (
 						<Box
 							sx={{
 								display: 'flex',
-								justifyContent: 'center',
+								flexDirection: 'column',
+								justifyContent: 'space-evenly',
 								alignItems: 'center',
 								width: '100%',
 								minHeight: '30vh',
+								textAlign: 'center',
 							}}
 						>
 							<CheckCircleIcon
 								sx={{
 									color: 'rgb(29, 161, 241)',
-									fontSize: '10rem',
+									fontSize: '9rem',
 								}}
 							/>
+							<Typography
+								sx={{
+									fontSize: '15px',
+									fontWeight: 600,
+								}}
+								variant='p'
+							>
+								Please activate your account using the verification code sent to
+								your email.
+							</Typography>
 						</Box>
 					)}
 				</Box>

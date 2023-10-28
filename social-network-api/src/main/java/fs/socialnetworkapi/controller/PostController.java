@@ -34,11 +34,28 @@ public class PostController {
     return ResponseEntity.ok(allPosts);
   }
 
-  @GetMapping("profile-posts")
-  public ResponseEntity<List<PostDtoOut>> getUserPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
+  @GetMapping("profile-posts/{user_id}")
+  public ResponseEntity<List<PostDtoOut>> getUserPosts(@PathVariable(value = "user_id") Long userId,
+                                                       @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-    List<PostDtoOut> allPosts = postService.getProfilePosts(page, size);
+    List<PostDtoOut> allPosts = postService.getProfilePosts(userId, page, size);
     return ResponseEntity.ok(allPosts);
+  }
+
+  @GetMapping("profile-reposts/{user_id}")
+  public ResponseEntity<List<PostDtoOut>> getUserReposts(@PathVariable("user_id") Long userId,
+                                                      @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    List<PostDtoOut> posts = postService.getProfileType(userId, TypePost.REPOST, page, size);
+    return ResponseEntity.ok(posts);
+  }
+
+  @GetMapping("profile-comments/{user_id}")
+  public ResponseEntity<List<PostDtoOut>> getProfileComments(@PathVariable("user_id") Long userId,
+                                                      @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    List<PostDtoOut> posts = postService.getProfileType(userId, TypePost.COMMENT, page, size);
+    return ResponseEntity.ok(posts);
   }
 
   @GetMapping("followings-posts")
@@ -85,6 +102,13 @@ public class PostController {
     PostDtoOut post = postService.getPostById(postId);
     return ResponseEntity.ok(post);
   }
+
+  @GetMapping("post-user-likes/{user_id}")
+  public ResponseEntity<List<PostDtoOut>> getPostByUserLikes(@PathVariable("user_id") Long userId) {
+    List<PostDtoOut> posts = postService.getPostByUserLikes(userId);
+    return ResponseEntity.ok(posts);
+  }
+
 
 
 }
