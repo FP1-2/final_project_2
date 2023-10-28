@@ -9,32 +9,38 @@ import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
 import { postLoginData } from '../../api/authApi'
 import useUserToken from '../../hooks/useUserToken'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { login } from './../../redux/slices/userSlice'
 
 const theme = createTheme({
-	// custom theme
-	typography: {
-		h3: {
-			fontSize: '2.5rem',
-			fontWeight: 700,
-		},
-	},
-})
+  // custom theme
+  typography: {
+    h3: {
+      fontSize: "2.5rem",
+      fontWeight: 700,
+    },
+  },
+});
 const validationSchema = Yup.object({
-	email: Yup.string()
-		.email('invalid email address')
-		.required('Email is required'),
-	password: Yup.string()
-		.required('Password is required')
-		.min(6, 'Password is too short'),
-})
+  email: Yup.string()
+    .email("invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password is too short"),
+});
 
 const initialValues = {
-	email: '',
-	password: '',
-}
+  email: "",
+  password: "",
+};
 
 const LoginPage = () => {
-	const { token, saveToken } = useUserToken()
+	const { token, saveToken, removeToken } = useUserToken()
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
+
 	const onSubmit = (values, { resetForm }) => {
 		// submit handler
 		;(async () => {
@@ -42,8 +48,11 @@ const LoginPage = () => {
 				const data = await postLoginData(values)
 				console.log(data)
 				if (data.error === null) {
+					removeToken()
 					saveToken(data.token)
+					dispatch(login(data.id))
 					resetForm()
+					navigate(`/profile/${data.id}`)
 				}
 			} catch (error) {
 				console.log(error)
@@ -142,13 +151,13 @@ const LoginPage = () => {
 						}}
 					>
 						<LinkText text='Forgot password?' link='/resetPassword' />
-						
-						<LinkText text='Sign up to Twitter' />
-					</Box>
-				</Box>
-			</Box>
-		</ThemeProvider>
-	)
-}
 
-export default LoginPage
+            <LinkText text="Sign up to Twitter" />
+          </Box>
+        </Box>
+      </Box>
+    </ThemeProvider>
+  );
+};
+
+export default LoginPage;

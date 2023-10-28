@@ -1,8 +1,11 @@
-import axios from 'axios'
+import axios from "axios";
 
 export default async function postRegistrationData(newUserObject) {
 	try {
-		const { data } = await axios.post(`api/v1/registration`, newUserObject)
+		const { data } = await axios.post(
+			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/registration`,
+			newUserObject
+		)
 		return data
 	} catch (error) {
 		throw error
@@ -12,11 +15,12 @@ export default async function postRegistrationData(newUserObject) {
 export async function postLoginData(loginObject) {
 	try {
 		const { data } = await axios.post(
-			`${process.env.REACT_APP_SERVER_URL}/api/v1/login`,
+			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/login`,
 			loginObject
 		)
+
 		return data
 	} catch (error) {
-		throw error
+		console.log(error)
 	}
 }

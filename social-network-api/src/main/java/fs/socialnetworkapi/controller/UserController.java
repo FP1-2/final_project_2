@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.controller;
 
+
 import fs.socialnetworkapi.dto.EmailRequest;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
@@ -30,29 +31,27 @@ public class UserController {
   private final AuthorizationService authorizationService;
   private final PasswordResetService passwordResetService;
 
-  @GetMapping("user/{current_user_id}/subscribe/{user_id}")
-  public ResponseEntity<?> subscribe(@PathVariable("current_user_id") Long currentUserId,
-                                     @PathVariable("user_id") Long userId) {
-    userService.subscribe(currentUserId, userId);
+  @GetMapping("subscribe/{subscribe_user_id}")
+  public ResponseEntity<?> subscribe(@PathVariable("subscribe_user_id") Long userId) {
+    userService.subscribe(userId);
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("user/{current_user_id}/unsubscribe/{user_id}")
-  public ResponseEntity<?> unsubscribe(@PathVariable("current_user_id") Long currentUserId,
-                                     @PathVariable("user_id") Long userId) {
-    userService.unsubscribe(currentUserId, userId);
+  @GetMapping("unsubscribe/{subscribe_user_id}")
+  public ResponseEntity<?> unsubscribe(@PathVariable("subscribe_user_id") Long userId) {
+    userService.unsubscribe(userId);
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("user/{current_user_id}/followers") //підписчики
-  public ResponseEntity<List<UserDtoOut>> getFollowers(@PathVariable("current_user_id") Long currentUserId) {
-    List<UserDtoOut> followers = userService.getFollowers(currentUserId);
+  @GetMapping("followers/{user_id}") //підписчики
+  public ResponseEntity<List<UserDtoOut>> getFollowers(@PathVariable(value = "user_id") Long userId) {
+    List<UserDtoOut> followers = userService.getFollowers(userId);
     return ResponseEntity.ok(followers);
   }
 
-  @GetMapping("user/{current_user_id}/followings") //підписки
-  public ResponseEntity<List<UserDtoOut>> getFollowings(@PathVariable("current_user_id") Long currentUserId) {
-    List<UserDtoOut> followings = userService.getFollowings(currentUserId);
+  @GetMapping("followings/{user_id}") //підписки
+  public ResponseEntity<List<UserDtoOut>> getFollowings(@PathVariable(value = "user_id") Long userId) {
+    List<UserDtoOut> followings = userService.getFollowings(userId);
     return ResponseEntity.ok(followings);
   }
 

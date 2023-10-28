@@ -6,7 +6,7 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import ResetPasswordConfirmPage from './pages/ResetPasswordConfirmPage/ResetPasswordConfirmPage'
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
-import FavPage from './pages/FavPage/FavPage'
+import FavPage from './pages/FavPage/FavPage';
 import MessagePage from './pages/MessagePage/MessagePage'
 
 const AppRoutes = () => {
@@ -16,24 +16,24 @@ const AppRoutes = () => {
 			<Route path='/' element={<AuthPage />} />
 			<Route path='/home' element={<HomePage />} />
 			<Route path='/explore' element={<HomePage />} />
+			<Route path='/favourites' element={<FavPage />} />
+			<Route path='/messages' element={<MessagePage />} />
+
 
 			{/* Auth Routes */}
 			<Route path='/signIn' element={<LoginPage />} />
 			<Route path='/resetPassword' element={<ResetPasswordPage />} />
-			<Route path='/resetPassword/confirm' element={<ResetPasswordConfirmPage />}
+			<Route
+				path='/resetPassword/confirm'
+				element={<ResetPasswordConfirmPage />}
 			/>
 
       {/* Profile Routes */}
-      <Route path='/notifications' element={<HomePage />} />
-      <Route path='/messages' element={<MessagePage />} />
-      <Route path='/favourites' element={<FavPage />} />
-      <Route path='/profile' element={<HomePage />} />
-      <Route path='/profile/:userId' element={<ProfilePage />} />
-
+      <Route path="/profile/:userId" element={<ProfilePage />} />
       {/* Error Path */}
-      <Route path='*' element={<h1>error</h1>} />
+      <Route path="*" element={<h1>error</h1>} />
     </Routes>
-  )
-}
+  );
+};
 
-export default AppRoutes
+export default AppRoutes;
