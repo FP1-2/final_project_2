@@ -1,8 +1,8 @@
-import { Box, CssBaseline, ThemeProvider, Typography } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider, Typography, Link } from "@mui/material";
 import Button from "@mui/material/Button";
 import { createTheme } from "@mui/material/styles";
 import { Form, Formik } from "formik";
-import React from "react";
+import React,{useState} from "react";
 import * as Yup from "yup";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import IconTwitter from "../../components/IconTwitter/IconTwitter";
@@ -10,7 +10,9 @@ import LinkText from "../../components/LinkText/LinkText";
 import { postLoginData } from "../../api/authApi";
 import useUserToken from "../../hooks/useUserToken";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch,useSelector } from 'react-redux'
+import {openResetModal} from "../../redux/slices/modalResetSlice";
+import ModalResetPassword from "../../components/ModalResetPassword/ModalResetPassword";
 const theme = createTheme({
   // custom theme
   typography: {
@@ -37,7 +39,12 @@ const initialValues = {
 const LoginPage = () => {
   const { token, saveToken, removeToken } = useUserToken();
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const isModalOpen = useSelector(state => state.modalReset.modalProps.isOpenReset)
 
+  const handleResetModalOpen = () => {
+      dispatch(openResetModal())
+  }
   const onSubmit = (values, { resetForm }) => {
     // submit handler
     (async () => {
@@ -144,10 +151,27 @@ const LoginPage = () => {
               display: "flex",
               justifyContent: "space-between",
               width: "100%",
+
             }}
           >
-            <LinkText text="Forgot password?" link="/resetPassword" />
+                
+             <Button
+             sx={{
+                fontSize: "1rem",
+                color:'rgb(13, 118, 184)',
+                textTransform: "none",
+               '&:hover': {
+                 background:'transparent',
+                 color: 'rgb(7, 82, 128)',
+                 textDecoration: 'underline',
+               },
+                   
+             }}
+             onClick={handleResetModalOpen}>Forgot password? </Button >
 
+              { isModalOpen && <ModalResetPassword /> }
+            {/* <LinkText text="Forgot password?" onClick={()=>handleResetModalOpen()}> </LinkText> */}
+           
             <LinkText text="Sign up to Twitter" />
           </Box>
         </Box>
