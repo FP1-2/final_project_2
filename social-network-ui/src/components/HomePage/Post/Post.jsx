@@ -10,6 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import PropTypes from "prop-types";
 
 const Post = ({ tweet }) => {
+  // console.log(tweet);
   return (
     <div className={styles.post}>
       {tweet.user.avatar ? (
