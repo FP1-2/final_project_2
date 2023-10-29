@@ -40,18 +40,22 @@ public class Notification extends AbstractEntity {
   private boolean active = true;
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Notification that = (Notification) o;
-    return active == that.active &&
-      Objects.equals(user, that.user) &&
-      Objects.equals(post, that.post) &&
-      Objects.equals(message, that.message) &&
-      Objects.equals(notifyingUser, that.notifyingUser) &&
-      Objects.equals(text, that.text) &&
-      type == that.type &&
-      Objects.equals(link, that.link);
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Notification that = (Notification) obj;
+    return active == that.active
+      && Objects.equals(user, that.user)
+      && Objects.equals(post, that.post)
+      && Objects.equals(message, that.message)
+      && Objects.equals(notifyingUser, that.notifyingUser)
+      && Objects.equals(text, that.text)
+      && type == that.type
+      && Objects.equals(link, that.link);
   }
 
   @Override
