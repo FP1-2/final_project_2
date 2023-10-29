@@ -1,6 +1,11 @@
 package fs.socialnetworkapi.dto.notification;
 
-import fs.socialnetworkapi.entity.*;
+import fs.socialnetworkapi.entity.Like;
+import fs.socialnetworkapi.entity.Notification;
+import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.entity.Post;
+import fs.socialnetworkapi.entity.Message;
+import fs.socialnetworkapi.entity.ChatUser;
 import fs.socialnetworkapi.enums.NotificationType;
 import fs.socialnetworkapi.service.NotificationService;
 import lombok.AllArgsConstructor;
