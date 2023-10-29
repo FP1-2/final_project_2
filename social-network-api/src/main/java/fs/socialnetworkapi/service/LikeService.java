@@ -29,7 +29,7 @@ public class LikeService {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  private void sendLikeNotification(Like like){
+  private void sendLikeNotification(Like like) {
     Notification notification = new NotificationCreator().likeNotification(like);
   }
 

@@ -5,7 +5,11 @@ import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.dto.notification.NotificationCreator;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.entity.*;
+import fs.socialnetworkapi.entity.Notification;
+import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.entity.Message;
+import fs.socialnetworkapi.entity.ChatUser;
+import fs.socialnetworkapi.entity.Chat;
 import fs.socialnetworkapi.exception.ChatNotFoundException;
 import fs.socialnetworkapi.repos.ChatRepo;
 import fs.socialnetworkapi.repos.ChatUserRepo;
@@ -87,7 +91,6 @@ public class MessageService {
             .stream()
             .map(message -> mapper.map(message, MessageDtoOut.class))
             .toList();
-
   }
 
   public void deleteMessage(Message message) {
