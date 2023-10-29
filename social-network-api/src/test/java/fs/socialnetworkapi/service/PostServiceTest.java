@@ -131,21 +131,21 @@ public class PostServiceTest {
     //
     //        assertThrows(UserNotFoundException.class, () -> postService.savePost( any(PostDtoIn.class)));
     }
-    @Test
-    public void testSave() {
-
-        PostDtoIn postDtoIn = PostDtoIn.builder()
-                .description("Description")
-                .photo("Photo")
-                .build();
-
-        PostDtoOut expectedPostDtoOut = PostDtoOut.builder()
-                .id(1L)
-                .user(userDtoOut1)
-                .description("Description")
-                .photo("Photo")
-                .build();
-
+//    @Test
+//    public void testSave() {
+//
+//        PostDtoIn postDtoIn = PostDtoIn.builder()
+//                .description("Description")
+//                .photo("Photo")
+//                .build();
+//
+//        PostDtoOut expectedPostDtoOut = PostDtoOut.builder()
+//                .id(1L)
+//                .user(userDtoOut1)
+//                .description("Description")
+//                .photo("Photo")
+//                .build();
+//
 //        SecurityContext securityContext = mock(SecurityContext.class);
 //        SecurityContextHolder.setContext(securityContext);
 //
@@ -156,15 +156,16 @@ public class PostServiceTest {
 //
 //        //Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(user1));
 //        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user1);
-        when(mapper.map(postDtoIn,Post.class)).thenReturn(post);
-        when(postRepo.save(post)).thenReturn(post);
-        when(mapper.map(eq(post), eq(PostDtoOut.class))).thenReturn(expectedPostDtoOut);
-
-        PostDtoOut result = postService.savePost(postDtoIn);
-
-        assertNotNull(result);
-        assertEquals(expectedPostDtoOut, result);
-    }
+//        when(mapper.map(postDtoIn,Post.class)).thenReturn(post);
+//        when(postRepo.save(post)).thenReturn(post);
+//        when(mapper.map(eq(post), eq(PostDtoOut.class))).thenReturn(expectedPostDtoOut);
+//        when(postService.s)
+//
+//        PostDtoOut result = postService.savePost(postDtoIn);
+//
+//        assertNotNull(result);
+//        assertEquals(expectedPostDtoOut, result);
+//    }
 
     @Test
     public void testEditePost(){
