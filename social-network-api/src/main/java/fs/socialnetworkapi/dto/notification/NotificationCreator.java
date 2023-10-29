@@ -32,15 +32,15 @@ public class NotificationCreator {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  private String fromUser(){
+  private String fromUser() {
     return notificationDtoIn.getUser().getUsername();
   }
 
-  private String post(){
+  private String post() {
     return notificationDtoIn.getPost().getDescription();
   }
 
-  private String message(){
+  private String message() {
     return notificationDtoIn.getMessage().getText();
   }
 
