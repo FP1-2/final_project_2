@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @Setter
@@ -36,5 +38,25 @@ public class Notification extends AbstractEntity {
   private NotificationType type;
   private String link;
   private boolean active = true;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Notification that = (Notification) o;
+    return active == that.active &&
+      Objects.equals(user, that.user) &&
+      Objects.equals(post, that.post) &&
+      Objects.equals(message, that.message) &&
+      Objects.equals(notifyingUser, that.notifyingUser) &&
+      Objects.equals(text, that.text) &&
+      type == that.type &&
+      Objects.equals(link, that.link);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(user, post, message, notifyingUser, text, type, link, active);
+  }
 
 }
