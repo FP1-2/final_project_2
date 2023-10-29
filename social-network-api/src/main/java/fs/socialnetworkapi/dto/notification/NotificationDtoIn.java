@@ -16,6 +16,5 @@ public class NotificationDtoIn {
   private Message message;
   private User notifyingUser;
   private NotificationType type;
-  private String link;
 
 }

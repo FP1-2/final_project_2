@@ -17,6 +17,8 @@ public class NotificationCreator {
   private ModelMapper mapper;
   private NotificationService notificationService;
   private NotificationDtoIn notificationDtoIn;
+  private String text;
+  private String link;
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
@@ -43,9 +45,10 @@ public class NotificationCreator {
       like.getPost(),
       null,
       like.getPost().getUser(),
-      NotificationType.LIKE,
-      String.format("%s/api/v1/%d", baseUrl, like.getPost().getId())
+      NotificationType.LIKE
     );
+    link = String.format("%s/api/v1/%d", baseUrl, like.getPost().getId());
+    text = String.format("User %s liked your post %s", fromUser(), post());
     return createNewNotification();
   }
 
@@ -55,9 +58,10 @@ public class NotificationCreator {
       post,
       null,
       post.getOriginalPost().getUser(),
-      NotificationType.COMMENT,
-      String.format("%s/api/v1/%d", baseUrl, post.getId())
+      NotificationType.COMMENT
     );
+    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+    text = String.format("User %s commented your post: %s", fromUser(), post());
     return createNewNotification();
   }
 
@@ -67,9 +71,10 @@ public class NotificationCreator {
       post,
       null,
       post.getOriginalPost().getUser(),
-      NotificationType.REPOST,
-      String.format("%s/api/v1/%d", baseUrl, post.getId())
-    );
+      NotificationType.REPOST
+      );
+    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+    text = String.format("User %s reposted your post: %s", fromUser(), post());
     return createNewNotification();
   }
 
@@ -79,9 +84,10 @@ public class NotificationCreator {
       null,
       null,
       user,
-      NotificationType.SUBSCRIBER,
-      String.format("%s/api/v1/user/info/%d", baseUrl, user.getId())
-    );
+      NotificationType.SUBSCRIBER
+      );
+    link = String.format("%s/api/v1/user/info/%d", baseUrl, user.getId());
+    text = String.format("User %s subscribed to your account", fromUser());
     return createNewNotification();
   }
 
@@ -96,9 +102,10 @@ public class NotificationCreator {
             post,
             null,
             user,
-            NotificationType.FEATURED,
-            String.format("%s/api/v1/%d", baseUrl, post.getId())
-          );
+            NotificationType.FEATURED
+            );
+          link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+          text = String.format("Your featured user %s has new post: %s", fromUser(), post());
           return createNewNotification();
         }
       ).toList();
@@ -117,28 +124,19 @@ public class NotificationCreator {
             null,
             message,
             user,
-            NotificationType.MESSAGE,
-            String.format("%s/api/v1/get-messages-chat/%d", baseUrl, message.getChat().getId())
-          );
+            NotificationType.MESSAGE
+            );
+          link = String.format("%s/api/v1/get-messages-chat/%d", baseUrl, message.getChat().getId());
+          text = String.format("User %s sent you new message: %s", fromUser(), message());
           return createNewNotification();
         }
       ).toList();
   }
 
-  private String createMessage() {
-    return switch (notificationDtoIn.getType()) {
-      case LIKE -> String.format("User %s liked your post %s", fromUser(), post());
-      case COMMENT -> String.format("User %s commented your post: %s", fromUser(), post());
-      case REPOST -> String.format("User %s reposted your post: %s", fromUser(), post());
-      case SUBSCRIBER -> String.format("User %s subscribed to your account", fromUser());
-      case FEATURED -> String.format("Your featured user %s has new post: %s", fromUser(), post());
-      case MESSAGE -> String.format("User %s sent you new message: %s", fromUser(), message());
-    };
-  }
-
   private Notification createNewNotification() {
     Notification notification = mapper.map(notificationDtoIn, Notification.class);
-    notification.setText(createMessage());
+    notification.setText(text);
+    notification.setLink(link);
     return notificationService.createNewNotification(notification);
   }
 

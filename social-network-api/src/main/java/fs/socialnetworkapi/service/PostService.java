@@ -141,10 +141,14 @@ public class PostService {
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
     Post postToSave = postRepo.save(post);
-    switch (typePost) {
-      case POST -> sendFeaturedNotification(postToSave);
-      case REPOST -> sendRepostNotification(postToSave);
-      case COMMENT -> sendCommentNotification(postToSave);
+    if (typePost.equals(TypePost.POST)) {
+      sendFeaturedNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.REPOST)) {
+      sendRepostNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.COMMENT)) {
+      sendCommentNotification(postToSave);
     }
     return getPostById(originalPostId);
   }
