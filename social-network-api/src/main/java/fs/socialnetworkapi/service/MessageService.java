@@ -3,11 +3,13 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.message.CreateChatDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
+import fs.socialnetworkapi.dto.notification.NotificationCreator;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
-import fs.socialnetworkapi.entity.Chat;
-import fs.socialnetworkapi.entity.ChatUser;
 import fs.socialnetworkapi.entity.Message;
+import fs.socialnetworkapi.entity.ChatUser;
+import fs.socialnetworkapi.entity.Chat;
 import fs.socialnetworkapi.exception.ChatNotFoundException;
 import fs.socialnetworkapi.repos.ChatRepo;
 import fs.socialnetworkapi.repos.ChatUserRepo;
@@ -30,6 +32,7 @@ public class MessageService {
   private final ChatUserRepo chatUserRepo;
   private final MessageRepo messageRepo;
   private final ModelMapper mapper;
+  private final NotificationService notificationService;
 
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {
 
@@ -72,8 +75,10 @@ public class MessageService {
     message.setChat(chat);
     message.setText(messageDtoIn.getText());
     message.setUser(user);
+    Message messageToSave = messageRepo.save(message);
+    sendMessageNotification(messageToSave);
 
-    return mapper.map(messageRepo.save(message),MessageDtoOut.class);
+    return mapper.map(messageToSave,MessageDtoOut.class);
   }
 
   public List<MessageDtoOut> getMessagesChat(Long chatId) {
@@ -86,6 +91,15 @@ public class MessageService {
             .stream()
             .map(message -> mapper.map(message, MessageDtoOut.class))
             .toList();
-
   }
+
+  public void deleteMessage(Message message) {
+    messageRepo.delete(message);
+    notificationService.deleteByMessageId(message.getId());
+  }
+
+  private void sendMessageNotification(Message message) {
+    List<Notification> notifications = new NotificationCreator().messageNotification(message);
+  }
+
 }
