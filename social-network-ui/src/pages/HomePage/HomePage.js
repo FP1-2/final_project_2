@@ -7,7 +7,6 @@ import UseUserToken from "../../hooks/useUserToken";
 
 const Home = () => {
   const [tweetPosts, setTweetPost] = useState([]);
-  console.log(tweetPosts);
   const { token } = UseUserToken();
 
   useEffect(() => {
