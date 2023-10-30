@@ -9,12 +9,12 @@ const Home = () => {
   const [tweetPosts, setTweetPost] = useState([]);
   console.log(tweetPosts);
   const { token } = UseUserToken();
-  console.log(token);
+
   useEffect(() => {
     getApiPosts(token).then((newTweets) => {
       setTweetPost(newTweets);
-      console.log(newTweets);
-      console.log(token);
+      // console.log(newTweets);
+      // console.log(token);
     });
   }, []);
 
