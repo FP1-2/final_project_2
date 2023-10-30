@@ -23,69 +23,74 @@ function App() {
 		console.log(screenSize)
 	}, [screenSize])
 	return (
-		<>
-			{isAuth && isAuth ? (
-				<Grid
-					sx={{
-						minHeight: '100vh',
-					}}
-					container
-				>
-					<Grid
-						sx={{
-							bgcolor: 'red',
-						}}
-						item
-						xs={0}
-						lg={2}
-					>
-						<Box></Box>
-					</Grid>
-					<Grid
-						sx={{
-							border: '1px solid black',
-							borderBottom: 'none',
-							bgcolor: 'green',
-						}}
-						item
-						xs={2}
-						md={3}
-						lg={2}
-					>
-						<PermanentDrawerLeft />
-					</Grid>
-					<Grid item xs={8} md={6} lg={4}>
-						<AppRoutes />
-					</Grid>
-					<Grid
-						sx={{
-							bgcolor: 'green',
-						}}
-						item
-						xs={2}
-						md={3}
-						lg={2}
-					>
-						<Box></Box>
-					</Grid>
-					<Grid
-						sx={{
-							bgcolor: 'red',
-						}}
-						item
-						xs={0}
-						lg={2}
-					>
-						<Box></Box>
-					</Grid>
-				</Grid>
-			) : (
-				<>
-					<AppRoutes />
-					<ModalRegisterWindow />
-				</>
-			)}
-		</>
+<>
+  <AppRoutes />
+  <ModalRegisterWindow />
+</>
+
+		// <>
+		// 	{isAuth && isAuth ? (
+		// 		<Grid
+		// 			sx={{
+		// 				minHeight: '100vh',
+		// 			}}
+		// 			container
+		// 		>
+		// 			<Grid
+		// 				sx={{
+		// 					bgcolor: 'red',
+		// 				}}
+		// 				item
+		// 				xs={0}
+		// 				lg={2}
+		// 			>
+		// 				<Box></Box>
+		// 			</Grid>
+		// 			<Grid
+		// 				sx={{
+		// 					border: '1px solid black',
+		// 					borderBottom: 'none',
+		// 					bgcolor: 'green',
+		// 				}}
+		// 				item
+		// 				xs={2}
+		// 				md={3}
+		// 				lg={2}
+		// 			>
+		// 				<PermanentDrawerLeft />
+		// 			</Grid>
+		// 			<Grid item xs={8} md={6} lg={4}>
+		// 				<AppRoutes />
+		// 			</Grid>
+		// 			<Grid
+		// 				sx={{
+		// 					bgcolor: 'green',
+		// 				}}
+		// 				item
+		// 				xs={2}
+		// 				md={3}
+		// 				lg={2}
+		// 			>
+		// 				<Box></Box>
+		// 			</Grid>
+		// 			<Grid
+		// 				sx={{
+		// 					bgcolor: 'red',
+		// 				}}
+		// 				item
+		// 				xs={0}
+		// 				lg={2}
+		// 			>
+		// 				<Box></Box>
+		// 			</Grid>
+		// 		</Grid>
+		// 	) : (
+		// 		<>
+		// 			<AppRoutes />
+		// 			<ModalRegisterWindow />
+		// 		</>
+		// 	)}
+		// </>
 	)
 }
 
