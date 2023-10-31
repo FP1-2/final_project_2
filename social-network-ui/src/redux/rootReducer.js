@@ -3,10 +3,12 @@ import modalSlice from './slices/modalSlice'
 import registerSlice from './slices/registerSlice'
 import userSlice from './slices/userSlice'
 import modalResetSlice from './slices/modalResetSlice'
+import modalEditSlice from './slices/modalEditSlice'
 
 const rootReducer = combineReducers({
 	register: registerSlice,
 	modal: modalSlice,
+	modalEdit: modalEditSlice,
 	user: userSlice,
 	modalReset: modalResetSlice,
 })

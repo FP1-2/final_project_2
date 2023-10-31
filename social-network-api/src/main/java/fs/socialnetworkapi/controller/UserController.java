@@ -1,6 +1,5 @@
 package fs.socialnetworkapi.controller;
 
-
 import fs.socialnetworkapi.dto.EmailRequest;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
