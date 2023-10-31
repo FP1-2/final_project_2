@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import getApiPosts from "../../api/getApiPosts";
-
 import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
 import PostWrapper from "../../components/HomePage/PostWrapper/PostWrapper";
 import UseUserToken from "../../hooks/useUserToken";
-import TwitterHeader from "../../components/Header/TwitterHeader";
 import { Box } from "@mui/material";
 
 const Home = () => {
@@ -14,8 +12,6 @@ const Home = () => {
   useEffect(() => {
     getApiPosts(token).then((newTweets) => {
       setTweetPost(newTweets);
-      // console.log(newTweets);
-      // console.log(token);
     });
   }, []);
 
