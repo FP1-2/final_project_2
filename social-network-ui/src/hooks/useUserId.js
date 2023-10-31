@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 
 const useUserId = () => {
-  const userId = useSelector(state => state.user.userId)
+  const userId = localStorage.getItem('userId')
   return userId
 }
 
