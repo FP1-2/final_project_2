@@ -79,12 +79,6 @@ export default function PermanentDrawerLeft({ pageName, children }) {
           <Toolbar> </Toolbar>
           <AppBar
             position="fixed"
-            sx={
-				{
-                // width: `calc(100% - ${drawerWidth}px)`,
-                // ml: `${drawerWidth}px`
-              }
-            }
           >
             <Toolbar>
               <Link to="/home" className={styles.link}>
@@ -165,7 +159,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
         </Drawer>
         <Box
           component='main'
-          sx={{ flexGrow: 1, bgcolor: 'background.default', mt: '64px'}}
+          sx={{ flexGrow: 1, bgcolor: 'background.default', mt: '64px', width: `calc(100% - ${drawerWidth}px)`}}
         >
           {children}
           <Toolbar />

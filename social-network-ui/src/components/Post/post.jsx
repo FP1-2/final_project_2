@@ -17,15 +17,21 @@ import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
 
-function Post ({ post }) {
+function Post ({ post, setCommentedPost, setOpenModal }) {
   const [isLiked, setIsLiked] = useState(post?.hasMyLike)
   const [likes, setLikes] = useState(post?.countLikes)
   const [isReposted, setIsReposted] = useState(post.hasMyRepost)
   const [reposts, setReposts] = useState(post.countRepost)
+  const [comments, setComments] = useState(post.countComments)
   const [error, setError] = useState(null)
   const { token } = UseUserToken()
   const url = process.env.REACT_APP_SERVER_URL
   const postDate = formatPostDate(post.createdDate)
+
+  function comment() {
+    setCommentedPost(post)
+    setOpenModal(true)
+  }
 
   async function like () {
     try {
@@ -86,7 +92,7 @@ function Post ({ post }) {
     <Card variant='outlined'>
       <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         <Link
-          href={'/user' + post.user.id}
+          href={'/user/' + post.user.id}
           sx={{ display: 'flex', gap: 1, color: 'rgba(0, 0, 0, 0.87)' }}
           underline='hover'
         >
@@ -122,6 +128,7 @@ function Post ({ post }) {
               </Avatar>
             )}
           </Box>
+          </Link>
           <Typography
             variant='h6'
             sx={{ display: 'flex', alignItems: 'center' }}
@@ -131,9 +138,8 @@ function Post ({ post }) {
           <Typography sx={{ display: 'flex', alignItems: 'center' }}>
             @{post.user.username}
           </Typography>
-        </Link>
         <Link
-          href={'/post' + post.id}
+          to={'/post/' + post.id}
           color='rgba(0, 0, 0, 0.87)'
           underline='hover'
         >
@@ -141,13 +147,16 @@ function Post ({ post }) {
         </Link>
       </CardContent>
       <CardContent>
-        <Typography paragraph={true}>{post.description}</Typography>
+        <Typography paragraph={true} sx={{wordWrap: 'break-word'}}>{post.description}</Typography>
         <ImageListItem>
           <img src={post.photo}></img>
         </ImageListItem>
         <CardActions>
-          <Button>
+          <Button onClick={() => comment()}>
             <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
+            <Typography sx={{ color: 'grey', ml: 1 }}>
+              {comments || null}
+            </Typography>
           </Button>
           <Button onClick={() => repost()}>
             <AutorenewRoundedIcon
@@ -176,6 +185,8 @@ function Post ({ post }) {
 
 Post.propTypes = {
   post: PropTypes.object,
-  children: PropTypes.string
+  children: PropTypes.string,
+  setCommentedPost: PropTypes.func,
+  setOpenModal: PropTypes.func
 }
 export default Post
