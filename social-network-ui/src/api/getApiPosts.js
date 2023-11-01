@@ -2,9 +2,9 @@ import axios from "axios";
 
 const url = process.env.REACT_APP_SERVER_URL || "";
 
-const getApiPosts = async (token) => {
+const getApiPosts = async (token, userId) => {
   try {
-    const response = await axios.get(url + "/api/v1/all-posts", {
+    const response = await axios.get(url + "/api/v1/profile-posts/" + userId, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

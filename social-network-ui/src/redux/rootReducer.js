@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import modalSlice from './slices/modalSlice'
 import registerSlice from './slices/registerSlice'
 import userSlice from './slices/userSlice'
+import modalResetSlice from './slices/modalResetSlice'
 import modalEditSlice from './slices/modalEditSlice'
 
 const rootReducer = combineReducers({
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
 	modal: modalSlice,
 	modalEdit: modalEditSlice,
 	user: userSlice,
+	modalReset: modalResetSlice,
 })
 
 export default rootReducer
