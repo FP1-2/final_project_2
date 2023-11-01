@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import modalSlice from './slices/modalSlice'
 import registerSlice from './slices/registerSlice'
 import userSlice from './slices/userSlice'
+import modalResetSlice from './slices/modalResetSlice'
 import modalEditSlice from './slices/modalEditSlice'
 import chatSlice from './slices/chatSlice'
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
 	modalEdit: modalEditSlice,
 	user: userSlice,
 	chat: chatSlice,
+	modalReset: modalResetSlice,
 })
 
 export default rootReducer
