@@ -17,9 +17,9 @@ const Home = () => {
     });
   }, []);
 
-  const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : "";
-  const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : "";
-  const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : "";
+  // const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : "";
+  // const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : "";
+  // const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : "";
 
   return (
     <Header pageName="Home">
@@ -27,9 +27,9 @@ const Home = () => {
         <TwitterWriteWindow
           setTweetPost={setTweetPost}
           tweetPosts={tweetPosts}
-          userPhoto={userPhoto}
-          firstName={firstName}
-          lastName={lastName}
+          // userPhoto={userPhoto}
+          // firstName={firstName}
+          // lastName={lastName}
           token={token}
         />
         <PostWrapper tweets={tweetPosts} />

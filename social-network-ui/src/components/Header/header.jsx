@@ -60,7 +60,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
 
   if (screenSize !== 'mobile') {
     return (
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex"}}>
         <CssBaseline />
 
         <Drawer
@@ -74,7 +74,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
             },
           }}
           variant="permanent"
-          anchor="left"
+          anchor="center"
         >
           <Toolbar> </Toolbar>
           <AppBar

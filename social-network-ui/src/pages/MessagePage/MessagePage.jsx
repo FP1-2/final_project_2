@@ -20,43 +20,29 @@ function MessagePage() {
 	const [isMobile, setIsMobile] = useState(false)
 
 
-   const handleSearch = async () => {
-    try {
-      const response = await axios.get (`http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/user/info/1`);
-      if (response === 200) {
-        const data = await response.json();
-        setUser(data);
-        setErr(false);
-      } else {
-        setErr(true);
-      }
-    } catch (error) {
-      setErr(true);
-    }
+  //  const handleSearch = async () => {
+  //   try {
+  //     const response = await axios.post ('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/search');
+  //     if (response === 200) {
+  //       const data = await response.json();
+  //       setUser(data);
+  //       setErr(false);
+  //     } else {
+  //       setErr(true);
+  //     }
+  //   } catch (error) {
+  //     setErr(true);
+  //   }
+  // }
+ const handleKey = (e) => {
+    e.target.value === "Enter" && handleSearch()
+    setChatComponentActive(true)
   }
 
-
-  const userId = {
-	id: 50,
-	username: 'Camel_wafas',
-	firstName: 'Jack',
-	lastName: 'Petrov',
-	email: 'asda@gmail.com',
-	birthday: '1992-04-04',
-	avatar: null,
-	address: 'Poltava',
-	createdDate: '2023-10-16T10:59:39.842808',
-	userDescribe: 'I am a good person',
-	userLink: 't.me/adadsa',
-	bgProfileImage: null,
-	userTweetCount: 55,
-	userFollowersCount: 12,
-	userFollowingCount: 34,
-}
-
   return (
-  <Header >
+  <Header>
     <Box sx={{
+     
       position: 'relative',
       zIndex: 1300,
     }}>
@@ -76,16 +62,18 @@ function MessagePage() {
         
           </div>
           {err && <p style={{ marginTop: 20}} > Error USER NOT FOUND</p> }
-          {userId && <div  className={styles.userChat}>
-            <div style={{ backgroundImage: `url(${userId.avatar})` }}  >
+          {/* {"user" && <div  className={styles.userChat}>
+            <div   >
               <Avatar />
                </div>
             <div>
-              <span>{userId.firstName} </span>
-              <span>{userId.username} </span>
-              <span></span>
+              <span> </span>
+              <span> </span> */}
+              {/* <span>{userId.firstName} </span>
+              <span>{userId.username} </span> */}
+              {/* <span></span>
             </div>
-          </div>}
+          </div>} */}
             <Chats isMobile={isMobile} setIsMobile={setIsMobile} setChatComponentActive={setChatComponentActive}/>
           </div>
         <div className={styles.leftGrid} >
@@ -95,7 +83,7 @@ function MessagePage() {
               <div  className={styles.subLeft}>
               <h1>Select a message </h1>
               <p>Choose from your existing conversations, start a new one, or just keep swimming. </p>
-                <Link href="" ><button onClick={() => setChatComponentActive(true)} className={styles.newMessageBtn}>New message</button> </Link>
+                <Link><button onClick={() => setChatComponentActive(true)} className={styles.newMessageBtn}>New message</button> </Link>
                 </div>
             </div>}
         </div>

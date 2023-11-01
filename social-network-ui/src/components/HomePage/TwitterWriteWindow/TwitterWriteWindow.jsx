@@ -55,20 +55,20 @@ const TwitterWriteWindow = ({
   return (
     <div>
       <form className={styles.writeWindow} onSubmit={handleSubmit}>
-        {userPhoto ? (
+        {/* {userPhoto ? (
           <Avatar
             alt={`${firstName} ${lastName}`}
             src={userPhoto}
             sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
-          />
-        ) : (
+          /> */}
+        {/* ) : ( */}
           <Avatar
             sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
           >
-            {firstName.charAt(0)}
-            {lastName.charAt(0)}
+            {/* {firstName.charAt(0)} */}
+            {/* {lastName.charAt(0)} */}
           </Avatar>
-        )}
+        {/* )} */}
 
         <div className={styles.writeWindowBody}>
           <MultilineTextFields

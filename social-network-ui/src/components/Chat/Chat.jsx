@@ -1,16 +1,18 @@
 import React from 'react'
+import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import Message from '../Message/Message';
 import styles from './Chat.module.scss'
 
 function Chat() {
+    const [message, setMessages] = useState([])
   return (
     <div className={styles.chatCon} >
                 <div className={styles.subChatCon}>
                     <div className={styles.heading} >
                         <div className={styles.headingDetails}>
           <div className={styles.profileDp} style={{backgroundImage: `url`  }} ></div>
-                            <Link href={'/users/' + data.user?.username } ><span className={styles.username}>{data.user?.username}</span></Link>
+                            {/* <Link href={'/users/' + data.user?.username } ><span className={styles.username}>{data.user?.username}</span></Link> */}
                         </div>
                        
                     </div>

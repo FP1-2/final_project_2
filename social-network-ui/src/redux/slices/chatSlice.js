@@ -1,25 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+import getChatMembers from '../../api/getChatMembers'
+import UseUserToken from "../../hooks/useUserToken";
 
 
+const initialState = {
+    members: [],
+}
 
 const chatSlice = createSlice({
-  name: "chat",
-  initialState: {
-    user: {
-      chats: {
-            messages: ['hell' ]
-          }
-    }
-    
-  },
-  reducers: {
-    addchat: (state, action) => {
-      state.chats.push(action.payload);
+    name: 'chat',
+    initialState,
+    reducers: {
+        getMembers: (state, action) => {
+          console.log(action);
+            state.members = getChatMembers(action.payload, token)
+            
+        },
     },
-    clearchat: (state, action) => {
-     state.chats = state.chats.filter((chat) => chat.id !== action.payload)
-    },
-  },
-});
-export const {addchat, clearchat } = chatSlice.actions
-export default chatSlice.reducer;
+})
+
+export const {getMembers} = chatSlice.actions
+export default chatSlice.reducer
