@@ -12,10 +12,11 @@ import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import CardActions from '@mui/material/CardActions'
 import ImageListItem from '@mui/material/ImageListItem'
-import Link from '@mui/material/Link'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
+import styles from './post.module.scss'
 
 function Post ({ post, setCommentedPost, setOpenModal }) {
   const [isLiked, setIsLiked] = useState(post?.hasMyLike)
@@ -28,7 +29,7 @@ function Post ({ post, setCommentedPost, setOpenModal }) {
   const url = process.env.REACT_APP_SERVER_URL
   const postDate = formatPostDate(post.createdDate)
 
-  function comment() {
+  function comment () {
     setCommentedPost(post)
     setOpenModal(true)
   }
@@ -90,11 +91,9 @@ function Post ({ post, setCommentedPost, setOpenModal }) {
 
   return (
     <Card variant='outlined'>
-      <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+      <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <Link
-          href={'/user/' + post.user.id}
-          sx={{ display: 'flex', gap: 1, color: 'rgba(0, 0, 0, 0.87)' }}
-          underline='hover'
+          to={'/user/' + post.user.id}
         >
           <Box
             sx={{
@@ -128,26 +127,39 @@ function Post ({ post, setCommentedPost, setOpenModal }) {
               </Avatar>
             )}
           </Box>
-          </Link>
+        </Link>
+        <Box sx={{display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center'}}>
+        <Link
+          to={'/user/' + post.user.id}
+          className={styles.link}
+        >
           <Typography
             variant='h6'
             sx={{ display: 'flex', alignItems: 'center' }}
           >
             {post.user.firstName} {post.user.lastName}
           </Typography>
+        </Link>
+        <Link
+          to={'/user/' + post.user.id}
+          className={styles.link}
+        >
           <Typography sx={{ display: 'flex', alignItems: 'center' }}>
             @{post.user.username}
           </Typography>
+        </Link>
         <Link
           to={'/post/' + post.id}
-          color='rgba(0, 0, 0, 0.87)'
-          underline='hover'
+          className={styles.link}
         >
           <Typography>{postDate}</Typography>
-        </Link>
+          </Link>
+          </Box>
       </CardContent>
       <CardContent>
-        <Typography paragraph={true} sx={{wordWrap: 'break-word'}}>{post.description}</Typography>
+        <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
+          {post.description}
+        </Typography>
         <ImageListItem>
           <img src={post.photo}></img>
         </ImageListItem>
