@@ -115,6 +115,7 @@ const ProfilePage = () => {
 		;(async () => {
 			try {
 				setIsLoadingPosts(true)
+				setUserPosts([]) // change later
 				const { data } = await axios.get(
 					`${process.env.REACT_APP_SERVER_URL || ''}${objPosts[btnNum]}${
 						params.userId
@@ -418,7 +419,15 @@ const ProfilePage = () => {
 					}}
 				>
 					{isLoadingPosts && <CircularProgress size={80} />}
-					{userPosts.length !== 0 && <PostWrapper tweets={userPosts} />}
+					{userPosts.length !== 0 && (
+						<Box
+							sx={{
+								p: 2,
+							}}
+						>
+							<PostWrapper tweets={userPosts} />
+						</Box>
+					)}
 					{!isLoadingPosts && !userPosts.length && (
 						<Typography
 							sx={{

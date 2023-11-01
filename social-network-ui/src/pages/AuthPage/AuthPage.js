@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux'
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
 import { openModal } from '../../redux/slices/modalSlice'
+import { useEffect } from 'react'
+import UseUserToken from '../../hooks/useUserToken'
 
 const imageLink =
 	'https://res.cloudinary.com/doenettec/image/upload/v1695565552/back-twitter_1_ysrqxd.png'
@@ -71,6 +73,7 @@ const theme = createTheme({
 
 const AuthPage = () => {
 	const dispatch = useDispatch()
+	const { removeToken } = UseUserToken()
 
 	const handleModalOpen = () => {
 		// open modal window
