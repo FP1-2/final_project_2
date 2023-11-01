@@ -29,15 +29,6 @@ import PropTypes from "prop-types";
 function TwitterHeader() {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState(null);
-  const [tweetPosts, setTweetPost] = useState([]);
-  const { token } = UseUserToken();
-
-  useEffect(() => {
-    getApiPosts(token).then((newTweets) => {
-      setTweetPost(newTweets);
-      console.log(newTweets);
-    });
-  }, []);
 
   const handleItemClick = (itemName) => {
     setActiveItem(itemName);
@@ -210,7 +201,7 @@ function TwitterHeader() {
           Tweet
         </Button>
 
-        <ListItem>
+        {/* <ListItem>
           <div className={styles.post}>
             {tweet.user.avatar ? (
               <Avatar
@@ -251,13 +242,10 @@ function TwitterHeader() {
               </div>
             </div>
           </div>
-        </ListItem>
+        </ListItem> */}
       </List>
     </Box>
   );
 }
-// Post.propTypes = {
-//   tweet: PropTypes.object.isRequired,
-// };
 
 export default TwitterHeader;
