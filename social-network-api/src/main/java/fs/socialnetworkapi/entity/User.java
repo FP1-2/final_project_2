@@ -1,6 +1,5 @@
 package fs.socialnetworkapi.entity;
 
-
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;

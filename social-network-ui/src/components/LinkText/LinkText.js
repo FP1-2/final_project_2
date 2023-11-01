@@ -19,7 +19,7 @@ const LinkText = ({ text, link, isLink, href }) => {
 			</Link>
 		)
 	) : (
-		<span className={styles.authLInks}>{text}</span>
+		<span className={styles.authLInks}>{text} </span>
 	)
 }
 

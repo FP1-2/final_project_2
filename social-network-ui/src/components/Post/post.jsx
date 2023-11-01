@@ -41,52 +41,52 @@ function Post ({ post, setCommentedPost, setOpenModal }) {
         {},
         {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      )
+      );
       response.status === 200
         ? toggleLiked()
-        : setError(`Error ${response.status}: ${response.error}`)
+        : setError(`Error ${response.status}: ${response.error}`);
     } catch (err) {
-      setError(`Error: ${err}`)
+      setError(`Error: ${err}`);
     }
   }
 
-  async function repost () {
+  async function repost() {
     try {
       const response = await axios.post(
         url + `/api/v1/post/${post.id}/repost`,
         {
           id: 0,
           userId: 0,
-          photo: 'string',
-          description: 'string'
+          photo: "string",
+          description: "string",
         },
         {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      )
+      );
       response.status === 200
         ? toggleRepost()
-        : setError(`Error ${response.status}: ${response.error}`)
+        : setError(`Error ${response.status}: ${response.error}`);
     } catch (err) {
-      setError(`Error: ${err}`)
+      setError(`Error: ${err}`);
     }
   }
 
-  function toggleLiked () {
-    isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
-    setIsLiked(!isLiked)
+  function toggleLiked() {
+    isLiked ? setLikes(likes - 1) : setLikes(likes + 1);
+    setIsLiked(!isLiked);
   }
 
-  function toggleRepost () {
-    isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
-    setIsReposted(!isReposted)
+  function toggleRepost() {
+    isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1);
+    setIsReposted(!isReposted);
   }
 
   return (
@@ -97,30 +97,30 @@ function Post ({ post, setCommentedPost, setOpenModal }) {
         >
           <Box
             sx={{
-              position: 'relative',
-              '&:before': {
+              position: "relative",
+              "&:before": {
                 content: '""',
-                position: 'absolute',
+                position: "absolute",
                 top: 0,
                 left: 0,
                 bottom: 0,
                 right: 0,
-                m: '-2px',
-                borderRadius: '50%'
+                m: "-2px",
+                borderRadius: "50%",
                 // background:
                 //   'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)',
-              }
+              },
             }}
           >
             {post.user.avatar ? (
               <Avatar
                 alt={`${post.user.firstName} ${post.user.lastName}`}
                 src={post.user.avatar}
-                sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
+                sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
               />
             ) : (
               <Avatar
-                sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
+                sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
               >
                 {post.user.firstName.charAt(0)}
                 {post.user.lastName.charAt(0)}
@@ -134,8 +134,8 @@ function Post ({ post, setCommentedPost, setOpenModal }) {
           className={styles.link}
         >
           <Typography
-            variant='h6'
-            sx={{ display: 'flex', alignItems: 'center' }}
+            variant="h6"
+            sx={{ display: "flex", alignItems: "center" }}
           >
             {post.user.firstName} {post.user.lastName}
           </Typography>
@@ -172,27 +172,27 @@ function Post ({ post, setCommentedPost, setOpenModal }) {
           </Button>
           <Button onClick={() => repost()}>
             <AutorenewRoundedIcon
-              sx={{ color: isReposted ? 'green' : 'grey' }}
+              sx={{ color: isReposted ? "green" : "grey" }}
             />
-            <Typography sx={{ color: isReposted ? 'green' : 'grey', ml: 1 }}>
+            <Typography sx={{ color: isReposted ? "green" : "grey", ml: 1 }}>
               {reposts || null}
             </Typography>
           </Button>
           <Button onClick={() => like()}>
             {isLiked ? (
-              <FavoriteIcon sx={{ color: 'red' }} />
+              <FavoriteIcon sx={{ color: "red" }} />
             ) : (
-              <FavoriteBorderIcon sx={{ color: 'grey' }} />
+              <FavoriteBorderIcon sx={{ color: "grey" }} />
             )}
-            <Typography sx={{ color: isLiked ? 'red' : 'grey', ml: 1 }}>
+            <Typography sx={{ color: isLiked ? "red" : "grey", ml: 1 }}>
               {likes || null}
             </Typography>
           </Button>
         </CardActions>
-        <Typography sx={{ color: 'red' }}> {error}</Typography>
+        <Typography sx={{ color: "red" }}> {error}</Typography>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 Post.propTypes = {

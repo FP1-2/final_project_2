@@ -1,38 +1,38 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import Box from '@mui/material/Box'
-import Drawer from '@mui/material/Drawer'
-import CssBaseline from '@mui/material/CssBaseline'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
-import Divider from '@mui/material/Divider'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import Button from '@mui/material/Button'
-import { NavLink, Link } from 'react-router-dom'
-import HomeIcon from '@mui/icons-material/Home'
-import SearchIcon from '@mui/icons-material/Search'
-import MailOutlineIcon from '@mui/icons-material/MailOutline'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import PermIdentityIcon from '@mui/icons-material/PermIdentity'
-import LogoutIcon from '@mui/icons-material/Logout'
-import LoginIcon from '@mui/icons-material/Login'
-import styles from './header.module.scss'
-import PropTypes from 'prop-types'
-import { setIsLogin } from '../../redux/slices/userSlice'
-import deleteAllCookies from '../../utils/deleteAllCookies'
-import { ReactComponent as Logo } from '../../logo.svg'
-import useScreenSize from '../../hooks/useScreenSize'
-import useIsAuthenticated from './../../hooks/useIsAuthenticated';
-import UseUserToken from '../../hooks/useUserToken'
+import React from "react";
+import { useDispatch } from "react-redux";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Button from "@mui/material/Button";
+import { NavLink, Link } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from "@mui/icons-material/Search";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import styles from "./header.module.scss";
+import PropTypes from "prop-types";
+import { setIsLogin } from "../../redux/slices/userSlice";
+import deleteAllCookies from "../../utils/deleteAllCookies";
+import { ReactComponent as Logo } from "../../logo.svg";
+import useScreenSize from "../../hooks/useScreenSize";
+import useIsAuthenticated from "./../../hooks/useIsAuthenticated";
+import UseUserToken from "../../hooks/useUserToken";
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
 export default function PermanentDrawerLeft({ pageName, children }) {
   const isLoggedIn = useIsAuthenticated();
@@ -50,15 +50,15 @@ export default function PermanentDrawerLeft({ pageName, children }) {
       ])
     : (links = ["home", "explore"]);
 
-	const dispatch = useDispatch()
-  
+  const dispatch = useDispatch();
+
   function logOut() {
-    deleteAllCookies()
-    removeToken()
-    dispatch(setIsLogin(false))
+    deleteAllCookies();
+    removeToken();
+    dispatch(setIsLogin(false));
   }
 
-  if (screenSize !== 'mobile') {
+  if (screenSize !== "mobile") {
     return (
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -79,6 +79,12 @@ export default function PermanentDrawerLeft({ pageName, children }) {
           <Toolbar> </Toolbar>
           <AppBar
             position="fixed"
+            sx={
+              {
+                // width: `calc(100% - ${drawerWidth}px)`,
+                // ml: `${drawerWidth}px`
+              }
+            }
           >
             <Toolbar>
               <Link to="/home" className={styles.link}>
@@ -139,7 +145,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
             </Button>
           ) : (
             <Button
-              href='/signIn'
+              href="/signIn"
               sx={{
                 justifyContent: "left",
                 mt: "5px",
@@ -158,8 +164,8 @@ export default function PermanentDrawerLeft({ pageName, children }) {
           )}
         </Drawer>
         <Box
-          component='main'
-          sx={{ flexGrow: 1, bgcolor: 'background.default', mt: '64px', width: `calc(100% - ${drawerWidth}px)`}}
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: "background.default", mt: "64px" }}
         >
           {children}
           <Toolbar />
@@ -200,8 +206,8 @@ export default function PermanentDrawerLeft({ pageName, children }) {
           </Container>
         </AppBar>
         <Box
-          component='main'
-          sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3, mb: '20px' }}
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: "background.default", p: 3, mb: "20px" }}
         >
           {children}
         </Box>
@@ -250,6 +256,6 @@ export default function PermanentDrawerLeft({ pageName, children }) {
 }
 
 PermanentDrawerLeft.propTypes = {
-	pageName: PropTypes.string,
-	children: PropTypes.node,
-}
+  pageName: PropTypes.string,
+  children: PropTypes.node,
+};
