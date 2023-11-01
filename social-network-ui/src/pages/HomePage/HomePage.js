@@ -4,13 +4,15 @@ import Header from "../../components/Header/header";
 import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
 import PostWrapper from "../../components/HomePage/PostWrapper/PostWrapper";
 import UseUserToken from "../../hooks/useUserToken";
+import useUserId from "../../hooks/useUserId";
 
 const Home = () => {
   const [tweetPosts, setTweetPost] = useState([]);
   const { token } = UseUserToken();
+  const userId = useUserId();
 
   useEffect(() => {
-    getApiPosts(token).then((newTweets) => {
+    getApiPosts(token, userId).then((newTweets) => {
       setTweetPost(newTweets);
       // console.log(newTweets);
       // console.log(token);

@@ -4,9 +4,11 @@ import Post from '../Post/post'
 import UseUserToken from '../../hooks/useUserToken'
 import getLikedPosts from '../../api/getLikedPosts'
 import useIsAuthenticated from '../../hooks/useIsAuthenticated'
+import useUserId from '../../hooks/useUserId'
         
 function Favourites() {
     const isLoggedIn = useIsAuthenticated();
+    const userId = useUserId();
     const [favourites, setFavourites] = useState([])
     const [error, setError] = useState(null);
     const { token } = UseUserToken()
@@ -14,7 +16,7 @@ function Favourites() {
     useEffect(() => {
         async function getPosts() {
             try {
-                const data = await getLikedPosts(token);
+                const data = await getLikedPosts(token, userId);
                 console.log(data);
                 setFavourites(data);
             } catch (error) {
