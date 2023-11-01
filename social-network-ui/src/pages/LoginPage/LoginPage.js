@@ -10,9 +10,10 @@ import LinkText from '../../components/LinkText/LinkText'
 import { postLoginData } from '../../api/authApi'
 import useUserToken from '../../hooks/useUserToken'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector, useState} from 'react-redux'
 import { login } from './../../redux/slices/userSlice'
-
+import {openResetModal} from "../../redux/slices/modalResetSlice";
+import ModalResetPassword from "../../components/ModalResetPassword/ModalResetPassword";
 const theme = createTheme({
   // custom theme
   typography: {
@@ -40,6 +41,11 @@ const LoginPage = () => {
 	const { token, saveToken, removeToken } = useUserToken()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
+
+  const isModalOpen = useSelector(state => state.modalReset.modalProps.isOpenReset)
+  const handleResetModalOpen = () => {
+    dispatch(openResetModal())
+  }
 
 	const onSubmit = (values, { resetForm }) => {
 		// submit handler
@@ -150,8 +156,22 @@ const LoginPage = () => {
 							width: '100%',
 						}}
 					>
-						<LinkText text='Forgot password?' link='/resetPassword' />
+            <Button
+              sx={{
+                fontSize: "1rem",
+                color:'rgb(13, 118, 184)',
+                textTransform: "none",
+                '&:hover': {
+                  background:'transparent',
+                  color: 'rgb(7, 82, 128)',
+                  textDecoration: 'underline',
+                },
 
+              }}
+              onClick={handleResetModalOpen}>
+              Forgot password?
+            </Button >
+              { isModalOpen && <ModalResetPassword /> }
             <LinkText text="Sign up to Twitter" />
           </Box>
         </Box>
