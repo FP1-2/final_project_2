@@ -6,6 +6,7 @@ import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.dto.user.UsernameChecker;
 import fs.socialnetworkapi.service.AuthorizationService;
 import fs.socialnetworkapi.service.PasswordResetService;
 import fs.socialnetworkapi.service.UserService;
@@ -61,8 +62,15 @@ public class UserController {
   }
 
   @PostMapping("edit")
-  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn ) {
-    return ResponseEntity.ok(userService.editUser(userDtoIn));
+  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn) {
+    String usernameToCheck = userDtoIn.getUsername();
+    UsernameChecker usernameChecker = new UsernameChecker();
+    boolean isUnique = usernameChecker.isUsernameUnique(usernameToCheck);
+    if (isUnique) {
+      return ResponseEntity.ok(userService.editUser(userDtoIn));
+    }
+    return (ResponseEntity<UserDtoOut>) ResponseEntity.ok();
+
   }
 
   @PostMapping("login")
@@ -74,6 +82,7 @@ public class UserController {
   public ResponseEntity<UserDtoOut> createNewUser(@Valid @RequestBody UserDtoIn userDtoIn) {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
+
 
   @GetMapping("activate/{code}")
   public ResponseEntity<Model> activate(Model model, @PathVariable String code) {

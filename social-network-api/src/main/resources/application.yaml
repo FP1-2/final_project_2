@@ -25,6 +25,20 @@ spring:
        sender: # отправитель письма (его почта и имя)
          email: test@gmail.com
 #      text: no-reply
+
+     security:
+       oauth2:
+         client:
+           registration:
+             google:
+                client-id: 779726160232-lam28me1gsgolsu5cbmeu3c07uftcvld.apps.googleusercontent.com
+                client-secret: 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
+#                redirect-uri: http://localhost:5000/login/oauth2/code/google
+#                scope:
+#                  - https://www.googleapis.com/auth/userinfo.email
+#                  - https://www.googleapis.com/auth/userinfo.profile
+#                  - openid
+
 jwt:
   password:
     encoder:

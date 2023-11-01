@@ -6,12 +6,14 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import static java.lang.System.currentTimeMillis;
 
 @Setter
 @Getter
 public class UserDtoIn {
 
   private Long id;
+  @UniqueUsername(message = "Username must be unique")
   private String username;
   @NotNull
   @Size(min = 2, message = "User firstname should have at least 2 characters")
@@ -27,7 +29,7 @@ public class UserDtoIn {
   private String birthday;
   private String avatar;
   private String mainPhoto;
-  @NotNull
+  //  @NotNull
   private String password;
   private String address;
   private boolean active;
@@ -53,7 +55,7 @@ public class UserDtoIn {
   }
 
   public String getUsername() {
-    return (this.username == null) ? (String.format("%s_%s",this.firstName,this.lastName)) : (this.username);
+    return (this.username == null) ? (String.format("%s_%s_%d",this.firstName,this.lastName,currentTimeMillis())) : (this.username);
   }
 
 }
