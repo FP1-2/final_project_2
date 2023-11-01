@@ -13,7 +13,7 @@ import static java.lang.System.currentTimeMillis;
 public class UserDtoIn {
 
   private Long id;
-  @UniqueUsername(message = "Username must be unique")
+
   private String username;
   @NotNull
   @Size(min = 2, message = "User firstname should have at least 2 characters")

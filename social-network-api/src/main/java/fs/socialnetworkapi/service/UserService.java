@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,6 +30,7 @@ public class UserService implements UserDetailsService {
   private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
   private final PostRepo postRepo;
+
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
@@ -55,6 +55,8 @@ public class UserService implements UserDetailsService {
   public User saveUser(User user) {
     return userRepo.save(user);
   }
+
+  public User findByUsername(String username) {return userRepo.findByUsername(username); }
 
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
@@ -83,12 +85,13 @@ public class UserService implements UserDetailsService {
     String email = user.getEmail();
     User userFromDb = findByEmail(email);
     LocalDateTime createdDateUser = userFromDb.getCreatedDate();
+    String password = userFromDb.getPassword();
     user.setFirstName(userDtoIn.getFirstName());
     user.setLastName(userDtoIn.getLastName());
     user.setBirthday(userDtoIn.getBirthday());
     user.setMainPhoto(userDtoIn.getMainPhoto());
     user.setAvatar(userDtoIn.getAvatar());
-    user.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
+    user.setPassword(password);
     user.setAddress(userDtoIn.getAddress());
     user.setRoles("USER");
     user.setActive(true);
@@ -176,4 +179,5 @@ public class UserService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return findByEmail(username);
   }
+
 }
