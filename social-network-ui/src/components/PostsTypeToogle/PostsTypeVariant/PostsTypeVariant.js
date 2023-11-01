@@ -3,7 +3,12 @@ import { Box, Typography } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import PropTypes from 'prop-types'
 
-const PostsTypeVariant = ({ text, isChosen = false, setisChosen, index }) => {
+const PostsTypeVariant = ({
+	text,
+	isChosen = false,
+	setisChosen,
+	index,
+}) => {
 	const theme = createTheme({
 		typography: {
 			p: {

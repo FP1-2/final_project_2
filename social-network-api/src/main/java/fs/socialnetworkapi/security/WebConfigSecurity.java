@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,8 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -32,27 +29,19 @@ public class WebConfigSecurity {
     http.csrf(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests((authorizeHttpRequests) ->
         authorizeHttpRequests
-
           .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-          .requestMatchers("/api/v1/registration").permitAll()
-          .requestMatchers("/h2/**").permitAll()
-          .requestMatchers("/api/v1/login").permitAll()
-          .requestMatchers("/api/v1/activate/**").permitAll()
-          .requestMatchers("/api/v1/all-posts").permitAll()
-          .requestMatchers("/api/v1/reset/**").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/registration").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/login").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/activate/**").permitAll()
+          .requestMatchers(HttpMethod.GET,"/api/v1/all-posts").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/reset/**").permitAll()
           .requestMatchers("/error").permitAll()
-          .requestMatchers("/oauth2/google").permitAll()
-          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("USER")
-          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")
-          .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("USER")
-          .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
-
-//          .anyRequest().authenticated()
+          .requestMatchers(HttpMethod.DELETE,"/api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.PUT,"/api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.GET,"/api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.POST,"/api/v1/**").hasAuthority("USER")
 
       )
-
-//      .formLogin(Customizer.withDefaults())
-//      .oauth2Login(Customizer.withDefaults());
       .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();

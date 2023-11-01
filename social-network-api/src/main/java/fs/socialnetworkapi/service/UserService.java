@@ -1,8 +1,10 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.dto.notification.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,7 +33,6 @@ public class UserService implements UserDetailsService {
   private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
   private final PostRepo postRepo;
-
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
@@ -55,8 +57,6 @@ public class UserService implements UserDetailsService {
   public User saveUser(User user) {
     return userRepo.save(user);
   }
-
-  public User findByUsername(String username) {return userRepo.findByUsername(username); }
 
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
@@ -142,14 +142,11 @@ public class UserService implements UserDetailsService {
     return true;
   }
 
-  public void upgradeUser(User user) {
-    userRepo.save(user);
-  }
-
   public void subscribe(Long userId) {
     User currentUser = getUser();
 
     User user = findById(userId);
+    sendSubscriberNotification(user);
     user.getFollowers().add(currentUser);
     saveUser(user);
   }
@@ -178,6 +175,10 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return findByEmail(username);
+  }
+
+  private void sendSubscriberNotification(User user) {
+    Notification notification = new NotificationCreator().subscriberNotification(user);
   }
 
 }
