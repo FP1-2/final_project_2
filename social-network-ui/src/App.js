@@ -32,21 +32,23 @@ function App() {
 					container
 				>
 					<Grid
-						sx={{
-							bgcolor: 'red',
-						}}
+						sx={
+							{
+								// bgcolor: 'red',
+							}
+						}
 						item
 						xs={0}
-						lg={2}
+						lg={1}
 					>
 						<Box></Box>
 					</Grid>
 					<Grid
-						sx={{
-							border: '1px solid black',
-							borderBottom: 'none',
-							bgcolor: 'green',
-						}}
+						sx={
+							{
+								// bgcolor: 'green',
+							}
+						}
 						item
 						xs={2}
 						md={3}
@@ -54,13 +56,24 @@ function App() {
 					>
 						<TwitterHeader />
 					</Grid>
-					<Grid item xs={8} md={6} lg={4}>
+					<Grid
+						item
+						xs={8}
+						md={6}
+						lg={6}
+						sx={{
+							borderRight: '1px solid #C4C4C4',
+							borderLeft: '1px solid #C4C4C4',
+						}}
+					>
 						<AppRoutes />
 					</Grid>
 					<Grid
-						sx={{
-							bgcolor: 'green',
-						}}
+						sx={
+							{
+								// bgcolor: 'green',
+							}
+						}
 						item
 						xs={2}
 						md={3}
@@ -69,12 +82,14 @@ function App() {
 						<Box></Box>
 					</Grid>
 					<Grid
-						sx={{
-							bgcolor: 'red',
-						}}
+						sx={
+							{
+								// bgcolor: 'red',
+							}
+						}
 						item
 						xs={0}
-						lg={2}
+						lg={1}
 					>
 						<Box></Box>
 					</Grid>
