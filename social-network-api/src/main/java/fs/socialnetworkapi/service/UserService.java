@@ -1,8 +1,10 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.dto.notification.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -139,14 +140,11 @@ public class UserService implements UserDetailsService {
     return true;
   }
 
-  public void upgradeUser(User user) {
-    userRepo.save(user);
-  }
-
   public void subscribe(Long userId) {
     User currentUser = getUser();
 
     User user = findById(userId);
+    sendSubscriberNotification(user);
     user.getFollowers().add(currentUser);
     saveUser(user);
   }
@@ -176,4 +174,9 @@ public class UserService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return findByEmail(username);
   }
+
+  private void sendSubscriberNotification(User user) {
+    Notification notification = new NotificationCreator().subscriberNotification(user);
+  }
+
 }

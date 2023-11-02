@@ -30,17 +30,16 @@ public class WebConfigSecurity {
     http.authorizeHttpRequests((authorizeHttpRequests) ->
         authorizeHttpRequests
           .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-          .requestMatchers("/api/v1/registration").permitAll()
-          .requestMatchers("/h2/**").permitAll()
-          .requestMatchers("/api/v1/login").permitAll()
-          .requestMatchers("/api/v1/activate/**").permitAll()
-          .requestMatchers("/api/v1/all-posts").permitAll()
-          .requestMatchers("/api/v1/reset/**").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/registration").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/login").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/activate/**").permitAll()
+          .requestMatchers(HttpMethod.GET,"/api/v1/all-posts").permitAll()
+          .requestMatchers(HttpMethod.POST,"/api/v1/reset/**").permitAll()
           .requestMatchers("/error").permitAll()
-          .requestMatchers(HttpMethod.DELETE,"api/v1/**").hasAuthority("USER")
-          .requestMatchers(HttpMethod.PUT,"api/v1/**").hasAuthority("USER")
-          .requestMatchers(HttpMethod.GET,"api/v1/**").hasAuthority("USER")
-          .requestMatchers(HttpMethod.POST,"api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.DELETE,"/api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.PUT,"/api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.GET,"/api/v1/**").hasAuthority("USER")
+          .requestMatchers(HttpMethod.POST,"/api/v1/**").hasAuthority("USER")
 
       )
       .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
