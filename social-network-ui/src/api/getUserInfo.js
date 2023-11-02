@@ -10,7 +10,6 @@ export default async function getUserData(userId, token) {
 				},
 			}
 		)
-		console.log(data);
 		return data
 	} catch (error) {
 		throw error
