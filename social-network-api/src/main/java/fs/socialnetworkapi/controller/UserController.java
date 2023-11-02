@@ -11,6 +11,8 @@ import fs.socialnetworkapi.service.PasswordResetService;
 import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,7 +71,18 @@ public class UserController {
       return ResponseEntity.ok(userService.editUser(userDtoIn));
     }
     return (ResponseEntity<UserDtoOut>) ResponseEntity.ok();
+  }
 
+  @GetMapping("username-checker/{username}")
+  public ResponseEntity<Model> usernameChecker(Model model, @PathVariable String username) {
+    UsernameChecker usernameChecker = new UsernameChecker();
+    boolean isUnique = usernameChecker.isUsernameUnique(username);
+    if (isUnique) {
+      model.addAttribute("message", "Username is unique");
+    } else {
+      model.addAttribute("message", "Username is not unique");
+    }
+    return ResponseEntity.ok(model);
   }
 
   @PostMapping("login")
@@ -81,7 +94,6 @@ public class UserController {
   public ResponseEntity<UserDtoOut> createNewUser(@Valid @RequestBody UserDtoIn userDtoIn) {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
-
 
   @GetMapping("activate/{code}")
   public ResponseEntity<Model> activate(Model model, @PathVariable String code) {
