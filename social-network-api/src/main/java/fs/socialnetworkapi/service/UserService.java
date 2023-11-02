@@ -20,8 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
-
-import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -37,12 +35,6 @@ public class UserService implements UserDetailsService {
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
-//  @Value("${spring.datasource.url}")
-//  private String JDBC_URL;
-//  @Value("${username}")
-//  private String USERNAME;
-//  @Value("${password}")
-//  private String PASSWORD;
 
   public User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -187,23 +179,5 @@ public class UserService implements UserDetailsService {
   private void sendSubscriberNotification(User user) {
     Notification notification = new NotificationCreator().subscriberNotification(user);
   }
-
-//  public boolean isUsernameUnique(String username) {
-//    try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
-//      String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
-//      try (PreparedStatement statement = connection.prepareStatement(sql)) {
-//        statement.setString(1, username);
-//        try (ResultSet resultSet = statement.executeQuery()) {
-//          if (resultSet.next()) {
-//            int count = resultSet.getInt(1);
-//            return count == 0;
-//          }
-//        }
-//      }
-//    } catch (SQLException e) {
-//      e.printStackTrace();
-//    }
-//    return false;
-//  }
 
 }

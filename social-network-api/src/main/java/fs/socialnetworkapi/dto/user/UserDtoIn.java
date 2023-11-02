@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
 import static java.lang.System.currentTimeMillis;
 
 @Setter
@@ -54,7 +55,8 @@ public class UserDtoIn {
   }
 
   public String getUsername() {
-    return (this.username == null) ? (String.format("%s_%s_%d",this.firstName,this.lastName,currentTimeMillis())) : (this.username);
+    return (this.username == null) ? (String.format("%s_%s_%d",this.firstName,this.lastName,currentTimeMillis()))
+      : (this.username);
   }
 
 }
