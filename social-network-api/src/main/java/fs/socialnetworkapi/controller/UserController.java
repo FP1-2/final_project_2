@@ -70,19 +70,13 @@ public class UserController {
     if (isUnique) {
       return ResponseEntity.ok(userService.editUser(userDtoIn));
     }
-    return (ResponseEntity<UserDtoOut>) ResponseEntity.ok();
+    return ResponseEntity.status(409).build();
   }
 
   @GetMapping("username-checker/{username}")
-  public ResponseEntity<Model> usernameChecker(Model model, @PathVariable String username) {
+  public boolean usernameChecker(@PathVariable String username) {
     UsernameChecker usernameChecker = new UsernameChecker();
-    boolean isUnique = usernameChecker.isUsernameUnique(username);
-    if (isUnique) {
-      model.addAttribute("message", "Username is unique");
-    } else {
-      model.addAttribute("message", "Username is not unique");
-    }
-    return ResponseEntity.ok(model);
+    return usernameChecker.isUsernameUnique(username);
   }
 
   @PostMapping("login")
