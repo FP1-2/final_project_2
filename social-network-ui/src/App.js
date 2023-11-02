@@ -4,9 +4,9 @@ import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterW
 import useScreenSize from './hooks/useScreenSize'
 import { useSelector, useDispatch } from 'react-redux'
 import { login } from './redux/slices/userSlice'
-import PermanentDrawerLeft from './components/Header/header'
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/material'
+import TwitterHeader from './components/Header/TwitterHeader'
 
 function App() {
 	const screenSize = useScreenSize()
@@ -52,7 +52,7 @@ function App() {
 						md={3}
 						lg={2}
 					>
-						<PermanentDrawerLeft />
+						<TwitterHeader />
 					</Grid>
 					<Grid item xs={8} md={6} lg={4}>
 						<AppRoutes />
