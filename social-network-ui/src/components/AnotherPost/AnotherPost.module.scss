@@ -1,9 +1,8 @@
-.wrapper {
-  border: solid grey 1px;
-  border-radius: 5px;
-  background-color: rgb(239, 248, 255);
-}
+.link {
+  color: rgba(46, 46, 46, .8);
+  text-decoration: none;
 
-.postInfo {
-  font-weight: 700px;
+  :hover {
+    text-decoration: underline;
+  }
 }

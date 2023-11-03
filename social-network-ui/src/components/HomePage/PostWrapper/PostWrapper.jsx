@@ -1,15 +1,15 @@
-import React from 'react'
-// import Post from "../Post/Post";
-import { Box } from '@mui/material'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import AnotherPost from '../../AnotherPost/AnotherPost'
+import ModalComment from '../../ModalComment/ModalComment';
+import AnotherPost from '../../AnotherPost/AnotherPost';
 
 const PostWrapper = ({ tweets }) => {
+	const [commentedPost, setCommentedPost] = useState(null);
+    const [openModal, setOpenModal] = useState(false)
+	console.log(tweets)
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-			{tweets &&
-				tweets.map(tweet => <AnotherPost post={tweet} key={tweet.id} />)}
-		</Box>
+		<>{tweets && tweets.map(tweet => <AnotherPost post={tweet} key={tweet.id} setCommentedPost={setCommentedPost} setOpenModal={setOpenModal} />)}
+		{commentedPost ? <ModalComment post={commentedPost} open={openModal} setOpenModal={setOpenModal} /> : null}</>
 	)
 }
 

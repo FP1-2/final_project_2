@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import getApiPosts from '../../api/getApiPosts'
-import TwitterWriteWindow from '../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow'
-import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper'
-import UseUserToken from '../../hooks/useUserToken'
-import useUserId from '../../hooks/useUserId'
+import React, { useState, useEffect } from "react";
+import getApiPosts from "../../api/getApiPosts";
+import Header from "../../components/Header/header";
+import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
+import PostWrapper from "../../components/HomePage/PostWrapper/PostWrapper";
+import UseUserToken from "../../hooks/useUserToken";
+import getUserId from "../../utils/getUserId";
 
 const Home = () => {
-	const [tweetPosts, setTweetPost] = useState([])
-	const { token } = UseUserToken()
-	const userId = useUserId()
+  const [tweetPosts, setTweetPost] = useState([]);
+  const { token } = UseUserToken();
+  const userId = getUserId();
 
 	useEffect(() => {
 		getApiPosts(token, userId).then(newTweets => {

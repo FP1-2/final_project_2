@@ -14,14 +14,14 @@ const ImageInput = (props) => {
         value={props.value}
         onChange={props.onChange}
       />
-      <label for="fileInput" className={styles.customFileLabel}>
+      <label htmlFor="fileInput" className={styles.customFileLabel}>
         <AddPhotoAlternateIcon />
       </label>
     </div>
   );
 };
 ImageInput.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 export default ImageInput;
