@@ -30,6 +30,7 @@ public class UserDtoIn {
   private String avatar;
   private String mainPhoto;
   //  @NotNull
+  @Size(min = 6)
   private String password;
   private String address;
   private boolean active;

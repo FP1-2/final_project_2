@@ -13,8 +13,8 @@ public class UsernameChecker {
   private static final String USERNAME = "postgres";
   private static final String PASSWORD = "z7a2z%8G";
 
-
   public boolean isUsernameUnique(String username) {
+
     try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
       String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
       try (PreparedStatement statement = connection.prepareStatement(sql)) {
