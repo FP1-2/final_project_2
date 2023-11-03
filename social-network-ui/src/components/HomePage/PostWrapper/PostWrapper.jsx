@@ -1,15 +1,14 @@
 import React, {useState} from 'react'
-// import Post from "../Post/Post";
-import { Box } from '@mui/material'
 import PropTypes from 'prop-types'
 import ModalComment from '../../ModalComment/ModalComment';
+import AnotherPost from '../../AnotherPost/AnotherPost';
 
 const PostWrapper = ({ tweets }) => {
 	const [commentedPost, setCommentedPost] = useState(null);
     const [openModal, setOpenModal] = useState(false)
 	console.log(tweets)
 	return (
-		<>{tweets && tweets.map(tweet => <Post post={tweet} key={tweet.id} setCommentedPost={setCommentedPost} setOpenModal={setOpenModal} />)}
+		<>{tweets && tweets.map(tweet => <AnotherPost post={tweet} key={tweet.id} setCommentedPost={setCommentedPost} setOpenModal={setOpenModal} />)}
 		{commentedPost ? <ModalComment post={commentedPost} open={openModal} setOpenModal={setOpenModal} /> : null}</>
 	)
 }

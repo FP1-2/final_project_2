@@ -12,170 +12,193 @@ import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import CardActions from '@mui/material/CardActions'
 import ImageListItem from '@mui/material/ImageListItem'
-import Link from '@mui/material/Link'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
+import styles from './post.module.scss'
 
-function AnotherPost({ post }) {
-	const [isLiked, setIsLiked] = useState(post?.hasMyLike)
-	const [likes, setLikes] = useState(post?.countLikes)
-	const [isReposted, setIsReposted] = useState(post.hasMyRepost)
-	const [reposts, setReposts] = useState(post.countRepost)
-	const [error, setError] = useState(null)
-	const { token } = UseUserToken()
-	const url = process.env.REACT_APP_SERVER_URL
-	const postDate = formatPostDate(post.createdDate)
+function Post ({ post, setCommentedPost, setOpenModal }) {
+  const [isLiked, setIsLiked] = useState(post?.hasMyLike)
+  const [likes, setLikes] = useState(post?.countLikes)
+  const [isReposted, setIsReposted] = useState(post.hasMyRepost)
+  const [reposts, setReposts] = useState(post.countRepost)
+  const [comments, setComments] = useState(post.countComments)
+  const [error, setError] = useState(null)
+  const { token } = UseUserToken()
+  const url = process.env.REACT_APP_SERVER_URL
+  const postDate = formatPostDate(post.createdDate)
 
-	async function like() {
-		try {
-			const response = await axios.post(
-				url + `/api/v1/likes/like/${post.id}`,
-				{},
-				{
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			)
-			response.status === 200
-				? toggleLiked()
-				: setError(`Error ${response.status}: ${response.error}`)
-		} catch (err) {
-			setError(`Error: ${err}`)
-		}
-	}
+  function comment () {
+    setCommentedPost(post)
+    setOpenModal(true)
+  }
 
-	async function repost() {
-		try {
-			const response = await axios.post(
-				url + `/api/v1/post/${post.id}/repost`,
-				{
-					id: 0,
-					userId: 0,
-					photo: 'string',
-					description: 'string',
-				},
-				{
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			)
-			response.status === 200
-				? toggleRepost()
-				: setError(`Error ${response.status}: ${response.error}`)
-		} catch (err) {
-			setError(`Error: ${err}`)
-		}
-	}
+  async function like () {
+    try {
+      const response = await axios.post(
+        url + `/api/v1/likes/like/${post.id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      response.status === 200
+        ? toggleLiked()
+        : setError(`Error ${response.status}: ${response.error}`);
+    } catch (err) {
+      setError(`Error: ${err}`);
+    }
+  }
 
-	function toggleLiked() {
-		isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
-		setIsLiked(!isLiked)
-	}
+  async function repost() {
+    try {
+      const response = await axios.post(
+        url + `/api/v1/post/${post.id}/repost`,
+        {
+          id: 0,
+          userId: 0,
+          photo: "string",
+          description: "string",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      response.status === 200
+        ? toggleRepost()
+        : setError(`Error ${response.status}: ${response.error}`);
+    } catch (err) {
+      setError(`Error: ${err}`);
+    }
+  }
 
-	function toggleRepost() {
-		isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
-		setIsReposted(!isReposted)
-	}
+  function toggleLiked() {
+    isLiked ? setLikes(likes - 1) : setLikes(likes + 1);
+    setIsLiked(!isLiked);
+  }
 
-	return (
-		<Card variant='outlined' sx={{ maxWidth: '600px' }}>
-			<CardContent sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-				<Link
-					to={'/user/' + post.user.id}
-					sx={{ display: 'flex', gap: 1, color: 'rgba(0, 0, 0, 0.87)' }}
-					underline='hover'
-				>
-					<Box
-						sx={{
-							position: 'relative',
-							'&:before': {
-								content: '""',
-								position: 'absolute',
-								top: 0,
-								left: 0,
-								bottom: 0,
-								right: 0,
-								m: '-2px',
-								borderRadius: '50%',
-								// background:
-								//   'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)',
-							},
-						}}
-					>
-						{post.user.avatar ? (
-							<Avatar
-								alt={`${post.user.firstName} ${post.user.lastName}`}
-								src={post.user.avatar}
-								sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
-							/>
-						) : (
-							<Avatar
-								sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
-							>
-								{post.user.firstName.charAt(0)}
-								{post.user.lastName.charAt(0)}
-							</Avatar>
-						)}
-					</Box>
-					<Typography
-						variant='h6'
-						sx={{ display: 'flex', alignItems: 'center' }}
-					>
-						{post.user.firstName} {post.user.lastName}
-					</Typography>
-					<Typography sx={{ display: 'flex', alignItems: 'center' }}>
-						@{post.user.username}
-					</Typography>
-				</Link>
-				<Link
-					to={'/post/' + post.id}
-					color='rgba(0, 0, 0, 0.87)'
-					underline='hover'
-				>
-					<Typography>{postDate}</Typography>
-				</Link>
-			</CardContent>
-			<CardContent>
-				<Typography paragraph={true}>{post.description}</Typography>
-				<ImageListItem>
-					<img src={post.photo}></img>
-				</ImageListItem>
-				<CardActions>
-					<Button>
-						<MapsUgcRoundedIcon sx={{ color: 'grey' }} />
-					</Button>
-					<Button onClick={() => repost()}>
-						<AutorenewRoundedIcon
-							sx={{ color: isReposted ? 'green' : 'grey' }}
-						/>
-						<Typography sx={{ color: isReposted ? 'green' : 'grey', ml: 1 }}>
-							{reposts || null}
-						</Typography>
-					</Button>
-					<Button onClick={() => like()}>
-						{isLiked ? (
-							<FavoriteIcon sx={{ color: 'red' }} />
-						) : (
-							<FavoriteBorderIcon sx={{ color: 'grey' }} />
-						)}
-						<Typography sx={{ color: isLiked ? 'red' : 'grey', ml: 1 }}>
-							{likes || null}
-						</Typography>
-					</Button>
-				</CardActions>
-				<Typography sx={{ color: 'red' }}> {error}</Typography>
-			</CardContent>
-		</Card>
-	)
+  function toggleRepost() {
+    isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1);
+    setIsReposted(!isReposted);
+  }
+
+  return (
+    <Card variant='outlined'>
+      <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Link
+          to={'/user/' + post.user.id}
+        >
+          <Box
+            sx={{
+              position: "relative",
+              "&:before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                m: "-2px",
+                borderRadius: "50%",
+                // background:
+                //   'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)',
+              },
+            }}
+          >
+            {post.user.avatar ? (
+              <Avatar
+                alt={`${post.user.firstName} ${post.user.lastName}`}
+                src={post.user.avatar}
+                sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
+              />
+            ) : (
+              <Avatar
+                sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
+              >
+                {post.user.firstName.charAt(0)}
+                {post.user.lastName.charAt(0)}
+              </Avatar>
+            )}
+          </Box>
+        </Link>
+        <Box sx={{display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center'}}>
+        <Link
+          to={'/user/' + post.user.id}
+          className={styles.link}
+        >
+          <Typography
+            variant="h6"
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            {post.user.firstName} {post.user.lastName}
+          </Typography>
+        </Link>
+        <Link
+          to={'/user/' + post.user.id}
+          className={styles.link}
+        >
+          <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+            @{post.user.username}
+          </Typography>
+        </Link>
+        <Link
+          to={'/post/' + post.id}
+          className={styles.link}
+        >
+          <Typography>{postDate}</Typography>
+          </Link>
+          </Box>
+      </CardContent>
+      <CardContent>
+        <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
+          {post.description}
+        </Typography>
+        <ImageListItem>
+          <img src={post.photo}></img>
+        </ImageListItem>
+        <CardActions>
+          <Button onClick={() => comment()}>
+            <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
+            <Typography sx={{ color: 'grey', ml: 1 }}>
+              {comments || null}
+            </Typography>
+          </Button>
+          <Button onClick={() => repost()}>
+            <AutorenewRoundedIcon
+              sx={{ color: isReposted ? "green" : "grey" }}
+            />
+            <Typography sx={{ color: isReposted ? "green" : "grey", ml: 1 }}>
+              {reposts || null}
+            </Typography>
+          </Button>
+          <Button onClick={() => like()}>
+            {isLiked ? (
+              <FavoriteIcon sx={{ color: "red" }} />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: "grey" }} />
+            )}
+            <Typography sx={{ color: isLiked ? "red" : "grey", ml: 1 }}>
+              {likes || null}
+            </Typography>
+          </Button>
+        </CardActions>
+        <Typography sx={{ color: "red" }}> {error}</Typography>
+      </CardContent>
+    </Card>
+  );
 }
 
 AnotherPost.propTypes = {
 	post: PropTypes.object,
 	children: PropTypes.string,
+	setCommentedPost: PropTypes.func,
+    setOpenModal: PropTypes.func
 }
 export default AnotherPost

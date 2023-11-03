@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Post from '../Post/post'
 import UseUserToken from '../../hooks/useUserToken'
 import getLikedPosts from '../../api/getLikedPosts'
 import useIsAuthenticated from '../../hooks/useIsAuthenticated'
@@ -7,6 +6,7 @@ import getUserId from '../../utils/getUserId'
 import ModalComment from '../ModalComment/ModalComment'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box';
+import AnotherPost from '../AnotherPost/AnotherPost'
 
 function Favourites () {
   const isLoggedIn = useIsAuthenticated()
@@ -59,7 +59,7 @@ function Favourites () {
           favourites
             .reverse()
             .map(post => (
-              <Post
+              <AnotherPost
                 key={post.id}
                 post={post}
                 setCommentedPost={setCommentedPost}
