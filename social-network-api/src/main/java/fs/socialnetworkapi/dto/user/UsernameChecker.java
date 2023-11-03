@@ -13,7 +13,7 @@ public class UsernameChecker {
   private static final String USERNAME = "postgres";
   private static final String PAS = "z7a2z%8G";
 
-  public boolean isUsernameUnique(String username) {
+  public boolean isUsernameUnique(String username) throws SQLException {
 
     try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PAS)) {
       String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
@@ -26,8 +26,6 @@ public class UsernameChecker {
           }
         }
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
     }
     return false;
   }
