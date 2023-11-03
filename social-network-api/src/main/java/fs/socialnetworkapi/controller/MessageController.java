@@ -4,6 +4,7 @@ import fs.socialnetworkapi.dto.message.CreateChatDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.entity.Chat;
 import fs.socialnetworkapi.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,25 @@ public class MessageController {
   public ResponseEntity<List<UserDtoOut>> getMembersChat(@PathVariable("chatId") Long chatId) {
 
     return ResponseEntity.ok(messageService.getMembersChat(chatId));
+
+  }
+
+  @GetMapping("get-chats-user/{userId}")
+  public ResponseEntity<List<Long>> getChatsByUser(@PathVariable("userId") Long userId) {
+
+    return ResponseEntity.ok(messageService.getChatsByUser(userId));
+
+  }
+
+  @PostMapping("add-members-chat/{chatId}")
+  public ResponseEntity<?> addMembersChat(@PathVariable("chatId") Long chatId,
+                                          @RequestBody CreateChatDtoIn createChatDtoIn) {
+
+    Optional<Chat> chat = messageService.addMembersChat(chatId, createChatDtoIn);
+
+    return chat.isPresent()
+            ? (ResponseEntity.ok(chat.get().getId()))
+            : (ResponseEntity.badRequest().body(Map.of("errorMessage", "Array members is empty")));
 
   }
 
