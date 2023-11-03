@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 // import Post from "../Post/Post";
-import Post from '../../Post/post'
+import { Box } from '@mui/material'
 import PropTypes from 'prop-types'
 import ModalComment from '../../ModalComment/ModalComment';
 

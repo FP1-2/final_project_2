@@ -11,33 +11,31 @@ const Home = () => {
   const { token } = UseUserToken();
   const userId = getUserId();
 
-  useEffect(() => {
-    getApiPosts(token, userId).then((newTweets) => {
-      setTweetPost(newTweets);
-      // console.log(newTweets);
-      // console.log(token);
-    });
-  }, []);
+	useEffect(() => {
+		getApiPosts(token, userId).then(newTweets => {
+			setTweetPost(newTweets)
+			// console.log(newTweets);
+			// console.log(token);
+		})
+	}, [])
 
-  const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : "";
-  const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : "";
-  const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : "";
+	const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : ''
+	const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : ''
+	const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : ''
 
-  return (
-    <Header pageName="Home">
-      <section>
-        <TwitterWriteWindow
-          setTweetPost={setTweetPost}
-          tweetPosts={tweetPosts}
-          userPhoto={userPhoto}
-          firstName={firstName}
-          lastName={lastName}
-          token={token}
-        />
-        <PostWrapper tweets={tweetPosts} />
-      </section>
-    </Header>
-  );
-};
+	return (
+		<section>
+			<TwitterWriteWindow
+				setTweetPost={setTweetPost}
+				tweetPosts={tweetPosts}
+				userPhoto={userPhoto}
+				firstName={firstName}
+				lastName={lastName}
+				token={token}
+			/>
+			<PostWrapper tweets={tweetPosts} />
+		</section>
+	)
+}
 
-export default Home;
+export default Home

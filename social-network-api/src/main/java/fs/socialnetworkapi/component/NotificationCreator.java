@@ -1,5 +1,6 @@
-package fs.socialnetworkapi.dto.notification;
+package fs.socialnetworkapi.component;
 
+import fs.socialnetworkapi.dto.notification.NotificationDtoIn;
 import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
@@ -11,15 +12,21 @@ import fs.socialnetworkapi.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotificationCreator {
+
+  @Autowired
   private ModelMapper mapper;
+
   private NotificationService notificationService;
   private NotificationDtoIn notificationDtoIn;
   private String text;

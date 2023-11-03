@@ -1,6 +1,6 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.dto.notification.NotificationCreator;
+import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
@@ -235,9 +235,11 @@ public class PostService {
             .stream()
             .filter(p -> p.getUser().equals(user)
                     && p.getTypePost().equals(TypePost.REPOST))
+            .map(p -> p.getOriginalPost().getId())
+            .distinct()
             .collect(Collectors.toMap(
-              p -> p.getOriginalPost().getId(),
-              p -> true
+              id -> id,
+              id -> true
             ));
   }
 
@@ -246,18 +248,22 @@ public class PostService {
             .stream()
             .filter(p -> p.getUser().equals(user)
                     && p.getTypePost().equals(TypePost.COMMENT))
+            .map(p -> p.getOriginalPost().getId())
+            .distinct()
             .collect(Collectors.toMap(
-              p -> p.getOriginalPost().getId(),
-              p -> true
+              id -> id,
+              id -> true
             ));
   }
 
   private Map<Long, Boolean> getUserLikesStatusMap(List<Like> likes, User user) {
     return likes.stream()
             .filter(like -> like.getUser().equals(user))
+            .map(p -> p.getPost().getId())
+            .distinct()
             .collect(Collectors.toMap(
-              like -> like.getPost().getId(),
-              like -> true
+              id -> id,
+              id -> true
             ));
   }
 

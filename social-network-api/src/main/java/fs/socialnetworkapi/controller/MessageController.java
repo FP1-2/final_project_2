@@ -7,6 +7,7 @@ import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,12 @@ import java.util.Optional;
 @RequestMapping("api/v1/")
 public class MessageController {
 
+  private final SimpMessagingTemplate messagingTemplate;
   private final MessageService messageService;
+
+  public void reply(MessageDtoOut messageDtoOut) {
+    messagingTemplate.convertAndSend("/topic/some-topic", messageDtoOut);
+  }
 
   @PostMapping("create-chat")
   public ResponseEntity<?> createChat(@RequestBody CreateChatDtoIn createChatDtoIn) {
@@ -52,8 +58,9 @@ public class MessageController {
 
   @PostMapping("message")
   public ResponseEntity<MessageDtoOut> addMessage(@RequestBody MessageDtoIn message) {
-
-    return ResponseEntity.ok(messageService.addMessage(message));
+    MessageDtoOut messageDtoOut = messageService.addMessage(message);
+    reply(messageDtoOut);
+    return ResponseEntity.ok(messageDtoOut);
   }
 
 

@@ -60,6 +60,7 @@ public class WebConfigSecurity {
       .requestMatchers(new AntPathRequestMatcher("/*.json"))
       .requestMatchers(new AntPathRequestMatcher("/*.ico"))
       .requestMatchers(new AntPathRequestMatcher("/#/**"))
+      .requestMatchers(new AntPathRequestMatcher("/api/ws/**"))
       ;
   }
 
