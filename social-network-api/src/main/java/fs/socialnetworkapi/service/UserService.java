@@ -1,6 +1,6 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.dto.notification.NotificationCreator;
+import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
