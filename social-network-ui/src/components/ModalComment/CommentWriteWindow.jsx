@@ -11,11 +11,12 @@ import getUserId from '../../utils/getUserId'
 import getUserData from '../../api/getUserInfo'
 import styles from './CommentWriteWindow.module.scss'
 import axios from 'axios'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
+import { redirect } from 'react-router-dom'
 
-function CommentWriteWindow ({ postId }) {
+function CommentWriteWindow ({ postId, close }) {
   const { token } = UseUserToken()
   const userId = getUserId()
   const [description, setDescription] = useState('')
@@ -71,7 +72,11 @@ const handlePost = async () => {
       );
 
       if (response.status === 200) {
-        setSuccess('Comment sent');
+        setSuccess('Comment sent. Click to open the post');
+        setTimeout(() => {
+          close()
+        }, 1000);
+
       } else {
         setError(`Error ${response.status}: ${response.data}`);
       }
@@ -104,6 +109,8 @@ const handlePost = async () => {
         />
         <PostButton onClick={handlePost}>Post</PostButton>
       </Box>
+      {error && <Typography sx={{color: 'red'}}>{error}</Typography>}
+      {success && <Button onClick={redirect(`/post/${postId}`)}><Typography sx={{color: 'green'}}>{success}</Typography></Button>}
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
@@ -136,5 +143,6 @@ const handlePost = async () => {
 export default CommentWriteWindow
 
 CommentWriteWindow.propTypes = {
-  postId: PropTypes.number
+  postId: PropTypes.number,
+  close: PropTypes.func
 }

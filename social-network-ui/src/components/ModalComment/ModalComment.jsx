@@ -54,7 +54,6 @@ const style = {
 }
 
 function ModalComment({ post, setOpenModal, open }) {
-    const [description, setDescription] = useState('')
     let postDate
     post ? postDate = formatPostDate(post.createdDate) : null;
     function handleClose() {
@@ -139,7 +138,7 @@ function ModalComment({ post, setOpenModal, open }) {
           {/* <Typography sx={{ color: 'red' }}> {error}</Typography> */}
         </CardContent>
               </Card>
-        <CommentWriteWindow postId={post.id}/>
+        <CommentWriteWindow postId={post.id} close={handleClose} />
      </Box>
     </Modal>
   )
