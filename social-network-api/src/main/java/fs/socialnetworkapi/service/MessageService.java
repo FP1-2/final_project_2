@@ -3,7 +3,7 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.message.CreateChatDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
-import fs.socialnetworkapi.dto.notification.NotificationCreator;
+import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
