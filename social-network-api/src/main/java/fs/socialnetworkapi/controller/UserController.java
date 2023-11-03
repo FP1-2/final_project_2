@@ -5,14 +5,11 @@ import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.dto.user.UsernameChecker;
 import fs.socialnetworkapi.service.AuthorizationService;
 import fs.socialnetworkapi.service.PasswordResetService;
 import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,19 +62,15 @@ public class UserController {
 
   @PostMapping("edit")
   public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn) throws SQLException {
-    String usernameToCheck = userDtoIn.getUsername();
-    UsernameChecker usernameChecker = new UsernameChecker();
-    boolean isUnique = usernameChecker.isUsernameUnique(usernameToCheck);
-    if (isUnique) {
+    if (userService.isUsernameUnique(userDtoIn.getUsername())) {
       return ResponseEntity.ok(userService.editUser(userDtoIn));
     }
     return ResponseEntity.status(409).build();
   }
 
   @GetMapping("username-checker/{username}")
-  public boolean usernameChecker(@PathVariable String username) throws SQLException {
-    UsernameChecker usernameChecker = new UsernameChecker();
-    return usernameChecker.isUsernameUnique(username);
+  public boolean usernameChecker(@PathVariable String username) {
+    return userService.isUsernameUnique(username);
   }
 
   @PostMapping("login")

@@ -180,4 +180,12 @@ public class UserService implements UserDetailsService {
     Notification notification = new NotificationCreator().subscriberNotification(user);
   }
 
+  public boolean isUsernameUnique(String username) {
+    if (userRepo.findByUsername(username) != null) {
+      return false;
+    }
+    return true;
+
+  }
+
 }
