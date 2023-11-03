@@ -17,7 +17,7 @@ import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
 
-function Post({ post }) {
+function AnotherPost({ post }) {
 	const [isLiked, setIsLiked] = useState(post?.hasMyLike)
 	const [likes, setLikes] = useState(post?.countLikes)
 	const [isReposted, setIsReposted] = useState(post.hasMyRepost)
@@ -174,8 +174,8 @@ function Post({ post }) {
 	)
 }
 
-Post.propTypes = {
+AnotherPost.propTypes = {
 	post: PropTypes.object,
 	children: PropTypes.string,
 }
-export default Post
+export default AnotherPost
