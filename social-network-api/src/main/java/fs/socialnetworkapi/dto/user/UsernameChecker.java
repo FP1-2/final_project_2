@@ -11,11 +11,11 @@ public class UsernameChecker {
   private static final String JDBC_URL = "jdbc:"
     + "postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter";
   private static final String USERNAME = "postgres";
-  private static final String PASSWORD = "z7a2z%8G";
+  private static final String PAS = "z7a2z%8G";
 
   public boolean isUsernameUnique(String username) {
 
-    try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
+    try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PAS)) {
       String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
       try (PreparedStatement statement = connection.prepareStatement(sql)) {
         statement.setString(1, username);
