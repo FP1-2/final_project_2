@@ -14,7 +14,7 @@ import formatPostDate from '../../utils/formatPostDate'
 import CloseIcon from '@mui/icons-material/Close';
 import CommentWriteWindow from './CommentWriteWindow'
 import { Link } from 'react-router-dom'
-import styles from '../Post/post.module.scss'
+import styles from '../AnotherPost/AnotherPost.module.scss'
 
 const style = {
 	position: 'absolute',

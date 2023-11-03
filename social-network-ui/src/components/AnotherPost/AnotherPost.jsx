@@ -16,9 +16,9 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
-import styles from './post.module.scss'
+import styles from './AnotherPost.module.scss'
 
-function Post ({ post, setCommentedPost, setOpenModal }) {
+function AnotherPost ({ post, setCommentedPost, setOpenModal }) {
   const [isLiked, setIsLiked] = useState(post?.hasMyLike)
   const [likes, setLikes] = useState(post?.countLikes)
   const [isReposted, setIsReposted] = useState(post.hasMyRepost)
