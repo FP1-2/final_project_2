@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal, Box, InputLabel, Avatar } from '@mui/material'
-import { Formik, Form } from 'formik'
+import { Formik, Form, useFormikContext } from 'formik'
 import { closeModal } from '../../redux/slices/modalEditSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import CustomInput from '../CustomInput/CustomInput'
@@ -40,8 +40,8 @@ const VisuallyHiddenInput = styled('input')`
 
 const ModalEdit = ({ user, setUser }) => {
 	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
-	const dispatch = useDispatch()
 
+	const dispatch = useDispatch()
 	const { token } = UseUserToken()
 
 	const [imageUrl, setImageUrl] = useState('') // image url
@@ -93,8 +93,13 @@ const ModalEdit = ({ user, setUser }) => {
 		if (type === 'background') setIsBgLoading(false)
 	}
 
+	const handleCloseModal = () => {
+		// need add reset form
+		dispatch(closeModal())
+	}
+
 	return (
-		<Modal open={isOpen} onClose={() => dispatch(closeModal())}>
+		<Modal open={isOpen} onClose={() => handleCloseModal()}>
 			<Box
 				sx={{
 					position: 'absolute',
@@ -129,7 +134,7 @@ const ModalEdit = ({ user, setUser }) => {
 						marginLeft: 'auto',
 					}}
 				>
-					<IconTwitter notLink={() => dispatch(closeModal())} />
+					<IconTwitter notLink={() => handleCloseModal()} />
 				</Box>
 
 				<Formik
