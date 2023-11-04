@@ -1,33 +1,40 @@
-import React, { useState } from "react";
-import { PropTypes } from "prop-types";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
-import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
-import ImageListItem from "@mui/material/ImageListItem";
-import Link from "@mui/material/Link";
-import axios from "axios";
-import UseUserToken from "../../hooks/useUserToken";
-import formatPostDate from "../../utils/formatPostDate";
+import React, { useState } from 'react'
+import { PropTypes } from 'prop-types'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import MapsUgcRoundedIcon from '@mui/icons-material/MapsUgcRounded'
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded'
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Box from '@mui/material/Box'
+import Avatar from '@mui/material/Avatar'
+import Typography from '@mui/material/Typography'
+import CardActions from '@mui/material/CardActions'
+import ImageListItem from '@mui/material/ImageListItem'
+import { Link } from 'react-router-dom'
+import axios from 'axios'
+import UseUserToken from '../../hooks/useUserToken'
+import formatPostDate from '../../utils/formatPostDate'
+import styles from './AnotherPost.module.scss'
 
-function Post({ post }) {
-  const [isLiked, setIsLiked] = useState(post?.hasMyLike);
-  const [likes, setLikes] = useState(post?.countLikes);
-  const [isReposted, setIsReposted] = useState(post.hasMyRepost);
-  const [reposts, setReposts] = useState(post.countRepost);
-  const [error, setError] = useState(null);
-  const { token } = UseUserToken();
-  const url = process.env.REACT_APP_SERVER_URL;
-  const postDate = formatPostDate(post.createdDate);
+function AnotherPost ({ post, setCommentedPost, setOpenModal }) {
+  const [isLiked, setIsLiked] = useState(post?.hasMyLike)
+  const [likes, setLikes] = useState(post?.countLikes)
+  const [isReposted, setIsReposted] = useState(post.hasMyRepost)
+  const [reposts, setReposts] = useState(post.countRepost)
+  const [comments, setComments] = useState(post.countComments)
+  const [error, setError] = useState(null)
+  const { token } = UseUserToken()
+  const url = process.env.REACT_APP_SERVER_URL
+  const postDate = formatPostDate(post.createdDate)
 
-  async function like() {
+  function comment () {
+    setCommentedPost(post)
+    setOpenModal(true)
+  }
+
+  async function like () {
     try {
       const response = await axios.post(
         url + `/api/v1/likes/like/${post.id}`,
@@ -83,12 +90,10 @@ function Post({ post }) {
   }
 
   return (
-    <Card variant="outlined">
-      <CardContent sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+    <Card variant='outlined'>
+      <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <Link
-          to={"/user/" + post.user.id}
-          sx={{ display: "flex", gap: 1, color: "rgba(0, 0, 0, 0.87)" }}
-          underline="hover"
+          to={'/user/' + post.user.id}
         >
           <Box
             sx={{
@@ -122,32 +127,48 @@ function Post({ post }) {
               </Avatar>
             )}
           </Box>
+        </Link>
+        <Box sx={{display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center'}}>
+        <Link
+          to={'/user/' + post.user.id}
+          className={styles.link}
+        >
           <Typography
             variant="h6"
             sx={{ display: "flex", alignItems: "center" }}
           >
             {post.user.firstName} {post.user.lastName}
           </Typography>
-          <Typography sx={{ display: "flex", alignItems: "center" }}>
+        </Link>
+        <Link
+          to={'/user/' + post.user.id}
+          className={styles.link}
+        >
+          <Typography sx={{ display: 'flex', alignItems: 'center' }}>
             @{post.user.username}
           </Typography>
         </Link>
         <Link
-          to={"/post/" + post.id}
-          color="rgba(0, 0, 0, 0.87)"
-          underline="hover"
+          to={'/post/' + post.id}
+          className={styles.link}
         >
           <Typography>{postDate}</Typography>
-        </Link>
+          </Link>
+          </Box>
       </CardContent>
       <CardContent>
-        <Typography paragraph={true}>{post.description}</Typography>
+        <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
+          {post.description}
+        </Typography>
         <ImageListItem>
           <img src={post.photo}></img>
         </ImageListItem>
         <CardActions>
-          <Button>
-            <MapsUgcRoundedIcon sx={{ color: "grey" }} />
+          <Button onClick={() => comment()}>
+            <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
+            <Typography sx={{ color: 'grey', ml: 1 }}>
+              {comments || null}
+            </Typography>
           </Button>
           <Button onClick={() => repost()}>
             <AutorenewRoundedIcon
@@ -174,8 +195,10 @@ function Post({ post }) {
   );
 }
 
-Post.propTypes = {
-  post: PropTypes.object,
-  children: PropTypes.string,
-};
-export default Post;
+AnotherPost.propTypes = {
+	post: PropTypes.object,
+	children: PropTypes.string,
+	setCommentedPost: PropTypes.func,
+    setOpenModal: PropTypes.func
+}
+export default AnotherPost

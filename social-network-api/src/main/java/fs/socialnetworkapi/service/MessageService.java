@@ -3,17 +3,17 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.message.CreateChatDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
-import fs.socialnetworkapi.dto.notification.NotificationCreator;
+import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.entity.Message;
 import fs.socialnetworkapi.entity.ChatUser;
 import fs.socialnetworkapi.entity.Chat;
-import fs.socialnetworkapi.exception.ChatNotFoundException;
 import fs.socialnetworkapi.repos.ChatRepo;
 import fs.socialnetworkapi.repos.ChatUserRepo;
 import fs.socialnetworkapi.repos.MessageRepo;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +32,7 @@ public class MessageService {
   private final ChatUserRepo chatUserRepo;
   private final MessageRepo messageRepo;
   private final ModelMapper mapper;
+  private final UserService userService;
   private final NotificationService notificationService;
 
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {
@@ -55,6 +56,19 @@ public class MessageService {
 
   }
 
+  public Optional<Chat> addMembersChat(Long chatId, CreateChatDtoIn createChatDtoIn) {
+
+    Chat chat = findById(chatId);
+
+    if (createChatDtoIn.getMembersChat().size() == 0) {
+      return Optional.empty();
+    }
+
+    createChatDtoIn.getMembersChat().forEach(memberChat -> chatUserRepo.save(new ChatUser(memberChat, chat.getId())));
+
+    return Optional.of(chat);
+  }
+
   public List<UserDtoOut> getMembersChat(Long chatId) {
     return chatRepo.findById(chatId)
            .map(chat -> chat.getChatUsers()
@@ -68,9 +82,8 @@ public class MessageService {
 
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    Chat chat = chatRepo.findById(messageDtoIn.getChatId())
-            .orElseThrow(()-> new ChatNotFoundException(
-                    String.format("Chat with id: %d not found", messageDtoIn.getChatId())));
+    Chat chat = findById(messageDtoIn.getChatId());
+
     Message message = new Message();
     message.setChat(chat);
     message.setText(messageDtoIn.getText());
@@ -83,9 +96,7 @@ public class MessageService {
 
   public List<MessageDtoOut> getMessagesChat(Long chatId) {
 
-    Chat chat = chatRepo.findById(chatId)
-            .orElseThrow(()-> new ChatNotFoundException(
-                    String.format("Chat with id: %d not found", chatId)));
+    Chat chat = findById(chatId);
 
     return chat.getMessages()
             .stream()
@@ -98,8 +109,23 @@ public class MessageService {
     notificationService.deleteByMessageId(message.getId());
   }
 
+  public List<Long> getChatsByUser(Long userId) {
+
+    User user = userService.findById(userId);
+    List<ChatUser> chatUsers = chatUserRepo.findByUser(user);
+
+    return chatUsers.stream().map(ChatUser::getChatId).toList();
+  }
+
   private void sendMessageNotification(Message message) {
     List<Notification> notifications = new NotificationCreator().messageNotification(message);
+  }
+
+  private Chat findById(Long chatId) {
+
+    return chatRepo.findById(chatId)
+            .orElseThrow(()-> new EntityNotFoundException(
+                    String.format("Unable to find Chat with id %d", chatId)));
   }
 
 }

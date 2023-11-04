@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal, Box, InputLabel, Avatar } from '@mui/material'
-import { Formik, Form } from 'formik'
+import { Formik, Form, useFormikContext } from 'formik'
 import { closeModal } from '../../redux/slices/modalEditSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import CustomInput from '../CustomInput/CustomInput'
@@ -19,11 +19,12 @@ const validationSchema = Yup.object({
 	firstName: Yup.string().min(3, 'Please enter at least 3 characters'),
 	lastName: Yup.string().min(3, 'Please enter at least 3 characters'),
 	address: Yup.string().min(3, 'Please enter at least 3 characters'),
-	username: Yup.string().min(8, 'Please enter at least 8 characters'),
+	username: Yup.string().min(6, 'Please enter at least 6 characters'),
 	birthday: Yup.string().matches(
 		/^\d{4}-\d{2}-\d{2}$/,
 		'Please enter a correct date'
 	),
+	userDescribe: Yup.string().max(60, 'Please enter 60 characters or less'),
 })
 
 const VisuallyHiddenInput = styled('input')`
@@ -40,8 +41,8 @@ const VisuallyHiddenInput = styled('input')`
 
 const ModalEdit = ({ user, setUser }) => {
 	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
-	const dispatch = useDispatch()
 
+	const dispatch = useDispatch()
 	const { token } = UseUserToken()
 
 	const [imageUrl, setImageUrl] = useState('') // image url
@@ -93,8 +94,13 @@ const ModalEdit = ({ user, setUser }) => {
 		if (type === 'background') setIsBgLoading(false)
 	}
 
+	const handleCloseModal = () => {
+		// need add reset form
+		dispatch(closeModal())
+	}
+
 	return (
-		<Modal open={isOpen} onClose={() => dispatch(closeModal())}>
+		<Modal open={isOpen} onClose={() => handleCloseModal()}>
 			<Box
 				sx={{
 					position: 'absolute',
@@ -129,7 +135,7 @@ const ModalEdit = ({ user, setUser }) => {
 						marginLeft: 'auto',
 					}}
 				>
-					<IconTwitter notLink={() => dispatch(closeModal())} />
+					<IconTwitter notLink={() => handleCloseModal()} />
 				</Box>
 
 				<Formik
@@ -140,6 +146,7 @@ const ModalEdit = ({ user, setUser }) => {
 						address: user.address,
 						userLink: user.userLink || '',
 						birthday: user.birthday,
+						userDescribe: user.userDescrib || '',
 					}}
 					onSubmit={async values => {
 						setIsBtnLoading(true)
@@ -152,6 +159,7 @@ const ModalEdit = ({ user, setUser }) => {
 						try {
 							const data = await editUserProfile(newValues, token)
 							console.log(data)
+							handleCloseModal()
 						} catch (error) {
 							console.log(error)
 						}
@@ -269,7 +277,7 @@ const ModalEdit = ({ user, setUser }) => {
 							</Box>
 							<Box
 								sx={{
-									width: '75%',
+									width: '100%',
 								}}
 							>
 								<InputLabel
@@ -282,6 +290,26 @@ const ModalEdit = ({ user, setUser }) => {
 									Your @Tag
 								</InputLabel>
 								<CustomInput type='text' id='username' name='username' />
+							</Box>
+							<Box
+								sx={{
+									width: '100%',
+								}}
+							>
+								<InputLabel
+									sx={{
+										p: 1,
+										cursor: 'pointer',
+									}}
+									htmlFor='userDescribe'
+								>
+									Your Profile Description
+								</InputLabel>
+								<CustomInput
+									type='text'
+									id='userDescribe'
+									name='userDescribe'
+								/>
 							</Box>
 							<Box
 								sx={{
@@ -331,7 +359,7 @@ const ModalEdit = ({ user, setUser }) => {
 							</Box>
 							<Box
 								sx={{
-									width: '75%',
+									width: '100%',
 									textAlign: 'center',
 								}}
 							>

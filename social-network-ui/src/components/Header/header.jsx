@@ -78,7 +78,7 @@ export default function PermanentDrawerLeft({ pageName, children }) {
         >
           <Toolbar> </Toolbar>
           <AppBar
-            // position="fixed"
+            position="fixed"
             sx={
               {
                 // width: `calc(100% - ${drawerWidth}px)`,
