@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -60,8 +61,16 @@ public class UserController {
   }
 
   @PostMapping("edit")
-  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn ) {
-    return ResponseEntity.ok(userService.editUser(userDtoIn));
+  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn) {
+    if (userService.isUsernameUnique(userDtoIn.getUsername())) {
+      return ResponseEntity.ok(userService.editUser(userDtoIn));
+    }
+    return ResponseEntity.status(409).build();
+  }
+
+  @GetMapping("username-checker/{username}")
+  public boolean usernameChecker(@PathVariable String username) {
+    return userService.isUsernameUnique(username);
   }
 
   @PostMapping("login")

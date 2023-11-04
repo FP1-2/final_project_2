@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,22 +82,17 @@ public class UserService implements UserDetailsService {
     User user = getUser();
     String email = user.getEmail();
     User userFromDb = findByEmail(email);
-    LocalDateTime createdDateUser = userFromDb.getCreatedDate();
-    user.setFirstName(userDtoIn.getFirstName());
-    user.setLastName(userDtoIn.getLastName());
-    user.setBirthday(userDtoIn.getBirthday());
-    user.setMainPhoto(userDtoIn.getMainPhoto());
-    user.setAvatar(userDtoIn.getAvatar());
-    user.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
-    user.setAddress(userDtoIn.getAddress());
-    user.setRoles("USER");
-    user.setActive(true);
-    user.setCreatedDate(createdDateUser);
-    user.setUsername(userDtoIn.getUsername());
-    user.setUserDescribe(userDtoIn.getUserDescribe());
-    user.setBgProfileImage(userDtoIn.getBgProfileImage());
-    user.setUserLink(userDtoIn.getUserLink());
-    return mapper.map(saveUser(user), UserDtoOut.class);
+    userFromDb.setFirstName(userDtoIn.getFirstName());
+    userFromDb.setLastName(userDtoIn.getLastName());
+    userFromDb.setBirthday(userDtoIn.getBirthday());
+    userFromDb.setMainPhoto(userDtoIn.getMainPhoto());
+    userFromDb.setAvatar(userDtoIn.getAvatar());
+    userFromDb.setUsername(userDtoIn.getUsername());
+    userFromDb.setAddress(userDtoIn.getAddress());
+    userFromDb.setUserDescribe(userDtoIn.getUserDescribe());
+    userFromDb.setBgProfileImage(userDtoIn.getBgProfileImage());
+    userFromDb.setUserLink(userDtoIn.getUserLink());
+    return mapper.map(saveUser(userFromDb), UserDtoOut.class);
   }
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
@@ -179,4 +173,10 @@ public class UserService implements UserDetailsService {
     Notification notification = new NotificationCreator().subscriberNotification(user);
   }
 
+  public boolean isUsernameUnique(String username) {
+    if (userRepo.findByUsername(username) != null) {
+      return false;
+    }
+    return true;
+  }
 }

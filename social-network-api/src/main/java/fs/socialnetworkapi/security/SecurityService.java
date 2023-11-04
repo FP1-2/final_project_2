@@ -37,6 +37,7 @@ public class SecurityService {
   private String issuer;
 
 
+
   public TokenDetails authenticate(String email) {
     User userByEmail = userService.findByEmail(email);
     return generateToken(userByEmail).toBuilder()
