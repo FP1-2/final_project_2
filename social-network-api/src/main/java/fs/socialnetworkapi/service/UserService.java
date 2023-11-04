@@ -83,23 +83,16 @@ public class UserService implements UserDetailsService {
     User user = getUser();
     String email = user.getEmail();
     User userFromDb = findByEmail(email);
-    LocalDateTime createdDateUser = userFromDb.getCreatedDate();
-    String password = userFromDb.getPassword();
-    user.setFirstName(userDtoIn.getFirstName());
-    user.setLastName(userDtoIn.getLastName());
-    user.setBirthday(userDtoIn.getBirthday());
-    user.setMainPhoto(userDtoIn.getMainPhoto());
-    user.setAvatar(userDtoIn.getAvatar());
-    user.setPassword(password);
-    user.setAddress(userDtoIn.getAddress());
-    user.setRoles("USER");
-    user.setActive(true);
-    user.setCreatedDate(createdDateUser);
-    user.setUsername(userDtoIn.getUsername());
-    user.setUserDescribe(userDtoIn.getUserDescribe());
-    user.setBgProfileImage(userDtoIn.getBgProfileImage());
-    user.setUserLink(userDtoIn.getUserLink());
-    return mapper.map(saveUser(user), UserDtoOut.class);
+    userFromDb.setFirstName(userDtoIn.getFirstName());
+    userFromDb.setLastName(userDtoIn.getLastName());
+    userFromDb.setBirthday(userDtoIn.getBirthday());
+    userFromDb.setMainPhoto(userDtoIn.getMainPhoto());
+    userFromDb.setAvatar(userDtoIn.getAvatar());
+    userFromDb.setUsername(userDtoIn.getUsername());
+    userFromDb.setUserDescribe(userDtoIn.getUserDescribe());
+    userFromDb.setBgProfileImage(userDtoIn.getBgProfileImage());
+    userFromDb.setUserLink(userDtoIn.getUserLink());
+    return mapper.map(saveUser(userFromDb), UserDtoOut.class);
   }
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {

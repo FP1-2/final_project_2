@@ -61,7 +61,7 @@ public class UserController {
   }
 
   @PostMapping("edit")
-  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn) throws SQLException {
+  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn) {
     if (userService.isUsernameUnique(userDtoIn.getUsername())) {
       return ResponseEntity.ok(userService.editUser(userDtoIn));
     }
