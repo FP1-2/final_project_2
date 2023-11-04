@@ -22,14 +22,12 @@ public class UserDtoIn {
   @Size(min = 2, message = "User lastname should have at least 2 characters")
   private String lastName;
   @Email
-  //  @NotNull
   private String email;
   @NotNull
   @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "birthday should be in format '1990-01-01'")
   private String birthday;
   private String avatar;
   private String mainPhoto;
-  //  @NotNull
   @Size(min = 6)
   private String password;
   private String address;
@@ -59,5 +57,4 @@ public class UserDtoIn {
     return (this.username == null) ? (String.format("%s_%s_%d",this.firstName,this.lastName,currentTimeMillis()))
       : (this.username);
   }
-
 }

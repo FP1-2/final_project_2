@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,6 +88,7 @@ public class UserService implements UserDetailsService {
     userFromDb.setMainPhoto(userDtoIn.getMainPhoto());
     userFromDb.setAvatar(userDtoIn.getAvatar());
     userFromDb.setUsername(userDtoIn.getUsername());
+    userFromDb.setAddress(userDtoIn.getAddress());
     userFromDb.setUserDescribe(userDtoIn.getUserDescribe());
     userFromDb.setBgProfileImage(userDtoIn.getBgProfileImage());
     userFromDb.setUserLink(userDtoIn.getUserLink());
@@ -178,7 +178,5 @@ public class UserService implements UserDetailsService {
       return false;
     }
     return true;
-
   }
-
 }
