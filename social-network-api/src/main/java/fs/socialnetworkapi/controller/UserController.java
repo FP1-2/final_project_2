@@ -5,14 +5,12 @@ import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.service.AuthorizationService;
 import fs.socialnetworkapi.service.PasswordResetService;
 import fs.socialnetworkapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
-
-import static org.springframework.messaging.simp.SimpMessageHeaderAccessor.getUser;
 
 @RestController
 @RequiredArgsConstructor
