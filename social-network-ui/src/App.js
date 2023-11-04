@@ -1,5 +1,5 @@
-import AppRoutes from "./AppRoutes";
 import React, { useEffect } from "react";
+import AppRoutes from "./AppRoutes";
 import ModalRegisterWindow from "./components/ModalRegisterWindow/ModalRegisterWindow";
 import useScreenSize from "./hooks/useScreenSize";
 import { useSelector, useDispatch } from "react-redux";

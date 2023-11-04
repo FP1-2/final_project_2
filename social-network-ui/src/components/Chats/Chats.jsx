@@ -1,69 +1,62 @@
-import React,{useState, useEffect} from 'react'
-import styles from './Chats.module.scss';
-import { useDispatch,useSelector } from 'react-redux';
-import getChatMembers from '../../api/getChatMembers'
-import getUserData from '../../api/getUserInfo'
-import {getMembers} from '../../redux/slices/chatSlice'
-import UseUserToken from '../../hooks/useUserToken'
-import ChatMembers from '../ChatMembers/ChatMembers';
+import React, { useState, useEffect } from "react";
+import styles from "./Chats.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+// import getChatMembers from '../../api/getChatMembers'
+import getUserData from "../../api/getUserInfo";
+import { getMembers } from "../../redux/slices/chatSlice";
+import UseUserToken from "../../hooks/useUserToken";
+import ChatMembers from "../ChatMembers/ChatMembers";
+import {
+  fetchChats,
+  getChatMessages,
+  setMessages,
+  createMessage,
+} from "../../redux/slices/chatSlice";
+import { Box } from "@mui/material";
+import PropTypes from "prop-types";
+
 function Chats() {
-//  const {message} = useSelector((state) => state.chat.members)
-  const {token} = UseUserToken()
-     const [chats, setChats] = useState(null)
-      // const dispatch = useDispatch()
-       const [error, setError] = useState(null);
-	 useEffect(() => {
+  const { token } = UseUserToken();
 
-     async function getChats() {
-            try {
-              console.log('data');
-                const data = await getChatMembers(1,token);
-                const chat = {
-                  chatId: 1,
-                  members: data,
+  //  const [chats, setChats] = useState(null)
+  const dispatch = useDispatch();
+  const chats = useSelector((state) => state.chat.chats);
+  const error = useSelector((state) => state.chat.error);
+  useEffect(() => {
+    dispatch(fetchChats(token));
+    // dispatch(fetchMessages(chatId))
+  }, [dispatch, token]);
 
-                }
-                // setChats( data);
-                setChats( chats.push(chat));
-                // console.log(chats);
-                const data2 = await getChatMembers(2,token);
-               const chat2 = {
-                  chatId: 2,
-                  members: data2,
+  async function fetchMessages(chatId) {
+    //      const create = await createMessage( {
+    //   text: "after 2",
+    // chatId: 6,
+    // }, token)
+    const data = await getChatMessages(chatId, token);
 
-                }
-                setChats( chats.push(chat2));
-                console.log(chats);
-            } catch (error) {
-                if (error.response) {
-                    setError(`Error ${error.response?.status}: ${error.response?.data}`)
-                }
-                if (error.request) {
-                    setError('Error: no response')
-                }
-                setError(`Error: ${error?.message}`)
-            }
-        }
-      console.log('jgjgj');
-    
-        getChats();
-          
-    }, []);
-		
+    dispatch(setMessages(data));
+  }
 
   return (
-      <div className={styles.chatsContainer} >
-
- <div onClick={() => {}}>
-  {chats?.map(chatmembers =>  (<ChatMembers onClick={()=>{}} key={chatmembers.id} chatmembers={chatmembers}/>))}
- </div>
-
-      
-
-
-              
-    </div>
-  )
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      {/* <div onClick={() => {}} style={{width: '100%'}}> */}
+      {chats?.map((chat) => (
+        <ChatMembers
+          fetchMessages={fetchMessages}
+          key={chat.id}
+          chatmembers={chat}
+        />
+      ))}
+      {/* </div> */}
+    </Box>
+  );
 }
 
-export default Chats
+export default Chats;
