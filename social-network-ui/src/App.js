@@ -50,15 +50,15 @@ function App() {
 							}
 						}
 						item
-						xs={2}
+						xs={0}
 						md={3}
 						lg={2}
 					>
-						<TwitterHeader />
+						{screenSize !== 'mobile' && <TwitterHeader />}
 					</Grid>
 					<Grid
 						item
-						xs={8}
+						xs={12}
 						md={6}
 						lg={6}
 						sx={{
@@ -75,7 +75,7 @@ function App() {
 							}
 						}
 						item
-						xs={2}
+						xs={0}
 						md={3}
 						lg={2}
 					>
