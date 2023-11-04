@@ -109,7 +109,7 @@ public class PostService {
     post.setUser(user);
     post.setTypePost(TypePost.POST);
     Post postToSave = postRepo.save(post);
-    sendFeaturedNotification(postToSave);
+    //sendFeaturedNotification(postToSave);
     return mapper.map(postToSave, PostDtoOut.class);
   }
 
@@ -141,15 +141,15 @@ public class PostService {
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
     Post postToSave = postRepo.save(post);
-    if (typePost.equals(TypePost.POST)) {
-      sendFeaturedNotification(postToSave);
-    }
-    if (typePost.equals(TypePost.REPOST)) {
-      sendRepostNotification(postToSave);
-    }
-    if (typePost.equals(TypePost.COMMENT)) {
-      sendCommentNotification(postToSave);
-    }
+    //    if (typePost.equals(TypePost.POST)) {
+    //      sendFeaturedNotification(postToSave);
+    //    }
+    //    if (typePost.equals(TypePost.REPOST)) {
+    //      sendRepostNotification(postToSave);
+    //    }
+    //    if (typePost.equals(TypePost.COMMENT)) {
+    //      sendCommentNotification(postToSave);
+    //    }
     return getPostById(originalPostId);
   }
 
