@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -174,9 +175,8 @@ public class UserService implements UserDetailsService {
   }
 
   public boolean isUsernameUnique(String username) {
-    if (userRepo.findByUsername(username) != null) {
-      return false;
-    }
-    return true;
+    User user = getUser();
+    return userRepo.findByUsername(username) == null
+      || Objects.equals(user.getId(), userRepo.findByUsername(username).getId());
   }
 }
