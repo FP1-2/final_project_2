@@ -159,11 +159,11 @@ const ModalEdit = ({ user, setUser }) => {
 						try {
 							const data = await editUserProfile(newValues, token)
 							console.log(data)
+							handleCloseModal()
 						} catch (error) {
 							console.log(error)
 						}
 						setIsBtnLoading(false)
-						handleCloseModal()
 					}}
 					validationSchema={validationSchema}
 				>
