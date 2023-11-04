@@ -30,6 +30,7 @@ function Favourites () {
       try {
         const data = await getLikedPosts(token, userId)
         setFavourites(data)
+        console.log(data);
       } catch (error) {
         if (error.response) {
           setError(`Error ${error.response?.status}: ${error.response?.data}`)

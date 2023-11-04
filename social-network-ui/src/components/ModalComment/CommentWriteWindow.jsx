@@ -75,7 +75,7 @@ const handlePost = async () => {
         setSuccess('Comment sent. Click to open the post');
         setTimeout(() => {
           close()
-        }, 1000);
+        }, 3000);
 
       } else {
         setError(`Error ${response.status}: ${response.data}`);
@@ -110,7 +110,7 @@ const handlePost = async () => {
         <PostButton onClick={handlePost}>Post</PostButton>
       </Box>
       {error && <Typography sx={{color: 'red'}}>{error}</Typography>}
-      {success && <Button onClick={redirect(`/post/${postId}`)}><Typography sx={{color: 'green'}}>{success}</Typography></Button>}
+      {success && <Button onClick={() => redirect(`/post/${postId}`)}><Typography sx={{color: 'green'}}>{success}</Typography></Button>}
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >

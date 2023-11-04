@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
 	isAuthenticated: false,
 	userId: null,
+	userPosts: []
 }
 
 const userSlice = createSlice({
@@ -20,8 +21,11 @@ const userSlice = createSlice({
 				localStorage.removeItem('userId')
 			}
 		},
+		userPosts: (state, action) => {
+        state.userPosts = action.payload;
+    },
 	},
 })
 
-export const { login, setIsLogin } = userSlice.actions
+export const { login, setIsLogin, userPosts } = userSlice.actions
 export default userSlice.reducer

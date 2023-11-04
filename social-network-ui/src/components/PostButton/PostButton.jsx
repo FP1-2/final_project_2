@@ -16,7 +16,7 @@ const buttonStyles = {
 
 function PostButton ({ onClick, children }) {
   return (
-    <Button onClick={onClick} variant='contained' sx={buttonStyles}>
+    <Button onClick={() => onClick()} variant='contained' sx={buttonStyles}>
       {children}
     </Button>
   )
