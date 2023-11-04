@@ -130,7 +130,7 @@ function AnotherPost ({ post, setCommentedPost, setOpenModal }) {
         </Link>
         <Box sx={{display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center'}}>
         <Link
-          to={'/user/' + post.user.id}
+          to={'/profile/' + post.user.id}
           className={styles.link}
         >
           <Typography
