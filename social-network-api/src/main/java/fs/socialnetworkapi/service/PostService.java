@@ -4,7 +4,6 @@ import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
-import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.enums.TypePost;
@@ -12,6 +11,7 @@ import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,9 @@ public class PostService {
   private final LikeService likeService;
   private final UserService userService;
   private final NotificationService notificationService;
+
+  @Autowired
+  private final NotificationCreator notificationCreator;
 
   public PostDtoOut findById(Long postId) {
 
@@ -294,15 +297,15 @@ public class PostService {
   }
 
   private void sendCommentNotification(Post post) {
-    Notification notification = new NotificationCreator().commentNotification(post);
+    notificationCreator.commentNotification(post);
   }
 
   private void sendRepostNotification(Post post) {
-    Notification notification = new NotificationCreator().repostNotification(post);
+    notificationCreator.repostNotification(post);
   }
 
   private void sendFeaturedNotification(Post post) {
-    List<Notification> notifications = new NotificationCreator().featuredNotification(post);
+    notificationCreator.featuredNotification(post);
   }
 
 }

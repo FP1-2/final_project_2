@@ -5,7 +5,6 @@ import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.entity.Message;
 import fs.socialnetworkapi.entity.ChatUser;
@@ -16,6 +15,7 @@ import fs.socialnetworkapi.repos.MessageRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
@@ -34,6 +34,9 @@ public class MessageService {
   private final ModelMapper mapper;
   private final UserService userService;
   private final NotificationService notificationService;
+
+  @Autowired
+  private final NotificationCreator notificationCreator;
 
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {
 
@@ -118,7 +121,7 @@ public class MessageService {
   }
 
   private void sendMessageNotification(Message message) {
-    List<Notification> notifications = new NotificationCreator().messageNotification(message);
+    notificationCreator.messageNotification(message);
   }
 
   private Chat findById(Long chatId) {

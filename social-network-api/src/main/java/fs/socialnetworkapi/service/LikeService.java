@@ -3,7 +3,6 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
-import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
@@ -11,6 +10,7 @@ import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +25,15 @@ public class LikeService {
   private final PostRepo postRepo;
   private final ModelMapper mapper;
 
+  @Autowired
+  private final NotificationCreator notificationCreator;
+
   private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
   private void sendLikeNotification(Like like) {
-    Notification notification = new NotificationCreator().likeNotification(like);
+    notificationCreator.likeNotification(like);
   }
 
   public List<PostDtoOut> getLikesForUser() {
