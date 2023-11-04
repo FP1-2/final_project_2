@@ -70,9 +70,10 @@ const ProfilePage = () => {
 	const params = useParams()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	const { isFollowing } = useIsUserFollowing(params.userId)
+	const { isFollowing, checkIsFollowing } = useIsUserFollowing(params.userId)
 
 	const localUserId = useSelector(state => state.user?.userId)
+	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
 
 	const [user, setUser] = useState(null)
 	const [notEqual, setNotEqual] = useState(false)
@@ -84,8 +85,13 @@ const ProfilePage = () => {
 	let userBirthdayData = null
 	let userJoinedData = null
 	useEffect(() => {
-		console.log(isFollowing)
-	}, [isFollowing])
+		if (token) {
+			;(async () => {
+				const userData = await getUserData(params.userId, token)
+				setUser(userData)
+			})()
+		}
+	}, [isFollowing, isOpen])
 	useEffect(() => {
 		console.log(isFollowing)
 		if (token) {
@@ -102,6 +108,7 @@ const ProfilePage = () => {
 			setNotEqual(true)
 		}
 		loadNewPosts(choosenTypePost)
+		checkIsFollowing(params.userId)
 	}, [params.userId])
 
 	useEffect(() => {
@@ -151,6 +158,7 @@ const ProfilePage = () => {
 				},
 			}
 		)
+		checkIsFollowing(userId)
 	}
 	const handleUnFollow = async userId => {
 		console.log('unfollow')
@@ -162,6 +170,7 @@ const ProfilePage = () => {
 				},
 			}
 		)
+		checkIsFollowing(userId)
 	}
 
 	const goBackFunc = () => {
