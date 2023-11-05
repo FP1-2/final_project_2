@@ -56,7 +56,7 @@ const style = {
 function ModalComment({ post, setOpenModal, open }) {
     let postDate
     post ? postDate = formatPostDate(post.createdDate) : null;
-    function handleClose() {
+    const handleClose = () => {
         setOpenModal(false)
     }
 
