@@ -92,7 +92,7 @@ const ProfilePage = () => {
 				setUser(userData)
 			})()
 		}
-	}, [isFollowing, isOpen])
+	}, [isFollowing, isOpen, params.userId])
 	useEffect(() => {
 		if (token && isFrstLoad) {
 			;(async () => {
