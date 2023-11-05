@@ -146,7 +146,7 @@ const ModalEdit = ({ user, setUser }) => {
 						address: user.address,
 						userLink: user.userLink || '',
 						birthday: user.birthday,
-						userDescribe: user.userDescrib || '',
+						userDescribe: user.userDescribe || '',
 					}}
 					onSubmit={async values => {
 						setIsBtnLoading(true)

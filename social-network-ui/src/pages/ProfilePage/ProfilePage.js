@@ -81,11 +81,12 @@ const ProfilePage = () => {
 	const [isLoadingPosts, setIsLoadingPosts] = useState(false)
 	const [userPosts, setUserPosts] = useState([])
 	const [choosenTypePost, setChoosenTypePost] = useState(0)
+	const [isFrstLoad, setIsFrstLoad] = useState(true)
 
 	let userBirthdayData = null
 	let userJoinedData = null
 	useEffect(() => {
-		if (token) {
+		if (token && !isFrstLoad) {
 			;(async () => {
 				const userData = await getUserData(params.userId, token)
 				setUser(userData)
@@ -93,8 +94,7 @@ const ProfilePage = () => {
 		}
 	}, [isFollowing, isOpen])
 	useEffect(() => {
-		console.log(isFollowing)
-		if (token) {
+		if (token && isFrstLoad) {
 			;(async () => {
 				setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
@@ -109,6 +109,7 @@ const ProfilePage = () => {
 		}
 		loadNewPosts(choosenTypePost)
 		checkIsFollowing(params.userId)
+		setIsFrstLoad(false)
 	}, [params.userId])
 
 	useEffect(() => {
@@ -129,7 +130,7 @@ const ProfilePage = () => {
 			try {
 				setIsLoadingPosts(true)
 				setUserPosts([]) // change later
-				console.log(btnNum)
+
 				const { data } = await axios.get(
 					`${process.env.REACT_APP_SERVER_URL || ''}${objPosts[btnNum]}${
 						params.userId
@@ -485,6 +486,7 @@ const ProfilePage = () => {
 						<Box
 							sx={{
 								p: 2,
+								width: '100%',
 							}}
 						>
 							<PostWrapper tweets={userPosts} />
