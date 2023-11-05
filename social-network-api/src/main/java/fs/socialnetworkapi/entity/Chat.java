@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.Objects;
 public class Chat extends AbstractEntity{
 
   private String name;
-  @OneToMany(mappedBy = "chat")
+  @OneToMany(mappedBy = "chat",fetch = FetchType.EAGER)
   List<ChatUser> chatUsers;
   @OneToMany(mappedBy = "chat")
   List<Message> messages;
