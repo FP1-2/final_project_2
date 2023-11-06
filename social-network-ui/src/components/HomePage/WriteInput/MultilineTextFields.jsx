@@ -8,7 +8,8 @@ export default function MultilineTextFields(props) {
     <Box
       // component="form"
       sx={{
-        "& .MuiTextField-root": { mb: 1, width: "40ch" },
+        width: '100%',
+        "& .MuiTextField-root": { mb: 1},
       }}
       noValidate
       autoComplete="off"
@@ -22,6 +23,7 @@ export default function MultilineTextFields(props) {
           placeholder="What's happening?!"
           multiline
           variant="standard"
+          sx={{width: '100%'}}
         />
       </div>
     </Box>

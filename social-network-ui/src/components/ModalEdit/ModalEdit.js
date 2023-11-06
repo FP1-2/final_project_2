@@ -110,7 +110,7 @@ const ModalEdit = ({ user, setUser }) => {
 					alignItems: 'center',
 					width: '70%',
 					p: 2,
-					pt: 21,
+					pt: 32,
 					top: '50%',
 					left: '50%',
 					transform: 'translate(-50%, -50%)',

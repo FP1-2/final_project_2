@@ -46,7 +46,7 @@ public class PostController {
   public ResponseEntity<List<PostDtoOut>> getUserReposts(@PathVariable("user_id") Long userId,
                                                       @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-    List<PostDtoOut> posts = postService.getProfileType(userId, TypePost.REPOST, page, size);
+    List<PostDtoOut> posts = postService.getProfilePostByType(userId, TypePost.REPOST, page, size);
     return ResponseEntity.ok(posts);
   }
 
@@ -54,7 +54,7 @@ public class PostController {
   public ResponseEntity<List<PostDtoOut>> getProfileComments(@PathVariable("user_id") Long userId,
                                                       @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
-    List<PostDtoOut> posts = postService.getProfileType(userId, TypePost.COMMENT, page, size);
+    List<PostDtoOut> posts = postService.getProfilePostByType(userId, TypePost.COMMENT, page, size);
     return ResponseEntity.ok(posts);
   }
 
@@ -73,15 +73,15 @@ public class PostController {
 
   @PostMapping("post/{original_post_id}/repost")
   public ResponseEntity<PostDtoOut> addRepost(@PathVariable("original_post_id") Long originalPostId,
-                                              @RequestBody PostDtoIn postDtoIn) {
-    PostDtoOut postDtoOut = postService.saveByType(originalPostId, postDtoIn, TypePost.REPOST);
+                                              @Valid @RequestBody PostDtoIn postDtoIn) {
+    PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost(originalPostId, postDtoIn, TypePost.REPOST);
     return ResponseEntity.ok(postDtoOut);
   }
 
   @PostMapping("post/{original_post_id}/comment")
   public ResponseEntity<PostDtoOut> addComment(@PathVariable("original_post_id") Long originalPostId,
                                             @Valid @RequestBody PostDtoIn postDtoIn) {
-    PostDtoOut postDtoOut = postService.saveByType( originalPostId, postDtoIn, TypePost.COMMENT);
+    PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost( originalPostId, postDtoIn, TypePost.COMMENT);
     return ResponseEntity.ok(postDtoOut);
   }
 
