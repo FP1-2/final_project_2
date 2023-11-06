@@ -1,12 +1,75 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Avatar, Box } from "@mui/material";
+import AvatarWithoutImg from "../AvatarWithoutImg/AvatarWithoutImg";
 
 function ChatMembers({ chatmembers, fetchMessages }) {
+  const lastMessage = chatmembers.lastMessage;
+
   return (
     <>
-      {chatmembers.members.map((member, index) => (
-        <div key={index}>
+      {lastMessage && (
+        <div>
+          <Box
+            onClick={() => fetchMessages(chatmembers.id)}
+            sx={{
+              display: "flex",
+              cursor: "pointer",
+              width: "100%",
+              margin: '10px',
+              "&:hover": {
+                background: "rgba(0, 0, 0, 0.04)",
+              },
+            }}
+          >
+            <Box>
+               <Box>
+              {lastMessage.user.avatar ? (
+                <Avatar
+                  sx={{
+                    width: "3rem",
+                    height: "3rem",
+                    // mb: 1,
+                  }}
+                  src={lastMessage.user.avatar}
+                ></Avatar>
+              ) : (
+                <AvatarWithoutImg
+                  sx={{
+                    width: "3rem",
+                    height: "3rem",
+                    // mb: 1,
+                  }}
+                  userName={lastMessage.user.username}
+                >
+                  {" "}
+                  {lastMessage.user.username?.charAt(0).toUpperCase()}
+                </AvatarWithoutImg>
+              )}
+            </Box>
+            </Box>
+           
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              <div>
+                      <div>{lastMessage.user.firstName}</div>
+
+                    <div>{lastMessage.user.username}</div>
+              </div>
+        
+              <div>{lastMessage.text}</div>
+            </Box>
+            
+          
+          </Box>
+          
+        </div>
+      )}
+      {/* {chatmembers.lastMessage.map((lastMessage, index) => ( */}
+      {}
+      {/* <div >
           <Box
             onClick={() => fetchMessages(chatmembers.id)}
             sx={{
@@ -19,24 +82,34 @@ function ChatMembers({ chatmembers, fetchMessages }) {
             }}
           >
             <Box>
-              {member.avatar && (
+              {lastMessage.user.avatar ? (
                 <Avatar
                   sx={{
                     width: "3rem",
                     height: "3rem",
                     mb: 1,
                   }}
-                  src={member.avatar}
+                  src={lastMessage.user.avatar}
                 ></Avatar>
+              ) : (
+                <Avatar   sx={{
+                    width: "3rem",
+                    height: "3rem",
+                    mb: 1,
+                  }}> {lastMessage.user.username?.charAt(0).toUpperCase()} </Avatar>
               )}
             </Box>
 
-            <Box>{member.firstName}</Box>
+            <Box>{lastMessage.user.firstName}</Box>
 
-            <Box>{member.username}</Box>
+            <Box>{lastMessage.user.username}</Box>
+            <Box>
+              {lastMessage.text}
+            </Box>
           </Box>
-        </div>
-      ))}
+        </div> */}
+      {/* )) */}
+      {/* } */}
     </>
   );
 }

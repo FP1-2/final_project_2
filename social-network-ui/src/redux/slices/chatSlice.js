@@ -1,70 +1,107 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import UseUserToken from "../../hooks/useUserToken";
-import useUserId from "../../hooks/useUserId";
-import axios from 'axios';
+import getUserId from "../../utils/getUserId";
+import axios from "axios";
 
-const userId = useUserId()
+const userId = getUserId()
 
 const initialState = {
   chats: null,
   error: null,
   messages: null,
+  chatId: null,
 };
 
 export const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState,
   reducers: {
     setChats: (state, action) => {
-      return { ...state, chats: action.payload }
+      return { ...state, chats: action.payload };
     },
     setError: (state, action) => {
       return { ...state, error: action.payload };
     },
-    setMessages:(state, action) => {
+    setMessages: (state, action) => {
       return { ...state, messages: action.payload };
     },
-
+    setChatId: (state, action) => {
+      return { ...state, chatId: action.payload };
+    },
     
   },
 });
 
-export const { setChats, setError, setMessages } = chatSlice.actions;
+export const { setChats, setError, setMessages, setChatId } = chatSlice.actions;
+
+// export const fetchChats = (token) => async (dispatch) => {
+//   try {
+//     const chatsIDs = await getChats(userId, token);
+//     const chatPromises = chatsIDs.map(async (chatId) => {
+//       const data = await getChatMembers(chatId, token);
+//       return { id: chatId, members: data };
+//     });
+
+//     const updatedChats = await Promise.all(chatPromises);
+//     dispatch(setChats(updatedChats));
+//     console.log(updatedChats);
+//   } catch (error) {
+//     if (error.response) {
+//       dispatch(
+//         setError(`Error ${error.response?.status}: ${error.response?.data}`)
+//       );
+//     } else if (error.request) {
+//       dispatch(setError("Error: no response"));
+//     } else {
+//       dispatch(setError(`Error: ${error?.message}`));
+//     }
+//   }
+// };
 
 export const fetchChats = (token) => async (dispatch) => {
   try {
-       const chatsIDs = await getChats();
-      const chatPromises = chatsIDs.map(async (chat) => {
+    const chatsIDs = await getChats(userId, token);
+    const chatPromises = chatsIDs.map(async (chatId) => {
+      const data = await getChatMessages(chatId, token);
+      let lastMessage = null
+      if(data.length > 0) {
+        lastMessage= data[data.length-1]
+      }
     
-      const data = await getChatMembers(chat.id, token);
-      return { ...chat, members: data };
+      return { id: chatId, lastMessage: lastMessage };
     });
 
     const updatedChats = await Promise.all(chatPromises);
     dispatch(setChats(updatedChats));
-    console.log(updatedChats);
+
   } catch (error) {
     if (error.response) {
-      dispatch(setError(`Error ${error.response?.status}: ${error.response?.data}`));
+      dispatch(
+        setError(`Error ${error.response?.status}: ${error.response?.data}`)
+      );
     } else if (error.request) {
-      dispatch(setError('Error: no response'));
+      dispatch(setError("Error: no response"));
     } else {
       dispatch(setError(`Error: ${error?.message}`));
     }
   }
 };
+
+
 export async function getChatMembers(chatID, token) {
   try {
     const { data } = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL || ''}/api/v1/get-members-chat/${chatID}`,
+      `${
+        process.env.REACT_APP_SERVER_URL || ""
+      }/api/v1/get-members-chat/${chatID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
-    )
-    
+    );
+
     return data;
   } catch (error) {
     throw error;
@@ -74,25 +111,24 @@ export async function getChatMembers(chatID, token) {
 export async function getChatMessages(chatID, token) {
   try {
     const { data } = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL || ''}/api/v1/get-messages-chat/${chatID}`,
+      `${
+        process.env.REACT_APP_SERVER_URL || ""
+      }/api/v1/get-messages-chat/${chatID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
-    )
-    
+    );
+
     return data;
   } catch (error) {
     throw error;
   }
 }
 
-export async function getChats(user) {
-     try {
-
-        // userId
-
+export async function getChats(userId, token) {
+  try {
     const { data } = await axios.get(
       `${process.env.REACT_APP_SERVER_URL || ''}/api/v1/get-chats-user/${userId}`,
       {
@@ -101,65 +137,77 @@ export async function getChats(user) {
         },
       }
     );
-    // const data = [
-    //     {
-    //     id:1,
-    //    },
-    //     {
-    //     id: 2,
-    //    },
-    //    {
-    //      id: 3,
-    //    },
-    //     {
-    //      id: 4,
-    //    },
-    //     {
-    //      id: 5,
-    //    },
-    //     {
-    //      id: 6,
-    //    },
-    // ];
+
+
     return data;
   } catch (error) {
     throw error;
   }
 }
 
+export async function createMessage(message, token) {
+  try {
+    
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL || ""}/api/v1/message`,
 
-
-export  async function createMessage(message,token) {
-	try {
-  //    return await axios.post(
-  //   `${process.env.REACT_APP_SERVER_URL}` + "/api/v1/message",
-  //   {
-  //     text: "hfhhhh",
-	// chatId: 2,
-  //   },
-  //   {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // );
-		const { data } = await axios.post(
-			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/message`,
-      
-			message,
-        {
-       headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      message,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
-		)
-		return data
-	} catch (error) {
-		throw error
-	}
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
 }
 
+export  function getAllUsers() {
+  try {
+  
 
-export default chatSlice.reducer
+    // const { data } = await axios.get(
+    //   `${process.env.REACT_APP_SERVER_URL || ''}/api/v1/get-chats-user/${userId}`,
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   }
+    // );
+
+
+const data = [
+  {
+    "id":63,
+    "username": "string",
+    "firstName": "Alex",
+    "lastName": "Honchar",
+    "avatar": "https://res.cloudinary.com/doenettec/image/upload/v1699105589/m67rqx8jtietayb4qr43.jpg",
+  },
+    {
+   "id": 78,
+    "username": "Test",
+    "firstName": "Ivan",
+    "lastName": "Ivanov",
+    "avatar": "https://klike.net/uploads/posts/2019-03/1551511866_11.jpg",
+  },
+  {
+    "id": 62,
+    "username": "Camel",
+    "firstName": "Jon",
+    "lastName": "Sidorov",
+    "avatar": "https://klike.net/uploads/posts/2019-03/1551511866_11.jpg",
+  }
+
+]
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export default chatSlice.reducer;

@@ -112,7 +112,7 @@ function TwitterHeader() {
 					button
 					sx={{ gap: '1rem' }}
 					component={Link}
-					to='/explore'
+					to='/messages'
 					onClick={() => handleItemClick('Messages')}
 				>
 					{location.pathname === '/home' ? (
