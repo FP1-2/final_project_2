@@ -3,7 +3,6 @@ import UseUserToken from '../../hooks/useUserToken'
 import getLikedPosts from '../../api/getLikedPosts'
 import useIsAuthenticated from '../../hooks/useIsAuthenticated'
 import getUserId from '../../utils/getUserId'
-import ModalComment from '../ModalComment/ModalComment'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box';
 import AnotherPost from '../AnotherPost/AnotherPost'
@@ -14,9 +13,7 @@ function Favourites () {
   const [favourites, setFavourites] = useState([])
   const [error, setError] = useState(null)
   const { token } = UseUserToken()
-  const [commentedPost, setCommentedPost] = useState(null)
-  const [openModal, setOpenModal] = useState(false)
-    const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
     
     const style = {
         position: 'absolute',
@@ -30,7 +27,6 @@ function Favourites () {
       try {
         const data = await getLikedPosts(token, userId)
         setFavourites(data)
-        console.log(data);
       } catch (error) {
         if (error.response) {
           setError(`Error ${error.response?.status}: ${error.response?.data}`)
@@ -63,18 +59,9 @@ function Favourites () {
               <AnotherPost
                 key={post.id}
                 post={post}
-                setCommentedPost={setCommentedPost}
-                setOpenModal={setOpenModal}
               />
             ))
         )}
-        {commentedPost ? (
-          <ModalComment
-            post={commentedPost}
-            open={openModal}
-            setOpenModal={setOpenModal}
-          />
-        ) : null}
       </>
     )
   }

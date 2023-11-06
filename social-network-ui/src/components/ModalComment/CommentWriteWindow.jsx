@@ -5,7 +5,6 @@ import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import PropTypes from 'prop-types'
 import { Image } from 'cloudinary-react'
-import jwt from 'jwt-decode'
 import UseUserToken from './../../hooks/useUserToken'
 import getUserId from '../../utils/getUserId'
 import getUserData from '../../api/getUserInfo'
@@ -16,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
 import { useNavigate } from 'react-router-dom';
 
-function CommentWriteWindow ({ postId, close }) {
+function CommentWriteWindow ({ postId, close, commentsCount, setCommentsCount }) {
   const { token } = UseUserToken()
   const userId = getUserId()
   const [description, setDescription] = useState('')
@@ -75,6 +74,7 @@ const handlePost = async () => {
       if (response.status === 200) {
         setError(null)
         setSuccess('Comment sent. Click to open the post');
+        setCommentsCount(commentsCount + 1)
         setTimeout(() => {
           close()
         }, 3000);
@@ -146,5 +146,7 @@ export default CommentWriteWindow
 
 CommentWriteWindow.propTypes = {
   postId: PropTypes.number,
-  close: PropTypes.func
+  close: PropTypes.func,
+  commentsCount: PropTypes.number,
+  setCommentsCount: PropTypes.func
 }

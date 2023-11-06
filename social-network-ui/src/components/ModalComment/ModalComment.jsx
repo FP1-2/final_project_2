@@ -9,7 +9,6 @@ import {
   CardContent,
 } from '@mui/material'
 import { PropTypes } from 'prop-types'
-import { useState } from 'react'
 import formatPostDate from '../../utils/formatPostDate'
 import CloseIcon from '@mui/icons-material/Close';
 import CommentWriteWindow from './CommentWriteWindow'
@@ -53,7 +52,7 @@ const style = {
 	},
 }
 
-function ModalComment({ post, setOpenModal, open }) {
+function ModalComment({ post, setOpenModal, open, commentsCount, setCommentsCount }) {
     let postDate
     post ? postDate = formatPostDate(post.createdDate) : null;
     const handleClose = () => {
@@ -138,7 +137,7 @@ function ModalComment({ post, setOpenModal, open }) {
           {/* <Typography sx={{ color: 'red' }}> {error}</Typography> */}
         </CardContent>
               </Card>
-        <CommentWriteWindow postId={post.id} close={handleClose} />
+        <CommentWriteWindow postId={post.id} close={handleClose} commentsCount={commentsCount} setCommentsCount={setCommentsCount} />
      </Box>
     </Modal>
   )
@@ -147,6 +146,8 @@ function ModalComment({ post, setOpenModal, open }) {
 ModalComment.propTypes = {
     post: PropTypes.object,
     setOpenModal: PropTypes.func,
-    open: PropTypes.bool
+    open: PropTypes.bool,
+    setCommentsCount: PropTypes.func,
+    commentsCount: PropTypes.number
 }
 export default ModalComment

@@ -6,3 +6,12 @@
     text-decoration: underline;
   }
 }
+
+.postLink {
+  text-decoration: none;
+  color: rgb(53, 52, 52);
+}
+
+.cardContent:last-child {
+  padding-bottom: 0;
+}
