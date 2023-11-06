@@ -110,7 +110,7 @@ const ModalEdit = ({ user, setUser }) => {
 					alignItems: 'center',
 					width: '70%',
 					p: 2,
-					pt: 21,
+					pt: 32,
 					top: '50%',
 					left: '50%',
 					transform: 'translate(-50%, -50%)',
@@ -146,7 +146,7 @@ const ModalEdit = ({ user, setUser }) => {
 						address: user.address,
 						userLink: user.userLink || '',
 						birthday: user.birthday,
-						userDescribe: user.userDescrib || '',
+						userDescribe: user.userDescribe || '',
 					}}
 					onSubmit={async values => {
 						setIsBtnLoading(true)
