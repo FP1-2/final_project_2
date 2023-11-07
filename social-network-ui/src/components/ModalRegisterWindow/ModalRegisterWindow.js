@@ -9,7 +9,7 @@ import IconTwitter from '../IconTwitter/IconTwitter'
 import ModalRegisterWindowFrstStep from './ModalRegisterWindowFrstStep/ModalRegisterWindowFrstStep'
 import ModalRegisterWindowSecondStep from './ModalRegisterWindowSecondStep/ModalRegisterWindowSecondStep'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { closeModal } from '../../redux/slices/modalSlice'
+import { closeModal } from '../../redux/slices/modalSignUpSlice'
 import { debounce } from 'lodash'
 
 const style = {
@@ -62,7 +62,7 @@ const ModalRegisterWindow = () => {
 	const [isRegisterDone, setIsRegisterDone] = useState(false) // register done status
 	const [isOkayAlert, setIsOkayAlert] = useState(false)
 
-	const isModalOpen = useSelector(state => state.modal.modalProps.isOpen) // modal status
+	const isModalOpen = useSelector(state => state.modalSignUp.modalProps.isOpen) // modal status
 
 	const handleClose = () => {
 		// close modal window

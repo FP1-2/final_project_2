@@ -31,6 +31,8 @@ import useIsUserFollowing from '../../hooks/useIsUserFollowing'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { openModal } from '../../redux/slices/modalEditSlice'
+import { openModal as openFollowModal } from '../../redux/slices/modalFollowSlice'
+import { closeModal as closeFollowModal } from '../../redux/slices/modalFollowSlice'
 //router
 import { useNavigate } from 'react-router-dom'
 //api
@@ -39,6 +41,8 @@ import getUserData from '../../api/getUserInfo'
 import axios from 'axios'
 import { format } from 'date-fns'
 import { debounce } from 'lodash'
+import FollowButton from '../../components/FollowButton/FollowButton'
+import ModalFollow from '../../components/ModalFollow/ModalFollow'
 
 const theme = createTheme({
 	typography: {
@@ -91,6 +95,8 @@ const ProfilePage = () => {
 	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
 	//user state
 	const [user, setUser] = useState(null)
+	const [userFollowersCountState, setUserFollowersCountState] = useState(0)
+	const [userFollowingCountState, setUserFollowingCountState] = useState(null)
 	const [notEqual, setNotEqual] = useState(false)
 	//post state
 	const [isLoadingPosts, setIsLoadingPosts] = useState(false)
@@ -120,10 +126,11 @@ const ProfilePage = () => {
 				if (isFrstLoad) setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
 				setUser(userData)
+				setUserFollowersCountState(userData.userFollowersCount)
 				if (isFrstLoad) setIsLoading(false)
 			})()
 		}
-	}, [isFollowing, isOpen, params.userId])
+	}, [isOpen, params.userId])
 
 	useEffect(() => {
 		//set equal bool, frst load posts, check follow
@@ -135,6 +142,7 @@ const ProfilePage = () => {
 
 		loadNewPosts(choosenTypePost)
 		checkIsFollowing(params.userId)
+		dispatch(closeFollowModal())
 	}, [params.userId])
 
 	useEffect(() => {
@@ -177,31 +185,25 @@ const ProfilePage = () => {
 		})()
 	}
 
-	const handleFollow = async userId => {
-		//follow
-		//need rework
-		const data = await axios.get(
-			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/subscribe/${userId}`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		)
-		checkIsFollowing(userId)
-	}
-	const handleUnFollow = async userId => {
-		//unfollow
-		//need rework
-		const data = await axios.get(
-			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/unsubscribe/${userId}`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		)
-		checkIsFollowing(userId)
+	const handleFollowChange = async (userId, follow) => {
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/${
+					follow ? 'subscribe' : 'unsubscribe'
+				}/${userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			console.log(`user is ${follow ? 'subscribe' : 'unsubscribe'}`)
+			setUserFollowersCountState(prev => (follow ? prev + 1 : prev - 1))
+		} catch (error) {
+			console.error(error)
+		} finally {
+			checkIsFollowing(userId)
+		}
 	}
 
 	//pagination >>>>
@@ -294,6 +296,7 @@ const ProfilePage = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			{user && <ModalEdit user={user} setUser={setUser} />}
+			<ModalFollow />
 			<Box
 				ref={scrollHeight}
 				sx={{
@@ -331,6 +334,7 @@ const ProfilePage = () => {
 									<KeyboardBackspaceIcon
 										sx={{
 											fontSize: '28px',
+											cursor: 'pointer',
 										}}
 										onClick={goBackFunc}
 									/>
@@ -448,43 +452,11 @@ const ProfilePage = () => {
 									</Button>
 								)}
 								{!notEqual && (
-									<>
-										{isFollowing ? (
-											<Button
-												sx={{
-													marginTop: '1rem',
-													p: 1,
-													paddingX: '1.1rem',
-													border: '1px solid black',
-													borderRadius: '3rem',
-													textTransform: 'none',
-													color: 'black',
-												}}
-												onClick={() => handleUnFollow(params.userId)}
-											>
-												<Typography sx={{ fontSize: '0.9rem' }}>
-													Unfollow
-												</Typography>
-											</Button>
-										) : (
-											<Button
-												sx={{
-													marginTop: '1rem',
-													p: 1,
-													paddingX: '1.1rem',
-													border: '1px solid black',
-													borderRadius: '3rem',
-													textTransform: 'none',
-													color: 'black',
-												}}
-												onClick={() => handleFollow(params.userId)}
-											>
-												<Typography sx={{ fontSize: '0.9rem' }}>
-													Follow
-												</Typography>
-											</Button>
-										)}
-									</>
+									<FollowButton
+										userId={params.userId}
+										handleFollowChange={handleFollowChange}
+										isFollowing={isFollowing}
+									/>
 								)}
 							</Box>
 							<Box
@@ -560,31 +532,39 @@ const ProfilePage = () => {
 										)}
 									</Box>
 								</Box>
-								<Box // need to rework box to links
-									sx={{
-										display: 'flex',
-										justifyContent: 'flex-start',
-										alignItems: 'center',
-										gap: '30px',
-									}}
-								>
-									<Box sx={{ display: 'flex', gap: '5px' }}>
-										<Typography variant='p' sx={{ fontWeight: 700 }}>
-											{user.userFollowingCount}
-										</Typography>
-										<Typography sx={{ opacity: 0.6 }} variant='p'>
-											Following
-										</Typography>
+								{userFollowersCountState !== (null || undefined) && (
+									<Box // need to rework box to links
+										sx={{
+											display: 'flex',
+											justifyContent: 'flex-start',
+											alignItems: 'center',
+											gap: '30px',
+										}}
+									>
+										<Box
+											sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
+											onClick={() => dispatch(openFollowModal('followings'))}
+										>
+											<Typography variant='p' sx={{ fontWeight: 700 }}>
+												{user.userFollowingCount}
+											</Typography>
+											<Typography sx={{ opacity: 0.6 }} variant='p'>
+												Following
+											</Typography>
+										</Box>
+										<Box
+											sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
+											onClick={() => dispatch(openFollowModal('followers'))}
+										>
+											<Typography variant='p' sx={{ fontWeight: 700 }}>
+												{userFollowersCountState}
+											</Typography>
+											<Typography sx={{ opacity: 0.6 }} variant='p'>
+												Followers
+											</Typography>
+										</Box>
 									</Box>
-									<Box sx={{ display: 'flex', gap: '5px' }}>
-										<Typography variant='p' sx={{ fontWeight: 700 }}>
-											{user.userFollowersCount}
-										</Typography>
-										<Typography sx={{ opacity: 0.6 }} variant='p'>
-											Followers
-										</Typography>
-									</Box>
-								</Box>
+								)}
 							</Box>
 						</Box>
 					</Box>
