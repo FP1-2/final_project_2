@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import getApiPosts from "../../api/getApiPosts";
-import Header from "../../components/Header/header";
 import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
 import PostWrapper from "../../components/HomePage/PostWrapper/PostWrapper";
 import UseUserToken from "../../hooks/useUserToken";
@@ -11,31 +10,30 @@ const Home = () => {
   const { token } = UseUserToken();
   const userId = getUserId();
 
-	useEffect(() => {
-		getApiPosts(token, userId).then(newTweets => {
-			setTweetPost(newTweets)
-			// console.log(newTweets);
-			// console.log(token);
-		})
-	}, [])
+  useEffect(() => {
+    getApiPosts(token, userId).then((newTweets) => {
+      setTweetPost(newTweets);
+      console.log(newTweets);
+    });
+  }, []);
 
-	const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : ''
-	const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : ''
-	const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : ''
+  const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : "";
+  const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : "";
+  const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : "";
 
-	return (
-		<section>
-			<TwitterWriteWindow
-				setTweetPost={setTweetPost}
-				tweetPosts={tweetPosts}
-				userPhoto={userPhoto}
-				firstName={firstName}
-				lastName={lastName}
-				token={token}
-			/>
-			<PostWrapper tweets={tweetPosts} />
-		</section>
-	)
-}
+  return (
+    <section>
+      <TwitterWriteWindow
+        setTweetPost={setTweetPost}
+        tweetPosts={tweetPosts}
+        userPhoto={userPhoto}
+        firstName={firstName}
+        lastName={lastName}
+        token={token}
+      />
+      <PostWrapper tweets={tweetPosts} />
+    </section>
+  );
+};
 
-export default Home
+export default Home;

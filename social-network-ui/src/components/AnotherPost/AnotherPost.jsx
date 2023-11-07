@@ -1,40 +1,40 @@
-import React, { useState } from 'react'
-import { PropTypes } from 'prop-types'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import MapsUgcRoundedIcon from '@mui/icons-material/MapsUgcRounded'
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded'
-import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
-import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
-import CardActions from '@mui/material/CardActions'
-import ImageListItem from '@mui/material/ImageListItem'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import UseUserToken from '../../hooks/useUserToken'
-import formatPostDate from '../../utils/formatPostDate'
-import styles from './AnotherPost.module.scss'
+import React, { useState } from "react";
+import { PropTypes } from "prop-types";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
+import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+import ImageListItem from "@mui/material/ImageListItem";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import UseUserToken from "../../hooks/useUserToken";
+import formatPostDate from "../../utils/formatPostDate";
+import styles from "./AnotherPost.module.scss";
 
-function AnotherPost ({ post, setCommentedPost, setOpenModal }) {
-  const [isLiked, setIsLiked] = useState(post?.hasMyLike)
-  const [likes, setLikes] = useState(post?.countLikes)
-  const [isReposted, setIsReposted] = useState(post.hasMyRepost)
-  const [reposts, setReposts] = useState(post.countRepost)
-  const [comments, setComments] = useState(post.countComments)
-  const [error, setError] = useState(null)
-  const { token } = UseUserToken()
-  const url = process.env.REACT_APP_SERVER_URL
-  const postDate = formatPostDate(post.createdDate)
+function AnotherPost({ post, setCommentedPost, setOpenModal }) {
+  const [isLiked, setIsLiked] = useState(post?.hasMyLike);
+  const [likes, setLikes] = useState(post?.countLikes);
+  const [isReposted, setIsReposted] = useState(post.hasMyRepost);
+  const [reposts, setReposts] = useState(post.countRepost);
+  const [comments, setComments] = useState(post.countComments);
+  const [error, setError] = useState(null);
+  const { token } = UseUserToken();
+  const url = process.env.REACT_APP_SERVER_URL;
+  const postDate = formatPostDate(post.createdDate);
 
-  function comment () {
-    setCommentedPost(post)
-    setOpenModal(true)
+  function comment() {
+    setCommentedPost(post);
+    setOpenModal(true);
   }
 
-  async function like () {
+  async function like() {
     try {
       const response = await axios.post(
         url + `/api/v1/likes/like/${post.id}`,
@@ -90,11 +90,9 @@ function AnotherPost ({ post, setCommentedPost, setOpenModal }) {
   }
 
   return (
-    <Card variant='outlined'>
-      <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Link
-          to={'/user/' + post.user.id}
-        >
+    <Card variant="outlined">
+      <CardContent sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Link to={"/user/" + post.user.id}>
           <Box
             sx={{
               position: "relative",
@@ -128,45 +126,44 @@ function AnotherPost ({ post, setCommentedPost, setOpenModal }) {
             )}
           </Box>
         </Link>
-        <Box sx={{display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center'}}>
-        <Link
-          to={'/user/' + post.user.id}
-          className={styles.link}
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
         >
-          <Typography
-            variant="h6"
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            {post.user.firstName} {post.user.lastName}
-          </Typography>
-        </Link>
-        <Link
-          to={'/user/' + post.user.id}
-          className={styles.link}
-        >
-          <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-            @{post.user.username}
-          </Typography>
-        </Link>
-        <Link
-          to={'/post/' + post.id}
-          className={styles.link}
-        >
-          <Typography>{postDate}</Typography>
+          <Link to={"/user/" + post.user.id} className={styles.link}>
+            <Typography
+              variant="h6"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              {post.user.firstName} {post.user.lastName}
+            </Typography>
           </Link>
-          </Box>
+          <Link to={"/user/" + post.user.id} className={styles.link}>
+            <Typography sx={{ display: "flex", alignItems: "center" }}>
+              @{post.user.username}
+            </Typography>
+          </Link>
+          <Link to={"/post/" + post.id} className={styles.link}>
+            <Typography>{postDate}</Typography>
+          </Link>
+        </Box>
       </CardContent>
       <CardContent>
-        <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
+        <Typography paragraph={true} sx={{ wordWrap: "break-word" }}>
           {post.description}
         </Typography>
         <ImageListItem>
-          <img src={post.photo}></img>
+          {/* <img src={post.photo}></img> */}
+          {post.photo && <img src={post.photo} width={350} height={250} />}
         </ImageListItem>
         <CardActions>
           <Button onClick={() => comment()}>
-            <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
-            <Typography sx={{ color: 'grey', ml: 1 }}>
+            <MapsUgcRoundedIcon sx={{ color: "grey" }} />
+            <Typography sx={{ color: "grey", ml: 1 }}>
               {comments || null}
             </Typography>
           </Button>
@@ -196,9 +193,9 @@ function AnotherPost ({ post, setCommentedPost, setOpenModal }) {
 }
 
 AnotherPost.propTypes = {
-	post: PropTypes.object,
-	children: PropTypes.string,
-	setCommentedPost: PropTypes.func,
-    setOpenModal: PropTypes.func
-}
-export default AnotherPost
+  post: PropTypes.object,
+  children: PropTypes.string,
+  setCommentedPost: PropTypes.func,
+  setOpenModal: PropTypes.func,
+};
+export default AnotherPost;
