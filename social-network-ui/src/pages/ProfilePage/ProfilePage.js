@@ -1,32 +1,43 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import { Box, Typography } from '@mui/material'
-import AvatarWithoutImg from '../../components/AvatarWithoutImg/AvatarWithoutImg'
-import Button from '@mui/material/Button'
-import UserTag from '../../components/UserTag/UserTag'
+//mui
+import {
+	Box,
+	Typography,
+	Button,
+	Avatar,
+	CircularProgress,
+} from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import useUserToken from '../../hooks/useUserToken'
-import axios from 'axios'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+//mui icons
 import LinkIcon from '@mui/icons-material/Link'
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
-import LinkText from '../../components/LinkText/LinkText'
-import { format } from 'date-fns'
-import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
-import getUserData from '../../api/getUserInfo'
-import Avatar from '@mui/material/Avatar'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
-import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
-import getPostsById from '../../api/getPostsById'
+//components
+import AvatarWithoutImg from '../../components/AvatarWithoutImg/AvatarWithoutImg'
+import UserTag from '../../components/UserTag/UserTag'
+import LinkText from '../../components/LinkText/LinkText'
+import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
 import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper'
-import CircularProgress from '@mui/material/CircularProgress'
 import ModalEdit from '../../components/ModalEdit/ModalEdit'
+import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
+
+//hooks
+import useUserToken from '../../hooks/useUserToken'
+import useIsUserFollowing from '../../hooks/useIsUserFollowing'
+//redux
+import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { openModal } from '../../redux/slices/modalEditSlice'
-import useIsUserFollowing from '../../hooks/useIsUserFollowing'
+//router
+import { useNavigate } from 'react-router-dom'
+//api
+import getUserData from '../../api/getUserInfo'
+//npms
+import axios from 'axios'
+import { format } from 'date-fns'
 import { debounce } from 'lodash'
 
 const theme = createTheme({
@@ -101,25 +112,21 @@ const ProfilePage = () => {
 	//user const
 	let userBirthdayData = null
 	let userJoinedData = null
+
 	useEffect(() => {
-		if (token && !isFrstLoad) {
+		//user profile info load/upd
+		if (token) {
 			;(async () => {
+				if (isFrstLoad) setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
 				setUser(userData)
+				if (isFrstLoad) setIsLoading(false)
 			})()
 		}
 	}, [isFollowing, isOpen, params.userId])
 
 	useEffect(() => {
-		if (token && isFrstLoad) {
-			;(async () => {
-				setIsLoading(true)
-				const userData = await getUserData(params.userId, token)
-				setUser(userData)
-				setIsLoading(false)
-			})()
-		}
-
+		//set equal bool, frst load posts, check follow
 		if (Number(localUserId) !== Number(params.userId)) {
 			setNotEqual(false)
 		} else {
@@ -127,15 +134,16 @@ const ProfilePage = () => {
 		}
 
 		loadNewPosts(choosenTypePost)
-
 		checkIsFollowing(params.userId)
 	}, [params.userId])
 
 	useEffect(() => {
+		//load posts when user change post type
 		loadNewPosts(choosenTypePost)
 	}, [choosenTypePost])
 
 	if (user) {
+		//create right format date
 		userBirthdayData = `Born ${format(new Date(user.birthday), 'MMMM d, yyyy')}`
 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
 			month: 'short',
@@ -144,50 +152,8 @@ const ProfilePage = () => {
 		).getFullYear()}`
 	}
 
-	useEffect(() => {
-		const myElement = scrollHeight.current
-
-		const handleScroll = debounce(() => {
-			if (myElement) {
-				const scrollPosition = myElement.scrollTop
-				setUserScrollHeight(scrollPosition)
-			}
-		}, 300)
-
-		if (myElement) {
-			myElement.addEventListener('scroll', handleScroll)
-		}
-
-		return () => {
-			if (myElement) {
-				myElement.removeEventListener('scroll', handleScroll)
-			}
-		}
-	}, [scrollHeight.current, isLoading])
-
-	useEffect(() => {
-		if (userScrollHeight && userPostsHeight) {
-			if (
-				userScrollHeight >= userPostsHeight * 0.8 &&
-				Number(user.userTweetCount) !== userPosts.length
-			) {
-				loadMorePosts()
-			}
-			if (Number(user.userTweetCount) === userPosts.length) {
-				console.log(user.userTweetCount)
-				console.log(userPosts.length)
-				setIsLoadingMoreFull(true)
-			}
-		}
-	}, [userScrollHeight])
-
-	useEffect(() => {
-		if (postRef.current) {
-			setUserPostsHeight(postRef.current?.scrollHeight)
-		}
-	}, [postRef.current])
-
 	const loadNewPosts = (btnNum = 0) => {
+		//firs load posts
 		;(async () => {
 			try {
 				setIsLoadingPosts(true)
@@ -211,7 +177,82 @@ const ProfilePage = () => {
 		})()
 	}
 
+	const handleFollow = async userId => {
+		//follow
+		//need rework
+		const data = await axios.get(
+			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/subscribe/${userId}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		)
+		checkIsFollowing(userId)
+	}
+	const handleUnFollow = async userId => {
+		//unfollow
+		//need rework
+		const data = await axios.get(
+			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/unsubscribe/${userId}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		)
+		checkIsFollowing(userId)
+	}
+
+	//pagination >>>>
+
+	useEffect(() => {
+		//scroll listener for inf pagination
+		const myElement = scrollHeight.current
+
+		const handleScroll = debounce(() => {
+			if (myElement) {
+				const scrollPosition = myElement.scrollTop
+				setUserScrollHeight(scrollPosition)
+			}
+		}, 100)
+
+		if (myElement) {
+			myElement.addEventListener('scroll', handleScroll)
+		}
+
+		return () => {
+			if (myElement) {
+				myElement.removeEventListener('scroll', handleScroll)
+			}
+		}
+	}, [scrollHeight.current, isLoading])
+
+	useEffect(() => {
+		//inf pagination logic
+		if (userScrollHeight && userPostsHeight) {
+			if (
+				userScrollHeight >= userPostsHeight * 0.5 &&
+				Number(user.userTweetCount) !== userPosts.length &&
+				!isLoadingMore
+			) {
+				loadMorePosts()
+			}
+			if (Number(user.userTweetCount) === userPosts.length) {
+				setIsLoadingMoreFull(true)
+			}
+		}
+	}, [userScrollHeight])
+
+	useEffect(() => {
+		//set user post height for inf pag
+		if (postRef.current) {
+			setUserPostsHeight(postRef.current?.scrollHeight)
+		}
+	}, [postRef.current, userScrollHeight, userPosts])
+
 	const loadMorePosts = async () => {
+		//load more posts with pagination
 		if (isLoadingMore) return
 
 		setIsLoadingMore(true)
@@ -238,35 +279,16 @@ const ProfilePage = () => {
 		}
 	}
 
-	const handleFollow = async userId => {
-		const data = await axios.get(
-			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/subscribe/${userId}`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		)
-		checkIsFollowing(userId)
-	}
-	const handleUnFollow = async userId => {
-		const data = await axios.get(
-			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/unsubscribe/${userId}`,
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}
-		)
-		checkIsFollowing(userId)
-	}
+	//<<<< pagination
 
 	const goBackFunc = () => {
+		//navigation back
 		if (!notEqual) {
 			navigate(-1)
 		}
 	}
 	if (isLoading) {
+		//skeleton
 		return <ProfilePageSkeleton />
 	}
 	return (
@@ -278,12 +300,11 @@ const ProfilePage = () => {
 					overflow: 'scroll',
 					height: '100vh',
 					'&::-webkit-scrollbar': {
-						width: '0.2rem',
-						height: '0.21rem',
+						width: '0',
 					},
-					'&::-webkit-scrollbar-thumb': {
-						background: 'red',
-					},
+					// '&::-webkit-scrollbar-thumb': {
+					// 	background: 'red',
+					// },
 				}}
 			>
 				{user && (
@@ -579,7 +600,6 @@ const ProfilePage = () => {
 						alignItems: 'center',
 						width: '100%',
 						minHeight: '35vh',
-						mb: 10,
 					}}
 				>
 					{isLoadingPosts && <CircularProgress size={80} />}
@@ -594,7 +614,7 @@ const ProfilePage = () => {
 							<PostWrapper tweets={userPosts} />
 						</Box>
 					)}
-					{!isLoadingPosts && !userPosts.length && (
+					{!isLoadingPosts && !userPosts.length && !isLoadingMoreFull && (
 						<Typography
 							sx={{
 								fontWeight: 700,
