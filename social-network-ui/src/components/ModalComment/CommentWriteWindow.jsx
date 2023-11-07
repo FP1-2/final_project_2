@@ -13,9 +13,15 @@ import axios from 'axios'
 import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
+import CustomTooltip from '../Tooltip/tooltip'
 
-function CommentWriteWindow ({ postId, close, commentsCount, setCommentsCount }) {
+function CommentWriteWindow ({
+  postId,
+  close,
+  commentsCount,
+  setCommentsCount
+}) {
   const { token } = UseUserToken()
   const userId = getUserId()
   const [description, setDescription] = useState('')
@@ -23,7 +29,7 @@ function CommentWriteWindow ({ postId, close, commentsCount, setCommentsCount })
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const [user, setUser] = useState(null)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchData () {
@@ -53,39 +59,40 @@ function CommentWriteWindow ({ postId, close, commentsCount, setCommentsCount })
     event.preventDefault()
   }
 
-const handlePost = async () => {
+  const handlePost = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL || ''}/api/v1/post/${postId}/comment`,
+        `${
+          process.env.REACT_APP_SERVER_URL || ''
+        }/api/v1/post/${postId}/comment`,
         {
           id: 0,
           userId: userId,
           photo: photo,
-          description: description,
+          description: description
         },
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
-      );
+      )
 
       if (response.status === 200) {
         setError(null)
-        setSuccess('Comment sent. Click to open the post');
+        setSuccess('Comment sent. Click to open the post')
         setCommentsCount(commentsCount + 1)
         setTimeout(() => {
           close()
-        }, 3000);
-
+        }, 3000)
       } else {
-        setError(`Error ${response.status}: ${response.data}`);
+        setError(`Error ${response.status}: ${response.data}`)
       }
     } catch (err) {
-      setError(`Error: ${err.message}`);
+      setError(`Error: ${err.message}`)
     }
-  };
+  }
 
   return (
     <form className={styles.writeWindow} onSubmit={handleSubmit}>
@@ -111,20 +118,26 @@ const handlePost = async () => {
         />
         <PostButton onClick={handlePost}>Post</PostButton>
       </Box>
-      {error && <Typography sx={{color: 'red'}}>{error}</Typography>}
-      {success && <Button onClick={() => navigate(`/post/${postId}`)}><Typography sx={{color: 'green'}}>{success}</Typography></Button>}
+      {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
+      {success && (
+        <Button onClick={() => navigate(`/post/${postId}`)}>
+          <Typography sx={{ color: 'green' }}>{success}</Typography>
+        </Button>
+      )}
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
         {photo ? (
           <>
-            <Button
-              onClick={() => {
-                setPhoto(null)
-              }}
-            >
-              <CloseIcon />
-            </Button>
+            <CustomTooltip title='Delete photo'>
+              <Button
+                onClick={() => {
+                  setPhoto(null)
+                }}
+              >
+                <CloseIcon />
+              </Button>
+            </CustomTooltip>
             <Image
               style={{
                 width: '50%',
@@ -135,7 +148,7 @@ const handlePost = async () => {
             />
           </>
         ) : (
-          <ImageInput file={photo} onChange={handlePhotoInput} />
+            <ImageInput file={photo} onChange={handlePhotoInput} />
         )}
       </Box>
     </form>

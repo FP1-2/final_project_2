@@ -27,6 +27,7 @@ import ModalComment from '../ModalComment/ModalComment'
 import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
+import CustomTooltip from '../Tooltip/tooltip'
 
 function AnotherPost ({ post }) {
   const isRepost = post.typePost === 'REPOST'
@@ -60,7 +61,8 @@ function AnotherPost ({ post }) {
     border: '1px solid #000',
     boxShadow: 24,
     borderRadius: '7px',
-    p: 2
+    p: 2,
+    textAlign: 'center'
   }
 
   function comment () {
@@ -79,43 +81,43 @@ function AnotherPost ({ post }) {
         }
       )
       if (response.status === 200) {
-      toggleLiked()
-      setError(null)
-    } else {
-      setError(`Error ${response.status}: ${response.error}`)
-    }
+        toggleLiked()
+        setError(null)
+      } else {
+        setError(`Error ${response.status}: ${response.error}`)
+      }
     } catch (err) {
       setError(`Error: ${err}`)
     }
   }
 
-async function repost() {
-  try {
-    const response = await axios.post(
-      url + `/api/v1/post/${thisPost.id}/repost`,
-      {
-        id: 0,
-        userId: 0,
-        photo: '',
-        description: ''
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+  async function repost () {
+    try {
+      const response = await axios.post(
+        url + `/api/v1/post/${thisPost.id}/repost`,
+        {
+          id: 0,
+          userId: 0,
+          photo: '',
+          description: ''
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          }
         }
+      )
+      if (response.status === 200) {
+        toggleRepost()
+        setError(null)
+      } else {
+        setError(`Error ${response.status}: ${response.error}`)
       }
-    );
-    if (response.status === 200) {
-      toggleRepost()
-      setError(null)
-    } else {
-      setError(`Error ${response.status}: ${response.error}`)
+    } catch (err) {
+      setError(`Error: ${err}`)
     }
-  } catch (err) {
-    setError(`Error: ${err}`)
   }
-}
 
   function toggleLiked () {
     isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
@@ -264,53 +266,65 @@ async function repost() {
             </ImageListItem>
           </Link>
           <CardActions>
-            <Button onClick={() => comment()}>
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
-                <Typography sx={{ color: 'grey', ml: 1 }}>
-                  {comments || null}
-                </Typography>
-              </Box>
-            </Button>
-            <Button onClick={() => repost()}>
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <AutorenewRoundedIcon
-                  sx={{ color: isReposted ? 'green' : 'grey' }}
-                />
-                <Typography
-                  sx={{ color: isReposted ? 'green' : 'grey', ml: 1 }}
-                >
-                  {reposts || null}
-                </Typography>
-              </Box>
-            </Button>
-            <Button onClick={() => like()}>
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                {isLiked ? (
-                  <FavoriteIcon sx={{ color: 'red' }} />
-                ) : (
-                  <FavoriteBorderIcon sx={{ color: 'grey' }} />
-                )}
-                <Typography sx={{ color: isLiked ? 'red' : 'grey', ml: 1 }}>
-                  {likes || null}
-                </Typography>
-              </Box>
-            </Button>
+            <CustomTooltip title='Add comment'>
+              <Button onClick={() => comment()}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
+                  <Typography sx={{ color: 'grey', ml: 1 }}>
+                    {comments || null}
+                  </Typography>
+                </Box>
+              </Button>
+            </CustomTooltip>
+            <CustomTooltip title='Repost'>
+              <Button onClick={() => repost()}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <AutorenewRoundedIcon
+                    sx={{ color: isReposted ? 'green' : 'grey' }}
+                  />
+                  <Typography
+                    sx={{ color: isReposted ? 'green' : 'grey', ml: 1 }}
+                  >
+                    {reposts || null}
+                  </Typography>
+                </Box>
+              </Button>
+            </CustomTooltip>
+            <CustomTooltip title='Like'>
+              <Button onClick={() => like()}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  {isLiked ? (
+                    <FavoriteIcon sx={{ color: 'red' }} />
+                  ) : (
+                    <FavoriteBorderIcon sx={{ color: 'grey' }} />
+                  )}
+                  <Typography sx={{ color: isLiked ? 'red' : 'grey', ml: 1 }}>
+                    {likes || null}
+                  </Typography>
+                </Box>
+              </Button>
+            </CustomTooltip>
             {isMinePost ? (
-              <Button
-                onClick={() => setOpenDeleteModal(true)}
-                className={styles.button}
-              >
-                <DeleteForeverOutlinedIcon sx={{ color: 'grey' }} />
-              </Button>
-            ) : (
-              <Button onClick={toggleFollow} className={styles.button}>
-                {!isFollow ? (
+              <CustomTooltip title='Delete post'>
+                <Button
+                  onClick={() => setOpenDeleteModal(true)}
+                  className={styles.button}
+                >
+                  <DeleteForeverOutlinedIcon sx={{ color: 'grey' }} />
+                </Button>
+              </CustomTooltip>
+            ) : !isFollow ? (
+              <CustomTooltip title='Follow'>
+                <Button onClick={toggleFollow} className={styles.button}>
                   <PersonAddOutlinedIcon sx={{ color: 'grey' }} />
-                ) : (
+                </Button>
+              </CustomTooltip>
+            ) : (
+              <CustomTooltip title='Unfollow'>
+                <Button onClick={toggleFollow} className={styles.button}>
                   <VerifiedOutlinedIcon sx={{ color: 'primal' }} />
-                )}
-              </Button>
+                </Button>
+              </CustomTooltip>
             )}
           </CardActions>
           <Typography sx={{ color: 'red' }}> {error}</Typography>
@@ -325,7 +339,7 @@ async function repost() {
       />
       <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
         <Box sx={style}>
-          <Typography>DELETE THIS POST?</Typography>
+          <Typography>Delete this post?</Typography>
           <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
             <Button onClick={() => setOpenDeleteModal(false)}>
               <Typography>CANCEL</Typography>

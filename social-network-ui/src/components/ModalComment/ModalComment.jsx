@@ -15,6 +15,7 @@ import CommentWriteWindow from './CommentWriteWindow'
 import { Link } from 'react-router-dom'
 import styles from '../AnotherPost/AnotherPost.module.scss'
 import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
+import CustomTooltip from '../Tooltip/tooltip'
 
 function ModalComment ({
   post,
@@ -32,10 +33,12 @@ function ModalComment ({
   return (
     <Modal open={open} onClose={() => handleClose()}>
       <Box sx={style}>
-        <Button onClick={() => setOpenModal(false)}>
-          <CloseIcon />
-        </Button>
-        <Card variant='outlined' sx={{backgroundColor: 'rgb(241, 247, 255)'}}>
+        <CustomTooltip title='Close'>
+          <Button onClick={() => setOpenModal(false)}>
+            <CloseIcon />
+          </Button>
+        </CustomTooltip>
+        <Card variant='outlined' sx={{ backgroundColor: 'rgb(241, 247, 255)' }}>
           <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Link to={'/user/' + post.user.id}>
               <Box
