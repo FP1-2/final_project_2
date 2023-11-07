@@ -87,7 +87,9 @@ public class MessageController {
   @MessageMapping("/chat")
   public void processMessage(@Payload MessageDtoIn message, SimpMessageHeaderAccessor headerAccessor) {
     UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
-
+    if (user == null) {
+      return;
+    }
     MessageDtoOut messageDtoOut = messageService.addMessage(message, (User) user.getPrincipal());
     sendMessageToWebSocket(messageDtoOut);
   }
