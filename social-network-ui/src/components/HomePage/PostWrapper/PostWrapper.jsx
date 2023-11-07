@@ -4,6 +4,7 @@ import AnotherPost from '../../AnotherPost/AnotherPost'
 
 const PostWrapper = ({ tweets }) => {
 	console.log(tweets)
+
 	return (
 		<>{tweets && tweets.map(tweet => <AnotherPost post={tweet} key={tweet.id} />)}</>
 	)
