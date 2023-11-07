@@ -261,9 +261,9 @@ function AnotherPost ({ post }) {
             <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
               {thisPost?.description}
             </Typography>
-            <ImageListItem>
+            {thisPost?.photo != "" ? <ImageListItem>
               <img src={thisPost?.photo}></img>
-            </ImageListItem>
+            </ImageListItem> : null}
           </Link>
           <CardActions>
             <CustomTooltip title='Add comment'>
