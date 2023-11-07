@@ -121,7 +121,7 @@ const ProfilePage = () => {
 
 	useEffect(() => {
 		//user profile info load/upd
-		if (token) {
+		if (token && !isOpen) {
 			;(async () => {
 				if (isFrstLoad) setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
