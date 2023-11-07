@@ -13,5 +13,9 @@
 }
 
 .cardContent:last-child {
-  padding-bottom: 0;
+  padding-bottom: 0 !important;
+}
+
+.button:not(:first-of-type) {
+  margin-left: auto !important;
 }
