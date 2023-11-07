@@ -84,6 +84,7 @@ public class MessageService {
 
     return addMessage(messageDtoIn, user);
   }
+
   public MessageDtoOut addMessage(MessageDtoIn messageDtoIn, User user) {
 
     Chat chat = findById(messageDtoIn.getChatId());
