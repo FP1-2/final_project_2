@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useDispatch } from 'react-redux'
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
-import { openModal } from '../../redux/slices/modalSlice'
+import { openModal } from '../../redux/slices/modalSignUpSlice'
 import { useEffect } from 'react'
 import UseUserToken from '../../hooks/useUserToken'
 
