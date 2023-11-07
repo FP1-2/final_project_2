@@ -32,4 +32,6 @@ public interface PostRepo extends JpaRepository<Post, Long> {
 
   List<Post> findByLikesIn(List<Like> likes);
 
+  Optional<Post> findByUserAndOriginalPostAndTypePost(User user, Post originalPost, TypePost typePost);
+
 }

@@ -5,7 +5,6 @@ import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import PropTypes from 'prop-types'
 import { Image } from 'cloudinary-react'
-import jwt from 'jwt-decode'
 import UseUserToken from './../../hooks/useUserToken'
 import getUserId from '../../utils/getUserId'
 import getUserData from '../../api/getUserInfo'
@@ -14,9 +13,9 @@ import axios from 'axios'
 import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
-import { redirect } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
-function CommentWriteWindow ({ postId, close }) {
+function CommentWriteWindow ({ postId, close, commentsCount, setCommentsCount }) {
   const { token } = UseUserToken()
   const userId = getUserId()
   const [description, setDescription] = useState('')
@@ -24,6 +23,7 @@ function CommentWriteWindow ({ postId, close }) {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const [user, setUser] = useState(null)
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData () {
@@ -72,10 +72,12 @@ const handlePost = async () => {
       );
 
       if (response.status === 200) {
+        setError(null)
         setSuccess('Comment sent. Click to open the post');
+        setCommentsCount(commentsCount + 1)
         setTimeout(() => {
           close()
-        }, 1000);
+        }, 3000);
 
       } else {
         setError(`Error ${response.status}: ${response.data}`);
@@ -87,7 +89,7 @@ const handlePost = async () => {
 
   return (
     <form className={styles.writeWindow} onSubmit={handleSubmit}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2 }}>
         {user?.avatar ? (
           <Avatar
             alt={`${user?.firstName} ${user?.lastName}`}
@@ -110,7 +112,7 @@ const handlePost = async () => {
         <PostButton onClick={handlePost}>Post</PostButton>
       </Box>
       {error && <Typography sx={{color: 'red'}}>{error}</Typography>}
-      {success && <Button onClick={redirect(`/post/${postId}`)}><Typography sx={{color: 'green'}}>{success}</Typography></Button>}
+      {success && <Button onClick={() => navigate(`/post/${postId}`)}><Typography sx={{color: 'green'}}>{success}</Typography></Button>}
       <Box
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
@@ -144,5 +146,7 @@ export default CommentWriteWindow
 
 CommentWriteWindow.propTypes = {
   postId: PropTypes.number,
-  close: PropTypes.func
+  close: PropTypes.func,
+  commentsCount: PropTypes.number,
+  setCommentsCount: PropTypes.func
 }
