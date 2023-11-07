@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import UseUserToken from '../../hooks/useUserToken'
 import getLikedPosts from '../../api/getLikedPosts'
 import useIsAuthenticated from '../../hooks/useIsAuthenticated'
-import getUserId from '../../utils/getUserId'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box';
 import AnotherPost from '../AnotherPost/AnotherPost'
 
 function Favourites () {
   const isLoggedIn = useIsAuthenticated()
-  const userId = getUserId()
   const [favourites, setFavourites] = useState([])
   const [error, setError] = useState(null)
-  const { token } = UseUserToken()
   const [loading, setLoading] = useState(true)
     
     const style = {
@@ -25,7 +21,7 @@ function Favourites () {
   useEffect(() => {
     async function getPosts () {
       try {
-        const data = await getLikedPosts(token, userId)
+        const data = await getLikedPosts()
         setFavourites(data)
         console.log(data);
       } catch (error) {

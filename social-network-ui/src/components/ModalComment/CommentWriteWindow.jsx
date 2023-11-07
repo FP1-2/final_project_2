@@ -89,7 +89,7 @@ const handlePost = async () => {
 
   return (
     <form className={styles.writeWindow} onSubmit={handleSubmit}>
-      <Box sx={{ display: 'flex', width: '80%' }}>
+      <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2 }}>
         {user?.avatar ? (
           <Avatar
             alt={`${user?.firstName} ${user?.lastName}`}

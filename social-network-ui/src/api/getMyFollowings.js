@@ -2,27 +2,21 @@ import axios from 'axios'
 import getUserToken from '../utils/getUserToken'
 import getUserId from '../utils/getUserId'
 
-const url = process.env.REACT_APP_SERVER_URL
 const token = getUserToken()
 const userId = getUserId()
 
-const getLikedPosts = async () => {
+export default async function getMyFollowings () {
   try {
     const { data } = await axios.get(
-      url + '/api/v1/post-user-likes/' + userId,
+      `${process.env.REACT_APP_SERVER_URL || ''}/api/v1/followings/${userId}`,
       {
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         }
       }
     )
-    return data
+    return data.map((user) =>  user.id )
   } catch (error) {
     throw error
   }
 }
-
-
-export default getLikedPosts
-
