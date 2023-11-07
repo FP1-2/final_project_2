@@ -8,6 +8,7 @@ import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.Message;
 import fs.socialnetworkapi.entity.ChatUser;
 import fs.socialnetworkapi.enums.NotificationType;
+import fs.socialnetworkapi.enums.TypePost;
 import fs.socialnetworkapi.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -64,6 +65,51 @@ public class NotificationCreator {
     return createNewNotification();
   }
 
+  public void sendPostByTypePost(Post postToSave, TypePost typePost) {
+    if (typePost.equals(TypePost.POST)) {
+      featuredNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.REPOST)) {
+      repostNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.COMMENT)) {
+      commentNotification(postToSave);
+    }
+  }
+
+  public List<Notification> featuredNotification(Post post) {
+    return post.getUser()
+            .getFollowers()
+            .stream()
+            .map(
+              user -> {
+                this.notificationDtoIn = new NotificationDtoIn(
+                  post.getUser(),
+                  post,
+                  null,
+                  user,
+                  NotificationType.FEATURED
+                  );
+                link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+                text = String.format("Your featured user %s has new post: %s", fromUser(), post());
+                return createNewNotification();
+                }
+            ).toList();
+  }
+
+  public Notification repostNotification(Post post) {
+    this.notificationDtoIn = new NotificationDtoIn(
+            post.getUser(),
+            post,
+            null,
+            post.getOriginalPost().getUser(),
+            NotificationType.REPOST
+    );
+    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+    text = String.format("User %s reposted your post: %s", fromUser(), post());
+    return createNewNotification();
+  }
+
   public Notification commentNotification(Post post) {
     this.notificationDtoIn = new NotificationDtoIn(
       post.getUser(),
@@ -74,19 +120,6 @@ public class NotificationCreator {
     );
     link = String.format("%s/api/v1/%d", baseUrl, post.getId());
     text = String.format("User %s commented your post: %s", fromUser(), post());
-    return createNewNotification();
-  }
-
-  public Notification repostNotification(Post post) {
-    this.notificationDtoIn = new NotificationDtoIn(
-      post.getUser(),
-      post,
-      null,
-      post.getOriginalPost().getUser(),
-      NotificationType.REPOST
-      );
-    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
-    text = String.format("User %s reposted your post: %s", fromUser(), post());
     return createNewNotification();
   }
 
@@ -101,26 +134,6 @@ public class NotificationCreator {
     link = String.format("%s/api/v1/user/info/%d", baseUrl, user.getId());
     text = String.format("User %s subscribed to your account", fromUser());
     return createNewNotification();
-  }
-
-  public List<Notification> featuredNotification(Post post) {
-    return post.getUser()
-      .getFollowers()
-      .stream()
-      .map(
-        user -> {
-          this.notificationDtoIn = new NotificationDtoIn(
-            post.getUser(),
-            post,
-            null,
-            user,
-            NotificationType.FEATURED
-            );
-          link = String.format("%s/api/v1/%d", baseUrl, post.getId());
-          text = String.format("Your featured user %s has new post: %s", fromUser(), post());
-          return createNewNotification();
-        }
-      ).toList();
   }
 
   public List<Notification> messageNotification(Message message) {
@@ -152,4 +165,7 @@ public class NotificationCreator {
     return notificationService.createNewNotification(notification);
   }
 
+  public void deleteByPostId(Long postId) {
+    notificationService.deleteByPostId(postId);
+  }
 }
