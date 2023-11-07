@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import UseUserToken from '../../hooks/useUserToken'
 import getLikedPosts from '../../api/getLikedPosts'
 import useIsAuthenticated from '../../hooks/useIsAuthenticated'
-import getUserId from '../../utils/getUserId'
-import ModalComment from '../ModalComment/ModalComment'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box';
 import AnotherPost from '../AnotherPost/AnotherPost'
 
 function Favourites () {
   const isLoggedIn = useIsAuthenticated()
-  const userId = getUserId()
   const [favourites, setFavourites] = useState([])
   const [error, setError] = useState(null)
-  const { token } = UseUserToken()
-  const [commentedPost, setCommentedPost] = useState(null)
-  const [openModal, setOpenModal] = useState(false)
-    const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
     
     const style = {
         position: 'absolute',
@@ -28,7 +21,7 @@ function Favourites () {
   useEffect(() => {
     async function getPosts () {
       try {
-        const data = await getLikedPosts(token, userId)
+        const data = await getLikedPosts()
         setFavourites(data)
         console.log(data);
       } catch (error) {
@@ -63,18 +56,9 @@ function Favourites () {
               <AnotherPost
                 key={post.id}
                 post={post}
-                setCommentedPost={setCommentedPost}
-                setOpenModal={setOpenModal}
               />
             ))
         )}
-        {commentedPost ? (
-          <ModalComment
-            post={commentedPost}
-            open={openModal}
-            setOpenModal={setOpenModal}
-          />
-        ) : null}
       </>
     )
   }
