@@ -5,6 +5,7 @@ import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Chat;
+import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -85,8 +86,9 @@ public class MessageController {
 
   @MessageMapping("/chat")
   public void processMessage(@Payload MessageDtoIn message, SimpMessageHeaderAccessor headerAccessor) {
-    Principal principal = headerAccessor.getUser();
-    MessageDtoOut messageDtoOut = messageService.addMessage(message);
+    UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
+
+    MessageDtoOut messageDtoOut = messageService.addMessage(message, (User) user.getPrincipal());
     sendMessageToWebSocket(messageDtoOut);
   }
 

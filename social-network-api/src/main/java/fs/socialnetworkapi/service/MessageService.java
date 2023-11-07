@@ -82,6 +82,10 @@ public class MessageService {
 
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+    return addMessage(messageDtoIn, user);
+  }
+  public MessageDtoOut addMessage(MessageDtoIn messageDtoIn, User user) {
+
     Chat chat = findById(messageDtoIn.getChatId());
 
     Message message = new Message();

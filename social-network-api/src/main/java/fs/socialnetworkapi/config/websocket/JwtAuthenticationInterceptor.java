@@ -25,7 +25,7 @@ public class JwtAuthenticationInterceptor implements ChannelInterceptor {
 
   @Override
   public Message<?> preSend(Message<?> message, MessageChannel channel) {
-    //StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+
     StompHeaderAccessor accessor =  MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
     if (accessor ==  null) {
       return message;
