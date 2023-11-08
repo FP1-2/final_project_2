@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Button,
   Modal,
@@ -29,27 +29,27 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Tooltip/tooltip'
 
-function AnotherPost ({ post }) {
-  const isRepost = post.typePost === 'REPOST'
-  let thisPost
-  isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
-  const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
-  const [likes, setLikes] = useState(thisPost?.countLikes)
-  const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost)
-  const [reposts, setReposts] = useState(thisPost?.countRepost)
-  const [comments, setComments] = useState(thisPost?.countComments)
-  const [error, setError] = useState(null)
-  const [openCommentModal, setOpenCommentModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [postIsDeleted, setPostIsDeleted] = useState(false)
-  const { token } = UseUserToken()
-  const url = process.env.REACT_APP_SERVER_URL
-  const postDate = formatPostDate(thisPost?.createdDate)
-  const userId = getUserId()
-  const followings = useSelector(state => state.user.followings)
-  const dispatch = useDispatch()
-  const isMinePost = thisPost?.user?.id == userId
-  const isFollow = followings.includes(thisPost?.user?.id)
+function AnotherPost({ post }) {
+  const isRepost = post.typePost === 'REPOST';
+  let thisPost;
+  isRepost ? (thisPost = post?.originalPost) : (thisPost = post);
+  const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike);
+  const [likes, setLikes] = useState(thisPost?.countLikes);
+  const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost);
+  const [reposts, setReposts] = useState(thisPost?.countRepost);
+  const [comments, setComments] = useState(thisPost?.countComments);
+  const [error, setError] = useState(null);
+  const [openCommentModal, setOpenCommentModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [postIsDeleted, setPostIsDeleted] = useState(false);
+  const { token } = UseUserToken();
+  const url = process.env.REACT_APP_SERVER_URL;
+  const postDate = formatPostDate(thisPost?.createdDate);
+  const userId = getUserId();
+  const followings = useSelector((state) => state.user.followings);
+  const dispatch = useDispatch();
+  const isMinePost = thisPost?.user?.id == userId;
+  const isFollow = followings.includes(thisPost?.user?.id);
 
   const style = {
     position: 'absolute',
@@ -63,23 +63,23 @@ function AnotherPost ({ post }) {
     borderRadius: '7px',
     p: 2,
     textAlign: 'center'
-  }
+  };
 
   function comment () {
     setOpenCommentModal(true)
   }
 
-  async function like () {
+  async function like() {
     try {
       const response = await axios.post(
         url + `/api/v1/likes/like/${thisPost.id}`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
-      )
+      );
       if (response.status === 200) {
         toggleLiked()
         setError(null)
@@ -124,57 +124,90 @@ function AnotherPost ({ post }) {
     setIsLiked(!isLiked)
   }
 
-  function toggleRepost () {
+  async function repost() {
+    try {
+      const response = await axios.post(
+        url + `/api/v1/post/${thisPost.id}/repost`,
+        {
+          id: 0,
+          userId: 0,
+          photo: '',
+          description: '',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toggleRepost();
+        setError(null);
+      } else {
+        setError(`Error ${response.status}: ${response.error}`);
+      }
+    } catch (err) {
+      setError(`Error: ${err}`);
+    }
+  }
+
+  function toggleLiked() {
+    isLiked ? setLikes(likes - 1) : setLikes(likes + 1);
+    setIsLiked(!isLiked);
+  }
+
+  function toggleRepost() {
     isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
     setIsReposted(!isReposted)
   }
 
-  async function deletePost () {
+  async function deletePost() {
     try {
       const response = await axios.delete(url + `/api/v1/post/${thisPost.id}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      });
       response.status === 200
         ? setPostIsDeleted(true)
-        : setError(`Error ${response.status}: ${response.error}`)
+        : setError(`Error ${response.status}: ${response.error}`);
     } catch (err) {
-      setError(`Error: ${err}`)
+      setError(`Error: ${err}`);
     } finally {
-      setOpenDeleteModal(false)
+      setOpenDeleteModal(false);
     }
   }
 
-  async function toggleFollow () {
+  async function toggleFollow() {
     try {
-      let response
+      let response;
       if (!isFollow) {
         response = await axios.get(
           url + `/api/v1/subscribe/${thisPost.user.id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
-        )
-        dispatch(addFollowing(thisPost.user.id)) // Dispatch the action to add following
+        );
+        dispatch(addFollowing(thisPost.user.id)); // Dispatch the action to add following
       } else {
         response = await axios.get(
           url + `/api/v1/unsubscribe/${thisPost.user.id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
-        )
-        dispatch(removeFollowing(thisPost.user.id)) // Dispatch the action to remove following
+        );
+        dispatch(removeFollowing(thisPost.user.id)); // Dispatch the action to remove following
       }
       response.status === 200
         ? setError(null)
-        : setError(`Error ${response.status}: ${response.error}`)
+        : setError(`Error ${response.status}: ${response.error}`);
     } catch (error) {
-      setError(`Error: ${error}`)
+      setError(`Error: ${error}`);
     }
   }
 
@@ -209,8 +242,8 @@ function AnotherPost ({ post }) {
                   bottom: 0,
                   right: 0,
                   m: '-2px',
-                  borderRadius: '50%'
-                }
+                  borderRadius: '50%',
+                },
               }}
             >
               {thisPost.user.avatar ? (
@@ -232,7 +265,7 @@ function AnotherPost ({ post }) {
               display: 'flex',
               gap: 1,
               flexWrap: 'wrap',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
@@ -351,10 +384,10 @@ function AnotherPost ({ post }) {
         </Box>
       </Modal>
     </>
-  )
+  );
 }
 
 AnotherPost.propTypes = {
-  post: PropTypes.object
-}
-export default AnotherPost
+  post: PropTypes.object,
+};
+export default AnotherPost;
