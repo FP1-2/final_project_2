@@ -116,6 +116,7 @@ public class PostControllerTest {
         assertEquals("New Description1", postDtoOut.getDescription());
         assertEquals("URL photo1", postDtoOut.getPhoto());
     }
+
     @Test
     public void testAddPostWithoutToken() throws Exception {
 
@@ -149,6 +150,7 @@ public class PostControllerTest {
         assertEquals("New Description1", postDtoOut.getDescription());
         assertEquals("URL photo1", postDtoOut.getPhoto());
     }
+
     @Test
     public void testAddRepostWithoutToken() throws Exception {
 
@@ -181,6 +183,7 @@ public class PostControllerTest {
         assertEquals("New Description1", postDtoOut.getDescription());
         assertEquals("URL photo1", postDtoOut.getPhoto());
     }
+
     @Test
     public void testAddCommentWithoutToken() throws Exception {
 
@@ -357,10 +360,10 @@ public class PostControllerTest {
 
         List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
 
-        Mockito.when(postService.getPostByUserLikes(eq(1L))).thenReturn(postDtoOuts);
+        Mockito.when(postService.getPostByUserLikes(eq(1L),eq(0),eq(5))).thenReturn(postDtoOuts);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/post-user-likes/{user_id}", 1L)
+                        .get("/api/v1/post-user-likes/{user_id}?page=0&size=5", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
 

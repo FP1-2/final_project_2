@@ -5,10 +5,15 @@ import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Chat;
+import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,10 +32,6 @@ public class MessageController {
 
   private final SimpMessagingTemplate messagingTemplate;
   private final MessageService messageService;
-
-  public void reply(MessageDtoOut messageDtoOut) {
-    messagingTemplate.convertAndSend("/topic/some-topic", messageDtoOut);
-  }
 
   @PostMapping("create-chat")
   public ResponseEntity<?> createChat(@RequestBody CreateChatDtoIn createChatDtoIn) {
@@ -79,9 +80,30 @@ public class MessageController {
   @PostMapping("message")
   public ResponseEntity<MessageDtoOut> addMessage(@RequestBody MessageDtoIn message) {
     MessageDtoOut messageDtoOut = messageService.addMessage(message);
-    reply(messageDtoOut);
+    sendMessageToWebSocket(messageDtoOut);
     return ResponseEntity.ok(messageDtoOut);
   }
 
+  @MessageMapping("/chat")
+  public void processMessage(@Payload MessageDtoIn message, SimpMessageHeaderAccessor headerAccessor) {
+    UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken) headerAccessor.getUser();
+    if (user == null) {
+      return;
+    }
+    MessageDtoOut messageDtoOut = messageService.addMessage(message, (User) user.getPrincipal());
+    sendMessageToWebSocket(messageDtoOut);
+  }
+
+  public void sendMessageToWebSocket(MessageDtoOut messageDtoOut) {
+    long chatId = messageDtoOut.getChatId();
+    messageService.getMembersChat(chatId)
+            .stream()
+            .map(UserDtoOut::getId)
+            .forEach(userId -> sendMessageToWebSocket(userId, messageDtoOut));
+  }
+
+  private void sendMessageToWebSocket(long userId, MessageDtoOut messageDtoOut) {
+    messagingTemplate.convertAndSend(String.format("/topic/user-messages/%d",userId), messageDtoOut);
+  }
 
 }
