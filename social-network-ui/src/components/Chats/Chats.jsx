@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Chats.module.scss";
+
 import { useDispatch, useSelector } from "react-redux";
 import { getMembers, setChatId } from "../../redux/slices/chatSlice";
 import UseUserToken from "../../hooks/useUserToken";

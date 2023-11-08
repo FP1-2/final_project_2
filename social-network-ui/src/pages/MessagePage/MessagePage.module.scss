@@ -12,13 +12,15 @@
 }
 
 .searchInput {
+  width: 40%;
   padding: 10px 20px;
   border: 1px rgb(113, 118, 123) solid;
-  outline: none;
   margin-top: 20px;
-  font-size: 28px;
+  outline: none;
   background-color: transparent;
-  width: 40%;
+  font-size: 28px;
+
+
   border-radius: 30px;
   color: #fff;
 }
