@@ -25,7 +25,7 @@ function useScreenSize() {
 			} else {
 				setScreenSize('desktop')
 			}
-		}, 300)
+		}, 100)
 
 		window.addEventListener('resize', handleResize)
 

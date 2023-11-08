@@ -606,7 +606,7 @@ const ProfilePage = () => {
 							No Posts Available
 						</Typography>
 					)}
-					{isLoadingMoreFull && (
+					{isLoadingMoreFull && !isLoadingPosts && (
 						<Typography
 							sx={{
 								fontWeight: 700,
