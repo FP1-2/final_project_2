@@ -20,6 +20,8 @@ const UserTag = ({ userTag }) => {
 					fontSize: '0.9rem',
 					opacity: '0.6',
 					color: 'black',
+					whiteSpace: 'nowrap',
+					textOverflow: 'ellipsis',
 				}}
 			>
 				@{userTag}
