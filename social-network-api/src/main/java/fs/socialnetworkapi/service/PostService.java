@@ -89,8 +89,8 @@ public class PostService {
 
   }
 
-  public List<PostDtoOut> getPostByUserLikes(Long userId) {
-    List<Like> likeList = likeService.findByUserId(userId);
+  public List<PostDtoOut> getPostByUserLikes(Long userId, Integer page, Integer size) {
+    List<Like> likeList = likeService.findByUserId(userId, page, size);
     return findByLikesIn(likeList);
 
   }

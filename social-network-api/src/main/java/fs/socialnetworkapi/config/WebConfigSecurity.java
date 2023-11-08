@@ -1,5 +1,6 @@
-package fs.socialnetworkapi.security;
+package fs.socialnetworkapi.config;
 
+import fs.socialnetworkapi.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
