@@ -27,10 +27,11 @@ import ModalComment from '../ModalComment/ModalComment'
 import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
-import CustomTooltip from '../Tooltip/tooltip'
+import CustomTooltip from '../Tooltip/CustomTooltip'
 
 function AnotherPost({ post }) {
   const isRepost = post.typePost === 'REPOST';
+  const isComment = post.typePost === 'COMMENT';
   let thisPost;
   isRepost ? (thisPost = post?.originalPost) : (thisPost = post);
   const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike);
@@ -290,6 +291,14 @@ function AnotherPost({ post }) {
           </Box>
         </CardContent>
         <CardContent className={styles.cardContent}>
+          {isComment && <Box sx={{display: 'flex', gap: 1}}>
+              <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
+                <Typography sx={{color: 'grey'}}>Comment to</Typography>
+              </Link>
+              <Link to={'/profile/' + thisPost?.originalPost?.user?.id} className={styles.profileLink}>
+                <Typography>@{thisPost?.originalPost?.user?.username}</Typography>
+              </Link>
+            </Box>}
           <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
             <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
               {thisPost?.description}

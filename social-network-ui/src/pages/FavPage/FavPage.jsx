@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../../components/Header/header'
-import Favourites from '../../components/Favourites/favourites'
+import Favourites from '../../components/Favourites/Favourites'
 import './FavPage.scss'
 
 const FavPage = () => {

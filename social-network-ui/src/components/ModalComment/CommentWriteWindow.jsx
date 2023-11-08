@@ -14,7 +14,7 @@ import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
 import { useNavigate } from 'react-router-dom'
-import CustomTooltip from '../Tooltip/tooltip'
+import CustomTooltip from '../Tooltip/CustomTooltip'
 
 function CommentWriteWindow ({
   postId,
@@ -25,7 +25,7 @@ function CommentWriteWindow ({
   const { token } = UseUserToken()
   const userId = getUserId()
   const [description, setDescription] = useState('')
-  const [photo, setPhoto] = useState(null)
+  const [photo, setPhoto] = useState('')
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const [user, setUser] = useState(null)

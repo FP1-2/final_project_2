@@ -15,7 +15,7 @@ import CommentWriteWindow from './CommentWriteWindow'
 import { Link } from 'react-router-dom'
 import styles from '../AnotherPost/AnotherPost.module.scss'
 import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
-import CustomTooltip from '../Tooltip/tooltip'
+import CustomTooltip from '../Tooltip/CustomTooltip'
 
 function ModalComment ({
   post,
