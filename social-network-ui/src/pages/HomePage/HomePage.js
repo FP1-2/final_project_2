@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import getApiPosts from "../../api/getApiPosts";
-import TwitterWriteWindow from "../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow";
-import PostWrapper from "../../components/HomePage/PostWrapper/PostWrapper";
-import UseUserToken from "../../hooks/useUserToken";
-import getUserId from "../../utils/getUserId";
+import React, { useState, useEffect } from 'react';
+import getApiPosts from '../../api/getApiPosts';
+import TwitterWriteWindow from '../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow';
+import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper';
+import UseUserToken from '../../hooks/useUserToken';
+import getUserId from '../../utils/getUserId';
 
 const Home = () => {
   const [tweetPosts, setTweetPost] = useState([]);
@@ -17,9 +17,9 @@ const Home = () => {
     });
   }, []);
 
-  const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : "";
-  const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : "";
-  const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : "";
+  const userPhoto = tweetPosts.length > 0 ? tweetPosts[0]?.user?.avatar : '';
+  const firstName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.firstName : '';
+  const lastName = tweetPosts.length > 0 ? tweetPosts[0]?.user?.lastName : '';
 
   return (
     <section>
