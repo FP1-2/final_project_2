@@ -4,7 +4,7 @@ import AnotherPost from '../../AnotherPost/AnotherPost'
 import { Box } from '@mui/material'
 
 const PostWrapper = ({ tweets }) => {
-	console.log(tweets)
+  console.log(tweets);
 
 	return (
 		<Box
@@ -21,11 +21,11 @@ const PostWrapper = ({ tweets }) => {
 }
 
 PostWrapper.propTypes = {
-	tweets: PropTypes.array,
-}
+  tweets: PropTypes.array,
+};
 
 PostWrapper.defaultProps = {
-	tweets: [],
-}
+  tweets: [],
+};
 
-export default PostWrapper
+export default PostWrapper;
