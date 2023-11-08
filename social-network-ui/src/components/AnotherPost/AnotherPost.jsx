@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Button,
   Modal,
@@ -8,47 +8,47 @@ import {
   Card,
   CardContent,
   CardActions,
-  ImageListItem
-} from '@mui/material'
-import { PropTypes } from 'prop-types'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import MapsUgcRoundedIcon from '@mui/icons-material/MapsUgcRounded'
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded'
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import UseUserToken from '../../hooks/useUserToken'
-import formatPostDate from '../../utils/formatPostDate'
-import styles from './AnotherPost.module.scss'
-import ModalComment from '../ModalComment/ModalComment'
-import getUserId from '../../utils/getUserId'
-import { useDispatch, useSelector } from 'react-redux'
-import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
+  ImageListItem,
+} from '@mui/material';
+import { PropTypes } from 'prop-types';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MapsUgcRoundedIcon from '@mui/icons-material/MapsUgcRounded';
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import UseUserToken from '../../hooks/useUserToken';
+import formatPostDate from '../../utils/formatPostDate';
+import styles from './AnotherPost.module.scss';
+import ModalComment from '../ModalComment/ModalComment';
+import getUserId from '../../utils/getUserId';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFollowing, removeFollowing } from '../../redux/slices/userSlice';
 
-function AnotherPost ({ post }) {
-  const isRepost = post.typePost === 'REPOST'
-  let thisPost
-  isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
-  const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
-  const [likes, setLikes] = useState(thisPost?.countLikes)
-  const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost)
-  const [reposts, setReposts] = useState(thisPost?.countRepost)
-  const [comments, setComments] = useState(thisPost?.countComments)
-  const [error, setError] = useState(null)
-  const [openCommentModal, setOpenCommentModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [postIsDeleted, setPostIsDeleted] = useState(false)
-  const { token } = UseUserToken()
-  const url = process.env.REACT_APP_SERVER_URL
-  const postDate = formatPostDate(thisPost?.createdDate)
-  const userId = getUserId()
-  const followings = useSelector(state => state.user.followings)
-  const dispatch = useDispatch()
-  const isMinePost = thisPost?.user?.id == userId
-  const isFollow = followings.includes(thisPost?.user?.id)
+function AnotherPost({ post }) {
+  const isRepost = post.typePost === 'REPOST';
+  let thisPost;
+  isRepost ? (thisPost = post?.originalPost) : (thisPost = post);
+  const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike);
+  const [likes, setLikes] = useState(thisPost?.countLikes);
+  const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost);
+  const [reposts, setReposts] = useState(thisPost?.countRepost);
+  const [comments, setComments] = useState(thisPost?.countComments);
+  const [error, setError] = useState(null);
+  const [openCommentModal, setOpenCommentModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [postIsDeleted, setPostIsDeleted] = useState(false);
+  const { token } = UseUserToken();
+  const url = process.env.REACT_APP_SERVER_URL;
+  const postDate = formatPostDate(thisPost?.createdDate);
+  const userId = getUserId();
+  const followings = useSelector((state) => state.user.followings);
+  const dispatch = useDispatch();
+  const isMinePost = thisPost?.user?.id == userId;
+  const isFollow = followings.includes(thisPost?.user?.id);
 
   const style = {
     position: 'absolute',
@@ -60,119 +60,119 @@ function AnotherPost ({ post }) {
     border: '1px solid #000',
     boxShadow: 24,
     borderRadius: '7px',
-    p: 2
+    p: 2,
+  };
+
+  function comment() {
+    setOpenCommentModal(true);
   }
 
-  function comment () {
-    setOpenCommentModal(true)
-  }
-
-  async function like () {
+  async function like() {
     try {
       const response = await axios.post(
         url + `/api/v1/likes/like/${thisPost.id}`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
-      )
+      );
       if (response.status === 200) {
-      toggleLiked()
-      setError(null)
-    } else {
-      setError(`Error ${response.status}: ${response.error}`)
-    }
-    } catch (err) {
-      setError(`Error: ${err}`)
-    }
-  }
-
-async function repost() {
-  try {
-    const response = await axios.post(
-      url + `/api/v1/post/${thisPost.id}/repost`,
-      {
-        id: 0,
-        userId: 0,
-        photo: '',
-        description: ''
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
+        toggleLiked();
+        setError(null);
+      } else {
+        setError(`Error ${response.status}: ${response.error}`);
       }
-    );
-    if (response.status === 200) {
-      toggleRepost()
-      setError(null)
-    } else {
-      setError(`Error ${response.status}: ${response.error}`)
+    } catch (err) {
+      setError(`Error: ${err}`);
     }
-  } catch (err) {
-    setError(`Error: ${err}`)
-  }
-}
-
-  function toggleLiked () {
-    isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
-    setIsLiked(!isLiked)
   }
 
-  function toggleRepost () {
-    isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
-    setIsReposted(!isReposted)
+  async function repost() {
+    try {
+      const response = await axios.post(
+        url + `/api/v1/post/${thisPost.id}/repost`,
+        {
+          id: 0,
+          userId: 0,
+          photo: '',
+          description: '',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toggleRepost();
+        setError(null);
+      } else {
+        setError(`Error ${response.status}: ${response.error}`);
+      }
+    } catch (err) {
+      setError(`Error: ${err}`);
+    }
   }
 
-  async function deletePost () {
+  function toggleLiked() {
+    isLiked ? setLikes(likes - 1) : setLikes(likes + 1);
+    setIsLiked(!isLiked);
+  }
+
+  function toggleRepost() {
+    isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1);
+    setIsReposted(!isReposted);
+  }
+
+  async function deletePost() {
     try {
       const response = await axios.delete(url + `/api/v1/post/${thisPost.id}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      });
       response.status === 200
         ? setPostIsDeleted(true)
-        : setError(`Error ${response.status}: ${response.error}`)
+        : setError(`Error ${response.status}: ${response.error}`);
     } catch (err) {
-      setError(`Error: ${err}`)
+      setError(`Error: ${err}`);
     } finally {
-      setOpenDeleteModal(false)
+      setOpenDeleteModal(false);
     }
   }
 
-  async function toggleFollow () {
+  async function toggleFollow() {
     try {
-      let response
+      let response;
       if (!isFollow) {
         response = await axios.get(
           url + `/api/v1/subscribe/${thisPost.user.id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
-        )
-        dispatch(addFollowing(thisPost.user.id)) // Dispatch the action to add following
+        );
+        dispatch(addFollowing(thisPost.user.id)); // Dispatch the action to add following
       } else {
         response = await axios.get(
           url + `/api/v1/unsubscribe/${thisPost.user.id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
-        )
-        dispatch(removeFollowing(thisPost.user.id)) // Dispatch the action to remove following
+        );
+        dispatch(removeFollowing(thisPost.user.id)); // Dispatch the action to remove following
       }
       response.status === 200
         ? setError(null)
-        : setError(`Error ${response.status}: ${response.error}`)
+        : setError(`Error ${response.status}: ${response.error}`);
     } catch (error) {
-      setError(`Error: ${error}`)
+      setError(`Error: ${error}`);
     }
   }
 
@@ -207,8 +207,8 @@ async function repost() {
                   bottom: 0,
                   right: 0,
                   m: '-2px',
-                  borderRadius: '50%'
-                }
+                  borderRadius: '50%',
+                },
               }}
             >
               {thisPost.user.avatar ? (
@@ -230,7 +230,7 @@ async function repost() {
               display: 'flex',
               gap: 1,
               flexWrap: 'wrap',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
@@ -337,10 +337,10 @@ async function repost() {
         </Box>
       </Modal>
     </>
-  )
+  );
 }
 
 AnotherPost.propTypes = {
-  post: PropTypes.object
-}
-export default AnotherPost
+  post: PropTypes.object,
+};
+export default AnotherPost;
