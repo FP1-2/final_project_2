@@ -11,6 +11,8 @@ import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +67,10 @@ public class LikeService {
     return likeRepo.findByPostIn(posts);
   }
 
-  public List<Like> findByUserId(Long userId) {
-    return likeRepo.findByUserId(userId)
+  public List<Like> findByUserId(Long userId, Integer page, Integer size) {
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+    return likeRepo.findByUserId(userId, pageRequest)
             .stream()
             .toList();
   }
