@@ -36,28 +36,8 @@ function TwitterHeader() {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState(null);
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { token } = useUserToken();
-  const params = useParams();
-  const [user, setUser] = useState(null);
-  const screenSize = useScreenSize();
-  const userId = getUserId();
 
-  //   useEffect(() => {
-  //     getUserData(params.userId, token).then((userData) => {
-  //       setUser(userData);
-  //       console.log(userData);
-  //     });
-  //   }, [params.userId]);
-  useEffect(() => {
-    if (token) {
-      async () => {
-        const userData = await getUserData(params.userId, token);
-        setUser(userData);
-        console.log(userData);
-      };
-    }
-  }, [params.userId]);
+  const screenSize = useScreenSize();
 
   const toggleDrawer = (isOpen) => {
     setOpen(isOpen);
@@ -246,49 +226,6 @@ function TwitterHeader() {
               <DrawOutlinedIcon />
               Tweet
             </Button>
-
-            {/* <ListItem>
-          <div className={styles.post}>
-            {tweet.user.avatar ? (
-              <Avatar
-                alt={`${tweet.user.firstName} ${tweet.user.lastName}`}
-                src={tweet.user.avatar}
-                sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
-              />
-            ) : (
-              <Avatar
-                sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
-              >
-                {tweet.user.firstName.charAt(0)}
-                {tweet.user.lastName.charAt(0)}
-              </Avatar>
-            )}
-            <div className={styles.post__body}>
-              <div className={styles.body__header}>
-                <span className={styles.header__mainName}>
-                  {`${tweet.user.firstName} ${tweet.user.lastName}`}
-                </span>
-                <span className={styles.header__tagName}>
-                  {tweet.user.username}
-                </span>
-
-                <span className={styles.header__time}>{tweet.createdDate}</span>
-              </div>
-              <div className={styles.body__main}>
-                <p className={styles.main__twitte}>{tweet.description}</p>
-                {tweet.photo && (
-                  <img
-                    className={styles.main__photo}
-                    src={tweet.photo}
-                    alt=""
-                    width={350}
-                    height={250}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </ListItem> */}
           </List>
         </Drawer>
       </Box>
@@ -311,31 +248,10 @@ function TwitterHeader() {
             ml: "15px",
             mt: "15px",
           }}
-          //  onClick={() => toggleDrawer(true)}
         />
 
-        <List
-          sx={
-            {
-              //   "@media (max-width: 1280px)": {
-              //     width: "40%",
-              //   },
-              //   "@media (max-width: 860px)": {
-              //     width: "50%",
-              //   },
-              // "@media (max-width: 765px)": {
-              //   //   display: "none",
-              // },
-            }
-          }
-        >
-          <ListItem
-            button
-            sx={{ gap: "1rem" }}
-            component={Link}
-            to="/home"
-            // onClick={() => handleItemClick("Home")}
-          >
+        <List>
+          <ListItem button sx={{ gap: "1rem" }} component={Link} to="/home">
             {location.pathname === "/home" ? (
               <HomeIcon />
             ) : (
@@ -347,7 +263,7 @@ function TwitterHeader() {
                 fontWeight: activeItem === "Home" ? 800 : "normal",
                 display: {
                   xs: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                 },
               }}
@@ -371,7 +287,7 @@ function TwitterHeader() {
                 fontWeight: activeItem === "Explore" ? 800 : "normal",
                 display: {
                   xs: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                 },
               }}
@@ -395,7 +311,7 @@ function TwitterHeader() {
                 fontWeight: activeItem === "Notifications" ? 800 : "normal",
                 display: {
                   xs: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                 },
               }}
@@ -420,7 +336,7 @@ function TwitterHeader() {
                 fontWeight: activeItem === "Messages" ? 800 : "normal",
                 display: {
                   xs: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                 },
               }}
@@ -445,7 +361,7 @@ function TwitterHeader() {
                 fontWeight: activeItem === "Favourites" ? 800 : "normal",
                 display: {
                   xs: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                 },
               }}
@@ -469,7 +385,7 @@ function TwitterHeader() {
                 fontWeight: activeItem === "Profile" ? 800 : "normal",
                 display: {
                   xs: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                 },
               }}
@@ -493,7 +409,7 @@ function TwitterHeader() {
                 fontWeight: activeItem === "More" ? 800 : "normal",
                 display: {
                   xs: "none",
-                  sm: "none",
+                  sm: "block",
                   md: "block",
                 },
               }}
@@ -522,49 +438,6 @@ function TwitterHeader() {
           >
             Tweet
           </Button>
-
-          {/* <ListItem>
-		  <div className={styles.post}>
-			 {tweet.user.avatar ? (
-				<Avatar
-				  alt={`${tweet.user.firstName} ${tweet.user.lastName}`}
-				  src={tweet.user.avatar}
-				  sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
-				/>
-			 ) : (
-				<Avatar
-				  sx={{ width: 50, height: 50, mr: 2, alignSelf: "flex-start" }}
-				>
-				  {tweet.user.firstName.charAt(0)}
-				  {tweet.user.lastName.charAt(0)}
-				</Avatar>
-			 )}
-			 <div className={styles.post__body}>
-				<div className={styles.body__header}>
-				  <span className={styles.header__mainName}>
-					 {`${tweet.user.firstName} ${tweet.user.lastName}`}
-				  </span>
-				  <span className={styles.header__tagName}>
-					 {tweet.user.username}
-				  </span>
-
-				  <span className={styles.header__time}>{tweet.createdDate}</span>
-				</div>
-				<div className={styles.body__main}>
-				  <p className={styles.main__twitte}>{tweet.description}</p>
-				  {tweet.photo && (
-					 <img
-						className={styles.main__photo}
-						src={tweet.photo}
-						alt=""
-						width={350}
-						height={250}
-					 />
-				  )}
-				</div>
-			 </div>
-		  </div>
-		</ListItem> */}
         </List>
       </Box>
     );
