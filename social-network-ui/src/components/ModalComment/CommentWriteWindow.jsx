@@ -14,7 +14,7 @@ import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
 import { useNavigate } from 'react-router-dom'
-import CustomTooltip from '../Tooltip/CustomTooltip'
+import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 
 function CommentWriteWindow ({
   postId,

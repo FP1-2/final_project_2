@@ -27,7 +27,7 @@ import ModalComment from '../ModalComment/ModalComment'
 import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
-import CustomTooltip from '../Tooltip/CustomTooltip'
+import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 
 function AnotherPost({ post }) {
   const isRepost = post.typePost === 'REPOST';
