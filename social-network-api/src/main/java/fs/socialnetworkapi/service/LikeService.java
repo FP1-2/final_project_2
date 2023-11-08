@@ -51,7 +51,8 @@ public class LikeService {
       likeRepo.delete(like.get());
       return "Unliked";
     } else {
-      sendLikeNotification(likeRepo.save(new Like(user, post)));
+      Like like1 = likeRepo.save(new Like(user, post));
+      //sendLikeNotification(like1);
       return "Liked";
     }
   }
