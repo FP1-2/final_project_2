@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-//mui
+//MUI
 import {
 	Box,
 	Typography,
@@ -9,13 +9,13 @@ import {
 	CircularProgress,
 } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-//mui icons
+//MUI icons
 import LinkIcon from '@mui/icons-material/Link'
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined'
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
-//components
+//Components
 import AvatarWithoutImg from '../../components/AvatarWithoutImg/AvatarWithoutImg'
 import UserTag from '../../components/UserTag/UserTag'
 import LinkText from '../../components/LinkText/LinkText'
@@ -23,26 +23,25 @@ import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
 import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper'
 import ModalEdit from '../../components/ModalEdit/ModalEdit'
 import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
-
-//hooks
+import FollowButton from '../../components/FollowButton/FollowButton'
+import ModalFollow from '../../components/ModalFollow/ModalFollow'
+//Custom Hooks
 import useUserToken from '../../hooks/useUserToken'
 import useIsUserFollowing from '../../hooks/useIsUserFollowing'
-//redux
+//Redux
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { openModal } from '../../redux/slices/modalEditSlice'
 import { openModal as openFollowModal } from '../../redux/slices/modalFollowSlice'
 import { closeModal as closeFollowModal } from '../../redux/slices/modalFollowSlice'
-//router
+//Router
 import { useNavigate } from 'react-router-dom'
-//api
+//API
 import getUserData from '../../api/getUserInfo'
-//npms
+//NPMs
 import axios from 'axios'
 import { format } from 'date-fns'
 import { debounce } from 'lodash'
-import FollowButton from '../../components/FollowButton/FollowButton'
-import ModalFollow from '../../components/ModalFollow/ModalFollow'
 
 const theme = createTheme({
 	typography: {
@@ -606,7 +605,7 @@ const ProfilePage = () => {
 							No Posts Available
 						</Typography>
 					)}
-					{isLoadingMoreFull && (
+					{isLoadingMoreFull && !isLoadingPosts && (
 						<Typography
 							sx={{
 								fontWeight: 700,

@@ -15,17 +15,17 @@ function useScreenSize() {
     }
   }
 
-  useEffect(() => {
-    const handleResize = debounce(() => {
-      const width = window.innerWidth;
-      if (width < 768) {
-        setScreenSize("mobile");
-      } else if (width >= 768 && width < 1024) {
-        setScreenSize("tablet");
-      } else {
-        setScreenSize("desktop");
-      }
-    }, 300);
+	useEffect(() => {
+		const handleResize = debounce(() => {
+			const width = window.innerWidth
+			if (width < 768) {
+				setScreenSize('mobile')
+			} else if (width >= 768 && width < 1024) {
+				setScreenSize('tablet')
+			} else {
+				setScreenSize('desktop')
+			}
+		}, 100)
 
     window.addEventListener("resize", handleResize);
 

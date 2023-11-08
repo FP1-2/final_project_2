@@ -1,19 +1,25 @@
 import React, { useEffect } from 'react'
+// Components
 import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
+import TwitterHeader from './components/Header/TwitterHeader'
+import AppRoutes from './AppRoutes'
+//Custom Hooks
 import useScreenSize from './hooks/useScreenSize'
+// Redux
 import { useSelector, useDispatch } from 'react-redux'
-import { login } from './redux/slices/userSlice'
+import { login, setUserData } from './redux/slices/userSlice'
+// MUI
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/material'
-import TwitterHeader from './components/Header/TwitterHeader'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import AppRoutes from './AppRoutes'
+// API
+import getUserData from './api/getUserInfo'
 
 const theme = createTheme({
 	breakpoints: {
 		values: {
-			xs: 0, // Изменяем стандартное значение xs
-			sm: 768, // Устанавливаем планшетный брейкпоинт на 768
+			xs: 0,
+			sm: 768,
 			md: 1024,
 			lg: 1200,
 			xl: 1920,
@@ -22,19 +28,31 @@ const theme = createTheme({
 })
 
 function App() {
+	//custom hooks
 	const screenSize = useScreenSize()
+	//redux
 	const dispatch = useDispatch()
 	const isAuth = useSelector(state => state.user?.isAuthenticated)
 
 	useEffect(() => {
+		//save userId && token after auth
 		if (!isAuth && localStorage.getItem('userId')) {
 			dispatch(login(localStorage.getItem('userId')))
 		}
 	}, [isAuth])
 
 	useEffect(() => {
-		console.log(screenSize)
-	}, [screenSize])
+		//get user data when app init
+		if (localStorage.getItem('userToken') && localStorage.getItem('userId')) {
+			;(async () => {
+				const data = await getUserData(
+					localStorage.getItem('userId'),
+					localStorage.getItem('userToken')
+				)
+				dispatch(setUserData(data))
+			})()
+		}
+	}, [])
 
 	return (
 		<ThemeProvider theme={theme}>

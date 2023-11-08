@@ -1,20 +1,19 @@
 import * as React from 'react'
-
+// MUI
+import { Button, Box, CssBaseline, Grid, Typography } from '@mui/material'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+// Icons
 import AppleIcon from '@mui/icons-material/Apple'
 import GoogleIcon from '@mui/icons-material/Google'
-import { Typography } from '@mui/material'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
-import Grid from '@mui/material/Grid'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+// Redux
 import { useDispatch } from 'react-redux'
+// Components
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
-import { openModal } from '../../redux/slices/modalSignUpSlice'
-import { useEffect } from 'react'
+// Custom Hooks
 import UseUserToken from '../../hooks/useUserToken'
 
+// bg img
 const imageLink =
 	'https://res.cloudinary.com/doenettec/image/upload/v1695565552/back-twitter_1_ysrqxd.png'
 
@@ -72,11 +71,13 @@ const theme = createTheme({
 })
 
 const AuthPage = () => {
+	//Redux
 	const dispatch = useDispatch()
+	//custom hooks
 	const { removeToken } = UseUserToken()
 
 	const handleModalOpen = () => {
-		// open modal window
+		// open register modal
 		dispatch(openModal())
 	}
 
