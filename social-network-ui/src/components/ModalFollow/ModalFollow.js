@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from 'react'
+//MUI
 import { Box, Modal, CircularProgress, Typography } from '@mui/material'
+//Redux
 import { useSelector, useDispatch } from 'react-redux'
-import { closeModal } from '../../redux/slices/modalFollowSlice'
+//API
 import getUserFollowData from '../../api/getUserFollowData'
+//Router
 import { useParams } from 'react-router-dom'
+//Custom Hooks
 import UseUserToken from '../../hooks/useUserToken'
+//Components
 import ModalFollowList from './ModalFollowList/ModalFollowList'
 
 const ModalFollow = () => {
+	//redux state
 	const isModalOpen = useSelector(state => state.modalFollow.modalProps.isOpen)
 	const modalContent = useSelector(
 		state => state.modalFollow.modalProps.modalContent
 	)
+	//state
 	const [userFollowUsers, setUserFollowUsers] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
-
+	//redux
 	const dispatch = useDispatch()
+	//router
 	const params = useParams()
+	//custom hooks
 	const { token } = UseUserToken()
 
 	useEffect(() => {
+		//load lists when open modal
 		if (isModalOpen && modalContent) {
 			;(async () => {
 				setIsLoading(true)
@@ -46,6 +56,7 @@ const ModalFollow = () => {
 					bgcolor: 'white',
 					borderRadius: 2,
 					p: 2,
+					pb: 3,
 					outline: 'none',
 					overflow: 'auto',
 				}}
@@ -65,7 +76,7 @@ const ModalFollow = () => {
 						<Typography
 							sx={{
 								fontWeight: 700,
-								fontSize: '24px',
+								fontSize: '22px',
 								color: 'gray',
 								opacity: 0.5,
 								textTransform: 'capitalize',

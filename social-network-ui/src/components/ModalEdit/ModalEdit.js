@@ -1,20 +1,29 @@
 import React, { useState } from 'react'
+// MUI
 import { Button, Modal, Box, InputLabel, Avatar } from '@mui/material'
-import { Formik, Form, useFormikContext } from 'formik'
+import { Typography } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+// Redux
 import { closeModal } from '../../redux/slices/modalEditSlice'
 import { useSelector, useDispatch } from 'react-redux'
-import CustomInput from '../CustomInput/CustomInput'
+import { setUserData } from '../../redux/slices/userSlice'
+// Formik и Yup
+import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import PropTypes from 'prop-types'
-import { Typography } from '@mui/material'
+// Components
+import CustomInput from '../CustomInput/CustomInput'
 import AvatarWithoutImg from '../AvatarWithoutImg/AvatarWithoutImg'
+import IconTwitter from '../IconTwitter/IconTwitter'
+//NPMs
 import styled from '@emotion/styled'
 import axios from 'axios'
-import IconTwitter from '../IconTwitter/IconTwitter'
+//API
 import editUserProfile from '../../api/editUserProfile'
+//Custom Hooks
 import UseUserToken from '../../hooks/useUserToken'
-import CircularProgress from '@mui/material/CircularProgress'
+import PropTypes from 'prop-types'
 
+//validation schema for edit form
 const validationSchema = Yup.object({
 	firstName: Yup.string().min(3, 'Please enter at least 3 characters'),
 	lastName: Yup.string().min(3, 'Please enter at least 3 characters'),
@@ -40,21 +49,24 @@ const VisuallyHiddenInput = styled('input')`
 `
 
 const ModalEdit = ({ user, setUser }) => {
+	//redux state
 	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
-
+	//redux
 	const dispatch = useDispatch()
+	//custom hooks
 	const { token } = UseUserToken()
-
+	//state >>>
 	const [imageUrl, setImageUrl] = useState('') // image url
 	const [backgroundImageUrl, setBackgroundImageUrl] = useState('') // bg
+	//>>//Loading state
 	const [error, setError] = useState('') // error
-
 	const [isBtnLoading, setIsBtnLoading] = useState(false)
 	const [isAvatarLoading, setIsAvatarLoading] = useState(false)
 	const [isBgLoading, setIsBgLoading] = useState(false)
+	//<<<< state
 
+	//env
 	const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME // Cloudinary cloud name
-
 	const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Cloudinary upload preset
 
 	const handleImageUpload = async (event, type) => {
@@ -158,7 +170,7 @@ const ModalEdit = ({ user, setUser }) => {
 
 						try {
 							const data = await editUserProfile(newValues, token)
-							console.log(data)
+							dispatch(setUserData(data))
 							handleCloseModal()
 						} catch (error) {
 							console.log(error)
