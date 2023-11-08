@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import getLikedPosts from '../../api/getLikedPosts'
 import useIsAuthenticated from '../../hooks/useIsAuthenticated'
 import CircularProgress from '@mui/material/CircularProgress'
