@@ -9,29 +9,32 @@ function Message() {
   const messages = useSelector((state) => state.chat.messages);
   const chatId = useSelector((state) => state.chat.chatId);
   const [hasMore, setHasMore] = useState(true);
+ 
   return (
-    <Box>
+    <Box sx={{
+      width: '100%',
+      display: 'flex'
+    }}>
 
-<InfiniteScroll
-
-        dataLength={messages.length}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-      >
-        <Box>
+        <Box
+          sx={{
+            width: '100%',
+            //  position: "fixed",
+            // top: 0,
+            height: "80%",
+          }}
+        >
           {messages?.map((message) => (
             <MessageItem key={message.id} message={message} />
-          ))}
+          )).slice(-5)}
         </Box>
-      </InfiniteScroll>
-   
-      
+
 
       <Box
         sx={{
           position: "fixed",
           bottom: 0,
-          width: "100%",
+          width: "80%",
         }}
       >
         <InputCreatMessage chatId={chatId} />

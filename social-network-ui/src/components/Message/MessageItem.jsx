@@ -3,13 +3,11 @@ import PropTypes from "prop-types";
 import { Box, Avatar } from "@mui/material";
 import AvatarWithoutImg from "../AvatarWithoutImg/AvatarWithoutImg";
 
-function MessageItem({ message, }) {
-  
+function MessageItem({ message }) {
   return (
     <Box>
       <Box>
-   
-        {message.createdDate.split('T')[0]}
+        {message.createdDate.split("T")[0]}
         {message.user.avatar ? (
           <Avatar
             sx={{
@@ -20,11 +18,18 @@ function MessageItem({ message, }) {
             src={message.user.avatar}
           ></Avatar>
         ) : (
-          <AvatarWithoutImg       sx={{
+          <Avatar
+            sx={{
               width: "1rem",
               height: "1rem",
+              bgcolor: "rgb(29, 161, 241)",
               mb: 1,
-            }} userName={message.user.username}> {message.user.username?.charAt(0).toUpperCase()}</AvatarWithoutImg >
+            }}
+            username={message.user.username}
+          >
+            {" "}
+            {message.user.username?.charAt(0).toUpperCase()}
+          </Avatar>
         )}
       </Box>
       {message.text}

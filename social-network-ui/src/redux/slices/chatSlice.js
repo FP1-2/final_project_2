@@ -11,6 +11,10 @@ const initialState = {
   error: null,
   messages: null,
   chatId: null,
+  newChatMembers: null,
+  modalProps: {
+		isOpen: false,
+	},
 };
 
 export const chatSlice = createSlice({
@@ -29,11 +33,24 @@ export const chatSlice = createSlice({
     setChatId: (state, action) => {
       return { ...state, chatId: action.payload };
     },
+    addChatMember: (state, action) => {
+      return { ...state, newChatMembers: action.payload };
+    },
+      removeChatMember: (state, action) => {
+      return { ...state, newChatMembers: action.payload };
+    },
+    	openChatModal: (state, action) => {
+
+			state.modalProps.isOpenChat = true
+		},
+		closeChatModal: state => {
+			state.modalProps.isOpenChat = false
+		},
     
   },
 });
 
-export const { setChats, setError, setMessages, setChatId } = chatSlice.actions;
+export const { setChats, setError, setMessages, setChatId,openChatModal,closeChatModal,addChatMember,removeChatMember } = chatSlice.actions;
 
 // export const fetchChats = (token) => async (dispatch) => {
 //   try {
@@ -67,8 +84,13 @@ export const fetchChats = (token) => async (dispatch) => {
       let lastMessage = null
       if(data.length > 0) {
         lastMessage= data[data.length-1]
+      } else {
+        let chatMembers = await getChatMembers(chatId, token)
+         lastMessage = {
+          text: '',
+          user: chatMembers.length > 1 ?  chatMembers[1] : chatMembers[0]
+        }
       }
-    
       return { id: chatId, lastMessage: lastMessage };
     });
 
@@ -164,7 +186,25 @@ export async function createMessage(message, token) {
     throw error;
   }
 }
+export   async function createChat(chat, token) {
+  try {
+    
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL || ""}/api/v1/create-chat`,
 
+      chat,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
 export  function getAllUsers() {
   try {
   

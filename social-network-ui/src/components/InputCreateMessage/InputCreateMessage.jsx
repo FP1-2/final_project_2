@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Avatar, Box, CssBaseline, Button, Input } from "@mui/material";
 import { createMessage,getChatMessages,setMessages,fetchChats,setChats } from "../../redux/slices/chatSlice";
 
 import PropTypes from "prop-types";
 import UseUserToken from "../../hooks/useUserToken";
 import { useDispatch } from "react-redux";
-
+import SendIcon from '@mui/icons-material/Send';
 function InputCreatMessage({ chatId }) {
   const { token } = UseUserToken();
   const dispatch = useDispatch();
@@ -63,7 +63,6 @@ async function sendMessage() {
 
 
   const handleChange = (e) => {
-    console.log(e.target.value);
     setInputText(e.target.value);
   };
 
@@ -76,7 +75,7 @@ async function sendMessage() {
     >
       <Input
         name="text"
-        type="text"
+        type="text || file"
         label="enter your text message"
         placeholder="enter your text message"
         value={inputText}
@@ -87,18 +86,24 @@ async function sendMessage() {
         onClick={sendMessage}
         type="submit"
         variant="contained"
-        fullWidth
-        margin="normal"
+ 
+        // margin="normal"
         sx={{
-          marginBottom: "1.3rem",
-          padding: "1.1rem 0",
-          borderRadius: "2rem",
-          fontSize: "1rem",
-          fontWeight: 700,
+          boxSizing: 'border-box',
+          // marginBottom: "1rem",
+          padding: "5px",
+          borderRadius: "50%",
+          // fontSize: "1rem",
+          // fontWeight: 700,
           textTransform: "none",
           backgroundColor: "#1DA1F2",
+          width: '20px',
+        height: '20px'
         }}
-      />
+      ><SendIcon sx={{
+        width: '20px',
+        height: '20px'
+      }}/> </Button>
     </Box>
   );
 }
