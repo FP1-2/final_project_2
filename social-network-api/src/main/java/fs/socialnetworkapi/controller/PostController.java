@@ -104,8 +104,10 @@ public class PostController {
   }
 
   @GetMapping("post-user-likes/{user_id}")
-  public ResponseEntity<List<PostDtoOut>> getPostByUserLikes(@PathVariable("user_id") Long userId) {
-    List<PostDtoOut> posts = postService.getPostByUserLikes(userId);
+  public ResponseEntity<List<PostDtoOut>> getPostByUserLikes(@PathVariable("user_id") Long userId,
+                                                     @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                     @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    List<PostDtoOut> posts = postService.getPostByUserLikes(userId, page, size);
     return ResponseEntity.ok(posts);
   }
 

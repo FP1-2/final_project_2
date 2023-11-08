@@ -1,51 +1,73 @@
-import { Box, CssBaseline, ThemeProvider, Typography } from '@mui/material'
-import Button from '@mui/material/Button'
-import { createTheme } from '@mui/material/styles'
-import { Form, Formik } from 'formik'
 import React from 'react'
-import * as Yup from 'yup'
+// Components
 import CustomInput from '../../components/CustomInput/CustomInput'
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
-import { postLoginData } from '../../api/authApi'
+import ModalResetPassword from '../../components/ModalResetPassword/ModalResetPassword'
+//Custom Hooks
 import useUserToken from '../../hooks/useUserToken'
+// API
+import { postLoginData } from '../../api/authApi'
+//Router
 import { useNavigate } from 'react-router-dom'
-import { useDispatch,useSelector, useState} from 'react-redux'
-import { login } from './../../redux/slices/userSlice'
-import {openResetModal} from "../../redux/slices/modalResetSlice";
-import ModalResetPassword from "../../components/ModalResetPassword/ModalResetPassword";
-const theme = createTheme({
-  // custom theme
-  typography: {
-    h3: {
-      fontSize: "2.5rem",
-      fontWeight: 700,
-    },
-  },
-});
-const validationSchema = Yup.object({
-  email: Yup.string()
-    .email("invalid email address")
-    .required("Email is required"),
-  password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password is too short"),
-});
+// Redux
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../../redux/slices/userSlice'
+import { openResetModal } from '../../redux/slices/modalResetSlice'
+// MUI
+import {
+	Box,
+	Button,
+	CssBaseline,
+	ThemeProvider,
+	Typography,
+} from '@mui/material'
+import { createTheme } from '@mui/material/styles'
+//Forms
+import { Form, Formik } from 'formik'
+import * as Yup from 'yup'
 
+const theme = createTheme({
+	// custom theme
+	typography: {
+		h3: {
+			fontSize: '2.5rem',
+			fontWeight: 700,
+		},
+	},
+})
+
+//validation schema
+const validationSchema = Yup.object({
+	email: Yup.string()
+		.email('invalid email address')
+		.required('Email is required'),
+	password: Yup.string()
+		.required('Password is required')
+		.min(6, 'Password is too short'),
+})
+//init value login form
 const initialValues = {
-  email: "",
-  password: "",
-};
+	email: '',
+	password: '',
+}
 
 const LoginPage = () => {
+	//Custom hooks
 	const { token, saveToken, removeToken } = useUserToken()
+	//router
 	const navigate = useNavigate()
+	//redux
 	const dispatch = useDispatch()
+	//redux state
+	const isModalOpen = useSelector(
+		state => state.modalReset.modalProps.isOpenReset
+	)
 
-  const isModalOpen = useSelector(state => state.modalReset.modalProps.isOpenReset)
-  const handleResetModalOpen = () => {
-    dispatch(openResetModal())
-  }
+	const handleResetModalOpen = () => {
+		//close reset pass modal
+		dispatch(openResetModal())
+	}
 
 	const onSubmit = (values, { resetForm }) => {
 		// submit handler
@@ -58,7 +80,7 @@ const LoginPage = () => {
 					saveToken(data.token)
 					dispatch(login(data.id))
 					resetForm()
-					navigate(`/profile/${data.id}`)
+					navigate(`/home`)
 				}
 			} catch (error) {
 				console.log(error)
@@ -156,28 +178,28 @@ const LoginPage = () => {
 							width: '100%',
 						}}
 					>
-            <Button
-              sx={{
-                fontSize: "1rem",
-                color:'rgb(13, 118, 184)',
-                textTransform: "none",
-                '&:hover': {
-                  background:'transparent',
-                  color: 'rgb(7, 82, 128)',
-                  textDecoration: 'underline',
-                },
+						<Button
+							sx={{
+								fontSize: '1rem',
+								color: 'rgb(13, 118, 184)',
+								textTransform: 'none',
+								'&:hover': {
+									background: 'transparent',
+									color: 'rgb(7, 82, 128)',
+									textDecoration: 'underline',
+								},
+							}}
+							onClick={handleResetModalOpen}
+						>
+							Forgot password?
+						</Button>
+						{isModalOpen && <ModalResetPassword />}
+						<LinkText text='Sign up to Twitter' />
+					</Box>
+				</Box>
+			</Box>
+		</ThemeProvider>
+	)
+}
 
-              }}
-              onClick={handleResetModalOpen}>
-              Forgot password?
-            </Button >
-              { isModalOpen && <ModalResetPassword /> }
-            <LinkText text="Sign up to Twitter" />
-          </Box>
-        </Box>
-      </Box>
-    </ThemeProvider>
-  );
-};
-
-export default LoginPage;
+export default LoginPage
