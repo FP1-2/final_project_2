@@ -115,7 +115,7 @@ public class UserService implements UserDetailsService {
 
   private void sendActivationCode(UserDtoIn userDtoIn) {
     String message = String.format(
-            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %s/api/v1/activate/%s",
+            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
             userDtoIn.getFirstName(),
             baseUrl,
             userDtoIn.getActivationCode()
@@ -178,5 +178,11 @@ public class UserService implements UserDetailsService {
     User user = getUser();
     return userRepo.findByUsername(username) == null
       || Objects.equals(user.getId(), userRepo.findByUsername(username).getId());
+  }
+
+  public UserDtoOut findByUsername(String username) {
+    User user = userRepo.findByUsername(username);
+    Long id = user.getId();
+    return showUser(id);
   }
 }
