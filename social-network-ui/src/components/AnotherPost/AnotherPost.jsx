@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Button,
   Modal,
@@ -9,27 +9,27 @@ import {
   CardContent,
   CardActions,
   ImageListItem,
-} from "@mui/material";
-import { PropTypes } from "prop-types";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
-import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
-import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
-import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import UseUserToken from "../../hooks/useUserToken";
-import formatPostDate from "../../utils/formatPostDate";
-import styles from "./AnotherPost.module.scss";
-import ModalComment from "../ModalComment/ModalComment";
-import getUserId from "../../utils/getUserId";
-import { useDispatch, useSelector } from "react-redux";
-import { addFollowing, removeFollowing } from "../../redux/slices/userSlice";
+} from '@mui/material';
+import { PropTypes } from 'prop-types';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MapsUgcRoundedIcon from '@mui/icons-material/MapsUgcRounded';
+import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import UseUserToken from '../../hooks/useUserToken';
+import formatPostDate from '../../utils/formatPostDate';
+import styles from './AnotherPost.module.scss';
+import ModalComment from '../ModalComment/ModalComment';
+import getUserId from '../../utils/getUserId';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFollowing, removeFollowing } from '../../redux/slices/userSlice';
 
 function AnotherPost({ post }) {
-  const isRepost = post.typePost === "REPOST";
+  const isRepost = post.typePost === 'REPOST';
   let thisPost;
   isRepost ? (thisPost = post?.originalPost) : (thisPost = post);
   const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike);
@@ -51,15 +51,15 @@ function AnotherPost({ post }) {
   const isFollow = followings.includes(thisPost?.user?.id);
 
   const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    overflowY: "auto",
-    bgcolor: "background.paper",
-    border: "1px solid #000",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    overflowY: 'auto',
+    bgcolor: 'background.paper',
+    border: '1px solid #000',
     boxShadow: 24,
-    borderRadius: "7px",
+    borderRadius: '7px',
     p: 2,
   };
 
@@ -96,12 +96,12 @@ function AnotherPost({ post }) {
         {
           id: 0,
           userId: 0,
-          photo: "",
-          description: "",
+          photo: '',
+          description: '',
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         }
@@ -178,13 +178,13 @@ function AnotherPost({ post }) {
 
   return postIsDeleted ? null : (
     <>
-      <Card variant="outlined">
+      <Card variant='outlined'>
         {isRepost && (
           <Box sx={{ pl: 1 }}>
-            <Link to={"/user/" + post.user.id} className={styles.link}>
+            <Link to={'/user/' + post.user.id} className={styles.link}>
               <Typography
-                variant="p"
-                sx={{ display: "flex", alignItems: "center", color: "grey" }}
+                variant='p'
+                sx={{ display: 'flex', alignItems: 'center', color: 'grey' }}
               >
                 <AutorenewRoundedIcon />
                 {post.user?.firstName} {post.user?.lastName} has reposted
@@ -193,21 +193,21 @@ function AnotherPost({ post }) {
           </Box>
         )}
         <CardContent
-          sx={{ display: "flex", alignItems: "center", gap: 1, pt: 1, pb: 0 }}
+          sx={{ display: 'flex', alignItems: 'center', gap: 1, pt: 1, pb: 0 }}
         >
-          <Link to={"/user/" + thisPost?.user?.id}>
+          <Link to={'/user/' + thisPost?.user?.id}>
             <Box
               sx={{
-                position: "relative",
-                "&:before": {
+                position: 'relative',
+                '&:before': {
                   content: '""',
-                  position: "absolute",
+                  position: 'absolute',
                   top: 0,
                   left: 0,
                   bottom: 0,
                   right: 0,
-                  m: "-2px",
-                  borderRadius: "50%",
+                  m: '-2px',
+                  borderRadius: '50%',
                 },
               }}
             >
@@ -215,10 +215,10 @@ function AnotherPost({ post }) {
                 <Avatar
                   alt={`${thisPost?.user?.firstName} ${thisPost?.user?.lastName}`}
                   src={thisPost.user.avatar}
-                  sx={{ width: 50, height: 50, alignSelf: "flex-start" }}
+                  sx={{ width: 50, height: 50, alignSelf: 'flex-start' }}
                 />
               ) : (
-                <Avatar sx={{ width: 50, height: 50, alignSelf: "flex-start" }}>
+                <Avatar sx={{ width: 50, height: 50, alignSelf: 'flex-start' }}>
                   {thisPost?.user?.firstName.charAt(0)}
                   {thisPost?.user?.lastName.charAt(0)}
                 </Avatar>
@@ -227,36 +227,36 @@ function AnotherPost({ post }) {
           </Link>
           <Box
             sx={{
-              display: "flex",
+              display: 'flex',
               gap: 1,
-              flexWrap: "wrap",
-              alignItems: "center",
+              flexWrap: 'wrap',
+              alignItems: 'center',
             }}
           >
-            <Link to={"/profile/" + thisPost?.user?.id} className={styles.link}>
+            <Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
               <Typography
-                variant="h6"
-                sx={{ display: "flex", alignItems: "center" }}
+                variant='h6'
+                sx={{ display: 'flex', alignItems: 'center' }}
               >
                 {thisPost?.user?.firstName} {thisPost?.user?.lastName}
               </Typography>
             </Link>
-            <Link to={"/profile/" + thisPost?.user?.id} className={styles.link}>
-              <Typography sx={{ display: "flex", alignItems: "center" }}>
+            <Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
+              <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                 @{thisPost?.user?.username}
               </Typography>
             </Link>
             <Typography>
-              ●{" "}
-              <Link to={"/post/" + thisPost?.id} className={styles.link}>
+              ●{' '}
+              <Link to={'/post/' + thisPost?.id} className={styles.link}>
                 {postDate}
               </Link>
             </Typography>
           </Box>
         </CardContent>
         <CardContent className={styles.cardContent}>
-          <Link to={"/post/" + thisPost?.id} className={styles.postLink}>
-            <Typography paragraph={true} sx={{ wordWrap: "break-word" }}>
+          <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
+            <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
               {thisPost?.description}
             </Typography>
             <ImageListItem>
@@ -265,33 +265,33 @@ function AnotherPost({ post }) {
           </Link>
           <CardActions>
             <Button onClick={() => comment()}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <MapsUgcRoundedIcon sx={{ color: "grey" }} />
-                <Typography sx={{ color: "grey", ml: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
+                <Typography sx={{ color: 'grey', ml: 1 }}>
                   {comments || null}
                 </Typography>
               </Box>
             </Button>
             <Button onClick={() => repost()}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <AutorenewRoundedIcon
-                  sx={{ color: isReposted ? "green" : "grey" }}
+                  sx={{ color: isReposted ? 'green' : 'grey' }}
                 />
                 <Typography
-                  sx={{ color: isReposted ? "green" : "grey", ml: 1 }}
+                  sx={{ color: isReposted ? 'green' : 'grey', ml: 1 }}
                 >
                   {reposts || null}
                 </Typography>
               </Box>
             </Button>
             <Button onClick={() => like()}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 {isLiked ? (
-                  <FavoriteIcon sx={{ color: "red" }} />
+                  <FavoriteIcon sx={{ color: 'red' }} />
                 ) : (
-                  <FavoriteBorderIcon sx={{ color: "grey" }} />
+                  <FavoriteBorderIcon sx={{ color: 'grey' }} />
                 )}
-                <Typography sx={{ color: isLiked ? "red" : "grey", ml: 1 }}>
+                <Typography sx={{ color: isLiked ? 'red' : 'grey', ml: 1 }}>
                   {likes || null}
                 </Typography>
               </Box>
@@ -301,19 +301,19 @@ function AnotherPost({ post }) {
                 onClick={() => setOpenDeleteModal(true)}
                 className={styles.button}
               >
-                <DeleteForeverOutlinedIcon sx={{ color: "grey" }} />
+                <DeleteForeverOutlinedIcon sx={{ color: 'grey' }} />
               </Button>
             ) : (
               <Button onClick={toggleFollow} className={styles.button}>
                 {!isFollow ? (
-                  <PersonAddOutlinedIcon sx={{ color: "grey" }} />
+                  <PersonAddOutlinedIcon sx={{ color: 'grey' }} />
                 ) : (
-                  <VerifiedOutlinedIcon sx={{ color: "primal" }} />
+                  <VerifiedOutlinedIcon sx={{ color: 'primal' }} />
                 )}
               </Button>
             )}
           </CardActions>
-          <Typography sx={{ color: "red" }}> {error}</Typography>
+          <Typography sx={{ color: 'red' }}> {error}</Typography>
         </CardContent>
       </Card>
       <ModalComment
@@ -326,7 +326,7 @@ function AnotherPost({ post }) {
       <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
         <Box sx={style}>
           <Typography>DELETE THIS POST?</Typography>
-          <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
             <Button onClick={() => setOpenDeleteModal(false)}>
               <Typography>CANCEL</Typography>
             </Button>
