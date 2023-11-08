@@ -3,6 +3,7 @@ import { Box, Avatar, Typography } from '@mui/material'
 import PropTypes from 'prop-types'
 import AvatarWithoutImg from '../../../AvatarWithoutImg/AvatarWithoutImg'
 import { Link } from 'react-router-dom'
+import UserTag from '../../../UserTag/UserTag'
 
 const ModalFollowListItem = ({ item }) => {
 	return (
@@ -63,19 +64,7 @@ const ModalFollowListItem = ({ item }) => {
 							>{`${item.firstName} ${item.lastName}`}</Typography>
 						</Link>
 						<Link to={`/profile/${item.id}`} style={{ textDecoration: 'none' }}>
-							<Typography
-								variant='p'
-								sx={{
-									color: 'black',
-									opacity: 0.5,
-									fontSize: 12,
-									textOverflow: 'ellipsis',
-									overflow: 'hidden',
-									whiteSpace: 'nowrap',
-								}}
-							>
-								@{item.username}
-							</Typography>
+							<UserTag userTag={item.username} />
 						</Link>
 					</Box>
 				</Box>
