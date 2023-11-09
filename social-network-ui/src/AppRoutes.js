@@ -10,6 +10,8 @@ import { useEffect } from 'react'
 import { fetchUserFollowings } from './redux/thunks/folowingsThunk'
 import { setFollowings } from './redux/slices/userSlice'
 import UseUserToken from './hooks/useUserToken'
+import ExplorePage from './pages/ExplorePage/ExplorePage'
+import NotificationPage from './pages/NotificationPage/NotificationPage'
 
 const AppRoutes = () => {
 	const dispatch = useDispatch()
@@ -27,8 +29,9 @@ const AppRoutes = () => {
 			{/* Public Routes */}
 			<Route path='/' element={<AuthPage />} />
 			<Route path='/home' element={<HomePage />} />
-			<Route path='/explore' element={<HomePage />} />
+			<Route path='/explore' element={<ExplorePage />} />
 			<Route path='/favourites' element={<FavPage />} />
+			<Route path='/notifications' element={<NotificationPage />} />
 
 			{/* Auth Routes */}
 			<Route path='/signIn' element={<LoginPage />} />

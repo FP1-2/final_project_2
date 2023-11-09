@@ -165,7 +165,6 @@ const ProfilePage = () => {
 			try {
 				setIsLoadingPosts(true)
 				setUserPosts([]) // change later
-				console.log('123')
 
 				const { data } = await axios.get(
 					`${process.env.REACT_APP_SERVER_URL || ''}${objPosts[btnNum]}${

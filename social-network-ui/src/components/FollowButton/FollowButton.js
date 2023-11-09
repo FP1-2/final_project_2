@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from '@mui/material'
 import PropTypes from 'prop-types'
 
+
 const FollowButton = ({ userId, isFollowing, handleFollowChange }) => {
 	return (
 		<>
