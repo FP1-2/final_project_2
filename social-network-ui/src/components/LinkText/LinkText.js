@@ -1,6 +1,9 @@
 import React from 'react'
+//Router
 import { Link } from 'react-router-dom'
+//styles
 import styles from './LinkText.module.scss'
+//NPMs
 import PropTypes from 'prop-types'
 const LinkText = ({ text, link, isLink, href }) => {
 	return isLink ? (

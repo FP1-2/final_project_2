@@ -132,10 +132,13 @@ public class PostService {
     return mapper.map(postToSave, PostDtoOut.class);
   }
 
-  public void deletePost(Long postId) {
-    postRepo.deleteById(postId);
-    notificationService.deleteByPostId(postId);
-  }
+//   public void deletePost(Long postId) {
+//     postRepo.deleteById(postId);
+// <<<<<<< Notification
+//     notificationService.deleteByPostId(postId);
+// =======
+// >>>>>>> main
+//   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
     Post post = postRepo.findById(postDtoIn.getId())
@@ -315,9 +318,13 @@ public class PostService {
     notificationCreator.repostNotification(post);
   }
 
-  private void sendFeaturedNotification(Post post) {
-    notificationCreator.featuredNotification(post);
-  }
+// <<<<<<< Notification
+//   private void sendFeaturedNotification(Post post) {
+//     notificationCreator.featuredNotification(post);
+// =======
+//     return getPostById(postToSave.getId());
+// >>>>>>> main
+//   }
 
   private Post save(Post post, TypePost typePost) {
     Post postToSave = postRepo.save(post);
