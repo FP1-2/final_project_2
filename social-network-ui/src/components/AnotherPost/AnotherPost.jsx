@@ -29,6 +29,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    overflowY: 'auto',
+    bgcolor: 'background.paper',
+    border: '1px solid #000',
+    boxShadow: 24,
+    borderRadius: '7px',
+    p: 2,
+    textAlign: 'center'
+  };
+
 function AnotherPost({ post }) {
   const isRepost = post.typePost === 'REPOST';
   const isComment = post.typePost === 'COMMENT';
@@ -51,20 +65,6 @@ function AnotherPost({ post }) {
   const dispatch = useDispatch();
   const isMinePost = thisPost?.user?.id == userId;
   const isFollow = followings.includes(thisPost?.user?.id);
-
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    overflowY: 'auto',
-    bgcolor: 'background.paper',
-    border: '1px solid #000',
-    boxShadow: 24,
-    borderRadius: '7px',
-    p: 2,
-    textAlign: 'center'
-  };
 
   function comment () {
     setOpenCommentModal(true)
@@ -192,8 +192,7 @@ function AnotherPost({ post }) {
             },
           }
         );
-        dispatch(addFollowing(thisPost.user.id)); // Dispatch the action to add following
-      } else {
+        dispatch(addFollowing(thisPost.user.id)); } else {
         response = await axios.get(
           url + `/api/v1/unsubscribe/${thisPost.user.id}`,
           {
@@ -202,8 +201,7 @@ function AnotherPost({ post }) {
             },
           }
         );
-        dispatch(removeFollowing(thisPost.user.id)); // Dispatch the action to remove following
-      }
+        dispatch(removeFollowing(thisPost.user.id)); }
       response.status === 200
         ? setError(null)
         : setError(`Error ${response.status}: ${response.error}`);
