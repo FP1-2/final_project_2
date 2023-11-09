@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 // Components
 import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
 import TwitterHeader from './components/Header/TwitterHeader'
@@ -28,6 +28,9 @@ const theme = createTheme({
 })
 
 function App() {
+	//states
+	const [appLoading, setAppLoading] = useState(true)
+	const [userDataLoading, setUserDataLoading] = useState(false)
 	//custom hooks
 	const screenSize = useScreenSize()
 	//redux
@@ -43,20 +46,35 @@ function App() {
 
 	useEffect(() => {
 		//get user data when app init
-		if (localStorage.getItem('userToken') && localStorage.getItem('userId')) {
-			;(async () => {
-				const data = await getUserData(
-					localStorage.getItem('userId'),
-					localStorage.getItem('userToken')
-				)
-				dispatch(setUserData(data))
-			})()
+		const fetchData = async () => {
+			try {
+				if (
+					localStorage.getItem('userToken') &&
+					localStorage.getItem('userId')
+				) {
+					setUserDataLoading(true)
+					const data = await getUserData(
+						localStorage.getItem('userId'),
+						localStorage.getItem('userToken')
+					)
+					dispatch(setUserData(data))
+				}
+			} catch (error) {
+				console.error(error)
+			} finally {
+				setUserDataLoading(false)
+				setAppLoading(false)
+			}
 		}
-	}, [])
+
+		fetchData()
+	}, [dispatch])
+
+	if (appLoading) return <div>Loading</div> // need change to skeleton
 
 	return (
 		<ThemeProvider theme={theme}>
-			{isAuth && isAuth ? (
+			{isAuth && !userDataLoading ? (
 				<Grid
 					sx={{
 						minHeight: '100vh',
