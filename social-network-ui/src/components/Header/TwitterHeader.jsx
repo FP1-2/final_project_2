@@ -1,9 +1,7 @@
-// TwitterHeader.js
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Box, List, ListItem, ListItemText } from '@mui/material'
 import {
-	Twitter as TwitterIcon,
 	Home as HomeIcon,
 	Search as SearchIcon,
 	Notifications as NotificationsIcon,
@@ -13,11 +11,22 @@ import {
 } from '@mui/icons-material'
 import TweetButton from '../TweetButton/TweetButton'
 import { useSelector } from 'react-redux'
+import IconTwitter from '../IconTwitter/IconTwitter'
+import TwitterHeaderUser from './TwitterHeaderUser/TwitterHeaderUser'
 
 const TwitterHeader = () => {
 	const location = useLocation()
 	const [activeItem, setActiveItem] = useState(null)
 	const userId = useSelector(state => state?.user?.userId)
+
+	useEffect(() => {
+		const initialActiveItem = menuItems.find(
+			item => item.link === location.pathname
+		)
+		if (initialActiveItem) {
+			setActiveItem(initialActiveItem.label)
+		}
+	}, [location.pathname])
 
 	const handleItemClick = itemName => {
 		setActiveItem(itemName)
@@ -43,40 +52,68 @@ const TwitterHeader = () => {
 	return (
 		<Box
 			sx={{
-				gap: '1.5rem',
-				width: '100%',
-				paddingX: '1rem',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
 				height: '100%',
-				bgcolor: 'white',
 			}}
 		>
-			<TwitterIcon
-				sx={{ color: '#1DA1F2', fontSize: '50px', ml: '15px', mt: '15px' }}
-			/>
-			<List>
-				{menuItems.map(item => (
-					<ListItem
-						key={item.label}
-						button
-						sx={{ gap: '1rem', borderRadius: '2rem' }}
-						component={Link}
-						to={item.link}
-						onClick={() => handleItemClick(item.label)}
-					>
-						{React.cloneElement(item.icon, {
-							color: location.pathname === item.link ? 'primary' : 'action',
-						})}
-						<ListItemText
-							primary={item.label}
-							primaryTypographyProps={{
-								fontWeight: activeItem === item.label ? 800 : 'normal',
-								display: { xs: 'none', sm: 'block', md: 'block' },
-							}}
-						/>
-					</ListItem>
-				))}
+			<Box
+				sx={{
+					gap: '1.5rem',
+					width: '100%',
+					px: 2,
+					height: '100%',
+					bgcolor: 'white',
+				}}
+			>
+				<Box
+					sx={{
+						px: 3,
+						pt: 1.5,
+					}}
+				>
+					<IconTwitter link='home' md={true} />
+				</Box>
+				<List
+					sx={{
+						mb: 3,
+					}}
+				>
+					{menuItems.map(item => (
+						<ListItem
+							key={item.label}
+							button
+							sx={{ gap: '1rem', borderRadius: '2rem' }}
+							component={Link}
+							to={item.link}
+							onClick={() => handleItemClick(item.label)}
+						>
+							{React.cloneElement(item.icon, {
+								color: location.pathname === item.link ? 'primary' : 'action',
+								sx: {
+									fontSize: '26px',
+								},
+							})}
+							<ListItemText
+								primary={item.label}
+								primaryTypographyProps={{
+									fontWeight: activeItem === item.label ? 800 : 'normal',
+								}}
+							/>
+						</ListItem>
+					))}
+				</List>
 				<TweetButton />
-			</List>
+			</Box>
+			<Box
+				sx={{
+					mb: 15,
+					px: 2,
+				}}
+			>
+				<TwitterHeaderUser />
+			</Box>
 		</Box>
 	)
 }

@@ -1,22 +1,28 @@
 import React from 'react'
-import { Button } from '@mui/material'
+import { Button, Box } from '@mui/material'
 
 const TweetButton = () => {
 	return (
-		<Button
+		<Box
 			sx={{
-				marginTop: '1rem',
-				marginLeft: '1rem',
-				paddingX: '50px',
-				paddingY: '15px',
-				fontWeight: 800,
-				backgroundColor: '#1D9BF0',
-				borderRadius: '25px',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
 			}}
-			variant='contained'
 		>
-			Tweet
-		</Button>
+			<Button
+				sx={{
+					width: '90%',
+					py: 2,
+					fontWeight: 800,
+					backgroundColor: '#1D9BF0',
+					borderRadius: 7,
+				}}
+				variant='contained'
+			>
+				Tweet
+			</Button>
+		</Box>
 	)
 }
 

@@ -24,26 +24,33 @@ const AppRoutes = () => {
 			})
 		}
 	}, [dispatch])
-
-	return (
-		<Routes>
-			{/* Public Routes */}
-			<Route path='/' element={<AuthPage />} />
-			<Route path='/home' element={<HomePage />} />
-			<Route path='/explore' element={<ExplorePage />} />
-			<Route path='/favourites' element={<FavPage />} />
-			<Route path='/notifications' element={<NotificationPage />} />
-			<Route path='/messages' element={<MessagePage />} />
-
-			{/* Auth Routes */}
-			<Route path='/signIn' element={<LoginPage />} />
-
-			{/* Profile Routes */}
-			<Route path='/profile/:userId' element={<ProfilePage />} />
-			{/* Error Path */}
-			<Route path='*' element={<h1>error</h1>} />
-		</Routes>
-	)
+	if (token)
+		return (
+			<Routes>
+				{/* Public Routes */}
+				<Route path='/' element={<HomePage />} />
+				<Route path='/home' element={<HomePage />} />
+				<Route path='/explore' element={<ExplorePage />} />
+				<Route path='/favourites' element={<FavPage />} />
+				<Route path='/notifications' element={<NotificationPage />} />
+				<Route path='/messages' element={<MessagePage />} />
+				{/* Profile Routes */}
+				<Route path='/profile/:userId' element={<ProfilePage />} />
+				{/* Error Path */}
+				<Route path='*' element={<h1>error</h1>} />
+			</Routes>
+		)
+	if (!token)
+		return (
+			<Routes>
+				{/* Public Routes */}
+				<Route path='/' element={<AuthPage />} />
+				{/* Auth Routes */}
+				<Route path='/signIn' element={<LoginPage />} />
+				{/* Error Path */}
+				<Route path='*' element={<h1>error</h1>} />
+			</Routes>
+		)
 }
 
 export default AppRoutes

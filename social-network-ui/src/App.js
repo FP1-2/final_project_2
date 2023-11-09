@@ -36,6 +36,7 @@ function App() {
 	//redux
 	const dispatch = useDispatch()
 	const isAuth = useSelector(state => state.user?.isAuthenticated)
+	const userData = useSelector(state => state.user?.userData)
 
 	useEffect(() => {
 		//save userId && token after auth
@@ -67,8 +68,11 @@ function App() {
 			}
 		}
 
-		fetchData()
-	}, [dispatch])
+		if (userData === null && appLoading) {
+			//need to fix two times load data
+			fetchData()
+		}
+	}, [dispatch, isAuth])
 
 	if (appLoading) return <div>Loading</div> // need change to skeleton
 
