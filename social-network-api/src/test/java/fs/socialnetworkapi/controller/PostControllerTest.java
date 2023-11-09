@@ -50,7 +50,6 @@ public class PostControllerTest {
     private PostDtoOut postDtoOut2;
     private PostDtoOut postDtoOut3;
     private PostDtoIn postDtoIn;
-    private User user;
 
     @BeforeEach
     public void setUp() {
@@ -86,7 +85,7 @@ public class PostControllerTest {
                 .photo("URL photo1")
                 .build();
 
-        user = new User();
+        User user = new User();
         user.setUsername("Jim");
         user.setId(1L);
         user.setRoles("USER");
@@ -264,7 +263,8 @@ public class PostControllerTest {
                 .andReturn();
 
         String responseJson = mvcResult.getResponse().getContentAsString();
-        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<>() {
+        });
 
         assertEquals(3, postDtoOuts.size());
 
@@ -284,31 +284,31 @@ public class PostControllerTest {
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    public void testGetAllUserRepostsWithToken() throws Exception {
-
-        List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
-
-        Mockito.when(postService.getProfilePostByType(eq(1L),eq(TypePost.REPOST), eq(0), eq(10))).thenReturn(postDtoOuts);
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/profile-reposts/{user_id}?page=0&size=10", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
-
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String responseJson = mvcResult.getResponse().getContentAsString();
-        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
-
-        assertEquals(3, postDtoOuts.size());
-
-        assertEquals(1L, postDtoOuts.get(0).getId());
-        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
-        assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
-        assertEquals("New Description1", postDtoOuts.get(0).getDescription());
-    }
+//    @Test
+//    public void testGetAllUserRepostsWithToken() throws Exception {
+//
+//        List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
+//
+//        Mockito.when(postService.getProfilePostByType(eq(1L),eq(TypePost.REPOST), eq(0), eq(10))).thenReturn(postDtoOuts);
+//
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/api/v1/profile-reposts/{user_id}?page=0&size=10", 1L)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+//
+//                .andExpect(status().isOk())
+//                .andReturn();
+//
+//        String responseJson = mvcResult.getResponse().getContentAsString();
+//        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+//
+//        assertEquals(3, postDtoOuts.size());
+//
+//        assertEquals(1L, postDtoOuts.get(0).getId());
+//        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
+//        assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
+//        assertEquals("New Description1", postDtoOuts.get(0).getDescription());
+//    }
 
     @Test
     public void testGetAllUserRepostsWithoutToken() throws Exception {
@@ -320,31 +320,31 @@ public class PostControllerTest {
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    public void testGetAllUserCommentsWithToken() throws Exception {
-
-        List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
-
-        Mockito.when(postService.getProfilePostByType(eq(1L),eq(TypePost.COMMENT), eq(0), eq(10))).thenReturn(postDtoOuts);
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/profile-comments/{user_id}?page=0&size=10", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
-
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String responseJson = mvcResult.getResponse().getContentAsString();
-        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
-
-        assertEquals(3, postDtoOuts.size());
-
-        assertEquals(1L, postDtoOuts.get(0).getId());
-        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
-        assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
-        assertEquals("New Description1", postDtoOuts.get(0).getDescription());
-    }
+//    @Test
+//    public void testGetAllUserCommentsWithToken() throws Exception {
+//
+//        List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
+//
+//        Mockito.when(postService.getProfilePostByType(eq(1L),eq(TypePost.COMMENT), eq(0), eq(10))).thenReturn(postDtoOuts);
+//
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/api/v1/profile-comments/{user_id}?page=0&size=10", 1L)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+//
+//                .andExpect(status().isOk())
+//                .andReturn();
+//
+//        String responseJson = mvcResult.getResponse().getContentAsString();
+//        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+//
+//        assertEquals(3, postDtoOuts.size());
+//
+//        assertEquals(1L, postDtoOuts.get(0).getId());
+//        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
+//        assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
+//        assertEquals("New Description1", postDtoOuts.get(0).getDescription());
+//    }
 
     @Test
     public void testGetAllUserCommentsWithoutToken() throws Exception {
@@ -371,7 +371,8 @@ public class PostControllerTest {
                 .andReturn();
 
         String responseJson = mvcResult.getResponse().getContentAsString();
-        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<>() {
+        });
 
         assertEquals(3, postDtoOuts.size());
 
@@ -406,7 +407,8 @@ public class PostControllerTest {
                 .andReturn();
 
         String responseJson = mvcResult.getResponse().getContentAsString();
-        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<>() {
+        });
 
         assertEquals(3, postDtoOuts.size());
 

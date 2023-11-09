@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,9 @@ public interface PostRepo extends JpaRepository<Post, Long> {
   Page<Post> findByTypePost(TypePost post, PageRequest pageRequest);
 
   List<Post> findByLikesIn(List<Like> likes);
+
+  @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
+  Post findPostWithUser(@Param("postId") Long postId);
 
   Optional<Post> findByUserAndOriginalPostAndTypePost(User user, Post originalPost, TypePost typePost);
 

@@ -8,10 +8,10 @@ import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.Message;
 import fs.socialnetworkapi.entity.ChatUser;
 import fs.socialnetworkapi.enums.NotificationType;
-import fs.socialnetworkapi.enums.TypePost;
 import fs.socialnetworkapi.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @AllArgsConstructor
@@ -28,7 +29,9 @@ public class NotificationCreator {
   @Autowired
   private ModelMapper mapper;
 
+  @Autowired
   private NotificationService notificationService;
+
   private NotificationDtoIn notificationDtoIn;
   private String text;
   private String link;
@@ -52,7 +55,7 @@ public class NotificationCreator {
     return notificationDtoIn.getMessage().getText();
   }
 
-  public Notification likeNotification(Like like) {
+  public Notification likeNotification(@NonNull Like like) {
     this.notificationDtoIn = new NotificationDtoIn(
       like.getUser(),
       like.getPost(),
@@ -65,52 +68,7 @@ public class NotificationCreator {
     return createNewNotification();
   }
 
-  public void sendPostByTypePost(Post postToSave, TypePost typePost) {
-    if (typePost.equals(TypePost.POST)) {
-      featuredNotification(postToSave);
-    }
-    if (typePost.equals(TypePost.REPOST)) {
-      repostNotification(postToSave);
-    }
-    if (typePost.equals(TypePost.COMMENT)) {
-      commentNotification(postToSave);
-    }
-  }
-
-  public List<Notification> featuredNotification(Post post) {
-    return post.getUser()
-            .getFollowers()
-            .stream()
-            .map(
-              user -> {
-                this.notificationDtoIn = new NotificationDtoIn(
-                  post.getUser(),
-                  post,
-                  null,
-                  user,
-                  NotificationType.FEATURED
-                  );
-                link = String.format("%s/api/v1/%d", baseUrl, post.getId());
-                text = String.format("Your featured user %s has new post: %s", fromUser(), post());
-                return createNewNotification();
-                }
-            ).toList();
-  }
-
-  public Notification repostNotification(Post post) {
-    this.notificationDtoIn = new NotificationDtoIn(
-            post.getUser(),
-            post,
-            null,
-            post.getOriginalPost().getUser(),
-            NotificationType.REPOST
-    );
-    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
-    text = String.format("User %s reposted your post: %s", fromUser(), post());
-    return createNewNotification();
-  }
-
-  public Notification commentNotification(Post post) {
+  public Notification commentNotification(@NonNull Post post) {
     this.notificationDtoIn = new NotificationDtoIn(
       post.getUser(),
       post,
@@ -123,7 +81,20 @@ public class NotificationCreator {
     return createNewNotification();
   }
 
-  public Notification subscriberNotification(User user) {
+  public Notification repostNotification(@NonNull Post post) {
+    this.notificationDtoIn = new NotificationDtoIn(
+      post.getUser(),
+      post,
+      null,
+      post.getOriginalPost().getUser(),
+      NotificationType.REPOST
+      );
+    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+    text = String.format("User %s reposted your post: %s", fromUser(), post());
+    return createNewNotification();
+  }
+
+  public Notification subscriberNotification(@NonNull User user) {
     this.notificationDtoIn = new NotificationDtoIn(
       getUser(),
       null,
@@ -136,7 +107,28 @@ public class NotificationCreator {
     return createNewNotification();
   }
 
-  public List<Notification> messageNotification(Message message) {
+  public List<Notification> featuredNotification(@NonNull Post post) {
+    return post.getUser()
+      .getFollowers()
+      .stream()
+      .filter(Objects::nonNull)
+      .map(
+        user -> {
+          this.notificationDtoIn = new NotificationDtoIn(
+            post.getUser(),
+            post,
+            null,
+            user,
+            NotificationType.FEATURED
+            );
+          link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+          text = String.format("Your featured user %s has new post: %s", fromUser(), post());
+          return createNewNotification();
+        }
+      ).toList();
+  }
+
+  public List<Notification> messageNotification(@NonNull Message message) {
     return message.getChat()
       .getChatUsers()
       .stream()
@@ -165,7 +157,4 @@ public class NotificationCreator {
     return notificationService.createNewNotification(notification);
   }
 
-  public void deleteByPostId(Long postId) {
-    notificationService.deleteByPostId(postId);
-  }
 }

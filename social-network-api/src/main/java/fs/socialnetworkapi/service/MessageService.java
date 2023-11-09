@@ -40,16 +40,14 @@ public class MessageService {
 
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {
 
-    if (createChatDtoIn.getMembersChat().size() == 0) {
+    if (createChatDtoIn.getMembersChat().isEmpty()) {
       return Optional.empty();
     }
 
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     Chat newChat = chatRepo.save(new Chat());
-    ChatUser chatUser = new ChatUser(user.getId(), newChat.getId());
-
-    chatUser = chatUserRepo.save(chatUser);
+    chatUserRepo.save(new ChatUser(user.getId(), newChat.getId()));
 
     createChatDtoIn.getMembersChat()
             .forEach(memberChat -> chatUserRepo.save(
@@ -63,7 +61,7 @@ public class MessageService {
 
     Chat chat = findById(chatId);
 
-    if (createChatDtoIn.getMembersChat().size() == 0) {
+    if (createChatDtoIn.getMembersChat().isEmpty()) {
       return Optional.empty();
     }
 
@@ -97,7 +95,7 @@ public class MessageService {
     message.setText(messageDtoIn.getText());
     message.setUser(user);
     Message messageToSave = messageRepo.save(message);
-    //sendMessageNotification(messageToSave);
+    sendMessageNotification(messageToSave);
 
     return mapper.map(messageToSave,MessageDtoOut.class);
   }

@@ -50,9 +50,11 @@ spring:
     activate:
       on-profile: local
   datasource:
-        url: jdbc:h2:mem:twitter
-        username: sa
-        password: sa
+    url: jdbc:h2:mem:twitter
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
+
 #    url: jdbc:postgresql://localhost:5432/twitter
 #    username: postgres
 #    password: pg123456

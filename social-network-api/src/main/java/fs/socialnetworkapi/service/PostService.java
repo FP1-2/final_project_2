@@ -11,6 +11,7 @@ import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class PostService {
   private final ModelMapper mapper;
   private final LikeService likeService;
   private final UserService userService;
+  private final NotificationService notificationService;
+
+  @Autowired
   private final NotificationCreator notificationCreator;
 
   public PostDtoOut findById(Long postId) {
@@ -65,7 +69,7 @@ public class PostService {
     return mapListPostToListPostDtoOut(allPosts);
   }
 
-  public List<PostDtoOut> getProfilePostByType(Long userId, TypePost typePost, Integer page, Integer size ) {
+  public List<PostDtoOut> getProfileType(Long userId, TypePost typePost,  Integer page, Integer size ) {
     User user = userService.findById(userId);
 
     PageRequest pageRequest = getPageRequest(page, size);
@@ -108,8 +112,8 @@ public class PostService {
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(TypePost.POST);
-    Post postToSave = save(post, TypePost.POST);
-
+    Post postToSave = postRepo.save(post);
+    //sendFeaturedNotification(postToSave);
     return mapper.map(postToSave, PostDtoOut.class);
   }
 
@@ -121,21 +125,16 @@ public class PostService {
             .orElseThrow(() -> new PostNotFoundException(
                     String.format("Original post with id: %d not found", originalPostId)));
 
-    switch (typePost) {
-      case REPOST:
-        return saveOrDeleteRepost(user, originalPost, postDtoIn, TypePost.REPOST);
-
-      case COMMENT:
-        return saveByType(user, originalPost, postDtoIn, TypePost.COMMENT);
-
-      default:
-        return getPostById(originalPostId);
-    }
+    return switch (typePost) {
+      case REPOST -> saveOrDeleteRepost(user, originalPost, postDtoIn);
+      case COMMENT -> saveByType(user, originalPost, postDtoIn, TypePost.COMMENT);
+      default -> getPostById(originalPostId);
+    };
   }
 
   public void deletePost(Long postId) {
     postRepo.deleteById(postId);
-    notificationCreator.deleteByPostId(postId);
+    notificationService.deleteByPostId(postId);
   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
@@ -146,6 +145,31 @@ public class PostService {
     post.setDescription(postDtoIn.getDescription());
     post.setPhoto(postDtoIn.getPhoto());
     return mapper.map(postRepo.save(post), PostDtoOut.class);
+  }
+
+  public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
+
+    User user = userService.getUser();
+
+    Post originalPost = postRepo.findById(originalPostId)
+            .orElseThrow(() -> new PostNotFoundException(
+                    String.format("Original post with id: %d not found", originalPostId)));
+
+    Post post = mapper.map(postDtoIn, Post.class);
+    post.setUser(user);
+    post.setTypePost(typePost);
+    post.setOriginalPost(originalPost);
+    Post postToSave = postRepo.save(post);
+    if (typePost.equals(TypePost.POST)) {
+      sendFeaturedNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.REPOST)) {
+      sendRepostNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.COMMENT)) {
+      sendCommentNotification(postToSave);
+    }
+    return getPostById(originalPostId);
   }
 
   public PostDtoOut getPostById(Long postId) {
@@ -288,13 +312,26 @@ public class PostService {
               Collectors.counting()));
   }
 
-  private PostDtoOut saveOrDeleteRepost(User user, Post originalPost, PostDtoIn postDtoIn, TypePost typePost) {
+  private void sendCommentNotification(Post post) {
+    notificationCreator.commentNotification(post);
+  }
+
+  private void sendRepostNotification(Post post) {
+    notificationCreator.repostNotification(post);
+  }
+
+  private void sendFeaturedNotification(Post post) {
+    notificationCreator.featuredNotification(post);
+  }
+
+
+  private PostDtoOut saveOrDeleteRepost(User user, Post originalPost, PostDtoIn postDtoIn) {
 
     Optional<Post> repost = postRepo.findByUserAndOriginalPostAndTypePost(user, originalPost, TypePost.REPOST);
     if (repost.isPresent())  {
       postRepo.delete(repost.get());
     } else {
-      saveByType(user, originalPost, postDtoIn, typePost);
+      saveByType(user, originalPost, postDtoIn, TypePost.REPOST);
     }
 
     return getPostById(originalPost.getId());

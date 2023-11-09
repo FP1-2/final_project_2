@@ -4,12 +4,12 @@ import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,6 +32,9 @@ public class UserService implements UserDetailsService {
   private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
   private final PostRepo postRepo;
+
+  @Autowired
+  private final NotificationCreator notificationCreator;
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
@@ -171,7 +174,7 @@ public class UserService implements UserDetailsService {
   }
 
   private void sendSubscriberNotification(User user) {
-    Notification notification = new NotificationCreator().subscriberNotification(user);
+    notificationCreator.subscriberNotification(user);
   }
 
   public boolean isUsernameUnique(String username) {
