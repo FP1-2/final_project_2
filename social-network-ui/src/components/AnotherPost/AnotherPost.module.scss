@@ -12,7 +12,17 @@
   text-decoration: none;
 }
 
+.profileLink {
+  color: blue;
+  text-decoration: none;
+
+  :hover {
+    text-decoration: underline;
+  }
+}
+
 .cardContent:last-child {
+  padding-top: 5px !important;
   padding-bottom: 0 !important;
 }
 
