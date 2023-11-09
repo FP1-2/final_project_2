@@ -28,7 +28,9 @@ const validationSchema = Yup.object({
 	firstName: Yup.string().min(3, 'Please enter at least 3 characters'),
 	lastName: Yup.string().min(3, 'Please enter at least 3 characters'),
 	address: Yup.string().min(3, 'Please enter at least 3 characters'),
-	username: Yup.string().min(6, 'Please enter at least 6 characters'),
+	username: Yup.string()
+		.min(6, 'Please enter at least 6 characters')
+		.max(12, 'Please enter no more than 12 characters'),
 	birthday: Yup.string().matches(
 		/^\d{4}-\d{2}-\d{2}$/,
 		'Please enter a correct date'

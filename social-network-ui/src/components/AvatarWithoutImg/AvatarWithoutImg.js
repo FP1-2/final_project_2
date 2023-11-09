@@ -1,5 +1,7 @@
 import React from 'react'
+//MUI
 import Avatar from '@mui/material/Avatar'
+//NPMs
 import PropTypes from 'prop-types'
 
 const AvatarWithoutImg = ({ userName, border, big }) => {

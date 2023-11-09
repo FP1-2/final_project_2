@@ -7,6 +7,7 @@ import AppleIcon from '@mui/icons-material/Apple'
 import GoogleIcon from '@mui/icons-material/Google'
 // Redux
 import { useDispatch } from 'react-redux'
+import { openModal } from './../../redux/slices/modalSignUpSlice'
 // Components
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
 import LinkText from '../../components/LinkText/LinkText'
