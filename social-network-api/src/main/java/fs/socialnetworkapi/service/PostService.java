@@ -132,13 +132,13 @@ public class PostService {
     return mapper.map(postToSave, PostDtoOut.class);
   }
 
-//   public void deletePost(Long postId) {
-//     postRepo.deleteById(postId);
-// <<<<<<< Notification
-//     notificationService.deleteByPostId(postId);
-// =======
-// >>>>>>> main
-//   }
+  //   public void deletePost(Long postId) {
+  //     postRepo.deleteById(postId);
+  // <<<<<<< Notification
+  //     notificationService.deleteByPostId(postId);
+  // =======
+  // >>>>>>> main
+  //   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
     Post post = postRepo.findById(postDtoIn.getId())
