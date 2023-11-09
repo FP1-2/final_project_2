@@ -138,23 +138,18 @@ public class PostService {
   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
-
     Post post = postRepo.findById(postDtoIn.getId())
             .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postDtoIn.getId())));
-
     post.setDescription(postDtoIn.getDescription());
     post.setPhoto(postDtoIn.getPhoto());
     return mapper.map(postRepo.save(post), PostDtoOut.class);
   }
 
   public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
-
     User user = userService.getUser();
-
     Post originalPost = postRepo.findById(originalPostId)
             .orElseThrow(() -> new PostNotFoundException(
                     String.format("Original post with id: %d not found", originalPostId)));
-
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(typePost);
