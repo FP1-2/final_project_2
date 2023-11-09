@@ -134,7 +134,6 @@ public class PostService {
   }
 
   public void deletePost(Long postId) {
-    //notificationCreator.deleteByPostId(postId);
     postRepo.deleteById(postId);
   }
 
