@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.entity;
 
 import fs.socialnetworkapi.enums.NotificationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -79,6 +78,16 @@ public class PostService {
     return mapListPostToListPostDtoOut(allPosts);
   }
 
+  public List<PostDtoOut> getProfilePostByType(Long userId, TypePost typePost, Integer page, Integer size ) {
+    User user = userService.findById(userId);
+
+    PageRequest pageRequest = getPageRequest(page, size);
+
+    List<Post> allPosts = postRepo.findByUserAndTypePost(user, typePost, pageRequest).stream().toList();
+
+    return mapListPostToListPostDtoOut(allPosts);
+  }
+
   public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
 
     User user = userService.getUser();
@@ -90,6 +99,12 @@ public class PostService {
     List<Post> allPosts = postRepo.findByUserInAndTypePost(users, TypePost.POST, pageRequest).stream().toList();
 
     return mapListPostToListPostDtoOut(allPosts);
+
+  }
+
+  public List<PostDtoOut> getPostByUserLikes(Long userId) {
+    List<Like> likeList = likeService.findByUserId(userId);
+    return findByLikesIn(likeList);
 
   }
 
@@ -112,24 +127,9 @@ public class PostService {
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(TypePost.POST);
-    Post postToSave = postRepo.save(post);
+    Post postToSave = save(post, TypePost.POST);
     //sendFeaturedNotification(postToSave);
     return mapper.map(postToSave, PostDtoOut.class);
-  }
-
-  public PostDtoOut saveByTypeAndOriginalPost(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
-
-    User user = userService.getUser();
-
-    Post originalPost = postRepo.findById(originalPostId)
-            .orElseThrow(() -> new PostNotFoundException(
-                    String.format("Original post with id: %d not found", originalPostId)));
-
-    return switch (typePost) {
-      case REPOST -> saveOrDeleteRepost(user, originalPost, postDtoIn);
-      case COMMENT -> saveByTypeDoNotTouchIt(user, originalPost, postDtoIn, TypePost.COMMENT);
-      default -> getPostById(originalPostId);
-    };
   }
 
   public void deletePost(Long postId) {
@@ -147,7 +147,7 @@ public class PostService {
     return mapper.map(postRepo.save(post), PostDtoOut.class);
   }
 
-  public PostDtoOut saveByTypeDoNotTouchIt(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
+  public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
 
     User user = userService.getUser();
 
@@ -160,15 +160,15 @@ public class PostService {
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
     Post postToSave = postRepo.save(post);
-    if (typePost.equals(TypePost.POST)) {
-      sendFeaturedNotification(postToSave);
-    }
-    if (typePost.equals(TypePost.REPOST)) {
-      sendRepostNotification(postToSave);
-    }
-    if (typePost.equals(TypePost.COMMENT)) {
-      sendCommentNotification(postToSave);
-    }
+    //    if (typePost.equals(TypePost.POST)) {
+    //      sendFeaturedNotification(postToSave);
+    //    }
+    //    if (typePost.equals(TypePost.REPOST)) {
+    //      sendRepostNotification(postToSave);
+    //    }
+    //    if (typePost.equals(TypePost.COMMENT)) {
+    //      sendCommentNotification(postToSave);
+    //    }
     return getPostById(originalPostId);
   }
 
@@ -324,20 +324,7 @@ public class PostService {
     notificationCreator.featuredNotification(post);
   }
 
-
-  private PostDtoOut saveOrDeleteRepost(User user, Post originalPost, PostDtoIn postDtoIn) {
-
-    Optional<Post> repost = postRepo.findByUserAndOriginalPostAndTypePost(user, originalPost, TypePost.REPOST);
-    if (repost.isPresent())  {
-      postRepo.delete(repost.get());
-    } else {
-      saveByTypeDoNotTouchIt(user, originalPost, postDtoIn, TypePost.REPOST);
-    }
-
-    return getPostById(originalPost.getId());
-  }
-
-  private PostDtoOut saveByTypeDoNotTouchIt(User user, Post originalPost, PostDtoIn postDtoIn, TypePost typePost) {
+  private PostDtoOut saveByType(User user, Post originalPost, PostDtoIn postDtoIn, TypePost typePost) {
 
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
@@ -353,4 +340,5 @@ public class PostService {
     //notificationCreator.sendPostByTypePost(postToSave, typePost);
     return postToSave;
   }
+
 }
