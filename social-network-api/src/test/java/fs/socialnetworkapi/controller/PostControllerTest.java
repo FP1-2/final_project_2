@@ -131,7 +131,7 @@ public class PostControllerTest {
     @Test
     public void testAddRepostWithToken() throws Exception {
 
-        Mockito.when(postService.saveByTypeAndOriginalPost(eq(1L), any(PostDtoIn.class), eq(TypePost.REPOST))).thenReturn(postDtoOut1);
+        Mockito.when(postService.saveByType(eq(1L), any(PostDtoIn.class), eq(TypePost.REPOST))).thenReturn(postDtoOut1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/post/{original_post_id}/repost", 1L)
@@ -164,7 +164,7 @@ public class PostControllerTest {
     @Test
     public void testAddCommentWithToken() throws Exception {
 
-        Mockito.when(postService.saveByTypeAndOriginalPost(eq(1L), any(PostDtoIn.class), eq(TypePost.COMMENT))).thenReturn(postDtoOut1);
+        Mockito.when(postService.saveByType(eq(1L), any(PostDtoIn.class), eq(TypePost.COMMENT))).thenReturn(postDtoOut1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/post/{original_post_id}/comment", 1L)
