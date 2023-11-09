@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 // Components
 import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
 import TwitterHeader from './components/Header/TwitterHeader'
+import IconTwitter from './components/IconTwitter/IconTwitter'
+import TwitterHeaderMobileMenu from './components/Header/TwitterHeaderMobileMenu/TwitterHeaderMobileMenu'
 import AppRoutes from './AppRoutes'
 //Custom Hooks
 import useScreenSize from './hooks/useScreenSize'
@@ -31,6 +33,7 @@ function App() {
 	//states
 	const [appLoading, setAppLoading] = useState(true)
 	const [userDataLoading, setUserDataLoading] = useState(false)
+	const [mobileMenuIsActive, setMobileMenuIsActive] = useState(false)
 	//custom hooks
 	const screenSize = useScreenSize()
 	//redux
@@ -44,6 +47,12 @@ function App() {
 			dispatch(login(localStorage.getItem('userId')))
 		}
 	}, [isAuth])
+
+	useEffect(() => {
+		if (mobileMenuIsActive && screenSize !== 'mobile') {
+			setMobileMenuIsActive(false)
+		}
+	}, [screenSize])
 
 	useEffect(() => {
 		//get user data when app init
@@ -68,7 +77,7 @@ function App() {
 			}
 		}
 
-		if (userData === null && appLoading) {
+		if (userData === null) {
 			//need to fix two times load data
 			fetchData()
 		}
@@ -100,8 +109,28 @@ function App() {
 						sx={{
 							borderRight: '1px solid #C4C4C4',
 							borderLeft: '1px solid #C4C4C4',
+							position: 'relative',
 						}}
 					>
+						{screenSize === 'mobile' && (
+							<Box
+								sx={{
+									position: 'absolute',
+									right: 10,
+									transform: 'translateY(-5%)',
+									zIndex: 100,
+								}}
+							>
+								<IconTwitter
+									userFill={true}
+									stroke={true}
+									notLink={() => setMobileMenuIsActive(prev => !prev)}
+								/>
+							</Box>
+						)}
+						{mobileMenuIsActive && (
+							<TwitterHeaderMobileMenu onClose={setMobileMenuIsActive} />
+						)}
 						<AppRoutes />
 					</Grid>
 					<Grid sx={{}} item xs={0} sm={3} md={3} lg={2}>

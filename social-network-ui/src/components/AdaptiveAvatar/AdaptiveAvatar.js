@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+//MUI
 import { Avatar } from '@mui/material'
+//Components
 import AvatarWithoutImg from './../AvatarWithoutImg/AvatarWithoutImg'
+//NPMs
+import PropTypes from 'prop-types'
 
 const AdaptiveAvatar = ({ src, alt, firstName, big = true, border = true }) => {
 	if (src) {

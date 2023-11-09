@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react'
+//MUI
 import {
 	Button,
 	FormControl,
@@ -5,18 +7,20 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
+	Box,
+	Typography,
 } from '@mui/material'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
+//redux
+import { useDispatch } from 'react-redux'
+import { register } from '../../../redux/slices/registerSlice'
+//Components
+import CustomInput from '../../CustomInput/CustomInput'
+import LinkText from '../../LinkText/LinkText'
+//NPMs
 import { getDaysInMonth, getYear } from 'date-fns'
 import { Form, Formik } from 'formik'
 import { PropTypes } from 'prop-types'
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { register } from '../../../redux/slices/registerSlice'
-import CustomInput from '../../CustomInput/CustomInput'
-import LinkText from '../../LinkText/LinkText'
 
 const months = [
 	// months for date of birth
@@ -76,7 +80,7 @@ const ModalRegisterWindowFrstStep = ({
 	isModalOpen,
 	setRegisterStep,
 }) => {
-	const dispatch = useDispatch()
+	//states
 
 	const [month, setMonth] = useState('')
 	const [day, setDay] = useState('')
@@ -84,6 +88,9 @@ const ModalRegisterWindowFrstStep = ({
 	const [days, setDays] = useState([])
 	const [isPhone, setIsPhone] = useState(false) // phone or email registration
 
+	//redux
+	const dispatch = useDispatch()
+	//constants
 	const years = allYears // years for date of birth
 	const initialValues = { firstName: '', email: '', phone: '' }
 
@@ -100,6 +107,7 @@ const ModalRegisterWindowFrstStep = ({
 	}
 
 	useEffect(() => {
+		//adaptive day picker
 		if (month !== '' && year !== '') {
 			getDays()
 		}
@@ -122,6 +130,7 @@ const ModalRegisterWindowFrstStep = ({
 	}
 
 	useEffect(() => {
+		//reset info if modal cloce
 		if (!isModalOpen) {
 			resetInfo()
 		}

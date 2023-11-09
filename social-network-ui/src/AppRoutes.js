@@ -6,7 +6,7 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
 import FavPage from './pages/FavPage/FavPage'
 import MessagePage from './pages/MessagePage/MessagePage'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { fetchUserFollowings } from './redux/thunks/folowingsThunk'
 import { setFollowings } from './redux/slices/userSlice'
@@ -17,13 +17,16 @@ import NotificationPage from './pages/NotificationPage/NotificationPage'
 const AppRoutes = () => {
 	const dispatch = useDispatch()
 	const { token } = UseUserToken()
+	const userId = useSelector(state => state.user?.userId)
+
 	useEffect(() => {
-		if (token) {
-			dispatch(fetchUserFollowings()).then(followings => {
+		console.log(userId)
+		if (token && userId) {
+			dispatch(fetchUserFollowings({ token, userId })).then(followings => {
 				dispatch(setFollowings(followings.payload))
 			})
 		}
-	}, [dispatch])
+	}, [dispatch, userId])
 	if (token)
 		return (
 			<Routes>

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useField } from 'formik'
-import PropTypes from 'prop-types'
+//Styles
 import styles from './CustomInput.module.scss'
-import ErrorIcon from '@mui/icons-material/Error'
+//MUI
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import ErrorIcon from '@mui/icons-material/Error'
+//NPMs
+import { useField } from 'formik'
+import PropTypes from 'prop-types'
 
 function CustomInput({ label, ...props }) {
 	const [field, meta] = useField(props)

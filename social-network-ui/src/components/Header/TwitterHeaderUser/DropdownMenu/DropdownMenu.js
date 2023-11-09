@@ -1,5 +1,7 @@
 import React from 'react'
+//MUI
 import { Box, Typography } from '@mui/material'
+//NPMs
 import PropTypes from 'prop-types'
 
 const DropdownMenu = ({ onLogout, username }) => {

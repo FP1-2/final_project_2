@@ -1,10 +1,13 @@
 import React from 'react'
-import { Box, Avatar, Typography } from '@mui/material'
-import PropTypes from 'prop-types'
-import AvatarWithoutImg from '../../../AvatarWithoutImg/AvatarWithoutImg'
+//MUI
+import { Box, Typography } from '@mui/material'
+//Router
 import { Link } from 'react-router-dom'
+//Components
 import UserTag from '../../../UserTag/UserTag'
 import AdaptiveAvatar from '../../../AdaptiveAvatar/AdaptiveAvatar'
+//NPMs
+import PropTypes from 'prop-types'
 
 const ModalFollowListItem = ({ item }) => {
 	return (

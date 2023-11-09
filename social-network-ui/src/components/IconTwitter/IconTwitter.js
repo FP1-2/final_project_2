@@ -4,7 +4,7 @@ import TwitterIcon from '@mui/icons-material/Twitter'
 import { PropTypes } from 'prop-types'
 import { Box } from '@mui/material'
 
-const IconTwitter = ({ adaptive, notLink, link, md }) => {
+const IconTwitter = ({ adaptive, notLink, link, md, stroke }) => {
 	if (notLink)
 		return (
 			<Box onClick={notLink}>
@@ -12,7 +12,9 @@ const IconTwitter = ({ adaptive, notLink, link, md }) => {
 					sx={{
 						fontSize: '4rem',
 						cursor: 'pointer',
-						fill: 'rgb(29, 161, 242)',
+						fill: 'rgb(19, 151, 232)',
+						stroke: 'black',
+						strokeWidth: stroke ? '1px' : '0',
 						':hover': {
 							fill: 'rgb(49, 116, 157)',
 						},
@@ -57,6 +59,7 @@ IconTwitter.propTypes = {
 	notLink: PropTypes.func,
 	link: PropTypes.string,
 	md: PropTypes.bool,
+	stroke: PropTypes.bool,
 }
 
 IconTwitter.defaultProps = {
