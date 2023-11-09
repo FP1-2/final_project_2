@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import { fetchUserFollowings } from './redux/thunks/folowingsThunk'
 import { setFollowings } from './redux/slices/userSlice'
 import UseUserToken from './hooks/useUserToken'
+import PostPage from './pages/PostPage/PostPage'
 
 const AppRoutes = () => {
 	const dispatch = useDispatch()
@@ -29,6 +30,9 @@ const AppRoutes = () => {
 			<Route path='/home' element={<HomePage />} />
 			<Route path='/explore' element={<HomePage />} />
 			<Route path='/favourites' element={<FavPage />} />
+
+			{/* Post Routes */}
+			<Route path='/post/:postId' element={<PostPage />} />
 
 			{/* Auth Routes */}
 			<Route path='/signIn' element={<LoginPage />} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Button,
   Modal,
@@ -28,59 +28,60 @@ import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
+import CommentWriteWindow from '../ModalComment/CommentWriteWindow'
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    overflowY: 'auto',
-    bgcolor: 'background.paper',
-    border: '1px solid #000',
-    boxShadow: 24,
-    borderRadius: '7px',
-    p: 2,
-    textAlign: 'center'
-  };
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  overflowY: 'auto',
+  bgcolor: 'background.paper',
+  border: '1px solid #000',
+  boxShadow: 24,
+  borderRadius: '7px',
+  p: 2,
+  textAlign: 'center'
+}
 
-function AnotherPost({ post }) {
-  const isRepost = post.typePost === 'REPOST';
-  const isComment = post.typePost === 'COMMENT';
-  let thisPost;
-  isRepost ? (thisPost = post?.originalPost) : (thisPost = post);
-  const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike);
-  const [likes, setLikes] = useState(thisPost?.countLikes);
-  const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost);
-  const [reposts, setReposts] = useState(thisPost?.countRepost);
-  const [comments, setComments] = useState(thisPost?.countComments);
-  const [error, setError] = useState(null);
-  const [openCommentModal, setOpenCommentModal] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [postIsDeleted, setPostIsDeleted] = useState(false);
-  const { token } = UseUserToken();
-  const url = process.env.REACT_APP_SERVER_URL;
-  const postDate = formatPostDate(thisPost?.createdDate);
-  const userId = getUserId();
-  const followings = useSelector((state) => state.user.followings);
-  const dispatch = useDispatch();
-  const isMinePost = thisPost?.user?.id == userId;
-  const isFollow = followings.includes(thisPost?.user?.id);
+function AnotherPost ({ post, setComments }) {
+  const isRepost = post.typePost === 'REPOST'
+  const isComment = post.typePost === 'COMMENT'
+  let thisPost
+  isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
+  const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
+  const [likes, setLikes] = useState(thisPost?.countLikes)
+  const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost)
+  const [reposts, setReposts] = useState(thisPost?.countRepost)
+  const [countComments, setCountComments] = useState(thisPost?.countComments)
+  const [error, setError] = useState(null)
+  const [openCommentModal, setOpenCommentModal] = useState(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [postIsDeleted, setPostIsDeleted] = useState(false)
+  const { token } = UseUserToken()
+  const url = process.env.REACT_APP_SERVER_URL
+  const postDate = formatPostDate(thisPost?.createdDate)
+  const userId = getUserId()
+  const followings = useSelector(state => state.user.followings)
+  const dispatch = useDispatch()
+  const isMinePost = thisPost?.user?.id == userId
+  const isFollow = followings.includes(thisPost?.user?.id)
 
   function comment () {
     setOpenCommentModal(true)
   }
 
-  async function like() {
+  async function like () {
     try {
       const response = await axios.post(
         url + `/api/v1/likes/like/${thisPost.id}`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
-      );
+      )
       if (response.status === 200) {
         toggleLiked()
         setError(null)
@@ -125,7 +126,7 @@ function AnotherPost({ post }) {
     setIsLiked(!isLiked)
   }
 
-  async function repost() {
+  async function repost () {
     try {
       const response = await axios.post(
         url + `/api/v1/post/${thisPost.id}/repost`,
@@ -133,80 +134,82 @@ function AnotherPost({ post }) {
           id: 0,
           userId: 0,
           photo: '',
-          description: '',
+          description: ''
         },
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
-      );
+      )
       if (response.status === 200) {
-        toggleRepost();
-        setError(null);
+        toggleRepost()
+        setError(null)
       } else {
-        setError(`Error ${response.status}: ${response.error}`);
+        setError(`Error ${response.status}: ${response.error}`)
       }
     } catch (err) {
-      setError(`Error: ${err}`);
+      setError(`Error: ${err}`)
     }
   }
 
-  function toggleLiked() {
-    isLiked ? setLikes(likes - 1) : setLikes(likes + 1);
-    setIsLiked(!isLiked);
+  function toggleLiked () {
+    isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
+    setIsLiked(!isLiked)
   }
 
-  function toggleRepost() {
+  function toggleRepost () {
     isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
     setIsReposted(!isReposted)
   }
 
-  async function deletePost() {
+  async function deletePost () {
     try {
       const response = await axios.delete(url + `/api/v1/post/${thisPost.id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          Authorization: `Bearer ${token}`
+        }
+      })
       response.status === 200
         ? setPostIsDeleted(true)
-        : setError(`Error ${response.status}: ${response.error}`);
+        : setError(`Error ${response.status}: ${response.error}`)
     } catch (err) {
-      setError(`Error: ${err}`);
+      setError(`Error: ${err}`)
     } finally {
-      setOpenDeleteModal(false);
+      setOpenDeleteModal(false)
     }
   }
 
-  async function toggleFollow() {
+  async function toggleFollow () {
     try {
-      let response;
+      let response
       if (!isFollow) {
         response = await axios.get(
           url + `/api/v1/subscribe/${thisPost.user.id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
-            },
+              Authorization: `Bearer ${token}`
+            }
           }
-        );
-        dispatch(addFollowing(thisPost.user.id)); } else {
+        )
+        dispatch(addFollowing(thisPost.user.id))
+      } else {
         response = await axios.get(
           url + `/api/v1/unsubscribe/${thisPost.user.id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
-            },
+              Authorization: `Bearer ${token}`
+            }
           }
-        );
-        dispatch(removeFollowing(thisPost.user.id)); }
+        )
+        dispatch(removeFollowing(thisPost.user.id))
+      }
       response.status === 200
         ? setError(null)
-        : setError(`Error ${response.status}: ${response.error}`);
+        : setError(`Error ${response.status}: ${response.error}`)
     } catch (error) {
-      setError(`Error: ${error}`);
+      setError(`Error: ${error}`)
     }
   }
 
@@ -241,8 +244,8 @@ function AnotherPost({ post }) {
                   bottom: 0,
                   right: 0,
                   m: '-2px',
-                  borderRadius: '50%',
-                },
+                  borderRadius: '50%'
+                }
               }}
             >
               {thisPost.user.avatar ? (
@@ -264,7 +267,7 @@ function AnotherPost({ post }) {
               display: 'flex',
               gap: 1,
               flexWrap: 'wrap',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
@@ -289,21 +292,30 @@ function AnotherPost({ post }) {
           </Box>
         </CardContent>
         <CardContent className={styles.cardContent}>
-          {isComment && <Box sx={{display: 'flex', gap: 1}}>
+          {isComment && (
+            <Box sx={{ display: 'flex', gap: 1 }}>
               <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
-                <Typography sx={{color: 'grey'}}>Comment to</Typography>
+                <Typography sx={{ color: 'grey' }}>Comment to</Typography>
               </Link>
-              <Link to={'/profile/' + thisPost?.originalPost?.user?.id} className={styles.profileLink}>
-                <Typography>@{thisPost?.originalPost?.user?.username}</Typography>
+              <Link
+                to={'/profile/' + thisPost?.originalPost?.user?.id}
+                className={styles.profileLink}
+              >
+                <Typography>
+                  @{thisPost?.originalPost?.user?.username}
+                </Typography>
               </Link>
-            </Box>}
+            </Box>
+          )}
           <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
             <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
               {thisPost?.description}
             </Typography>
-            {thisPost?.photo != "" ? <ImageListItem>
-              <img src={thisPost?.photo}></img>
-            </ImageListItem> : null}
+            {thisPost?.photo != '' ? (
+              <ImageListItem>
+                <img src={thisPost?.photo}></img>
+              </ImageListItem>
+            ) : null}
           </Link>
           <CardActions>
             <CustomTooltip title='Add comment'>
@@ -311,7 +323,7 @@ function AnotherPost({ post }) {
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                   <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
                   <Typography sx={{ color: 'grey', ml: 1 }}>
-                    {comments || null}
+                    {countComments || null}
                   </Typography>
                 </Box>
               </Button>
@@ -372,10 +384,10 @@ function AnotherPost({ post }) {
       </Card>
       <ModalComment
         post={thisPost}
-        commentsCount={comments}
+        commentsCount={countComments}
         open={openCommentModal}
         setOpenModal={setOpenCommentModal}
-        setCommentsCount={setComments}
+        setCommentsCount={setCountComments}
       />
       <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
         <Box sx={style}>
@@ -390,11 +402,19 @@ function AnotherPost({ post }) {
           </Box>
         </Box>
       </Modal>
+      {setComments && (
+        <CommentWriteWindow
+          postId={thisPost.id}
+          setCommentsCount={setCountComments}
+          setComments={setComments}
+        />
+      )}
     </>
-  );
+  )
 }
 
 AnotherPost.propTypes = {
-  post: PropTypes.object,
-};
-export default AnotherPost;
+  post: PropTypes.object.isRequired,
+  setComments: PropTypes.func
+}
+export default AnotherPost

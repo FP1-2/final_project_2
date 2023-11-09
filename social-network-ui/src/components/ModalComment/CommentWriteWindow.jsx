@@ -19,8 +19,8 @@ import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 function CommentWriteWindow ({
   postId,
   close,
-  commentsCount,
-  setCommentsCount
+  setCommentsCount,
+  setComments
 }) {
   const { token } = UseUserToken()
   const userId = getUserId()
@@ -43,6 +43,18 @@ function CommentWriteWindow ({
 
     fetchData()
   }, [userId, token])
+
+  const handleModalComment = () => {
+    setSuccess('Comment sent. Click to open the post')
+    setTimeout(() => {
+      close()
+    }, 3000)
+  }
+
+  const handleComment = () => {
+    setPhoto('')
+    setDescription('')
+  }
 
   const handlePhotoInput = event => {
     const formData = new FormData()
@@ -81,11 +93,11 @@ function CommentWriteWindow ({
 
       if (response.status === 200) {
         setError(null)
-        setSuccess('Comment sent. Click to open the post')
-        setCommentsCount(commentsCount + 1)
-        setTimeout(() => {
-          close()
-        }, 3000)
+        setCommentsCount((prev) => prev + 1)
+        setComments((prev) => [...prev, response.data])
+        console.log(response.data);
+        close ? handleModalComment() : handleComment()
+
       } else {
         setError(`Error ${response.status}: ${response.data}`)
       }
@@ -132,7 +144,7 @@ function CommentWriteWindow ({
             <CustomTooltip title='Delete photo'>
               <Button
                 onClick={() => {
-                  setPhoto(null)
+                  setPhoto('')
                 }}
               >
                 <CloseIcon />
@@ -148,7 +160,7 @@ function CommentWriteWindow ({
             />
           </>
         ) : (
-            <ImageInput file={photo} onChange={handlePhotoInput} />
+          <ImageInput file={photo} onChange={handlePhotoInput} />
         )}
       </Box>
     </form>
@@ -160,6 +172,6 @@ export default CommentWriteWindow
 CommentWriteWindow.propTypes = {
   postId: PropTypes.number,
   close: PropTypes.func,
-  commentsCount: PropTypes.number,
-  setCommentsCount: PropTypes.func
+  setCommentsCount: PropTypes.func,
+  setComments: PropTypes.func
 }

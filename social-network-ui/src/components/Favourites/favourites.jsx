@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import getLikedPosts from '../../api/getLikedPosts'
-import useIsAuthenticated from '../../hooks/useIsAuthenticated'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 import AnotherPost from '../AnotherPost/AnotherPost'
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)'
-}
+import { style } from '../../styles/circularProgressStyle'
 
 function Favourites () {
   const [favourites, setFavourites] = useState([])
