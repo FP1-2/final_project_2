@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Modal, CircularProgress, Typography } from '@mui/material'
 //Redux
 import { useSelector, useDispatch } from 'react-redux'
+import { closeModal } from '../../redux/slices/modalFollowSlice'
 //API
 import getUserFollowData from '../../api/getUserFollowData'
 //Router

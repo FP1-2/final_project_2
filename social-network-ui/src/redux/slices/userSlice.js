@@ -4,7 +4,7 @@ const initialState = {
 	isAuthenticated: false,
 	userId: null,
 	followings: [],
-	userData: {},
+	userData: null,
 }
 
 const userSlice = createSlice({
@@ -15,6 +15,10 @@ const userSlice = createSlice({
 			state.isAuthenticated = true
 			state.userId = action.payload
 			localStorage.setItem('userId', action.payload)
+		},
+		logOut: state => {
+			state.isAuthenticated = false
+			localStorage.removeItem('userId')
 		},
 		setUserData: (state, action) => {
 			state.userData = {
@@ -51,5 +55,6 @@ export const {
 	addFollowing,
 	removeFollowing,
 	setUserData,
+	logOut,
 } = userSlice.actions
 export default userSlice.reducer

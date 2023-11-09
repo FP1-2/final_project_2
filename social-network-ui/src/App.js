@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 // Components
 import ModalRegisterWindow from './components/ModalRegisterWindow/ModalRegisterWindow'
 import TwitterHeader from './components/Header/TwitterHeader'
+import IconTwitter from './components/IconTwitter/IconTwitter'
+import TwitterHeaderMobileMenu from './components/Header/TwitterHeaderMobileMenu/TwitterHeaderMobileMenu'
 import AppRoutes from './AppRoutes'
 //Custom Hooks
 import useScreenSize from './hooks/useScreenSize'
@@ -28,11 +30,16 @@ const theme = createTheme({
 })
 
 function App() {
+	//states
+	const [appLoading, setAppLoading] = useState(true)
+	const [userDataLoading, setUserDataLoading] = useState(false)
+	const [mobileMenuIsActive, setMobileMenuIsActive] = useState(false)
 	//custom hooks
 	const screenSize = useScreenSize()
 	//redux
 	const dispatch = useDispatch()
 	const isAuth = useSelector(state => state.user?.isAuthenticated)
+	const userData = useSelector(state => state.user?.userData)
 
 	useEffect(() => {
 		//save userId && token after auth
@@ -42,21 +49,45 @@ function App() {
 	}, [isAuth])
 
 	useEffect(() => {
-		//get user data when app init
-		if (localStorage.getItem('userToken') && localStorage.getItem('userId')) {
-			;(async () => {
-				const data = await getUserData(
-					localStorage.getItem('userId'),
-					localStorage.getItem('userToken')
-				)
-				dispatch(setUserData(data))
-			})()
+		if (mobileMenuIsActive && screenSize !== 'mobile') {
+			setMobileMenuIsActive(false)
 		}
-	}, [])
+	}, [screenSize])
+
+	useEffect(() => {
+		//get user data when app init
+		const fetchData = async () => {
+			try {
+				if (
+					localStorage.getItem('userToken') &&
+					localStorage.getItem('userId')
+				) {
+					setUserDataLoading(true)
+					const data = await getUserData(
+						localStorage.getItem('userId'),
+						localStorage.getItem('userToken')
+					)
+					dispatch(setUserData(data))
+				}
+			} catch (error) {
+				console.error(error)
+			} finally {
+				setUserDataLoading(false)
+				setAppLoading(false)
+			}
+		}
+
+		if (userData === null) {
+			//need to fix two times load data
+			fetchData()
+		}
+	}, [dispatch, isAuth])
+
+	if (appLoading) return <div>Loading</div> // need change to skeleton
 
 	return (
 		<ThemeProvider theme={theme}>
-			{isAuth && isAuth ? (
+			{isAuth && !userDataLoading ? (
 				<Grid
 					sx={{
 						minHeight: '100vh',
@@ -78,8 +109,28 @@ function App() {
 						sx={{
 							borderRight: '1px solid #C4C4C4',
 							borderLeft: '1px solid #C4C4C4',
+							position: 'relative',
 						}}
 					>
+						{screenSize === 'mobile' && (
+							<Box
+								sx={{
+									position: 'absolute',
+									right: 10,
+									transform: 'translateY(-5%)',
+									zIndex: 100,
+								}}
+							>
+								<IconTwitter
+									userFill={true}
+									stroke={true}
+									notLink={() => setMobileMenuIsActive(prev => !prev)}
+								/>
+							</Box>
+						)}
+						{mobileMenuIsActive && (
+							<TwitterHeaderMobileMenu onClose={setMobileMenuIsActive} />
+						)}
 						<AppRoutes />
 					</Grid>
 					<Grid sx={{}} item xs={0} sm={3} md={3} lg={2}>
