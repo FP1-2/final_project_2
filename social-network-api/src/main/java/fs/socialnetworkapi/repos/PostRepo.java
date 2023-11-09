@@ -34,9 +34,6 @@ public interface PostRepo extends JpaRepository<Post, Long> {
 
   List<Post> findByLikesIn(List<Like> likes);
 
-  @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
-  Post findPostWithUser(@Param("postId") Long postId);
-
   Optional<Post> findByUserAndOriginalPostAndTypePost(User user, Post originalPost, TypePost typePost);
 
   @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")

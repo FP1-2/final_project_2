@@ -67,6 +67,10 @@ public class LikeService {
     return likeRepo.findByPostIn(posts);
   }
 
+  public List<Like> findByUserId(Long userId) {
+    return likeRepo.findByUserId(userId);
+  }
+
   public List<Like> findByUserId(Long userId, Integer page, Integer size) {
     PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 

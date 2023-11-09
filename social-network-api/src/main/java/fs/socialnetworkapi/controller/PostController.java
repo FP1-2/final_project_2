@@ -75,7 +75,7 @@ public class PostController {
   public ResponseEntity<PostDtoOut> addRepost(@PathVariable("original_post_id") Long originalPostId,
                                               @Valid @RequestBody PostDtoIn postDtoIn) {
     PostDtoOut postDtoOut = postService.saveByType(originalPostId, postDtoIn, TypePost.REPOST);
-//    PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost(originalPostId, postDtoIn, TypePost.REPOST);
+    //PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost(originalPostId, postDtoIn, TypePost.REPOST);
     return ResponseEntity.ok(postDtoOut);
   }
 
@@ -83,7 +83,7 @@ public class PostController {
   public ResponseEntity<PostDtoOut> addComment(@PathVariable("original_post_id") Long originalPostId,
                                             @Valid @RequestBody PostDtoIn postDtoIn) {
     PostDtoOut postDtoOut = postService.saveByType(originalPostId, postDtoIn, TypePost.COMMENT);
-//    PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost( originalPostId, postDtoIn, TypePost.COMMENT);
+    //PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost( originalPostId, postDtoIn, TypePost.COMMENT);
     return ResponseEntity.ok(postDtoOut);
   }
 

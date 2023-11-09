@@ -324,17 +324,6 @@ public class PostService {
     notificationCreator.featuredNotification(post);
   }
 
-  private PostDtoOut saveByType(User user, Post originalPost, PostDtoIn postDtoIn, TypePost typePost) {
-
-    Post post = mapper.map(postDtoIn, Post.class);
-    post.setUser(user);
-    post.setTypePost(typePost);
-    post.setOriginalPost(originalPost);
-    Post postToSave = save(post, typePost);
-
-    return getPostById(originalPost.getId());
-  }
-
   private Post save(Post post, TypePost typePost) {
     Post postToSave = postRepo.save(post);
     //notificationCreator.sendPostByTypePost(postToSave, typePost);
