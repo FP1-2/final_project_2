@@ -88,7 +88,7 @@ function ModalConfirm({setIsEmailSend}) {
 	const onSubmit = async(values) => {
 		try {
 			const response = await axios.post(
-				"https://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/reset/confirm",
+				`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/reset/confirm`,
 				values
 			);
 			
