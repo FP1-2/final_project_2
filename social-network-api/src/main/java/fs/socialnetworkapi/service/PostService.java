@@ -117,21 +117,6 @@ public class PostService {
     return mapper.map(postToSave, PostDtoOut.class);
   }
 
-  public PostDtoOut saveByTypeAndOriginalPost(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
-
-    User user = userService.getUser();
-
-    Post originalPost = postRepo.findById(originalPostId)
-            .orElseThrow(() -> new PostNotFoundException(
-                    String.format("Original post with id: %d not found", originalPostId)));
-
-    return switch (typePost) {
-      case REPOST -> saveOrDeleteRepost(user, originalPost, postDtoIn);
-      case COMMENT -> saveByType(user, originalPost, postDtoIn, TypePost.COMMENT);
-      default -> getPostById(originalPostId);
-    };
-  }
-
   public void deletePost(Long postId) {
     postRepo.deleteById(postId);
     notificationService.deleteByPostId(postId);
