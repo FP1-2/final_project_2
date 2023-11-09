@@ -116,6 +116,7 @@ public class PostControllerTest {
         assertEquals("New Description1", postDtoOut.getDescription());
         assertEquals("URL photo1", postDtoOut.getPhoto());
     }
+
     @Test
     public void testAddPostWithoutToken() throws Exception {
 
@@ -131,7 +132,7 @@ public class PostControllerTest {
     @Test
     public void testAddRepostWithToken() throws Exception {
 
-        Mockito.when(postService.saveByType(eq(1L), any(PostDtoIn.class), eq(TypePost.REPOST))).thenReturn(postDtoOut1);
+        Mockito.when(postService.saveByTypeAndOriginalPost(eq(1L), any(PostDtoIn.class), eq(TypePost.REPOST))).thenReturn(postDtoOut1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/post/{original_post_id}/repost", 1L)
@@ -149,6 +150,7 @@ public class PostControllerTest {
         assertEquals("New Description1", postDtoOut.getDescription());
         assertEquals("URL photo1", postDtoOut.getPhoto());
     }
+
     @Test
     public void testAddRepostWithoutToken() throws Exception {
 
@@ -163,7 +165,7 @@ public class PostControllerTest {
     @Test
     public void testAddCommentWithToken() throws Exception {
 
-        Mockito.when(postService.saveByType(eq(1L), any(PostDtoIn.class), eq(TypePost.COMMENT))).thenReturn(postDtoOut1);
+        Mockito.when(postService.saveByTypeAndOriginalPost(eq(1L), any(PostDtoIn.class), eq(TypePost.COMMENT))).thenReturn(postDtoOut1);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/post/{original_post_id}/comment", 1L)
@@ -181,6 +183,7 @@ public class PostControllerTest {
         assertEquals("New Description1", postDtoOut.getDescription());
         assertEquals("URL photo1", postDtoOut.getPhoto());
     }
+
     @Test
     public void testAddCommentWithoutToken() throws Exception {
 
@@ -286,7 +289,7 @@ public class PostControllerTest {
 
         List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
 
-        Mockito.when(postService.getProfileType(eq(1L),eq(TypePost.REPOST), eq(0), eq(10))).thenReturn(postDtoOuts);
+        Mockito.when(postService.getProfilePostByType(eq(1L),eq(TypePost.REPOST), eq(0), eq(10))).thenReturn(postDtoOuts);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/profile-reposts/{user_id}?page=0&size=10", 1L)
@@ -322,7 +325,7 @@ public class PostControllerTest {
 
         List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
 
-        Mockito.when(postService.getProfileType(eq(1L),eq(TypePost.COMMENT), eq(0), eq(10))).thenReturn(postDtoOuts);
+        Mockito.when(postService.getProfilePostByType(eq(1L),eq(TypePost.COMMENT), eq(0), eq(10))).thenReturn(postDtoOuts);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/profile-comments/{user_id}?page=0&size=10", 1L)
@@ -357,10 +360,10 @@ public class PostControllerTest {
 
         List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
 
-        Mockito.when(postService.getPostByUserLikes(eq(1L))).thenReturn(postDtoOuts);
+        Mockito.when(postService.getPostByUserLikes(eq(1L),eq(0),eq(5))).thenReturn(postDtoOuts);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/post-user-likes/{user_id}", 1L)
+                        .get("/api/v1/post-user-likes/{user_id}?page=0&size=5", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
 

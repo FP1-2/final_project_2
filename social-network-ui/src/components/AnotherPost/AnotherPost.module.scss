@@ -6,3 +6,26 @@
     text-decoration: underline;
   }
 }
+
+.postLink {
+  color: rgb(53, 52, 52);
+  text-decoration: none;
+}
+
+.profileLink {
+  color: blue;
+  text-decoration: none;
+
+  :hover {
+    text-decoration: underline;
+  }
+}
+
+.cardContent:last-child {
+  padding-top: 5px !important;
+  padding-bottom: 0 !important;
+}
+
+.button:not(:first-of-type) {
+  margin-left: auto !important;
+}

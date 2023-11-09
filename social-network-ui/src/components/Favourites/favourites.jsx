@@ -1,34 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import UseUserToken from '../../hooks/useUserToken'
 import getLikedPosts from '../../api/getLikedPosts'
 import useIsAuthenticated from '../../hooks/useIsAuthenticated'
-import getUserId from '../../utils/getUserId'
-import ModalComment from '../ModalComment/ModalComment'
 import CircularProgress from '@mui/material/CircularProgress'
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box'
 import AnotherPost from '../AnotherPost/AnotherPost'
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)'
+}
+
 function Favourites () {
-  const isLoggedIn = useIsAuthenticated()
-  const userId = getUserId()
   const [favourites, setFavourites] = useState([])
   const [error, setError] = useState(null)
-  const { token } = UseUserToken()
-  const [commentedPost, setCommentedPost] = useState(null)
-  const [openModal, setOpenModal] = useState(false)
-    const [loading, setLoading] = useState(true)
-    
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
-    }
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getPosts () {
       try {
-        const data = await getLikedPosts(token, userId)
+        const data = await getLikedPosts()
         setFavourites(data)
       } catch (error) {
         if (error.response) {
@@ -45,38 +37,23 @@ function Favourites () {
     getPosts()
   }, [])
 
-  if (isLoggedIn) {
-    return (
-      <>
-        {loading && (
-          <Box sx={style}>
-            <CircularProgress />
-          </Box>
-        )}
-        {error ? (
-          <h2>{error}</h2>
-        ) : (
-          favourites
-            .reverse()
-            .map(post => (
-              <AnotherPost
-                key={post.id}
-                post={post}
-                setCommentedPost={setCommentedPost}
-                setOpenModal={setOpenModal}
-              />
-            ))
-        )}
-        {commentedPost ? (
-          <ModalComment
-            post={commentedPost}
-            open={openModal}
-            setOpenModal={setOpenModal}
-          />
-        ) : null}
-      </>
-    )
-  }
+  return (
+    <>
+      {loading && (
+        <Box sx={style}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {error && <h2>{error}</h2>}
+
+      {!error &&
+        !loading &&
+        favourites
+          .reverse()
+          .map(post => <AnotherPost key={post.id} post={post} />)}
+    </>
+  )
 }
 
 export default Favourites

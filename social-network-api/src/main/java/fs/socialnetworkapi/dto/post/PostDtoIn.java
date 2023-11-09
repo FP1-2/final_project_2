@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.dto.post;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +13,9 @@ public class PostDtoIn {
 
   private Long id;
   private Long userId;
+  @NotNull
   private String photo;
-  @Size(min = 1, max = 280, message = "Description should be between 1 and 280 characters")
+  @NotNull
   private String description;
 
 }

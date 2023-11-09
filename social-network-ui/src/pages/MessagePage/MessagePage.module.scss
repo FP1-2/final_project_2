@@ -1,0 +1,30 @@
+
+.flex {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.inputContainer {
+  display: flex;
+  // justify-content: center;
+  justify-content: flex-start;
+}
+
+.searchInput {
+  width: 40%;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: 1px rgb(113, 118, 123) solid;
+  border-radius: 30px;
+  outline: none;
+  background-color: transparent;
+  color: #fff;
+  font-size: 28px;
+}
+
+.searchInput::placeholder {
+  color: rgb(113, 118, 123);
+  font-size: 18px;
+  text-align: center;
+}

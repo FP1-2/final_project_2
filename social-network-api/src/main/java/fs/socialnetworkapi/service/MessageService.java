@@ -85,6 +85,11 @@ public class MessageService {
 
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+    return addMessage(messageDtoIn, user);
+  }
+
+  public MessageDtoOut addMessage(MessageDtoIn messageDtoIn, User user) {
+
     Chat chat = findById(messageDtoIn.getChatId());
 
     Message message = new Message();
@@ -92,7 +97,7 @@ public class MessageService {
     message.setText(messageDtoIn.getText());
     message.setUser(user);
     Message messageToSave = messageRepo.save(message);
-    sendMessageNotification(messageToSave);
+    //sendMessageNotification(messageToSave);
 
     return mapper.map(messageToSave,MessageDtoOut.class);
   }

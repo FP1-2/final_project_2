@@ -1,6 +1,8 @@
 const getUserId = () => {
   const userId = localStorage.getItem('userId')
-  return userId
+  if (userId) {
+    return userId
+  } return null
 }
 
 export default getUserId

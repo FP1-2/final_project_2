@@ -3,6 +3,7 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
@@ -10,7 +11,8 @@ import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +27,12 @@ public class LikeService {
   private final PostRepo postRepo;
   private final ModelMapper mapper;
 
-  @Autowired
-  private final NotificationCreator notificationCreator;
-
   private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
   private void sendLikeNotification(Like like) {
-    notificationCreator.likeNotification(like);
+    Notification notification = new NotificationCreator().likeNotification(like);
   }
 
   public List<PostDtoOut> getLikesForUser() {
@@ -54,7 +53,8 @@ public class LikeService {
       likeRepo.delete(like.get());
       return "Unliked";
     } else {
-      sendLikeNotification(likeRepo.save(new Like(user, post)));
+      Like like1 = likeRepo.save(new Like(user, post));
+      //sendLikeNotification(like1);
       return "Liked";
     }
   }
@@ -67,8 +67,10 @@ public class LikeService {
     return likeRepo.findByPostIn(posts);
   }
 
-  public List<Like> findByUserId(Long userId) {
-    return likeRepo.findByUserId(userId)
+  public List<Like> findByUserId(Long userId, Integer page, Integer size) {
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+    return likeRepo.findByUserId(userId, pageRequest)
             .stream()
             .toList();
   }
