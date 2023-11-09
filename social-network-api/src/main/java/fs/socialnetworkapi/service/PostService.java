@@ -158,15 +158,15 @@ public class PostService {
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
     Post postToSave = postRepo.save(post);
-    //    if (typePost.equals(TypePost.POST)) {
-    //      sendFeaturedNotification(postToSave);
-    //    }
-    //    if (typePost.equals(TypePost.REPOST)) {
-    //      sendRepostNotification(postToSave);
-    //    }
-    //    if (typePost.equals(TypePost.COMMENT)) {
-    //      sendCommentNotification(postToSave);
-    //    }
+    //if (typePost.equals(TypePost.POST)) {
+    //  sendFeaturedNotification(postToSave);
+    //}
+    if (typePost.equals(TypePost.REPOST)) {
+      sendRepostNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.COMMENT)) {
+      sendCommentNotification(postToSave);
+    }
     return getPostById(originalPostId);
   }
 
@@ -318,18 +318,19 @@ public class PostService {
     notificationCreator.repostNotification(post);
   }
 
-// <<<<<<< Notification
-//   private void sendFeaturedNotification(Post post) {
-//     notificationCreator.featuredNotification(post);
-// =======
-//     return getPostById(postToSave.getId());
-// >>>>>>> main
-//   }
+  //private void sendFeaturedNotification(Post post) {
+  //  notificationCreator.featuredNotification(post);
+  //  return getPostById(postToSave.getId());
+  //}
 
   private Post save(Post post, TypePost typePost) {
     Post postToSave = postRepo.save(post);
     //notificationCreator.sendPostByTypePost(postToSave, typePost);
     return postToSave;
+  }
+
+  public void deletePost(Long postId) {
+    postRepo.deleteById(postId);
   }
 
 }
