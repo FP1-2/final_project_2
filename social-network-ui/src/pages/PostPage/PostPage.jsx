@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import getLikedPosts from '../../api/getLikedPosts'
+import { useParams } from 'react-router-dom'
+import AnotherPost from '../../components/AnotherPost/AnotherPost'
+import getPost from '../../api/getPost'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
-import AnotherPost from '../AnotherPost/AnotherPost'
 import { style } from '../../styles/circularProgressStyle'
-import { useSelector } from 'react-redux'
-import UseUserToken from '../../hooks/useUserToken'
 
-function Favourites () {
-  const [favourites, setFavourites] = useState([])
+function PostPage () {
+  const params = useParams()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
-
-  const userId = useSelector(state => state.user.userId)
-  const { token } = UseUserToken()
+  const [post, setPost] = useState({})
+  const [comments, setComments] = useState([])
 
   useEffect(() => {
-    async function getPosts () {
+    async function fetchPost () {
       try {
-        const data = await getLikedPosts(token, userId)
-        setFavourites(data)
-        console.log(data)
+        const data = await getPost(params.postId)
+        setPost(data)
+        setComments(data.comments)
       } catch (error) {
         if (error.response) {
           setError(`Error ${error.response?.status}: ${error.response?.data}`)
@@ -33,11 +31,8 @@ function Favourites () {
         setLoading(false)
       }
     }
-
-    if (userId) {
-      getPosts()
-    }
-  }, [userId])
+    fetchPost()
+  }, [])
 
   return (
     <>
@@ -49,13 +44,19 @@ function Favourites () {
 
       {error && <h2>{error}</h2>}
 
+      {!error && !loading && (
+        <AnotherPost
+          post={post}
+          setComments={setComments}
+        />
+      )}
       {!error &&
         !loading &&
-        favourites
+        comments
           .reverse()
           .map(post => <AnotherPost key={post.id} post={post} />)}
     </>
   )
 }
 
-export default Favourites
+export default PostPage

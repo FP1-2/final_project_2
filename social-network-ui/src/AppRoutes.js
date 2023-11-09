@@ -16,47 +16,47 @@ import ExplorePage from './pages/ExplorePage/ExplorePage'
 import NotificationPage from './pages/NotificationPage/NotificationPage'
 
 const AppRoutes = () => {
-	const dispatch = useDispatch()
-	const { token } = UseUserToken()
-	const userId = useSelector(state => state.user?.userId)
+  const dispatch = useDispatch()
+  const { token } = UseUserToken()
+  const userId = useSelector(state => state.user?.userId)
 
-	useEffect(() => {
-		console.log(userId)
-		if (token && userId) {
-			dispatch(fetchUserFollowings({ token, userId })).then(followings => {
-				dispatch(setFollowings(followings.payload))
-			})
-		}
-	}, [dispatch, userId])
-	if (token)
-		return (
-			<Routes>
-				{/* Public Routes */}
-				<Route path='/' element={<HomePage />} />
-				<Route path='/home' element={<HomePage />} />
-				<Route path='/explore' element={<ExplorePage />} />
-				<Route path='/favourites' element={<FavPage />} />
-				<Route path='/notifications' element={<NotificationPage />} />
-				<Route path='/messages' element={<MessagePage />} />
-				{/* Profile Routes */}
-				<Route path='/profile/:userId' element={<ProfilePage />} />
-				{/* Post Routes */}
-			<Route path='/post/:postId' element={<PostPage />} />
-				{/* Error Path */}
-				<Route path='*' element={<h1>error</h1>} />
-			</Routes>
-		)
-	if (!token)
-		return (
-			<Routes>
-				{/* Public Routes */}
-				<Route path='/' element={<AuthPage />} />
-				{/* Auth Routes */}
-				<Route path='/signIn' element={<LoginPage />} />
-				{/* Error Path */}
-				<Route path='*' element={<h1>error</h1>} />
-			</Routes>
-		)
+  useEffect(() => {
+    console.log(userId)
+    if (token && userId) {
+      dispatch(fetchUserFollowings({ token, userId })).then(followings => {
+        dispatch(setFollowings(followings.payload))
+      })
+    }
+  }, [dispatch, userId])
+  if (token)
+    return (
+      <Routes>
+        {/* Public Routes */}
+        <Route path='/' element={<HomePage />} />
+        <Route path='/home' element={<HomePage />} />
+        <Route path='/explore' element={<ExplorePage />} />
+        <Route path='/favourites' element={<FavPage />} />
+        <Route path='/notifications' element={<NotificationPage />} />
+        <Route path='/messages' element={<MessagePage />} />
+        {/* Profile Routes */}
+        <Route path='/profile/:userId' element={<ProfilePage />} />
+        {/* Post Routes */}
+        <Route path='/post/:postId' element={<PostPage />} />
+        {/* Error Path */}
+        <Route path='*' element={<h1>error</h1>} />
+      </Routes>
+    )
+  if (!token)
+    return (
+      <Routes>
+        {/* Public Routes */}
+        <Route path='/' element={<AuthPage />} />
+        {/* Auth Routes */}
+        <Route path='/signIn' element={<LoginPage />} />
+        {/* Error Path */}
+        <Route path='*' element={<h1>error</h1>} />
+      </Routes>
+    )
 }
 
 export default AppRoutes
