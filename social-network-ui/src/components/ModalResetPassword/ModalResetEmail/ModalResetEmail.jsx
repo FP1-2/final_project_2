@@ -78,7 +78,7 @@ const ModalResetEmail = ({setIsEmailSend}) => {
 	const onSubmit = async (values) => {
 		try {
 			const response = await axios.post(
-				'http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/reset/request',
+				`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/reset/request/`,
 				values
 			);
 

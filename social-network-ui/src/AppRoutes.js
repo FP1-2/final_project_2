@@ -5,6 +5,7 @@ import AuthPage from './pages/AuthPage/AuthPage'
 import LoginPage from './pages/LoginPage/LoginPage'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
 import FavPage from './pages/FavPage/FavPage'
+import MessagePage from './pages/MessagePage/MessagePage'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { fetchUserFollowings } from './redux/thunks/folowingsThunk'
@@ -29,6 +30,7 @@ const AppRoutes = () => {
 			<Route path='/home' element={<HomePage />} />
 			<Route path='/explore' element={<HomePage />} />
 			<Route path='/favourites' element={<FavPage />} />
+			<Route path='/messages' element={<MessagePage />} />
 
 			{/* Auth Routes */}
 			<Route path='/signIn' element={<LoginPage />} />
