@@ -94,7 +94,7 @@ function CommentWriteWindow ({
       if (response.status === 200) {
         setError(null)
         setCommentsCount((prev) => prev + 1)
-        setComments((prev) => [...prev, response.data])
+        setComments((prev) => [response.data, ...prev])
         console.log(response.data);
         close ? handleModalComment() : handleComment()
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Button,
   Modal,
@@ -44,7 +44,13 @@ const style = {
   textAlign: 'center'
 }
 
-function AnotherPost ({ post, setComments }) {
+function AnotherPost ({
+  post,
+  setComments,
+  hasCommentWriteWindow,
+  deletedCommentsCount,
+  setDeletedCommentsCount
+}) {
   const isRepost = post.typePost === 'REPOST'
   const isComment = post.typePost === 'COMMENT'
   let thisPost
@@ -66,6 +72,12 @@ function AnotherPost ({ post, setComments }) {
   const dispatch = useDispatch()
   const isMinePost = thisPost?.user?.id == userId
   const isFollow = followings.includes(thisPost?.user?.id)
+
+  useEffect(() => {
+    if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
+      setCountComments(thisPost?.countComments - deletedCommentsCount)
+    }
+  }, [deletedCommentsCount])
 
   function comment () {
     setOpenCommentModal(true)
@@ -164,6 +176,11 @@ function AnotherPost ({ post, setComments }) {
     setIsReposted(!isReposted)
   }
 
+  function handleDeletePost () {
+    setPostIsDeleted(true)
+    setDeletedCommentsCount && setDeletedCommentsCount(prev => prev + 1)
+  }
+
   async function deletePost () {
     try {
       const response = await axios.delete(url + `/api/v1/post/${thisPost.id}`, {
@@ -172,7 +189,7 @@ function AnotherPost ({ post, setComments }) {
         }
       })
       response.status === 200
-        ? setPostIsDeleted(true)
+        ? handleDeletePost()
         : setError(`Error ${response.status}: ${response.error}`)
     } catch (err) {
       setError(`Error: ${err}`)
@@ -402,7 +419,7 @@ function AnotherPost ({ post, setComments }) {
           </Box>
         </Box>
       </Modal>
-      {setComments && (
+      {hasCommentWriteWindow && (
         <CommentWriteWindow
           postId={thisPost.id}
           setCommentsCount={setCountComments}
@@ -415,6 +432,9 @@ function AnotherPost ({ post, setComments }) {
 
 AnotherPost.propTypes = {
   post: PropTypes.object.isRequired,
-  setComments: PropTypes.func
+  setComments: PropTypes.func,
+  hasCommentWriteWindow: PropTypes.bool,
+  deletedCommentsCount: PropTypes.number,
+  setDeletedCommentsCount: PropTypes.func
 }
 export default AnotherPost

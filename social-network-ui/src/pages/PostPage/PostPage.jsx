@@ -12,6 +12,9 @@ function PostPage () {
   const [loading, setLoading] = useState(true)
   const [post, setPost] = useState({})
   const [comments, setComments] = useState([])
+  const [deletedCommentsCount, setDeletedCommentsCount] = useState(0)
+
+  console.log(comments)
 
   useEffect(() => {
     async function fetchPost () {
@@ -48,13 +51,19 @@ function PostPage () {
         <AnotherPost
           post={post}
           setComments={setComments}
+          hasCommentWriteWindow={true}
+          deletedCommentsCount={deletedCommentsCount}
         />
       )}
       {!error &&
         !loading &&
-        comments
-          .reverse()
-          .map(post => <AnotherPost key={post.id} post={post} />)}
+        comments.map(post => (
+          <AnotherPost
+            key={post.id}
+            post={post}
+            setDeletedCommentsCount={setDeletedCommentsCount}
+          />
+        ))}
     </>
   )
 }
