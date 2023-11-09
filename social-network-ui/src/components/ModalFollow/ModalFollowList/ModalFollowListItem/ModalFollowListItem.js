@@ -1,9 +1,13 @@
 import React from 'react'
-import { Box, Avatar, Typography } from '@mui/material'
-import PropTypes from 'prop-types'
-import AvatarWithoutImg from '../../../AvatarWithoutImg/AvatarWithoutImg'
+//MUI
+import { Box, Typography } from '@mui/material'
+//Router
 import { Link } from 'react-router-dom'
+//Components
 import UserTag from '../../../UserTag/UserTag'
+import AdaptiveAvatar from '../../../AdaptiveAvatar/AdaptiveAvatar'
+//NPMs
+import PropTypes from 'prop-types'
 
 const ModalFollowListItem = ({ item }) => {
 	return (
@@ -24,22 +28,7 @@ const ModalFollowListItem = ({ item }) => {
 					}}
 				>
 					<Link to={`/profile/${item.id}`}>
-						{item.avatar ? (
-							<Avatar
-								sx={{
-									width: '4.5rem',
-									height: '4.5rem',
-									border: '1px solid white',
-								}}
-								src={item.avatar}
-							></Avatar>
-						) : (
-							<AvatarWithoutImg
-								border={true}
-								userName={item.firstName}
-								big={true}
-							/>
-						)}
+						<AdaptiveAvatar src={item.avatar} firstName={item.firstName} />
 					</Link>
 					<Box
 						sx={{

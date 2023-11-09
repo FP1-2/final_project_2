@@ -135,7 +135,6 @@ public class PostService {
 
   public void deletePost(Long postId) {
     postRepo.deleteById(postId);
-    notificationCreator.deleteByPostId(postId);
   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
@@ -308,7 +307,7 @@ public class PostService {
     post.setOriginalPost(originalPost);
     Post postToSave = save(post, typePost);
 
-    return getPostById(originalPost.getId());
+    return getPostById(postToSave.getId());
   }
 
   private Post save(Post post, TypePost typePost) {
