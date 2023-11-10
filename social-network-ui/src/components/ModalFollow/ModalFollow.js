@@ -49,7 +49,7 @@ const ModalFollow = () => {
 					justifyContent: 'center',
 					alignItems: 'flex-start',
 					height: '50%',
-					width: '300px',
+					width: '350px',
 					position: 'absolute',
 					top: '50%',
 					left: '50%',
