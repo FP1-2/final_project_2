@@ -188,26 +188,11 @@ public class UserService implements UserDetailsService {
   private List<UserDtoOut> showAllUserWithUsername(List<User> users) {
     return users
       .stream()
-      .map(p -> {
-        UserDtoOut pp = new UserDtoOut() { {
-            setId(p.getId());
-            setAddress(p.getAddress());
-            setEmail(p.getEmail());
-            setUsername(p.getUsername());
-            setAvatar(p.getAvatar());
-            setBgProfileImage(p.getBgProfileImage());
-            setBirthday(p.getBirthday());
-            setCreatedDate(p.getCreatedDate());
-            setFirstName(p.getFirstName());
-            setLastName(p.getLastName());
-            setUserLink(p.getUserLink());
-            setUserDescribe(p.getUserDescribe());
-            setUserFollowingCount(getFollowings(p.getId()).size());
-            setUserFollowersCount(getFollowers(p.getId()).size());
-            setUserTweetCount(getUserPosts(p.getId(), 0, 1000000).size());
-          }
-        };
-        return pp;
+      .map(p->mapper.map(p,UserDtoOut.class))
+      .peek(userDtoOut -> {
+        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
       })
       .toList();
   }
