@@ -1,7 +1,8 @@
 import React, { useState,useEffect } from "react";
 import { Avatar, Box, CssBaseline, Button, Input } from "@mui/material";
-import { createMessage,getChatMessages,setMessages,fetchChats,setChats } from "../../redux/slices/chatSlice";
-
+import { setMessages } from "../../redux/slices/chatSlice";
+import{getChatMessages} from '../../api/getChatMessages';
+import{createMessage} from '../../api/postCreateMessage';
 import PropTypes from "prop-types";
 import UseUserToken from "../../hooks/useUserToken";
 import { useDispatch } from "react-redux";

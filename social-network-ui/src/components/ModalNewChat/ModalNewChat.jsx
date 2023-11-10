@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import {
   getAllUsers,
-  closeChatModal,
-  createChat,
-  getChatMembers,
+  // closeChatModal,
+  // createChat,
+  // getChatMembers,
   setChatId,
-  setError, fetchChats, getChatMessages, setMessages,
-} from '../../redux/slices/chatSlice'
+  setError,  setMessages,
+} from '../../redux/slices/chatSlice';
+import {closeChatModal} from '../../redux/slices/chatSlice'
+import {getChatMessages} from '../../api/getChatMessages';
+import {createChat} from '../../api/postCreateChat';
 import { useDispatch, useSelector } from "react-redux";
+import {fetchChats} from '../../redux/thunks/chatThunk'
 import {
   Box,
   Checkbox,

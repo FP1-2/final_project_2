@@ -18,11 +18,11 @@ const TwitterWriteWindow = ({
   lastName,
   token,
 }) => {
-  console.log(token);
+;
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
   const [userId, setUserId] = useState(jwt(token).id);
-  console.log(token);
+ 
 
   const handlePhotoInput = (event) => {
     const formData = new FormData();
