@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import ModalFollowListItem from './ModalFollowListItem/ModalFollowListItem'
+//MUI
 import { Box } from '@mui/material'
+//Components
+import ModalFollowListItem from './ModalFollowListItem/ModalFollowListItem'
+//NPMs
+import PropTypes from 'prop-types'
 
 const ModalFollowList = ({ followList }) => {
 	return (
