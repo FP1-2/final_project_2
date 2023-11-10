@@ -82,8 +82,8 @@ public class UserController {
   }
 
   @GetMapping("find-user/{username}")
-  public ResponseEntity<UserDtoOut> findUser(@PathVariable String username) {
-    return ResponseEntity.ok(userService.findByUsername(username));
+  public List<UserDtoOut> findUser(@PathVariable String username) {
+    return userService.findByUsername(username);
   }
 
   @GetMapping("activate/{code}")

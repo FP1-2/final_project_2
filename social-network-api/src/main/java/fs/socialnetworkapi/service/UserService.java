@@ -180,9 +180,35 @@ public class UserService implements UserDetailsService {
       || Objects.equals(user.getId(), userRepo.findByUsername(username).getId());
   }
 
-  public UserDtoOut findByUsername(String username) {
-    User user = userRepo.findByUsername(username);
-    Long id = user.getId();
-    return showUser(id);
+  public List<UserDtoOut> findByUsername(String username) {
+    List<User> users = userRepo.searchByUsernameLike(username);
+    return showAllUserWithUsername(users);
   }
+
+  private List<UserDtoOut> showAllUserWithUsername(List<User> users) {
+    return users
+      .stream()
+      .map(p -> {
+        UserDtoOut pp = new UserDtoOut() {{
+          setId(p.getId());
+          setAddress(p.getAddress());
+          setEmail(p.getEmail());
+          setUsername(p.getUsername());
+          setAvatar(p.getAvatar());
+          setBgProfileImage(p.getBgProfileImage());
+          setBirthday(p.getBirthday());
+          setCreatedDate(p.getCreatedDate());
+          setFirstName(p.getFirstName());
+          setLastName(p.getLastName());
+          setUserLink(p.getUserLink());
+          setUserDescribe(p.getUserDescribe());
+          setUserFollowingCount(getFollowings(p.getId()).size());
+          setUserFollowersCount(getFollowers(p.getId()).size());
+          setUserTweetCount(getUserPosts(p.getId(), 0, 1000000).size());
+        }};
+        return pp;
+      })
+      .toList();
+
+    }
 }
