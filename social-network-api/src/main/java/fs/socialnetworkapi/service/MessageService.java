@@ -38,13 +38,17 @@ public class MessageService {
   @Autowired
   private final NotificationCreator notificationCreator;
 
+  private User getUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
+
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {
 
     if (createChatDtoIn.getMembersChat().isEmpty()) {
       return Optional.empty();
     }
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     Chat newChat = chatRepo.save(new Chat());
     chatUserRepo.save(new ChatUser(user.getId(), newChat.getId()));
@@ -81,7 +85,7 @@ public class MessageService {
 
   public MessageDtoOut addMessage(MessageDtoIn messageDtoIn) {
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     return addMessage(messageDtoIn, user);
   }

@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
   @Value("${myapp.baseUrl}")
   private String baseUrl;
 
-  public User getUser() {
+  private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
@@ -143,14 +143,18 @@ public class UserService implements UserDetailsService {
 
     User user = findById(userId);
     sendSubscriberNotification(user);
-    user.getFollowers().add(currentUser);
-    saveUser(user);
+    //
+    // This logic doesn't work correctly
+    // Need to be remade
+    //
+    //user.getFollowers().add(currentUser); - an error occurred here!!!
+    //saveUser(user);
   }
 
   public void unsubscribe(Long userId) {
     User currentUser = getUser();
     User user = findById(userId);
-    user.getFollowers().remove(currentUser);
+    user.getFollowers().remove(currentUser); // I guess it will be the same here!!!
     saveUser(user);
   }
 

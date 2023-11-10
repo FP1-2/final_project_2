@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +34,10 @@ public class PostService {
 
   @Autowired
   private final NotificationCreator notificationCreator;
+
+  private User getUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
 
   public PostDtoOut findById(Long postId) {
 
@@ -90,7 +95,7 @@ public class PostService {
 
   public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
 
-    User user = userService.getUser();
+    User user = getUser();
 
     Set<User> followings = user.getFollowings();
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
@@ -121,24 +126,17 @@ public class PostService {
   }
 
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
-
-    User user = userService.getUser();
-
+    User user = getUser();
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(TypePost.POST);
-    Post postToSave = save(post, TypePost.POST);
+    Post postToSave = save(post);
+    //
+    // Not implemented because of subscribe mistakes
+    //
     //sendFeaturedNotification(postToSave);
     return mapper.map(postToSave, PostDtoOut.class);
   }
-
-  //   public void deletePost(Long postId) {
-  //     postRepo.deleteById(postId);
-  // <<<<<<< Notification
-  //     notificationService.deleteByPostId(postId);
-  // =======
-  // >>>>>>> main
-  //   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
     Post post = postRepo.findById(postDtoIn.getId())
@@ -149,15 +147,16 @@ public class PostService {
   }
 
   public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
-    User user = userService.getUser();
-    Post originalPost = postRepo.findById(originalPostId)
-            .orElseThrow(() -> new PostNotFoundException(
-                    String.format("Original post with id: %d not found", originalPostId)));
+    User user = getUser();
+    Post originalPost = postRepo.findPostWithUser(originalPostId);
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(typePost);
     post.setOriginalPost(originalPost);
     Post postToSave = postRepo.save(post);
+    //
+    // Not implemented because of subscribe mistakes
+    //
     //if (typePost.equals(TypePost.POST)) {
     //  sendFeaturedNotification(postToSave);
     //}
@@ -167,13 +166,13 @@ public class PostService {
     if (typePost.equals(TypePost.COMMENT)) {
       sendCommentNotification(postToSave);
     }
-    return getPostById(originalPostId);
+    return mapper.map(postToSave, PostDtoOut.class);
   }
 
   public PostDtoOut getPostById(Long postId) {
     Post post = postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
-    User user = userService.getUser();
+    User user = getUser();
 
     PostDtoOut postDtoOut = mapper.map(post, PostDtoOut.class);
 
@@ -215,9 +214,7 @@ public class PostService {
   }
 
   private List<PostDtoOut> mapListPostToListPostDtoOut(List<Post> allPosts) {
-
-    User user = userService.getUser();
-
+    User user = getUser();
     List<Post> listOriginalPosts = postRepo.findByOriginalPostIn(allPosts);
     List<Like> likes = likeService.findByPostIn(allPosts);
 
@@ -318,15 +315,12 @@ public class PostService {
     notificationCreator.repostNotification(post);
   }
 
-  //private void sendFeaturedNotification(Post post) {
-  //  notificationCreator.featuredNotification(post);
-  //  return getPostById(postToSave.getId());
-  //}
+  private void sendFeaturedNotification(Post post) {
+    notificationCreator.featuredNotification(post);
+  }
 
-  private Post save(Post post, TypePost typePost) {
-    Post postToSave = postRepo.save(post);
-    //notificationCreator.sendPostByTypePost(postToSave, typePost);
-    return postToSave;
+  private Post save(Post post) {
+    return postRepo.save(post);
   }
 
   public void deletePost(Long postId) {
