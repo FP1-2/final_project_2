@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 // Components
 import CustomInput from '../../components/CustomInput/CustomInput'
 import IconTwitter from '../../components/IconTwitter/IconTwitter'
@@ -53,6 +53,8 @@ const initialValues = {
 }
 
 const LoginPage = () => {
+	//states
+	const [loginError, setLoginError] = useState('')
 	//Custom hooks
 	const { token, saveToken, removeToken } = useUserToken()
 	//router
@@ -69,24 +71,24 @@ const LoginPage = () => {
 		dispatch(openResetModal())
 	}
 
-	const onSubmit = (values, { resetForm }) => {
-		// submit handler
-		;(async () => {
-			try {
-				const data = await postLoginData(values)
-				console.log(data)
-				if (data.error === null) {
-					removeToken()
-					saveToken(data.token)
-					dispatch(login(data.id))
-					resetForm()
-					navigate(`/home`)
-				}
-			} catch (error) {
-				console.log(error)
+	const onSubmit = async (values, { resetForm }) => {
+		//submit handler
+		try {
+			const data = await postLoginData(values)
+			if (data.error === null) {
+				removeToken()
+				saveToken(data.token)
+				dispatch(login(data.id))
+				resetForm()
+				navigate(`/home`)
+			} else {
+				setLoginError('Invalid email or password. Please try again.')
 			}
-		})()
+		} catch (error) {
+			console.error(error)
+		}
 	}
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Box
@@ -134,6 +136,7 @@ const LoginPage = () => {
 							<Form
 								style={{
 									width: '100%',
+									position: 'relative',
 								}}
 							>
 								<CustomInput
@@ -142,6 +145,7 @@ const LoginPage = () => {
 									label='Email'
 									placeholder='Email address'
 									autoComplete='email'
+									onClick={() => setLoginError('')}
 								/>
 								<CustomInput
 									name='password'
@@ -149,7 +153,25 @@ const LoginPage = () => {
 									label='Password'
 									placeholder='Password'
 									autoComplete='current-password'
+									onClick={() => setLoginError('')}
 								/>
+								{loginError && (
+									<Typography
+										variant='body2'
+										color='error'
+										sx={{
+											marginBottom: '1rem',
+											position: 'absolute',
+											width: '100%',
+											bot: 0,
+											top: '60%',
+											textAlign: 'center',
+											whiteSpace: 'nowrap',
+										}}
+									>
+										{loginError}
+									</Typography>
+								)}
 								<Button
 									type='submit'
 									variant='contained'
@@ -171,6 +193,7 @@ const LoginPage = () => {
 							</Form>
 						)}
 					</Formik>
+
 					<Box
 						sx={{
 							display: 'flex',

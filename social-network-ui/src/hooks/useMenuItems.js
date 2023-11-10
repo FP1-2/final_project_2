@@ -17,6 +17,11 @@ const useMenuItems = () => {
 
 	return [
 		{ label: 'Home', link: '/home', icon: <HomeIcon /> },
+		{
+			label: 'Profile',
+			link: `/profile/${userId}`,
+			icon: <PersonRoundedIcon />,
+		},
 		{ label: 'Explore', link: '/explore', icon: <SearchIcon /> },
 		{
 			label: 'Notifications',
@@ -25,11 +30,6 @@ const useMenuItems = () => {
 		},
 		{ label: 'Messages', link: '/messages', icon: <MailRoundedIcon /> },
 		{ label: 'Favourites', link: '/favourites', icon: <FavoriteRoundedIcon /> },
-		{
-			label: 'Profile',
-			link: `/profile/${userId}`,
-			icon: <PersonRoundedIcon />,
-		},
 	]
 }
 

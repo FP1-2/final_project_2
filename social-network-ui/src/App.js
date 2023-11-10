@@ -118,7 +118,7 @@ function App() {
 									position: 'absolute',
 									right: 10,
 									transform: 'translateY(-5%)',
-									zIndex: 100,
+									zIndex: 9999,
 								}}
 							>
 								<IconTwitter
