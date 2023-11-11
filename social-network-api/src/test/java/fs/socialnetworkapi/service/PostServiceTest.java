@@ -267,23 +267,22 @@ public class PostServiceTest {
                 postDto1,
                 postDto2);
 
-        //SecurityContext securityContext = mock(SecurityContext.class);
-        //SecurityContextHolder.setContext(securityContext);
-
-        //Authentication authentication = mock(Authentication.class);
-        //when(securityContext.getAuthentication()).thenReturn(authentication);
+//        SecurityContext securityContext = mock(SecurityContext.class);
+//        SecurityContextHolder.setContext(securityContext);
+//
+//        Authentication authentication = mock(Authentication.class);
+//        when(securityContext.getAuthentication()).thenReturn(authentication);
 
         //when(authentication.getPrincipal()).thenReturn(user1);
-        //when(userUtils.getUser()).thenReturn(user1);
 
-        //Mockito.when(postRepo.findByUser(eq(user1), eq(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))))).thenReturn(pageOfPosts);
+        Mockito.when(postRepo.findByUser(eq(user1), eq(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"))))).thenReturn(pageOfPosts);
 
-        //when(mapper.map(post1, PostDtoOut.class)).thenReturn(postDto1);
-        //when(mapper.map(post2, PostDtoOut.class)).thenReturn(postDto2);
-        //when(userService.findById(userId)).thenReturn(user1);
-        //List<PostDtoOut> result = postService.getProfilePosts(userId, page, size);
+        when(mapper.map(post1, PostDtoOut.class)).thenReturn(postDto1);
+        when(mapper.map(post2, PostDtoOut.class)).thenReturn(postDto2);
+        when(userService.findById(userId)).thenReturn(user1);
+        List<PostDtoOut> result = postService.getProfilePosts(userId, page, size);
 
-        //assertEquals(expectedPostDtoOutList, result);
+        assertEquals(expectedPostDtoOutList, result);
     }
 
     @Test
