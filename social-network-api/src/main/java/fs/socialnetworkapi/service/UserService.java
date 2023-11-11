@@ -118,7 +118,7 @@ public class UserService implements UserDetailsService {
 
   private void sendActivationCode(UserDtoIn userDtoIn) {
     String message = String.format(
-            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %s/api/v1/activate/%s",
+            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
             userDtoIn.getFirstName(),
             baseUrl,
             userDtoIn.getActivationCode()
@@ -185,5 +185,22 @@ public class UserService implements UserDetailsService {
     User user = getUser();
     return userRepo.findByUsername(username) == null
       || Objects.equals(user.getId(), userRepo.findByUsername(username).getId());
+  }
+
+  public List<UserDtoOut> findByUsername(String username) {
+    List<User> users = userRepo.searchByUsernameLike(username);
+    return showAllUserWithUsername(users);
+  }
+
+  private List<UserDtoOut> showAllUserWithUsername(List<User> users) {
+    return users
+      .stream()
+      .map(p->mapper.map(p,UserDtoOut.class))
+      .peek(userDtoOut -> {
+        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
+      })
+      .toList();
   }
 }

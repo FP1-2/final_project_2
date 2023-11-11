@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -27,13 +28,16 @@ public class WebConfigSecurity {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+
+
     http.csrf(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests((authorizeHttpRequests) ->
         authorizeHttpRequests
+
           .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
           .requestMatchers(HttpMethod.POST,"/api/v1/registration").permitAll()
           .requestMatchers(HttpMethod.POST,"/api/v1/login").permitAll()
-          .requestMatchers(HttpMethod.POST,"/api/v1/activate/**").permitAll()
+          .requestMatchers(HttpMethod.GET,"/api/v1/activate/**").permitAll()
           .requestMatchers(HttpMethod.GET,"/api/v1/all-posts").permitAll()
           .requestMatchers(HttpMethod.POST,"/api/v1/reset/**").permitAll()
           .requestMatchers("/error").permitAll()
@@ -41,7 +45,6 @@ public class WebConfigSecurity {
           .requestMatchers(HttpMethod.PUT,"/api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.GET,"/api/v1/**").hasAuthority("USER")
           .requestMatchers(HttpMethod.POST,"/api/v1/**").hasAuthority("USER")
-
       )
       .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
