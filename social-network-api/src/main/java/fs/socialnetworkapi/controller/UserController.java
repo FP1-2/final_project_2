@@ -81,16 +81,20 @@ public class UserController {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
 
-  @GetMapping("activate/{code}")
-  public ResponseEntity<Model> activate(Model model, @PathVariable String code) {
-    boolean isActivated = userService.activateUser(code);
+  @GetMapping("find-user/{username}")
+  public List<UserDtoOut> findUser(@PathVariable String username) {
+    return userService.findByUsername(username);
+  }
 
+  @GetMapping("activate/{code}")
+  public ResponseEntity<String> activate(Model model, @PathVariable String code) {
+    boolean isActivated = userService.activateUser(code);
     if (isActivated) {
       model.addAttribute("message", "User successfully activated");
     } else {
       model.addAttribute("message", "Activation code is not found!");
     }
-    return ResponseEntity.ok(model);
+    return ResponseEntity.ok(model.toString());
   }
 
   @PostMapping("reset/request")

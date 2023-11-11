@@ -6,12 +6,16 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.security.SecurityService;
 import fs.socialnetworkapi.security.TokenDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class AuthorizationService {
 
   private final UserService userService;
