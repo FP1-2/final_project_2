@@ -74,14 +74,14 @@ public class PostController {
   @PostMapping("post/{original_post_id}/repost")
   public ResponseEntity<PostDtoOut> addRepost(@PathVariable("original_post_id") Long originalPostId,
                                               @Valid @RequestBody PostDtoIn postDtoIn) {
-    PostDtoOut postDtoOut = postService.saveByType(originalPostId, postDtoIn, TypePost.REPOST);
+    PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost(originalPostId, postDtoIn, TypePost.REPOST);
     return ResponseEntity.ok(postDtoOut);
   }
 
   @PostMapping("post/{original_post_id}/comment")
   public ResponseEntity<PostDtoOut> addComment(@PathVariable("original_post_id") Long originalPostId,
                                             @Valid @RequestBody PostDtoIn postDtoIn) {
-    PostDtoOut postDtoOut = postService.saveByType(originalPostId, postDtoIn, TypePost.COMMENT);
+    PostDtoOut postDtoOut = postService.saveByTypeAndOriginalPost( originalPostId, postDtoIn, TypePost.COMMENT);
     return ResponseEntity.ok(postDtoOut);
   }
 

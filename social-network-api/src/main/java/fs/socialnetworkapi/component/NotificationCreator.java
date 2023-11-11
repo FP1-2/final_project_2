@@ -8,6 +8,7 @@ import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.Message;
 import fs.socialnetworkapi.entity.ChatUser;
 import fs.socialnetworkapi.enums.NotificationType;
+import fs.socialnetworkapi.enums.TypePost;
 import fs.socialnetworkapi.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -55,6 +56,7 @@ public class NotificationCreator {
     return notificationDtoIn.getMessage().getText();
   }
 
+
   public Notification likeNotification(@NonNull Like like) {
     this.notificationDtoIn = new NotificationDtoIn(
       like.getUser(),
@@ -68,43 +70,16 @@ public class NotificationCreator {
     return createNewNotification();
   }
 
-  public Notification commentNotification(@NonNull Post post) {
-    this.notificationDtoIn = new NotificationDtoIn(
-      post.getUser(),
-      post,
-      null,
-      post.getOriginalPost().getUser(),
-      NotificationType.COMMENT
-    );
-    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
-    text = String.format("User %s commented your post: %s", fromUser(), post());
-    return createNewNotification();
-  }
-
-  public Notification repostNotification(@NonNull Post post) {
-    this.notificationDtoIn = new NotificationDtoIn(
-      post.getUser(),
-      post,
-      null,
-      post.getOriginalPost().getUser(),
-      NotificationType.REPOST
-      );
-    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
-    text = String.format("User %s reposted your post: %s", fromUser(), post());
-    return createNewNotification();
-  }
-
-  public Notification subscriberNotification(@NonNull User user) {
-    this.notificationDtoIn = new NotificationDtoIn(
-      getUser(),
-      null,
-      null,
-      user,
-      NotificationType.SUBSCRIBER
-      );
-    link = String.format("%s/api/v1/user/info/%d", baseUrl, user.getId());
-    text = String.format("User %s subscribed to your account", fromUser());
-    return createNewNotification();
+  public void sendPostByTypePost(Post postToSave, TypePost typePost) {
+    if (typePost.equals(TypePost.POST)) {
+      featuredNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.REPOST)) {
+      repostNotification(postToSave);
+    }
+    if (typePost.equals(TypePost.COMMENT)) {
+      commentNotification(postToSave);
+    }
   }
 
   public List<Notification> featuredNotification(@NonNull Post post) {
@@ -126,6 +101,45 @@ public class NotificationCreator {
           return createNewNotification();
         }
       ).toList();
+  }
+
+  public Notification repostNotification(@NonNull Post post) {
+    this.notificationDtoIn = new NotificationDtoIn(
+      post.getUser(),
+      post,
+      null,
+      post.getOriginalPost().getUser(),
+      NotificationType.REPOST
+    );
+    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+    text = String.format("User %s reposted your post: %s", fromUser(), post());
+    return createNewNotification();
+  }
+
+  public Notification commentNotification(@NonNull Post post) {
+    this.notificationDtoIn = new NotificationDtoIn(
+      post.getUser(),
+      post,
+      null,
+      post.getOriginalPost().getUser(),
+      NotificationType.COMMENT
+    );
+    link = String.format("%s/api/v1/%d", baseUrl, post.getId());
+    text = String.format("User %s commented your post: %s", fromUser(), post());
+    return createNewNotification();
+  }
+
+  public Notification subscriberNotification(@NonNull User user) {
+    this.notificationDtoIn = new NotificationDtoIn(
+      getUser(),
+      null,
+      null,
+      user,
+      NotificationType.SUBSCRIBER
+    );
+    link = String.format("%s/api/v1/user/info/%d", baseUrl, user.getId());
+    text = String.format("User %s subscribed to your account", fromUser());
+    return createNewNotification();
   }
 
   public List<Notification> messageNotification(@NonNull Message message) {
@@ -155,6 +169,10 @@ public class NotificationCreator {
     notification.setText(text);
     notification.setLink(link);
     return notificationService.createNewNotification(notification);
+  }
+
+  public void deleteByPostId(Long postId) {
+    notificationService.deleteByPostId(postId);
   }
 
 }
