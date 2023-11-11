@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
   @Value("${myapp.baseUrl}")
   private String baseUrl;
 
-  private User getUser() {
+  public User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
