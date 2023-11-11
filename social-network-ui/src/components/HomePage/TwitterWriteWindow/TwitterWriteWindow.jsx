@@ -19,7 +19,7 @@ const TwitterWriteWindow = ({
 	token,
 }) => {
 	const [description, setDescription] = useState('')
-	const [photo, setPhoto] = useState(null)
+	const [photo, setPhoto] = useState('')
 	const [userId, setUserId] = useState(jwt(token).id)
 
 	const handlePhotoInput = event => {

@@ -3,10 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import UseUserToken from "../../hooks/useUserToken";
 import getUserId from "../../utils/getUserId";
 import axios from "axios";
-import {getChats} from '../../api/getChats'
-import {getChatMessages} from '../../api/getChatMessages'
-import {getChatMembers} from '../../api/getChatMembers'
-import {fetchChats} from '../thunks/chatThunk'
 
 const userId = getUserId()
 
@@ -56,9 +52,9 @@ export const chatSlice = createSlice({
     }
   },
     extraReducers: (builder) => {
-    
+
     builder.addCase(fetchChats.fulfilled, (state, action) => {
-  
+
      return {...state, chats: action.payload}
     })
   },

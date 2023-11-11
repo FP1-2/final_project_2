@@ -11,8 +11,6 @@ import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -96,4 +94,6 @@ public class User extends AbstractEntity implements UserDetails {
   public int hashCode() {
     return Objects.hash(this.getId());
   }
+
+
 }

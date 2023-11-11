@@ -17,6 +17,7 @@ const modalFollowSlice = createSlice({
 		},
 		closeModal: state => {
 			state.modalProps.isOpen = false
+			state.modalProps.modalContent = null
 		},
 	},
 })
