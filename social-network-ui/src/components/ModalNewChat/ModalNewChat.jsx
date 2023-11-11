@@ -1,44 +1,34 @@
 import React, { useEffect } from "react";
-import {
-  getAllUsers,
-  // closeChatModal,
-  // createChat,
-  // getChatMembers,
-  setChatId,
-  setError,  setMessages,
-} from '../../redux/slices/chatSlice';
-import {closeChatModal} from '../../redux/slices/chatSlice'
-import {getChatMessages} from '../../api/getChatMessages';
-import {createChat} from '../../api/postCreateChat';
+import { setChatId, setError, setMessages } from "../../redux/slices/chatSlice";
+import { getAllUsers } from "../../api/getAllUsers";
+import { closeChatModal, setUsers } from "../../redux/slices/chatSlice";
+import { getChatMessages } from "../../api/getChatMessages";
+import { createChat } from "../../api/postCreateChat";
 import { useDispatch, useSelector } from "react-redux";
-import {fetchChats} from '../../redux/thunks/chatThunk'
-import {
-  Box,
-  Checkbox,
-  Modal,
-  FormLabel,
-  InputLabel,
-  TextField,
-  FormGroup,
-  FormControlLabel,
-  Button,
-} from "@mui/material";
+import { fetchChats } from "../../redux/thunks/chatThunk";
+import { Box, Modal, ThemeProvider, TextField, Button } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 import ModalForm from "./ModalForm";
 import UseUserToken from "../../hooks/useUserToken";
 import Chats from "../Chats/Chats";
 
 function ModalNewChat() {
-   const chatMember = useSelector((state) => state.chat.newChatMembers);
+  const { token } = UseUserToken();
+  const chatMember = useSelector((state) => state.chat.newChatMembers);
+  const users = useSelector((state) => state.chat.users);
   const dispatch = useDispatch();
-  const users = getAllUsers();
-  console.log(users);
+
   const isOpen = useSelector((state) => state.chat.modalProps.isOpenChat);
   const handleCloseModal = () => {
     dispatch(closeChatModal(!isOpen));
   };
 
-  const { token } = UseUserToken();
+  async function findUsers(event) {
+    const username = event.target.value;
+    const users = await getAllUsers(username, token);
 
+    dispatch(setUsers(users));
+  }
   async function sendChat() {
     try {
       const chatData = {
@@ -50,7 +40,7 @@ function ModalNewChat() {
       dispatch(setChatId(chatId));
       const updatedChat = await getChatMessages(chatId, token);
       dispatch(setMessages(updatedChat));
-      handleCloseModal()
+      handleCloseModal();
     } catch (error) {
       if (error.response) {
         dispatch(
@@ -62,14 +52,19 @@ function ModalNewChat() {
         dispatch(setError(`Error: ${error?.message}`));
       }
     }
-
   }
-  // useEffect(() => {
-  //   dispatch(createChat(token));
-  // }, [chat, token]);
-
+const theme = createTheme({
+	// custom theme
+	typography: {
+		h3: {
+			fontSize: "2.5rem",
+			fontWeight: 700,
+		},
+	},
+});
   return (
-    <Box>
+    <ThemeProvider theme={theme}>
+    <Box >
       <Modal open={isOpen} onClose={() => handleCloseModal()}>
         <Box
           sx={{
@@ -113,16 +108,20 @@ function ModalNewChat() {
               width: "100%",
             }}
           >
-            <TextField sx={{ width: "100%" }} label="search people"></TextField>
+            <TextField
+              onChange={findUsers}
+              sx={{ width: "100%" }}
+              label="search people"
+            ></TextField>
             <Box>
-              {users?.map((user) => (
-                <ModalForm key={user.id} user={user} />
-              ))}
+              {users &&
+                users?.map((user) => <ModalForm key={user.id} user={user} />)}
             </Box>
           </Box>
         </Box>
       </Modal>
     </Box>
+    </ThemeProvider>
   );
 }
 

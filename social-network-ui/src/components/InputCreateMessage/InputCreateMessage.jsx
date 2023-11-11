@@ -1,67 +1,41 @@
-import React, { useState,useEffect } from "react";
-import { Avatar, Box, CssBaseline, Button, Input } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Button, Input } from "@mui/material";
 import { setMessages } from "../../redux/slices/chatSlice";
-import{getChatMessages} from '../../api/getChatMessages';
-import{createMessage} from '../../api/postCreateMessage';
+import { getChatMessages } from "../../api/getChatMessages";
+import { createMessage } from "../../api/postCreateMessage";
 import PropTypes from "prop-types";
 import UseUserToken from "../../hooks/useUserToken";
 import { useDispatch } from "react-redux";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 function InputCreatMessage({ chatId }) {
   const { token } = UseUserToken();
   const dispatch = useDispatch();
   const [inputText, setInputText] = useState("");
 
-//  async function sendMessage() {
-//     const messageData = {
-//       chatId: chatId,
-//       text: inputText,
-//     };
-  
-//     console.log(inputText);
-   
-//     createMessage(messageData, token);
-//     const data = await getChatMessages(chatId, token);
-//     dispatch(setMessages(data));
-//       async  const chats = await fetchChats(chatId, token);
-//         console.log(chats);
-//     dispatch(setChats(chats));
+  async function sendMessage() {
+    try {
+      const messageData = {
+        chatId: chatId,
+        text: inputText,
+      };
 
-//   }
+      await createMessage(messageData, token);
 
-async function sendMessage() {
-  try {
-    const messageData = {
-      chatId: chatId,
-      text: inputText,
-    };
-
-  
-    await createMessage(messageData, token);
-
-  
-    const updatedMessages = await getChatMessages(chatId, token);
-    dispatch(setMessages(updatedMessages));
-
-  
-    // const updatedChats = await fetchChats(chatId, token);
-    // dispatch(setChats(updatedChats));
-    // console.log(updatedChats);
-  } catch (error) {
-    if (error.response) {
-      dispatch(
-        setError(`Error ${error.response?.status}: ${error.response?.data}`)
-      );
-    } else if (error.request) {
-      dispatch(setError("Error: no response"));
-    } else {
-      dispatch(setError(`Error: ${error?.message}`));
+      const updatedMessages = await getChatMessages(chatId, token);
+      dispatch(setMessages(updatedMessages));
+      setInputText("");
+    } catch (error) {
+      if (error.response) {
+        dispatch(
+          setError(`Error ${error.response?.status}: ${error.response?.data}`)
+        );
+      } else if (error.request) {
+        dispatch(setError("Error: no response"));
+      } else {
+        dispatch(setError(`Error: ${error?.message}`));
+      }
     }
   }
-}
-
-
-
 
   const handleChange = (e) => {
     setInputText(e.target.value);
@@ -87,10 +61,9 @@ async function sendMessage() {
         onClick={sendMessage}
         type="submit"
         variant="contained"
- 
         // margin="normal"
         sx={{
-          boxSizing: 'border-box',
+          boxSizing: "border-box",
           // marginBottom: "1rem",
           padding: "5px",
           borderRadius: "50%",
@@ -98,13 +71,17 @@ async function sendMessage() {
           // fontWeight: 700,
           textTransform: "none",
           backgroundColor: "#1DA1F2",
-          width: '20px',
-        height: '20px'
+          width: "20px",
+          height: "20px",
         }}
-      ><SendIcon sx={{
-        width: '20px',
-        height: '20px'
-      }}/> </Button>
+      >
+        <SendIcon
+          sx={{
+            width: "20px",
+            height: "20px",
+          }}
+        />{" "}
+      </Button>
     </Box>
   );
 }

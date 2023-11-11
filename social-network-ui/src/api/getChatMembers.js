@@ -12,7 +12,6 @@ export async function getChatMembers(chatID, token) {
         },
       }
     );
-console.log(token);
     return data;
   } catch (error) {
     throw error;
