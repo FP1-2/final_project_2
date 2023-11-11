@@ -16,6 +16,7 @@ import { Box } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 // API
 import getUserData from './api/getUserInfo'
+import AppSkeleton from './components/AppSkeleton/AppSkeleton'
 
 const theme = createTheme({
 	breakpoints: {
@@ -83,8 +84,8 @@ function App() {
 		}
 	}, [dispatch, isAuth])
 
-	if (appLoading) return <div>Loading</div> // need change to skeleton
-
+	if (appLoading) return <AppSkeleton />
+	
 	return (
 		<ThemeProvider theme={theme}>
 			{isAuth && !userDataLoading ? (
@@ -118,7 +119,7 @@ function App() {
 									position: 'absolute',
 									right: 10,
 									transform: 'translateY(-5%)',
-									zIndex: 100,
+									zIndex: 9999,
 								}}
 							>
 								<IconTwitter

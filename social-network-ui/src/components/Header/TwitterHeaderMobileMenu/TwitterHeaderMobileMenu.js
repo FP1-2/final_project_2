@@ -35,7 +35,7 @@ const TwitterHeaderMobileMenu = ({ onClose }) => {
 				minHeight: '100vh',
 				minWidth: '100vw',
 				bgcolor: 'white',
-				zIndex: 99,
+				zIndex: 9998,
 			}}
 		>
 			<Box

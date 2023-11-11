@@ -6,7 +6,7 @@ import ModalFollowListItem from './ModalFollowListItem/ModalFollowListItem'
 //NPMs
 import PropTypes from 'prop-types'
 
-const ModalFollowList = ({ followList }) => {
+const ModalFollowList = ({ followList,  }) => {
 	return (
 		<Box
 			sx={{
@@ -27,5 +27,6 @@ const ModalFollowList = ({ followList }) => {
 }
 ModalFollowList.propTypes = {
 	followList: PropTypes.array.isRequired,
+
 }
 export default ModalFollowList
