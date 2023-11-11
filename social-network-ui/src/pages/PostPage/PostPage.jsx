@@ -14,13 +14,12 @@ function PostPage () {
   const [comments, setComments] = useState([])
   const [deletedCommentsCount, setDeletedCommentsCount] = useState(0)
 
-  console.log(comments)
-
   useEffect(() => {
-    async function fetchPost () {
+      async function fetchPost() {
+        setLoading(true)
       try {
         const data = await getPost(params.postId)
-        setPost(data)
+          setPost(data)
         setComments(data.comments)
       } catch (error) {
         if (error.response) {
@@ -35,7 +34,7 @@ function PostPage () {
       }
     }
     fetchPost()
-  }, [])
+  }, [params])
 
   return (
     <>

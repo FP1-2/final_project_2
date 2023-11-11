@@ -19,7 +19,7 @@ function Favourites () {
     async function getPosts () {
       try {
         const data = await getLikedPosts(token, userId)
-        setFavourites(data)
+        setFavourites(data.reverse())
         console.log(data)
       } catch (error) {
         if (error.response) {
@@ -52,7 +52,6 @@ function Favourites () {
       {!error &&
         !loading &&
         favourites
-          .reverse()
           .map(post => <AnotherPost key={post.id} post={post} />)}
     </>
   )

@@ -325,7 +325,7 @@ function AnotherPost ({
             </Box>
           )}
           <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
-            <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
+            <Typography paragraph={true} sx={{ wordWrap: 'break-word', mb: 0 }}>
               {thisPost?.description}
             </Typography>
             {thisPost?.photo != '' ? (
