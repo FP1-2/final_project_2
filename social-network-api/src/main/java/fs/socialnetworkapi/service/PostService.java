@@ -31,14 +31,7 @@ public class PostService {
   private final ModelMapper mapper;
   private final LikeService likeService;
   private final UserService userService;
-  private final NotificationService notificationService;
-
-  @Autowired
   private final NotificationCreator notificationCreator;
-
-  private User getUser() {
-    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-  }
 
   public PostDtoOut findById(Long postId) {
 
@@ -86,7 +79,7 @@ public class PostService {
 
   public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
 
-    User user = getUser();
+    User user = userService.getUser();
 
     Set<User> followings = user.getFollowings();
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
@@ -111,7 +104,9 @@ public class PostService {
   }
 
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
-    User user = getUser();
+
+    User user = userService.getUser();
+
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(TypePost.POST);
@@ -122,7 +117,7 @@ public class PostService {
 
   public PostDtoOut saveByTypeAndOriginalPost(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
 
-    User user = getUser();
+    User user = userService.getUser();
 
     Post originalPost = postRepo.findById(originalPostId)
             .orElseThrow(() -> new PostNotFoundException(
@@ -155,7 +150,7 @@ public class PostService {
   public PostDtoOut getPostById(Long postId) {
     Post post = postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
-    User user = getUser();
+    User user = userService.getUser();
 
     PostDtoOut postDtoOut = mapper.map(post, PostDtoOut.class);
 
@@ -197,7 +192,9 @@ public class PostService {
   }
 
   private List<PostDtoOut> mapListPostToListPostDtoOut(List<Post> allPosts) {
-    User user = getUser();
+
+    User user = userService.getUser();
+
     List<Post> listOriginalPosts = postRepo.findByOriginalPostIn(allPosts);
     List<Like> likes = likeService.findByPostIn(allPosts);
 
