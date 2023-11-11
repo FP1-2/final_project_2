@@ -94,7 +94,7 @@ function CommentWriteWindow ({
       if (response.status === 200) {
         setError(null)
         setCommentsCount((prev) => prev + 1)
-        setComments((prev) => [response.data, ...prev])
+        setComments && setComments((prev) => [response.data, ...prev])
         console.log(response.data);
         close ? handleModalComment() : handleComment()
 
@@ -170,8 +170,8 @@ function CommentWriteWindow ({
 export default CommentWriteWindow
 
 CommentWriteWindow.propTypes = {
-  postId: PropTypes.number,
+  postId: PropTypes.number.isRequired,
   close: PropTypes.func,
-  setCommentsCount: PropTypes.func,
+  setCommentsCount: PropTypes.func.isRequired,
   setComments: PropTypes.func
 }

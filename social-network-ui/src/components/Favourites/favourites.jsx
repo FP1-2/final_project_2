@@ -52,7 +52,7 @@ function Favourites () {
       {!error &&
         !loading &&
         favourites
-          .reverse()
+        //   .reverse()
           .map(post => <AnotherPost key={post.id} post={post} />)}
     </>
   )
