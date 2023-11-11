@@ -49,6 +49,7 @@ public class SecurityService {
     Map<String,Object> claims = new HashMap<>();
     claims.put("roles",user.getRoles());
     claims.put("email", user.getEmail());
+    claims.put("username", user.getUsername());
     claims.put(Claims.ID,user.getId().toString());
 
     return generateToken(claims, user.getEmail());

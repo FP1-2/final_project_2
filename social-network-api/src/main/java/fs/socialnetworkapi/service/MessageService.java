@@ -16,6 +16,7 @@ import fs.socialnetworkapi.repos.MessageRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
@@ -33,7 +34,8 @@ public class MessageService {
   private final MessageRepo messageRepo;
   private final ModelMapper mapper;
   private final UserService userService;
-  private final NotificationService notificationService;
+  @Autowired
+  private final NotificationCreator notificationCreator;
 
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {
 
@@ -94,7 +96,7 @@ public class MessageService {
     message.setText(messageDtoIn.getText());
     message.setUser(user);
     Message messageToSave = messageRepo.save(message);
-    //sendMessageNotification(messageToSave);
+    notificationCreator.messageNotification(messageToSave);
 
     return mapper.map(messageToSave,MessageDtoOut.class);
   }
@@ -110,8 +112,8 @@ public class MessageService {
   }
 
   public void deleteMessage(Message message) {
+    notificationCreator.deleteByMessageId(message.getId());
     messageRepo.delete(message);
-    notificationService.deleteByMessageId(message.getId());
   }
 
   public List<Long> getChatsByUser(Long userId) {
@@ -120,10 +122,6 @@ public class MessageService {
     List<ChatUser> chatUsers = chatUserRepo.findByUser(user);
 
     return chatUsers.stream().map(ChatUser::getChatId).toList();
-  }
-
-  private void sendMessageNotification(Message message) {
-    List<Notification> notifications = new NotificationCreator().messageNotification(message);
   }
 
   private Chat findById(Long chatId) {

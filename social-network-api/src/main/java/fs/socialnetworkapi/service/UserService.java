@@ -10,6 +10,7 @@ import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -32,6 +34,8 @@ public class UserService implements UserDetailsService {
   private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
   private final PostRepo postRepo;
+  @Autowired
+  private final NotificationCreator notificationCreator;
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
@@ -60,8 +64,8 @@ public class UserService implements UserDetailsService {
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
     UserDtoOut userDtoOut = mapper.map(user, UserDtoOut.class);
-    userDtoOut.setUserFollowingCount(getFollowings(userId).size());
-    userDtoOut.setUserFollowersCount(getFollowers(userId).size());
+    userDtoOut.setUserFollowingCount(getFollowingsDto(userId).size());
+    userDtoOut.setUserFollowersCount(getFollowersDto(userId).size());
     userDtoOut.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
     return userDtoOut;
   }
@@ -139,7 +143,7 @@ public class UserService implements UserDetailsService {
     User currentUser = getUser();
 
     User user = findById(userId);
-    sendSubscriberNotification(user);
+    notificationCreator.subscriberNotification(user);
     user.getFollowers().add(currentUser);
     saveUser(user);
   }
@@ -151,27 +155,31 @@ public class UserService implements UserDetailsService {
     saveUser(user);
   }
 
-  public List<UserDtoOut> getFollowers(Long userId) {
-    return findById(userId).getFollowers()
+  public List<UserDtoOut> getFollowersDto(Long userId) {
+    return getFollowers(userId)
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
   }
 
-  public List<UserDtoOut> getFollowings(Long userId) {
-    return findById(userId).getFollowings()
+  public Set<User> getFollowers(Long userId) {
+    return findById(userId).getFollowers();
+  }
+
+  public List<UserDtoOut> getFollowingsDto(Long userId) {
+    return getFollowings(userId)
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
+  }
+
+  public Set<User> getFollowings(Long userId) {
+    return findById(userId).getFollowings();
   }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return findByEmail(username);
-  }
-
-  private void sendSubscriberNotification(User user) {
-    Notification notification = new NotificationCreator().subscriberNotification(user);
   }
 
   public boolean isUsernameUnique(String username) {
