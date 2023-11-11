@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import {fetchChats} from '../thunks/chatThunk'
 import UseUserToken from "../../hooks/useUserToken";
 import getUserId from "../../utils/getUserId";
 import axios from "axios";
