@@ -99,8 +99,10 @@ const theme = createTheme({
               width: "100%",
             }}
           >
-            <div>x</div>
-            <div>New message</div>
+            <Box onClick={() => handleCloseModal()} sx={{
+              cursor: 'pointer'
+            }}>&#10005;</Box>
+            <Box>New message</Box>
             {<Chats /> && <Button onClick={() => sendChat()}>next</Button>}
           </Box>
           <Box
