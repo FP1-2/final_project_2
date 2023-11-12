@@ -20,9 +20,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +41,7 @@ public class UserService implements UserDetailsService {
 
   public User findById(Long userId) {
     return userRepo.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+      .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
   }
 
   public User findByEmail(String email) {
@@ -99,8 +98,8 @@ public class UserService implements UserDetailsService {
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = findByEmail(userDtoIn.getEmail());
     return (userFromDb == null)
-            ? createUser(userDtoIn)
-            : mapper.map(userFromDb, UserDtoOut.class);
+      ? createUser(userDtoIn)
+      : mapper.map(userFromDb, UserDtoOut.class);
   }
 
   private UserDtoOut createUser(UserDtoIn userDtoIn) {
@@ -115,10 +114,10 @@ public class UserService implements UserDetailsService {
 
   private void sendActivationCode(UserDtoIn userDtoIn) {
     String message = String.format(
-            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
-            userDtoIn.getFirstName(),
-            baseUrl,
-            userDtoIn.getActivationCode()
+      "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
+      userDtoIn.getFirstName(),
+      baseUrl,
+      userDtoIn.getActivationCode()
     );
     mailService.send(userDtoIn.getEmail(), "Activation code", message);
   }
@@ -153,16 +152,16 @@ public class UserService implements UserDetailsService {
 
   public List<UserDtoOut> getFollowers(Long userId) {
     return findById(userId).getFollowers()
-            .stream()
-            .map(u -> mapper.map(u, UserDtoOut.class))
-            .toList();
+      .stream()
+      .map(u -> mapper.map(u, UserDtoOut.class))
+      .toList();
   }
 
   public List<UserDtoOut> getFollowings(Long userId) {
     return findById(userId).getFollowings()
-            .stream()
-            .map(u -> mapper.map(u, UserDtoOut.class))
-            .toList();
+      .stream()
+      .map(u -> mapper.map(u, UserDtoOut.class))
+      .toList();
   }
 
   @Override
@@ -188,7 +187,7 @@ public class UserService implements UserDetailsService {
   private List<UserDtoOut> showAllUserWithUsername(List<User> users) {
     return users
       .stream()
-      .map(p->mapper.map(p,UserDtoOut.class))
+      .map(p -> mapper.map(p, UserDtoOut.class))
       .peek(userDtoOut -> {
         userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
         userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
@@ -199,10 +198,27 @@ public class UserService implements UserDetailsService {
 
   public List<UserDtoOut> findPopularUser() {
     List<User> users = userRepo.findAll();
-    UserDtoOut userDtoOut = mapper.map(users, UserDtoOut.class);
-    userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
-    
-//    return userDtoOut;
-    return showAllUserWithUsername(users);
+    List<User> popularUsers = new ArrayList<>();
+
+    for (int i = 0; i < users.size(); i++) {
+      if (users.get(i).getFollowers().size() > 0) {
+        popularUsers.add(users.get(i));
+      }
+    }
+    Comparator followersComparator = new PopularUserComparator();
+    Collections.sort(popularUsers, followersComparator);
+    List<User> fivePopularUser = popularUsers.subList(0,5);
+
+
+
+    return showAllUserWithUsername(fivePopularUser);
   }
+
+  public class PopularUserComparator implements Comparator<User> {
+    @Override
+    public int compare(User o1, User o2) {
+      return o2.getFollowers().size() - o1.getFollowers().size();
+    }
+  }
+
 }
