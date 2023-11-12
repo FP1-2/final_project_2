@@ -28,7 +28,7 @@ import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import CommentWriteWindow from '../ModalComment/CommentWriteWindow'
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
 
 const style = {
   position: 'absolute',
@@ -75,7 +75,7 @@ function AnotherPost ({
 
   useEffect(() => {
     if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
-      setCountComments(thisPost?.countComments - deletedCommentsCount)
+      setCountComments((prev) => prev - deletedCommentsCount)
     }
   }, [deletedCommentsCount])
 
