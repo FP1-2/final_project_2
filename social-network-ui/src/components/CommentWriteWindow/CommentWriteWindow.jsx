@@ -72,6 +72,7 @@ function CommentWriteWindow ({
   }
 
   const handlePost = async () => {
+    if (!description && !photo) return
     try {
       const response = await axios.post(
         `${
