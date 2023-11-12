@@ -289,8 +289,8 @@ public class PostService {
 
     Optional<Post> repost = postRepo.findByUserAndOriginalPostAndTypePost(user, originalPost, TypePost.REPOST);
     if (repost.isPresent())  {
-      notificationCreator.deleteByPost(repost.get());
-      //postRepo.delete(repost.get());
+      //notificationCreator.deleteByPost(repost.get());
+      postRepo.delete(repost.get());
     } else {
       saveByType(user, originalPost, postDtoIn, TypePost.REPOST);
     }

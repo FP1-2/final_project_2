@@ -6,6 +6,7 @@ import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.NotificationRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class NotificationService {
-
+  private final SimpMessagingTemplate messagingTemplate;
   private final NotificationRepo notificationRepo;
 
   private User getUser() {
@@ -22,6 +23,7 @@ public class NotificationService {
   }
 
   public Notification createNewNotification(Notification notification) {
+    //messagingTemplate.convertAndSend(String.format("/topic/user-notification/%d",userId), messageDtoOut);
     return notificationRepo.save(notification);
   }
 
