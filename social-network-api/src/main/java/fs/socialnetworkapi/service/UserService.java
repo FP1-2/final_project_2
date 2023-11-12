@@ -196,4 +196,13 @@ public class UserService implements UserDetailsService {
       })
       .toList();
   }
+
+  public List<UserDtoOut> findPopularUser() {
+    List<User> users = userRepo.findAll();
+    UserDtoOut userDtoOut = mapper.map(users, UserDtoOut.class);
+    userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+    
+//    return userDtoOut;
+    return showAllUserWithUsername(users);
+  }
 }
