@@ -1,32 +1,47 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import { Box, Typography } from '@mui/material'
-import AvatarWithoutImg from '../../components/AvatarWithoutImg/AvatarWithoutImg'
-import Button from '@mui/material/Button'
-import UserTag from '../../components/UserTag/UserTag'
+//MUI
+import {
+	Box,
+	Typography,
+	Button,
+	Avatar,
+	CircularProgress,
+} from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import useUserToken from '../../hooks/useUserToken'
-import axios from 'axios'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+//MUI icons
 import LinkIcon from '@mui/icons-material/Link'
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
-import LinkText from '../../components/LinkText/LinkText'
-import { format } from 'date-fns'
-import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
-import getUserData from '../../api/getUserInfo'
-import { useState } from 'react'
-import Avatar from '@mui/material/Avatar'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
-import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
-import getPostsById from '../../api/getPostsById'
+//Components
+import AvatarWithoutImg from '../../components/AvatarWithoutImg/AvatarWithoutImg'
+import UserTag from '../../components/UserTag/UserTag'
+import LinkText from '../../components/LinkText/LinkText'
+import PostsTypeToogle from '../../components/PostsTypeToogle/PostsTypeToogle'
 import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper'
-import CircularProgress from '@mui/material/CircularProgress'
 import ModalEdit from '../../components/ModalEdit/ModalEdit'
+import ProfilePageSkeleton from './ProfilePageSkeleton/ProfilePageSkeleton'
+import FollowButton from '../../components/FollowButton/FollowButton'
+import ModalFollow from '../../components/ModalFollow/ModalFollow'
+//Custom Hooks
+import useUserToken from '../../hooks/useUserToken'
+import useIsUserFollowing from '../../hooks/useIsUserFollowing'
+//Redux
+import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { openModal } from '../../redux/slices/modalEditSlice'
+import { openModal as openFollowModal } from '../../redux/slices/modalFollowSlice'
+import { closeModal as closeFollowModal } from '../../redux/slices/modalFollowSlice'
+//Router
+import { useNavigate } from 'react-router-dom'
+//API
+import getUserData from '../../api/getUserInfo'
+//NPMs
+import axios from 'axios'
+import { format } from 'date-fns'
+import { debounce } from 'lodash'
 
 const theme = createTheme({
 	typography: {
@@ -64,45 +79,78 @@ const typographyInfoUser = {
 	whiteSpace: 'nowrap',
 }
 
+const itemsPerPage = 10
+
 const ProfilePage = () => {
-	const { token } = useUserToken()
+	//navigate hooks
 	const params = useParams()
 	const navigate = useNavigate()
+	//custom hooks
+	const { token } = useUserToken()
+	const { isFollowing, checkIsFollowing } = useIsUserFollowing(params.userId)
+	//redux
 	const dispatch = useDispatch()
-
 	const localUserId = useSelector(state => state.user?.userId)
-
+	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
+	//user state
 	const [user, setUser] = useState(null)
+	const [userFollowersCountState, setUserFollowersCountState] = useState(0)
+	const [userFollowingCountState, setUserFollowingCountState] = useState(null)
 	const [notEqual, setNotEqual] = useState(false)
-	const [isLoading, setIsLoading] = useState(false)
+	//post state
 	const [isLoadingPosts, setIsLoadingPosts] = useState(false)
 	const [userPosts, setUserPosts] = useState([])
 	const [choosenTypePost, setChoosenTypePost] = useState(0)
-
+	//loading state
+	const [isLoading, setIsLoading] = useState(false)
+	const [isFrstLoad, setIsFrstLoad] = useState(true)
+	const [isLoadingMore, setIsLoadingMore] = useState(false)
+	const [isLoadingMoreFull, setIsLoadingMoreFull] = useState(false)
+	//size state
+	const [userPostsHeight, setUserPostsHeight] = useState(null)
+	const [userScrollHeight, setUserScrollHeight] = useState(null)
+	//page state
+	const [page, setPage] = useState(1)
+	//refs
+	const scrollHeight = useRef()
+	const postRef = useRef()
+	//user const
 	let userBirthdayData = null
 	let userJoinedData = null
 
 	useEffect(() => {
-		if (token) {
+		//user profile info load/upd
+		if (token && !isOpen) {
 			;(async () => {
-				setIsLoading(true)
+				if (isFrstLoad) setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
 				setUser(userData)
-				setIsLoading(false)
+				setUserFollowersCountState(userData.userFollowersCount)
+				if (isFrstLoad) setIsLoading(false)
 			})()
 		}
+	}, [isOpen, params.userId])
+
+	useEffect(() => {
+		//set equal bool, frst load posts, check follow
 		if (Number(localUserId) !== Number(params.userId)) {
 			setNotEqual(false)
 		} else {
 			setNotEqual(true)
 		}
+
+		loadNewPosts(choosenTypePost)
+		checkIsFollowing(params.userId)
+		dispatch(closeFollowModal())
 	}, [params.userId])
 
 	useEffect(() => {
+		//load posts when user change post type
 		loadNewPosts(choosenTypePost)
 	}, [choosenTypePost])
 
 	if (user) {
+		//create right format date
 		userBirthdayData = `Born ${format(new Date(user.birthday), 'MMMM d, yyyy')}`
 		userJoinedData = `Joined ${new Intl.DateTimeFormat('en', {
 			month: 'short',
@@ -112,9 +160,12 @@ const ProfilePage = () => {
 	}
 
 	const loadNewPosts = (btnNum = 0) => {
+		//firs load posts
 		;(async () => {
 			try {
 				setIsLoadingPosts(true)
+				setUserPosts([]) // change later
+
 				const { data } = await axios.get(
 					`${process.env.REACT_APP_SERVER_URL || ''}${objPosts[btnNum]}${
 						params.userId
@@ -125,7 +176,6 @@ const ProfilePage = () => {
 						},
 					}
 				)
-				console.log(data)
 				setUserPosts([...data])
 				setIsLoadingPosts(false)
 			} catch (error) {
@@ -134,18 +184,131 @@ const ProfilePage = () => {
 		})()
 	}
 
+	const handleFollowChange = async (userId, follow) => {
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/${
+					follow ? 'subscribe' : 'unsubscribe'
+				}/${userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			console.log(`user is ${follow ? 'subscribe' : 'unsubscribe'}`)
+			setUserFollowersCountState(prev => (follow ? prev + 1 : prev - 1))
+		} catch (error) {
+			console.error(error)
+		} finally {
+			checkIsFollowing(userId)
+		}
+	}
+
+	//pagination >>>>
+
+	useEffect(() => {
+		//scroll listener for inf pagination
+		const myElement = scrollHeight.current
+
+		const handleScroll = debounce(() => {
+			if (myElement) {
+				const scrollPosition = myElement.scrollTop
+				setUserScrollHeight(scrollPosition)
+			}
+		}, 100)
+
+		if (myElement) {
+			myElement.addEventListener('scroll', handleScroll)
+		}
+
+		return () => {
+			if (myElement) {
+				myElement.removeEventListener('scroll', handleScroll)
+			}
+		}
+	}, [scrollHeight.current, isLoading])
+
+	useEffect(() => {
+		//inf pagination logic
+		if (userScrollHeight && userPostsHeight) {
+			if (
+				userScrollHeight >= userPostsHeight * 0.5 &&
+				Number(user.userTweetCount) !== userPosts.length &&
+				!isLoadingMore
+			) {
+				loadMorePosts()
+			}
+			if (Number(user.userTweetCount) === userPosts.length) {
+				setIsLoadingMoreFull(true)
+			}
+		}
+	}, [userScrollHeight])
+
+	useEffect(() => {
+		//set user post height for inf pag
+		if (postRef.current) {
+			setUserPostsHeight(postRef.current?.scrollHeight)
+		}
+	}, [postRef.current, userScrollHeight, userPosts])
+
+	const loadMorePosts = async () => {
+		//load more posts with pagination
+		if (isLoadingMore) return
+
+		setIsLoadingMore(true)
+
+		try {
+			const { data } = await axios.get(
+				`${process.env.REACT_APP_SERVER_URL || ''}${objPosts[choosenTypePost]}${
+					params.userId
+				}?page=${page}&itemsPerPage=${itemsPerPage}`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			if (data.length > 0) {
+				setUserPosts(prevPosts => [...prevPosts, ...data])
+				setPage(prevPage => prevPage + 1)
+			}
+		} catch (error) {
+			console.error(error)
+		} finally {
+			setIsLoadingMore(false)
+		}
+	}
+
+	//<<<< pagination
+
 	const goBackFunc = () => {
+		//navigation back
 		if (!notEqual) {
 			navigate(-1)
 		}
 	}
 	if (isLoading) {
+		//skeleton
 		return <ProfilePageSkeleton />
 	}
 	return (
 		<ThemeProvider theme={theme}>
 			{user && <ModalEdit user={user} setUser={setUser} />}
-			<Box>
+			<ModalFollow />
+			<Box
+				ref={scrollHeight}
+				sx={{
+					overflow: 'scroll',
+					height: '100vh',
+					'&::-webkit-scrollbar': {
+						width: '0',
+					},
+					// '&::-webkit-scrollbar-thumb': {
+					// 	background: 'red',
+					// },
+				}}
+			>
 				{user && (
 					<Box
 						sx={{
@@ -170,6 +333,7 @@ const ProfilePage = () => {
 									<KeyboardBackspaceIcon
 										sx={{
 											fontSize: '28px',
+											cursor: 'pointer',
 										}}
 										onClick={goBackFunc}
 									/>
@@ -287,19 +451,11 @@ const ProfilePage = () => {
 									</Button>
 								)}
 								{!notEqual && (
-									<Button
-										sx={{
-											marginTop: '1rem',
-											p: 1,
-											paddingX: '1.1rem',
-											border: '1px solid black',
-											borderRadius: '3rem',
-											textTransform: 'none',
-											color: 'black',
-										}}
-									>
-										<Typography sx={{ fontSize: '0.9rem' }}>Follow</Typography>
-									</Button>
+									<FollowButton
+										userId={params.userId}
+										handleFollowChange={handleFollowChange}
+										isFollowing={isFollowing}
+									/>
 								)}
 							</Box>
 							<Box
@@ -375,31 +531,39 @@ const ProfilePage = () => {
 										)}
 									</Box>
 								</Box>
-								<Box // need to rework box to links
-									sx={{
-										display: 'flex',
-										justifyContent: 'flex-start',
-										alignItems: 'center',
-										gap: '30px',
-									}}
-								>
-									<Box sx={{ display: 'flex', gap: '5px' }}>
-										<Typography variant='p' sx={{ fontWeight: 700 }}>
-											{user.userFollowingCount}
-										</Typography>
-										<Typography sx={{ opacity: 0.6 }} variant='p'>
-											Following
-										</Typography>
+								{userFollowersCountState !== (null || undefined) && (
+									<Box // need to rework box to links
+										sx={{
+											display: 'flex',
+											justifyContent: 'flex-start',
+											alignItems: 'center',
+											gap: '30px',
+										}}
+									>
+										<Box
+											sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
+											onClick={() => dispatch(openFollowModal('followings'))}
+										>
+											<Typography variant='p' sx={{ fontWeight: 700 }}>
+												{user.userFollowingCount}
+											</Typography>
+											<Typography sx={{ opacity: 0.6 }} variant='p'>
+												Following
+											</Typography>
+										</Box>
+										<Box
+											sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
+											onClick={() => dispatch(openFollowModal('followers'))}
+										>
+											<Typography variant='p' sx={{ fontWeight: 700 }}>
+												{userFollowersCountState}
+											</Typography>
+											<Typography sx={{ opacity: 0.6 }} variant='p'>
+												Followers
+											</Typography>
+										</Box>
 									</Box>
-									<Box sx={{ display: 'flex', gap: '5px' }}>
-										<Typography variant='p' sx={{ fontWeight: 700 }}>
-											{user.userFollowersCount}
-										</Typography>
-										<Typography sx={{ opacity: 0.6 }} variant='p'>
-											Followers
-										</Typography>
-									</Box>
-								</Box>
+								)}
 							</Box>
 						</Box>
 					</Box>
@@ -418,8 +582,30 @@ const ProfilePage = () => {
 					}}
 				>
 					{isLoadingPosts && <CircularProgress size={80} />}
-					{userPosts.length !== 0 && <PostWrapper tweets={userPosts} />}
-					{!isLoadingPosts && !userPosts.length && (
+					{userPosts.length !== 0 && (
+						<Box
+							sx={{
+								p: 2,
+								width: '100%',
+							}}
+							ref={postRef}
+						>
+							<PostWrapper tweets={userPosts} />
+						</Box>
+					)}
+					{!isLoadingPosts && !userPosts.length && !isLoadingMoreFull && (
+						<Typography
+							sx={{
+								fontWeight: 700,
+								fontSize: '36px',
+								color: 'gray',
+								opacity: 0.5,
+							}}
+						>
+							No Posts Available
+						</Typography>
+					)}
+					{isLoadingMoreFull && !isLoadingPosts && (
 						<Typography
 							sx={{
 								fontWeight: 700,

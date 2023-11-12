@@ -1,15 +1,16 @@
-import * as React from 'react'
-import { Box, Typography } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
-import Modal from '@mui/material/Modal'
-import { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+//MUI
+import { Box, Typography, CircularProgress, Modal } from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+//redux
 import { useDispatch, useSelector } from 'react-redux'
 import { resetRegisterData } from '../../redux/slices/registerSlice'
+import { closeModal } from '../../redux/slices/modalSignUpSlice'
+//Components
 import IconTwitter from '../IconTwitter/IconTwitter'
 import ModalRegisterWindowFrstStep from './ModalRegisterWindowFrstStep/ModalRegisterWindowFrstStep'
 import ModalRegisterWindowSecondStep from './ModalRegisterWindowSecondStep/ModalRegisterWindowSecondStep'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { closeModal } from '../../redux/slices/modalSlice'
+//NPMs
 import { debounce } from 'lodash'
 
 const style = {
@@ -51,18 +52,18 @@ const style = {
 }
 
 const ModalRegisterWindow = () => {
-	const dispatch = useDispatch()
-
-	const modalHeight = useRef(null)
-
-	const [isLoading, setIsLoading] = useState(false)
+	//states
 	const [registerStep, setRegisterStep] = useState(1) // register step
 	const [heightModalBelow, setHeightModalBelow] = useState(false)
 	const [heightModalCountBelow, setHeightModalCountBelow] = useState(0)
 	const [isRegisterDone, setIsRegisterDone] = useState(false) // register done status
+	const [isLoading, setIsLoading] = useState(false)
 	const [isOkayAlert, setIsOkayAlert] = useState(false)
-
-	const isModalOpen = useSelector(state => state.modal.modalProps.isOpen) // modal status
+	//redux
+	const dispatch = useDispatch()
+	const isModalOpen = useSelector(state => state.modalSignUp.modalProps.isOpen) // modal status
+	//refs
+	const modalHeight = useRef(null)
 
 	const handleClose = () => {
 		// close modal window
@@ -70,6 +71,7 @@ const ModalRegisterWindow = () => {
 		setRegisterStep(1)
 	}
 	useEffect(() => {
+		//set window height
 		const handleResize = debounce(() => {
 			const windowHeight = window.innerHeight
 			if (windowHeight < 820) {

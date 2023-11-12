@@ -1,8 +1,10 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
@@ -18,9 +20,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -82,22 +83,17 @@ public class UserService implements UserDetailsService {
     User user = getUser();
     String email = user.getEmail();
     User userFromDb = findByEmail(email);
-    LocalDateTime createdDateUser = userFromDb.getCreatedDate();
-    user.setFirstName(userDtoIn.getFirstName());
-    user.setLastName(userDtoIn.getLastName());
-    user.setBirthday(userDtoIn.getBirthday());
-    user.setMainPhoto(userDtoIn.getMainPhoto());
-    user.setAvatar(userDtoIn.getAvatar());
-    user.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
-    user.setAddress(userDtoIn.getAddress());
-    user.setRoles("USER");
-    user.setActive(true);
-    user.setCreatedDate(createdDateUser);
-    user.setUsername(userDtoIn.getUsername());
-    user.setUserDescribe(userDtoIn.getUserDescribe());
-    user.setBgProfileImage(userDtoIn.getBgProfileImage());
-    user.setUserLink(userDtoIn.getUserLink());
-    return mapper.map(saveUser(user), UserDtoOut.class);
+    userFromDb.setFirstName(userDtoIn.getFirstName());
+    userFromDb.setLastName(userDtoIn.getLastName());
+    userFromDb.setBirthday(userDtoIn.getBirthday());
+    userFromDb.setMainPhoto(userDtoIn.getMainPhoto());
+    userFromDb.setAvatar(userDtoIn.getAvatar());
+    userFromDb.setUsername(userDtoIn.getUsername());
+    userFromDb.setAddress(userDtoIn.getAddress());
+    userFromDb.setUserDescribe(userDtoIn.getUserDescribe());
+    userFromDb.setBgProfileImage(userDtoIn.getBgProfileImage());
+    userFromDb.setUserLink(userDtoIn.getUserLink());
+    return mapper.map(saveUser(userFromDb), UserDtoOut.class);
   }
 
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
@@ -119,7 +115,7 @@ public class UserService implements UserDetailsService {
 
   private void sendActivationCode(UserDtoIn userDtoIn) {
     String message = String.format(
-            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %s/api/v1/activate/%s",
+            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
             userDtoIn.getFirstName(),
             baseUrl,
             userDtoIn.getActivationCode()
@@ -139,14 +135,11 @@ public class UserService implements UserDetailsService {
     return true;
   }
 
-  public void upgradeUser(User user) {
-    userRepo.save(user);
-  }
-
   public void subscribe(Long userId) {
     User currentUser = getUser();
 
     User user = findById(userId);
+    sendSubscriberNotification(user);
     user.getFollowers().add(currentUser);
     saveUser(user);
   }
@@ -175,5 +168,32 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return findByEmail(username);
+  }
+
+  private void sendSubscriberNotification(User user) {
+    Notification notification = new NotificationCreator().subscriberNotification(user);
+  }
+
+  public boolean isUsernameUnique(String username) {
+    User user = getUser();
+    return userRepo.findByUsername(username) == null
+      || Objects.equals(user.getId(), userRepo.findByUsername(username).getId());
+  }
+
+  public List<UserDtoOut> findByUsername(String username) {
+    List<User> users = userRepo.searchByUsernameLike(username);
+    return showAllUserWithUsername(users);
+  }
+
+  private List<UserDtoOut> showAllUserWithUsername(List<User> users) {
+    return users
+      .stream()
+      .map(p->mapper.map(p,UserDtoOut.class))
+      .peek(userDtoOut -> {
+        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
+      })
+      .toList();
   }
 }

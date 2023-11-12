@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,7 @@ public class PostService {
   private final ModelMapper mapper;
   private final LikeService likeService;
   private final UserService userService;
+  private final NotificationCreator notificationCreator;
 
   public PostDtoOut findById(Long postId) {
 
@@ -62,7 +65,7 @@ public class PostService {
     return mapListPostToListPostDtoOut(allPosts);
   }
 
-  public List<PostDtoOut> getProfileType(Long userId, TypePost typePost,  Integer page, Integer size ) {
+  public List<PostDtoOut> getProfilePostByType(Long userId, TypePost typePost, Integer page, Integer size ) {
     User user = userService.findById(userId);
 
     PageRequest pageRequest = getPageRequest(page, size);
@@ -86,8 +89,8 @@ public class PostService {
 
   }
 
-  public List<PostDtoOut> getPostByUserLikes(Long userId) {
-    List<Like> likeList = likeService.findByUserId(userId);
+  public List<PostDtoOut> getPostByUserLikes(Long userId, Integer page, Integer size) {
+    List<Like> likeList = likeService.findByUserId(userId, page, size);
     return findByLikesIn(likeList);
 
   }
@@ -105,11 +108,32 @@ public class PostService {
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
     post.setTypePost(TypePost.POST);
-    return mapper.map(postRepo.save(post), PostDtoOut.class);
+    Post postToSave = save(post, TypePost.POST);
+
+    return mapper.map(postToSave, PostDtoOut.class);
+  }
+
+  public PostDtoOut saveByTypeAndOriginalPost(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
+
+    User user = userService.getUser();
+
+    Post originalPost = postRepo.findById(originalPostId)
+            .orElseThrow(() -> new PostNotFoundException(
+                    String.format("Original post with id: %d not found", originalPostId)));
+
+    switch (typePost) {
+      case REPOST:
+        return saveOrDeleteRepost(user, originalPost, postDtoIn, TypePost.REPOST);
+
+      case COMMENT:
+        return saveByType(user, originalPost, postDtoIn, TypePost.COMMENT);
+
+      default:
+        return getPostById(originalPostId);
+    }
   }
 
   public void deletePost(Long postId) {
-
     postRepo.deleteById(postId);
   }
 
@@ -121,23 +145,6 @@ public class PostService {
     post.setDescription(postDtoIn.getDescription());
     post.setPhoto(postDtoIn.getPhoto());
     return mapper.map(postRepo.save(post), PostDtoOut.class);
-  }
-
-  public PostDtoOut saveByType(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
-
-    User user = userService.getUser();
-
-    Post originalPost = postRepo.findById(originalPostId)
-            .orElseThrow(() -> new PostNotFoundException(
-                    String.format("Original post with id: %d not found", originalPostId)));
-
-    Post post = mapper.map(postDtoIn, Post.class);
-    post.setUser(user);
-    post.setTypePost(typePost);
-    post.setOriginalPost(originalPost);
-    postRepo.save(post);
-
-    return getPostById(originalPostId);
   }
 
   public PostDtoOut getPostById(Long postId) {
@@ -178,6 +185,17 @@ public class PostService {
             .anyMatch(p -> p.getUser().equals(user)));
 
     return postDtoOut;
+  }
+
+  public List<PostDtoOut> getCommentsByPost(Long postId, Integer page, Integer size) {
+
+    Post post = postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
+
+    PageRequest pageRequest = getPageRequest(page, size);
+    List<Post> allPosts = postRepo.findByOriginalPostAndTypePost(post, TypePost.COMMENT, pageRequest).stream().toList();
+
+    return mapListPostToListPostDtoOut(allPosts);
   }
 
   private PageRequest getPageRequest(Integer page, Integer size) {
@@ -222,9 +240,11 @@ public class PostService {
             .stream()
             .filter(p -> p.getUser().equals(user)
                     && p.getTypePost().equals(TypePost.REPOST))
+            .map(p -> p.getOriginalPost().getId())
+            .distinct()
             .collect(Collectors.toMap(
-              p -> p.getOriginalPost().getId(),
-              p -> true
+              id -> id,
+              id -> true
             ));
   }
 
@@ -233,18 +253,22 @@ public class PostService {
             .stream()
             .filter(p -> p.getUser().equals(user)
                     && p.getTypePost().equals(TypePost.COMMENT))
+            .map(p -> p.getOriginalPost().getId())
+            .distinct()
             .collect(Collectors.toMap(
-              p -> p.getOriginalPost().getId(),
-              p -> true
+              id -> id,
+              id -> true
             ));
   }
 
   private Map<Long, Boolean> getUserLikesStatusMap(List<Like> likes, User user) {
     return likes.stream()
             .filter(like -> like.getUser().equals(user))
+            .map(p -> p.getPost().getId())
+            .distinct()
             .collect(Collectors.toMap(
-              like -> like.getPost().getId(),
-              like -> true
+              id -> id,
+              id -> true
             ));
   }
 
@@ -272,5 +296,34 @@ public class PostService {
             .collect(Collectors.groupingBy(
               like -> like.getPost().getId(),
               Collectors.counting()));
+  }
+
+  private PostDtoOut saveOrDeleteRepost(User user, Post originalPost, PostDtoIn postDtoIn, TypePost typePost) {
+
+    Optional<Post> repost = postRepo.findByUserAndOriginalPostAndTypePost(user, originalPost, TypePost.REPOST);
+    if (repost.isPresent())  {
+      postRepo.delete(repost.get());
+    } else {
+      saveByType(user, originalPost, postDtoIn, typePost);
+    }
+
+    return getPostById(originalPost.getId());
+  }
+
+  private PostDtoOut saveByType(User user, Post originalPost, PostDtoIn postDtoIn, TypePost typePost) {
+
+    Post post = mapper.map(postDtoIn, Post.class);
+    post.setUser(user);
+    post.setTypePost(typePost);
+    post.setOriginalPost(originalPost);
+    Post postToSave = save(post, typePost);
+
+    return getPostById(postToSave.getId());
+  }
+
+  private Post save(Post post, TypePost typePost) {
+    Post postToSave = postRepo.save(post);
+    //notificationCreator.sendPostByTypePost(postToSave, typePost);
+    return postToSave;
   }
 }

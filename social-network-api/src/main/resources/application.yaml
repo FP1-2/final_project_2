@@ -7,6 +7,8 @@ DB_PASSWORD:
 server:
   port: 5000
 
+
+
 spring:
      profiles:
        active: prod #local #prod #
@@ -25,6 +27,7 @@ spring:
        sender: # отправитель письма (его почта и имя)
          email: test@gmail.com
 #      text: no-reply
+
 jwt:
   password:
     encoder:
@@ -36,7 +39,9 @@ jwt:
   issuer: finalproject
 
 myapp:
-  baseUrl: http://twitterdanit.us-east-1.elasticbeanstalk.com
+  baseUrl: http://twitter-demo.us-east-1.elasticbeanstalk.com/
+
+
 
 # local profile
 ---

@@ -1,12 +1,20 @@
 import React from 'react'
-// import Post from "../Post/Post";
-import Post from '../../Post/post'
 import PropTypes from 'prop-types'
+import AnotherPost from '../../AnotherPost/AnotherPost'
+import { Box } from '@mui/material'
 
 const PostWrapper = ({ tweets }) => {
-	console.log(tweets)
 	return (
-		<>{tweets && tweets.map(tweet => <Post post={tweet} key={tweet.id} />)}</>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				gap: 3.5,
+			}}
+		>
+			{tweets &&
+				tweets.map(tweet => <AnotherPost post={tweet} key={tweet.id} />)}
+		</Box>
 	)
 }
 

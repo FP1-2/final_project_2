@@ -1,3 +1,5 @@
+import React, { useState } from 'react'
+//MUI
 import styled from '@emotion/styled'
 import {
 	Box,
@@ -6,24 +8,27 @@ import {
 	FormControlLabel,
 	FormGroup,
 	Typography,
+	Avatar,
 } from '@mui/material'
-import Avatar from '@mui/material/Avatar'
-import { Form, Formik } from 'formik'
-import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+//Redux
 import { useDispatch, useSelector } from 'react-redux'
-import * as Yup from 'yup'
 import {
 	register,
 	resetRegisterData,
 } from '../../../redux/slices/registerSlice'
+//components
 import CustomInput from '../../CustomInput/CustomInput'
 import LinkText from '../../LinkText/LinkText'
-import { useNavigate } from 'react-router-dom'
-import postRegistrationData from '../../../api/authApi'
-
-import axios from 'axios'
 import AvatarWithoutImg from '../../AvatarWithoutImg/AvatarWithoutImg'
+//router
+import { useNavigate } from 'react-router-dom'
+//api
+import postRegistrationData from '../../../api/authApi'
+//NPMs
+import { Form, Formik } from 'formik'
+import PropTypes from 'prop-types'
+import * as Yup from 'yup'
+import axios from 'axios'
 
 const VisuallyHiddenInput = styled('input')`
 	clip: rect(0 0 0 0);
@@ -46,6 +51,7 @@ const initialValues = {
 }
 
 const validationSchema = Yup.object({
+	//schema
 	city: Yup.string()
 		.required('Required')
 		.min(3, 'City must be at least 4 characters'),
@@ -71,26 +77,25 @@ const ModalRegisterWindowSecondStep = ({
 	setIsRegisterDone,
 	setIsOkayAlert,
 }) => {
-	const dispatch = useDispatch()
-
+	//states
 	const [dataProcessing, setDataProcessing] = useState(false) // data processing checkbox
 	const [subscribeNewsletter, setSubscribeNewsletter] = useState(false) // subscribe news checkbox
 	const [isCreatingPassword, setIsCreatingPassword] = useState(false) // creating password step
-
-	let navigate = useNavigate()
-
+	const [imageUrl, setImageUrl] = useState('') // image url
+	const [error, setError] = useState('') // error
+	//redux
+	const dispatch = useDispatch()
 	const registerName = useSelector(
 		state => state.register.registerData?.firstName
 	) // register user name
-
 	const userObj = useSelector(state => state.register.registerData) // register user object
+	//router
+	let navigate = useNavigate()
 
+	//env
 	const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME // Cloudinary cloud name
 
 	const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET // Cloudinary upload preset
-
-	const [imageUrl, setImageUrl] = useState('') // image url
-	const [error, setError] = useState('') // error
 
 	const handleImageUpload = async event => {
 		// image upload

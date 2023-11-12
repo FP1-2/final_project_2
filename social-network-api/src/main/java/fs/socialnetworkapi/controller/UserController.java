@@ -1,6 +1,5 @@
 package fs.socialnetworkapi.controller;
 
-
 import fs.socialnetworkapi.dto.EmailRequest;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.password.PasswordResetRequest;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
 
 @RestController
@@ -61,8 +59,16 @@ public class UserController {
   }
 
   @PostMapping("edit")
-  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn ) {
-    return ResponseEntity.ok(userService.editUser(userDtoIn));
+  public ResponseEntity<UserDtoOut> edit(@Valid @RequestBody UserDtoIn userDtoIn) {
+    if (userService.isUsernameUnique(userDtoIn.getUsername())) {
+      return ResponseEntity.ok(userService.editUser(userDtoIn));
+    }
+    return ResponseEntity.status(409).build();
+  }
+
+  @GetMapping("username-checker/{username}")
+  public boolean usernameChecker(@PathVariable String username) {
+    return userService.isUsernameUnique(username);
   }
 
   @PostMapping("login")
@@ -75,16 +81,20 @@ public class UserController {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
   }
 
-  @GetMapping("activate/{code}")
-  public ResponseEntity<Model> activate(Model model, @PathVariable String code) {
-    boolean isActivated = userService.activateUser(code);
+  @GetMapping("find-user/{username}")
+  public List<UserDtoOut> findUser(@PathVariable String username) {
+    return userService.findByUsername(username);
+  }
 
+  @GetMapping("activate/{code}")
+  public ResponseEntity<String> activate(Model model, @PathVariable String code) {
+    boolean isActivated = userService.activateUser(code);
     if (isActivated) {
       model.addAttribute("message", "User successfully activated");
     } else {
       model.addAttribute("message", "Activation code is not found!");
     }
-    return ResponseEntity.ok(model);
+    return ResponseEntity.ok(model.toString());
   }
 
   @PostMapping("reset/request")
