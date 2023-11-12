@@ -9,7 +9,7 @@ function ChatMembers({ chatmembers, fetchMessages }) {
   return (
     <>
       {lastMessage && (
-        <div>
+        <Box key={chatmembers.id}>
           <Box
             onClick={() => fetchMessages(chatmembers.id)}
             sx={{
@@ -56,60 +56,17 @@ function ChatMembers({ chatmembers, fetchMessages }) {
                 flexDirection: "column",
               }}
             >
-              <div>
+              <Box>
                 <div>{lastMessage.user.firstName}</div>
 
                 <div>{lastMessage.user.username}</div>
-              </div>
+              </Box>
 
               <div>{lastMessage.text}</div>
             </Box>
           </Box>
-        </div>
+        </Box>
       )}
-      {/* {chatmembers.lastMessage.map((lastMessage, index) => ( */}
-      {}
-      {/* <div >
-          <Box
-            onClick={() => fetchMessages(chatmembers.id)}
-            sx={{
-              display: "flex",
-              cursor: "pointer",
-              width: "100%",
-              "&:hover": {
-                background: "rgba(0, 0, 0, 0.04)",
-              },
-            }}
-          >
-            <Box>
-              {lastMessage.user.avatar ? (
-                <Avatar
-                  sx={{
-                    width: "3rem",
-                    height: "3rem",
-                    mb: 1,
-                  }}
-                  src={lastMessage.user.avatar}
-                ></Avatar>
-              ) : (
-                <Avatar   sx={{
-                    width: "3rem",
-                    height: "3rem",
-                    mb: 1,
-                  }}> {lastMessage.user.username?.charAt(0).toUpperCase()} </Avatar>
-              )}
-            </Box>
-
-            <Box>{lastMessage.user.firstName}</Box>
-
-            <Box>{lastMessage.user.username}</Box>
-            <Box>
-              {lastMessage.text}
-            </Box>
-          </Box>
-        </div> */}
-      {/* )) */}
-      {/* } */}
     </>
   );
 }

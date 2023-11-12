@@ -1,29 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Avatar, Box, CssBaseline, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Chats from "../../components/Chats/Chats";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import classNames from "classnames";
 import styles from "./MessagePage.module.scss";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import Message from "../../components/Message/Message";
+// import Message2 from "../../components/Message/Message2"
 import ModalNewChat from "../../components/ModalNewChat/ModalNewChat";
 import { openChatModal } from "../../redux/slices/chatSlice";
-
+import { fetchChats } from "../../redux/thunks/chatThunk";
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 function MessagePage() {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
   const isOpen = useSelector((state) => state.chat.modalProps.isOpenChat);
-
+  const userId = useSelector((state) => state.user?.userId);
   const messages = useSelector((state) => state.chat.messages);
 
   const handleOpenModal = () => {
     dispatch(openChatModal());
   };
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchChats(userId));
+    }
+  }, [dispatch, userId]);
 
   //  const handleSearch = async () => {
   //   try {
@@ -43,8 +47,15 @@ function MessagePage() {
   //     e.target.value === "Enter" && handleSearch()
   //     setChatComponentActive(true)
   //   }
-
+	const theme = createTheme({
+		typography: {
+			p: {
+			fontFamily: 'Segoe UI, sans-serif',
+		},
+		},
+	})
   return (
+    <ThemeProvider theme={theme}>
     <Box>
       <Box
         sx={{
@@ -78,14 +89,13 @@ function MessagePage() {
               className={styles.searchInput}
             />
           </div>
-          <div></div>
-          {/* </Box>
-        <Box> */}
+
+        
         </Box>
         <Box
           sx={{
             display: "flex",
-            // justifyContent: 'space-between'
+           
           }}
         >
           <Box
@@ -108,12 +118,10 @@ function MessagePage() {
               <div className={styles.subLeftGrid}>
                 <div className={styles.subLeft}>
                   <h2>Select a message </h2>
-
                   <p>
                     Choose from your existing conversations, start a new one, or
                     just keep swimming.
                   </p>
-
                   {isOpen && <ModalNewChat />}
                   <Button
                     variant="contained"
@@ -143,6 +151,7 @@ function MessagePage() {
         </Box>
       </Box>
     </Box>
+    </ThemeProvider>
   );
 }
 
