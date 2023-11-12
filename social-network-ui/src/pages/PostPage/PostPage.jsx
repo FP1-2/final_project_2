@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef  } from 'react'
 import { useParams } from 'react-router-dom'
 import AnotherPost from '../../components/AnotherPost/AnotherPost'
 import getPost from '../../api/getPost'
@@ -13,13 +13,16 @@ function PostPage () {
   const [post, setPost] = useState({})
   const [comments, setComments] = useState([])
   const [deletedCommentsCount, setDeletedCommentsCount] = useState(0)
+  const [isComment, setIsComment] = useState(false)
+  const bottomRef = useRef();
 
   useEffect(() => {
       async function fetchPost() {
         setLoading(true)
       try {
         const data = await getPost(params.postId)
-          setPost(data)
+        setPost(data)
+        data.typePost === 'COMMENT' ? setIsComment(true) : setIsComment(false)
         setComments(data.comments)
       } catch (error) {
         if (error.response) {
@@ -34,7 +37,12 @@ function PostPage () {
       }
     }
     fetchPost()
+    
   }, [params])
+
+  useEffect(() => {
+    isComment && bottomRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  });
 
   return (
     <>
@@ -46,13 +54,20 @@ function PostPage () {
 
       {error && <h2>{error}</h2>}
 
-      {!error && !loading && (
+      {!error && !loading && (<>
+        {isComment &&
+          <AnotherPost
+            post={post.originalPost}
+            deletedCommentsCount={deletedCommentsCount}
+           />}
         <AnotherPost
           post={post}
           setComments={setComments}
           hasCommentWriteWindow={true}
           deletedCommentsCount={deletedCommentsCount}
         />
+        <div ref={bottomRef}></div>
+        </>
       )}
       {!error &&
         !loading &&

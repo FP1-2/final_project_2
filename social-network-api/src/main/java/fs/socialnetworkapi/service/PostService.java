@@ -187,6 +187,17 @@ public class PostService {
     return postDtoOut;
   }
 
+  public List<PostDtoOut> getCommentsByPost(Long postId, Integer page, Integer size) {
+
+    Post post = postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
+
+    PageRequest pageRequest = getPageRequest(page, size);
+    List<Post> allPosts = postRepo.findByOriginalPostAndTypePost(post, TypePost.COMMENT, pageRequest).stream().toList();
+
+    return mapListPostToListPostDtoOut(allPosts);
+  }
+
   private PageRequest getPageRequest(Integer page, Integer size) {
     return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
   }
