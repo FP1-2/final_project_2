@@ -51,8 +51,8 @@ function AnotherPost ({
   deletedCommentsCount,
   setDeletedCommentsCount
 }) {
-  const isRepost = post.typePost === 'REPOST'
-  const isComment = post.typePost === 'COMMENT'
+  const isRepost = post?.typePost === 'REPOST'
+  const isComment = post?.typePost === 'COMMENT'
   let thisPost
   isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
   const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
