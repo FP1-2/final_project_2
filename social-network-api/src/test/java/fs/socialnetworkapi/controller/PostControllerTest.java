@@ -415,4 +415,39 @@ public class PostControllerTest {
         assertEquals("New Description1", postDtoOuts.get(0).getDescription());
     }
 
+    @Test
+    public void testGetCommentsByPostWithToken() throws Exception {
+
+        List<PostDtoOut> postDtoOuts = List.of(postDtoOut1, postDtoOut2, postDtoOut3);
+
+        Mockito.when(postService.getCommentsByPost(eq(1L),eq(0),eq(5))).thenReturn(postDtoOuts);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/v1/post/{post_id}/get-comments?page=0&size=5", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseJson = mvcResult.getResponse().getContentAsString();
+        postDtoOuts = objectMapper.readValue(responseJson, new TypeReference<List<PostDtoOut>>(){});
+
+        assertEquals(3, postDtoOuts.size());
+
+        assertEquals(1L, postDtoOuts.get(0).getId());
+        assertEquals(userDtoOut1, postDtoOuts.get(0).getUser());
+        assertEquals("URL photo1", postDtoOuts.get(0).getPhoto());
+        assertEquals("New Description1", postDtoOuts.get(0).getDescription());
+    }
+
+    @Test
+    public void testGetCommentsByPostWithoutToken() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/v1/post/{post_id}/get-comments?page=0&size=5", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isForbidden());
+    }
 }
