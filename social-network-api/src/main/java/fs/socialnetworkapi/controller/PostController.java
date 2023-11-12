@@ -111,6 +111,11 @@ public class PostController {
     return ResponseEntity.ok(posts);
   }
 
-
-
+  @GetMapping("post/{post_id}/get-comments")
+  public ResponseEntity<List<PostDtoOut>> getCommentsByPost(@PathVariable("post_id") Long postId,
+                                                             @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                             @RequestParam(value = "size", defaultValue = "10") Integer size) {
+    List<PostDtoOut> posts = postService.getCommentsByPost(postId, page, size);
+    return ResponseEntity.ok(posts);
+  }
 }
