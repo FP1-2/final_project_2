@@ -43,7 +43,7 @@ public class NotificationCreator {
     notification.setPost(like.getPost());
     notification.setUser(like.getUser());
     notification.setType(NotificationType.LIKE);
-    notification.setLink(String.format("%s/api/v1/%d", baseUrl, like.getPost().getId()));
+    notification.setLink(String.format("%s/#/%d", baseUrl, like.getPost().getId()));
     notification.setText(String.format("User %s liked your post %s",
       notification.getUser().getUsername(),
       notification.getPost().getDescription()));
@@ -70,7 +70,7 @@ public class NotificationCreator {
       notification.setPost(post);
       notification.setUser(post.getUser());
       notification.setType(NotificationType.FEATURED);
-      notification.setLink(String.format("%s/api/v1/%d", baseUrl, post.getId()));
+      notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
       notification.setText(String.format("Your featured user %s has new post: %s",
         notification.getUser().getUsername(),
         notification.getPost().getDescription()));
@@ -87,7 +87,7 @@ public class NotificationCreator {
     notification.setPost(post);
     notification.setUser(post.getUser());
     notification.setType(NotificationType.REPOST);
-    notification.setLink(String.format("%s/api/v1/%d", baseUrl, post.getId()));
+    notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s reposted your post: %s",
       notification.getUser().getUsername(),
       notification.getPost().getDescription()));
@@ -103,7 +103,7 @@ public class NotificationCreator {
     notification.setPost(post);
     notification.setUser(post.getUser());
     notification.setType(NotificationType.REPOST);
-    notification.setLink(String.format("%s/api/v1/%d", baseUrl, post.getId()));
+    notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s commented your post: %s",
             notification.getUser().getUsername(),
             notification.getPost().getDescription()));
@@ -118,7 +118,7 @@ public class NotificationCreator {
     Notification notification = new Notification();
     notification.setUser(getUser());
     notification.setType(NotificationType.SUBSCRIBER);
-    notification.setLink(String.format("%s/api/v1/user/info/%d", baseUrl, user.getId()));
+    notification.setLink(String.format("%s/#/user/info/%d", baseUrl, user.getId()));
     notification.setText(String.format("User %s subscribed to your account", notification.getUser().getUsername()));
     notification.setNotifyingUser(user);
 
@@ -138,7 +138,7 @@ public class NotificationCreator {
           notification.setUser(message.getUser());
           notification.setType(NotificationType.MESSAGE);
           notification.setMessage(message);
-          notification.setLink(String.format("%s/api/v1/get-messages-chat/%d",
+          notification.setLink(String.format("%s/#/get-messages-chat/%d",
             baseUrl,
             message.getChat().getId()));
           notification.setText(String.format("User %s sent you new message: %s",
