@@ -15,7 +15,6 @@ export const fetchChats = createAsyncThunk(
       }
 
       const chatsIDs = await getChats(userId, token);
-
       const chatPromises = chatsIDs.map(async (chatId) => {
         const data = await getChatMessages(chatId, token);
 
@@ -27,7 +26,8 @@ export const fetchChats = createAsyncThunk(
           const chatMembers = await getChatMembers(chatId, token);
           lastMessage = {
             text: "",
-            user: chatMembers.length > 1 ? chatMembers[1] : chatMembers[0],
+            // user: chatMembers.length > 1 ? chatMembers[1] : chatMembers[0],
+             user:  chatMembers[0]
           };
         }
 

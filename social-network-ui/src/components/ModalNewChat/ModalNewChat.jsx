@@ -16,6 +16,7 @@ function ModalNewChat() {
   const { token } = UseUserToken();
   const chatMember = useSelector((state) => state.chat.newChatMembers);
   const users = useSelector((state) => state.chat.users);
+   const userId = useSelector((state) => state.user?.userId);
   const dispatch = useDispatch();
 
   const isOpen = useSelector((state) => state.chat.modalProps.isOpenChat);
@@ -36,7 +37,7 @@ function ModalNewChat() {
       };
 
       const chatId = await createChat(chatData, token);
-      dispatch(fetchChats(token));
+      dispatch(fetchChats(userId));
       dispatch(setChatId(chatId));
       const updatedChat = await getChatMessages(chatId, token);
       dispatch(setMessages(updatedChat));
