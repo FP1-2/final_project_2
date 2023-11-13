@@ -11,16 +11,20 @@ function Favourites () {
   const [favourites, setFavourites] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
 
   const userId = useSelector(state => state.user.userId)
   const { token } = UseUserToken()
+  const size = 5
 
   useEffect(() => {
     async function getPosts () {
       try {
-        const data = await getLikedPosts(token, userId)
-        setFavourites(data.reverse())
-        console.log(data)
+        setLoading(true)
+        const data = await getLikedPosts(token, userId, page, size)
+        setFavourites(prev => [...prev, ...data.reverse()])
+        setHasMore(data.length > 0)
       } catch (error) {
         if (error.response) {
           setError(`Error ${error.response?.status}: ${error.response?.data}`)
@@ -34,25 +38,39 @@ function Favourites () {
       }
     }
 
-    if (userId) {
+    if (userId && hasMore) {
       getPosts()
     }
-  }, [userId])
+  }, [userId, page, hasMore])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = document.documentElement.scrollTop
+      const windowHeight = window.innerHeight
+      const scrollHeight = document.documentElement.scrollHeight
+
+      if (scrollTop + windowHeight >= scrollHeight - 20) {
+        setPage(prev => prev + 1)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   return (
     <>
-      {loading && (
-        <Box sx={style}>
-          <CircularProgress />
-        </Box>
-      )}
-
       {error && <h2>{error}</h2>}
 
       {!error &&
-        !loading &&
-        favourites
-          .map(post => <AnotherPost key={post.id} post={post} />)}
+        favourites.map(post => <AnotherPost key={post.id} post={post} />)}
+
+      <Box sx={style}>
+        {loading && <CircularProgress />}
+      </Box>
     </>
   )
 }

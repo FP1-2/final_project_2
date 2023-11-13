@@ -31,7 +31,6 @@ function PostPage () {
       try {
         const data = await getPost(params.postId, token)
         setPost(data)
-        console.log(post);
         data.typePost === 'COMMENT' ? setIsComment(true) : setIsComment(false)
       } catch (error) {
         if (error.response) {
@@ -51,11 +50,13 @@ function PostPage () {
   useEffect(() => {
     async function fetchComments () {
       try {
+        setLoading(true)
         const commentsData = await getComments(params.postId, token, page, size)
-        console.log(commentsData);
-        setComments((prev) => [...prev, ...commentsData])
+        setComments(prev => [...prev, ...commentsData])
       } catch (error) {
         console.error(error)
+      } finally {
+        setLoading(false)
       }
     }
     fetchComments()
@@ -65,19 +66,11 @@ function PostPage () {
     isComment && bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
   })
 
-          console.log(comments);
-
   return (
     <>
-      {loading && (
-        <Box sx={style}>
-          <CircularProgress />
-        </Box>
-      )}
-
       {error && <h2>{error}</h2>}
 
-      {!error && !loading && (
+      {post.id && (
         <>
           {isComment && (
             <AnotherPost
@@ -94,8 +87,7 @@ function PostPage () {
           <div ref={bottomRef}></div>
         </>
       )}
-      {!error &&
-        !loading &&
+      {comments.length > 0 &&
         comments.map(post => (
           <AnotherPost
             key={post.id}
@@ -103,11 +95,15 @@ function PostPage () {
             setDeletedCommentsCount={setDeletedCommentsCount}
           />
         ))}
-      {!error && !loading && moreComments && (
-        <Box sx={{display: 'flex', justifyContent: 'center'}}>
-          <Button onClick={() => setPage((prev) => prev + 1)}>Show more comments</Button>
-          </Box>
-      )}
+
+      <Box sx={style}>
+        {loading && <CircularProgress />}
+        {!error && !loading && moreComments && (
+          <Button onClick={() => setPage(prev => prev + 1)}>
+            Show more comments
+          </Button>
+        )}
+      </Box>
     </>
   )
 }
