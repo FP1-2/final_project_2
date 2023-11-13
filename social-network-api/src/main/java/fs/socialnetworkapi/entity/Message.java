@@ -1,8 +1,10 @@
 package fs.socialnetworkapi.entity;
 
+import fs.socialnetworkapi.component.NotificationEntityListener;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.EntityListeners;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +16,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @Table(name = "messages")
+@EntityListeners(NotificationEntityListener.class)
 public class Message extends AbstractEntity{
 
   private String text;

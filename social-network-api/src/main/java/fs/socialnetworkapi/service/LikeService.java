@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.advice.CurrentUserHolder;
 import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
@@ -31,6 +32,7 @@ public class LikeService {
 
   private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //return CurrentUserHolder.getCurrentUser();
   }
 
   private void sendLikeNotification(Like like) {

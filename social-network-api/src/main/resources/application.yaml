@@ -1,13 +1,8 @@
-MAIN_EMAIL:
-MAIN_EMAIL_PASSWORD:
-DB_URL:
-DB_USER:
-DB_PASSWORD:
-
 server:
   port: 5000
 
-
+myapp:
+  baseUrl: http://twitter-demo.us-east-1.elasticbeanstalk.com/
 
 spring:
      profiles:
@@ -15,8 +10,8 @@ spring:
      mail:
        host: smtp.gmail.com
        port: 587
-       username: ${MAIN_EMAIL} # логин от учётки
-       password: ${MAIN_EMAIL_PASSWORD} # специальный пароль для приложения
+       username: ffinalprojectdanit@gmail.com
+       password: Ubcu!fELUj
        test-connection: true # проверка подключения при старте приложения
        properties:
          mail:
@@ -26,6 +21,7 @@ spring:
          enable: true
        sender: # отправитель письма (его почта и имя)
          email: test@gmail.com
+
 #      text: no-reply
 
 jwt:
@@ -37,11 +33,6 @@ jwt:
   secret: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
   expiration: 3600
   issuer: finalproject
-
-myapp:
-  baseUrl: http://twitter-demo.us-east-1.elasticbeanstalk.com/
-
-
 
 # local profile
 ---
@@ -63,10 +54,10 @@ spring:
       repositories:
         bootstrap-mode: deferred #default
 
-    h2:
-      console:
-        enabled: true
-        path: /h2
+  h2:
+    console:
+      enabled: true
+      path: /h2
   jpa:
     hibernate:
       ddl-auto: create-drop #update
@@ -84,12 +75,14 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
+    username: postgres
+    password: z7a2z%8G
+    driver-class-name: org.postgresql.Driver
   data:
     jpa:
       repositories:
+        bootstrap-mode: deferred
   jpa:
     hibernate:
       ddl-auto: update
@@ -97,3 +90,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        time_zone: UTC

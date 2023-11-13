@@ -17,4 +17,5 @@ public interface NotificationRepo extends JpaRepository<Notification, Long> {
 
   void deleteAllByMessageId(Long messageId);
 
+  Notification findFirstByOrderByIdDesc();
 }

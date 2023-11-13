@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.advice.CurrentUserHolder;
 import fs.socialnetworkapi.dto.login.LoginDtoIn;
 import fs.socialnetworkapi.dto.login.LoginDtoOut;
 import fs.socialnetworkapi.entity.User;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class AuthorizationService {
 
   private final UserService userService;
@@ -24,18 +24,19 @@ public class AuthorizationService {
 
   public LoginDtoOut tokenGenerate(@RequestBody LoginDtoIn loginDtoIn) {
     User userByEmail = userService.findByEmail(loginDtoIn.getEmail());
-    if (passwordEncoder.matches(loginDtoIn.getPassword(), userByEmail.getPassword()) & userByEmail.isActive()) {
+    if (passwordEncoder.matches(loginDtoIn.getPassword(), userByEmail.getPassword()) && userByEmail.isActive()) {
       TokenDetails tokenDetails = securityService.authenticate(loginDtoIn.getEmail());
-      return LoginDtoOut
-        .builder()
+
+      CurrentUserHolder.setCurrentUser(userByEmail);
+
+      return LoginDtoOut.builder()
         .id(tokenDetails.getUserId())
         .token(tokenDetails.getToken())
         .expiresAt(tokenDetails.getExpiresAt())
         .issueAt(tokenDetails.getIssuedAt())
         .build();
     }
-    return LoginDtoOut
-      .builder()
+    return LoginDtoOut.builder()
       .error("wrong user/password combination")
       .build();
   }

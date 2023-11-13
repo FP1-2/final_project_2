@@ -1,11 +1,13 @@
 package fs.socialnetworkapi.entity;
 
-import jakarta.persistence.FetchType;
+import fs.socialnetworkapi.component.NotificationEntityListener;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,7 @@ import java.util.Objects;
 @Table(name = "users")
 @Setter
 @Getter
+@EntityListeners(NotificationEntityListener.class)
 public class User extends AbstractEntity implements UserDetails {
 
   private String username;

@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.advice.CurrentUserHolder;
 import fs.socialnetworkapi.dto.message.CreateChatDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
@@ -40,6 +41,7 @@ public class MessageService {
 
   private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //return CurrentUserHolder.getCurrentUser();
   }
 
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {

@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.advice.CurrentUserHolder;
 import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
@@ -39,8 +40,9 @@ public class UserService implements UserDetailsService {
   @Value("${myapp.baseUrl}")
   private String baseUrl;
 
-  public User getUser() {
+  private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //return CurrentUserHolder.getCurrentUser();
   }
 
   public User findById(Long userId) {

@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.advice.CurrentUserHolder;
 import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
@@ -32,6 +33,11 @@ public class PostService {
   private final LikeService likeService;
   private final UserService userService;
   private final NotificationCreator notificationCreator;
+
+  private User getUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //return CurrentUserHolder.getCurrentUser();
+  }
 
   public PostDtoOut findById(Long postId) {
 
@@ -79,7 +85,7 @@ public class PostService {
 
   public List<PostDtoOut> getFollowingsPosts(Integer page, Integer size) {
 
-    User user = userService.getUser();
+    User user = getUser();
 
     Set<User> followings = user.getFollowings();
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
@@ -105,7 +111,7 @@ public class PostService {
 
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
 
-    User user = userService.getUser();
+    User user = getUser();
 
     Post post = mapper.map(postDtoIn, Post.class);
     post.setUser(user);
@@ -117,7 +123,7 @@ public class PostService {
 
   public PostDtoOut saveByTypeAndOriginalPost(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
 
-    User user = userService.getUser();
+    User user = getUser();
 
     Post originalPost = postRepo.findById(originalPostId)
             .orElseThrow(() -> new PostNotFoundException(
@@ -148,9 +154,8 @@ public class PostService {
   }
 
   public PostDtoOut getPostById(Long postId) {
-    Post post = postRepo.findById(postId)
-            .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
-    User user = userService.getUser();
+    Post post = postRepo.findPostWithUser(postId);
+    User user = getUser();
 
     PostDtoOut postDtoOut = mapper.map(post, PostDtoOut.class);
 
@@ -193,7 +198,7 @@ public class PostService {
 
   private List<PostDtoOut> mapListPostToListPostDtoOut(List<Post> allPosts) {
 
-    User user = userService.getUser();
+    User user = getUser();
 
     List<Post> listOriginalPosts = postRepo.findByOriginalPostIn(allPosts);
     List<Like> likes = likeService.findByPostIn(allPosts);

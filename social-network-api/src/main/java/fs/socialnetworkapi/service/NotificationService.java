@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.advice.CurrentUserHolder;
 import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
@@ -18,6 +19,7 @@ public class NotificationService {
 
   private User getUser() {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //return CurrentUserHolder.getCurrentUser();
   }
 
   public Notification createNewNotification(Notification notification) {
