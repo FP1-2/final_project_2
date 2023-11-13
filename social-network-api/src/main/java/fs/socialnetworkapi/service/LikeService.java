@@ -5,6 +5,7 @@ import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import lombok.AllArgsConstructor;
@@ -48,7 +49,8 @@ public class LikeService {
 
   public String likePost(Long postId) {
     User user = getUser();
-    Post post = postRepo.findPostWithUser(postId);
+    Post post = postRepo.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException("No such post"));
     Optional<Like> like = likeRepo.findByPostIdAndUserId(postId, user.getId());
     if (like.isPresent()) {
       likeRepo.delete(like.get());
@@ -65,10 +67,6 @@ public class LikeService {
 
   public List<Like> findByPostIn(List<Post> posts) {
     return likeRepo.findByPostIn(posts);
-  }
-
-  public List<Like> findByUserId(Long userId) {
-    return likeRepo.findByUserId(userId);
   }
 
   public List<Like> findByUserId(Long userId, Integer page, Integer size) {
