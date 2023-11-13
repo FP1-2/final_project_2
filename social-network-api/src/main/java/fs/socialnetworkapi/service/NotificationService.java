@@ -20,8 +20,8 @@ public class NotificationService {
     return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
-  public Notification createNewNotification(Notification notification) {
-    return notificationRepo.save(notification);
+  public void createNewNotification(Notification notification) {
+    notificationRepo.save(notification);
   }
 
   public List<Notification> getAllNotifications() {
@@ -41,18 +41,6 @@ public class NotificationService {
       return true;
     }
     return false;
-  }
-
-  public void deleteByPostId(Long postId) {
-    notificationRepo.deleteAllByPostId(postId);
-  }
-
-  public void deleteByUserId(Long userId) {
-    notificationRepo.deleteAllByUserId(userId);
-  }
-
-  public void deleteByMessageId(Long messageId) {
-    notificationRepo.deleteAllByMessageId(messageId);
   }
 
 }
