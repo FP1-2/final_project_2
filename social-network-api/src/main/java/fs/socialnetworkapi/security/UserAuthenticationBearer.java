@@ -19,14 +19,16 @@ public class UserAuthenticationBearer {
 
     Claims claims = verificationResult.claims().get();
     String email = claims.getSubject();
-    String roles     = claims.get("roles", String.class);
-    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roles));
+    String roles = claims.get("roles", String.class);
+    String username = claims.get("username", String.class);
 
     long principalId = Long.parseLong(claims.get(Claims.ID).toString());
     User principal = new User();
     principal.setId(principalId);
     principal.setEmail(email);
+    principal.setUsername(username);
 
+    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roles));
 
     return new UsernamePasswordAuthenticationToken(principal,null, authorities);
   }
