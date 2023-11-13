@@ -142,19 +142,15 @@ public class UserService implements UserDetailsService {
     User currentUser = getUser();
 
     User user = findById(userId);
-    sendSubscriberNotification(user);
-    //
-    // This logic doesn't work correctly
-    // Need to be remade
-    //
-    //user.getFollowers().add(currentUser); - an error occurred here!!!
-    //saveUser(user);
+    notificationCreator.subscriberNotification(user);
+    user.getFollowers().add(currentUser);
+    saveUser(user);
   }
 
   public void unsubscribe(Long userId) {
     User currentUser = getUser();
     User user = findById(userId);
-    user.getFollowers().remove(currentUser); // I guess it will be the same here!!!
+    user.getFollowers().remove(currentUser);
     saveUser(user);
   }
 
@@ -175,10 +171,6 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return findByEmail(username);
-  }
-
-  private void sendSubscriberNotification(User user) {
-    notificationCreator.subscriberNotification(user);
   }
 
   public boolean isUsernameUnique(String username) {
