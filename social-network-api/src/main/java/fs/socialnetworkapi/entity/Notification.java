@@ -1,6 +1,7 @@
 package fs.socialnetworkapi.entity;
 
 import fs.socialnetworkapi.enums.NotificationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,19 +19,7 @@ import java.util.Objects;
 @Table(name = "notifications")
 public class Notification extends AbstractEntity {
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
-
-  @ManyToOne
-  @JoinColumn(name = "post_id")
-  private Post post;
-
-  @ManyToOne
-  @JoinColumn(name = "message_id")
-  private Message message;
-
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "notifying_user_id")
   private User notifyingUser;
 
@@ -49,9 +38,6 @@ public class Notification extends AbstractEntity {
     }
     Notification that = (Notification) obj;
     return active == that.active
-      && Objects.equals(user, that.user)
-      && Objects.equals(post, that.post)
-      && Objects.equals(message, that.message)
       && Objects.equals(notifyingUser, that.notifyingUser)
       && Objects.equals(text, that.text)
       && type == that.type
@@ -60,7 +46,7 @@ public class Notification extends AbstractEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(user, post, message, notifyingUser, text, type, link, active);
+    return Objects.hash(notifyingUser, text, type, link, active);
   }
 
 }

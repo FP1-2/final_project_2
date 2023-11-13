@@ -11,6 +11,7 @@ import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -29,20 +30,14 @@ public class PostService {
   private final ModelMapper mapper;
   private final LikeService likeService;
   private final UserService userService;
+
+  @Autowired
   private final NotificationCreator notificationCreator;
 
   public PostDtoOut findById(Long postId) {
 
     return mapper.map(postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException("No such post")),PostDtoOut.class);
-  }
-
-  public List<PostDtoOut> findByIds(List<Long> postIds) {
-    return postIds.stream().map(this::findById).toList();
-  }
-
-  public List<PostDtoOut> findLikedPostsByUserId(Long userId) {
-    return likeService.getLikesForUser();
   }
 
   public List<PostDtoOut> getAllPost(Integer page, Integer size) {
@@ -123,7 +118,7 @@ public class PostService {
 
     switch (typePost) {
       case REPOST:
-        return saveOrDeleteRepost(user, originalPost, postDtoIn, TypePost.REPOST);
+        return saveOrDeleteRepost(user, originalPost, postDtoIn);
 
       case COMMENT:
         return saveByType(user, originalPost, postDtoIn, TypePost.COMMENT);
@@ -138,10 +133,8 @@ public class PostService {
   }
 
   public PostDtoOut editePost(PostDtoIn postDtoIn) {
-
     Post post = postRepo.findById(postDtoIn.getId())
             .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postDtoIn.getId())));
-
     post.setDescription(postDtoIn.getDescription());
     post.setPhoto(postDtoIn.getPhoto());
     return mapper.map(postRepo.save(post), PostDtoOut.class);
@@ -298,13 +291,13 @@ public class PostService {
               Collectors.counting()));
   }
 
-  private PostDtoOut saveOrDeleteRepost(User user, Post originalPost, PostDtoIn postDtoIn, TypePost typePost) {
+  private PostDtoOut saveOrDeleteRepost(User user, Post originalPost, PostDtoIn postDtoIn) {
 
     Optional<Post> repost = postRepo.findByUserAndOriginalPostAndTypePost(user, originalPost, TypePost.REPOST);
     if (repost.isPresent())  {
       postRepo.delete(repost.get());
     } else {
-      saveByType(user, originalPost, postDtoIn, typePost);
+      saveByType(user, originalPost, postDtoIn, TypePost.REPOST);
     }
 
     return getPostById(originalPost.getId());
@@ -323,7 +316,8 @@ public class PostService {
 
   private Post save(Post post, TypePost typePost) {
     Post postToSave = postRepo.save(post);
-    //notificationCreator.sendPostByTypePost(postToSave, typePost);
+    notificationCreator.sendPostByTypePost(postToSave, typePost, userService.getFollowers(post.getUser().getId()));
     return postToSave;
   }
+
 }
