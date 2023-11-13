@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -64,8 +63,8 @@ public class UserService implements UserDetailsService {
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
     UserDtoOut userDtoOut = mapper.map(user, UserDtoOut.class);
-    userDtoOut.setUserFollowingCount(getFollowingsDto(userId).size());
-    userDtoOut.setUserFollowersCount(getFollowersDto(userId).size());
+    userDtoOut.setUserFollowingCount(getFollowings(userId).size());
+    userDtoOut.setUserFollowersCount(getFollowers(userId).size());
     userDtoOut.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
     return userDtoOut;
   }
@@ -119,7 +118,7 @@ public class UserService implements UserDetailsService {
 
   private void sendActivationCode(UserDtoIn userDtoIn) {
     String message = String.format(
-            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %s/api/v1/activate/%s",
+            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
             userDtoIn.getFirstName(),
             baseUrl,
             userDtoIn.getActivationCode()
@@ -143,38 +142,34 @@ public class UserService implements UserDetailsService {
     User currentUser = getUser();
 
     User user = findById(userId);
-    notificationCreator.subscriberNotification(user);
-    user.getFollowers().add(currentUser);
-    saveUser(user);
+    sendSubscriberNotification(user);
+    //
+    // This logic doesn't work correctly
+    // Need to be remade
+    //
+    //user.getFollowers().add(currentUser); - an error occurred here!!!
+    //saveUser(user);
   }
 
   public void unsubscribe(Long userId) {
     User currentUser = getUser();
     User user = findById(userId);
-    user.getFollowers().remove(currentUser);
+    user.getFollowers().remove(currentUser); // I guess it will be the same here!!!
     saveUser(user);
   }
 
-  public List<UserDtoOut> getFollowersDto(Long userId) {
-    return getFollowers(userId)
+  public List<UserDtoOut> getFollowers(Long userId) {
+    return findById(userId).getFollowers()
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
   }
 
-  public Set<User> getFollowers(Long userId) {
-    return findById(userId).getFollowers();
-  }
-
-  public List<UserDtoOut> getFollowingsDto(Long userId) {
-    return getFollowings(userId)
+  public List<UserDtoOut> getFollowings(Long userId) {
+    return findById(userId).getFollowings()
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
-  }
-
-  public Set<User> getFollowings(Long userId) {
-    return findById(userId).getFollowings();
   }
 
   @Override
@@ -182,9 +177,30 @@ public class UserService implements UserDetailsService {
     return findByEmail(username);
   }
 
+  private void sendSubscriberNotification(User user) {
+    notificationCreator.subscriberNotification(user);
+  }
+
   public boolean isUsernameUnique(String username) {
     User user = getUser();
     return userRepo.findByUsername(username) == null
       || Objects.equals(user.getId(), userRepo.findByUsername(username).getId());
+  }
+
+  public List<UserDtoOut> findByUsername(String username) {
+    List<User> users = userRepo.searchByUsernameLike(username);
+    return showAllUserWithUsername(users);
+  }
+
+  private List<UserDtoOut> showAllUserWithUsername(List<User> users) {
+    return users
+      .stream()
+      .map(p->mapper.map(p,UserDtoOut.class))
+      .peek(userDtoOut -> {
+        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
+      })
+      .toList();
   }
 }

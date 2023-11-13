@@ -43,13 +43,13 @@ public class UserController {
 
   @GetMapping("followers/{user_id}") //підписчики
   public ResponseEntity<List<UserDtoOut>> getFollowers(@PathVariable(value = "user_id") Long userId) {
-    List<UserDtoOut> followers = userService.getFollowersDto(userId);
+    List<UserDtoOut> followers = userService.getFollowers(userId);
     return ResponseEntity.ok(followers);
   }
 
   @GetMapping("followings/{user_id}") //підписки
   public ResponseEntity<List<UserDtoOut>> getFollowings(@PathVariable(value = "user_id") Long userId) {
-    List<UserDtoOut> followings = userService.getFollowingsDto(userId);
+    List<UserDtoOut> followings = userService.getFollowings(userId);
     return ResponseEntity.ok(followings);
   }
 
@@ -79,6 +79,11 @@ public class UserController {
   @PostMapping("registration")
   public ResponseEntity<UserDtoOut> createNewUser(@Valid @RequestBody UserDtoIn userDtoIn) {
     return ResponseEntity.ok(userService.addUser(userDtoIn));
+  }
+
+  @GetMapping("find-user/{username}")
+  public List<UserDtoOut> findUser(@PathVariable String username) {
+    return userService.findByUsername(username);
   }
 
   @GetMapping("activate/{code}")

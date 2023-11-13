@@ -1,7 +1,6 @@
 package fs.socialnetworkapi.service;
 
 import fs.socialnetworkapi.entity.Notification;
-import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.repos.NotificationRepo;
@@ -44,10 +43,8 @@ public class NotificationService {
     return false;
   }
 
-  public void deleteByPostId(Post post) {
-    Long p = 15L;
-    notificationRepo.deleteNotificationByPostId(p);
-
+  public void deleteByPostId(Long postId) {
+    notificationRepo.deleteAllByPostId(postId);
   }
 
   public void deleteByUserId(Long userId) {
