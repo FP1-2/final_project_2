@@ -11,11 +11,11 @@ import {
 import { PropTypes } from 'prop-types'
 import formatPostDate from '../../utils/formatPostDate'
 import CloseIcon from '@mui/icons-material/Close'
-import CommentWriteWindow from './CommentWriteWindow'
 import { Link } from 'react-router-dom'
 import styles from '../AnotherPost/AnotherPost.module.scss'
 import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
 
 function ModalComment ({
   post,

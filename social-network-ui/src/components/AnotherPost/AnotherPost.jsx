@@ -28,7 +28,7 @@ import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import CommentWriteWindow from '../ModalComment/CommentWriteWindow'
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
 
 const style = {
   position: 'absolute',
@@ -51,8 +51,8 @@ function AnotherPost ({
   deletedCommentsCount,
   setDeletedCommentsCount
 }) {
-  const isRepost = post.typePost === 'REPOST'
-  const isComment = post.typePost === 'COMMENT'
+  const isRepost = post?.typePost === 'REPOST'
+  const isComment = post?.typePost === 'COMMENT'
   let thisPost
   isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
   const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
@@ -75,7 +75,7 @@ function AnotherPost ({
 
   useEffect(() => {
     if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
-      setCountComments(thisPost?.countComments - deletedCommentsCount)
+      setCountComments((prev) => prev - deletedCommentsCount)
     }
   }, [deletedCommentsCount])
 
@@ -325,7 +325,7 @@ function AnotherPost ({
             </Box>
           )}
           <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
-            <Typography paragraph={true} sx={{ wordWrap: 'break-word' }}>
+            <Typography paragraph={true} sx={{ wordWrap: 'break-word', mb: 0 }}>
               {thisPost?.description}
             </Typography>
             {thisPost?.photo != '' ? (

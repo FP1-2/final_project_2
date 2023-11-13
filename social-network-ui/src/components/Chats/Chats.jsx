@@ -1,29 +1,23 @@
-import React, { useState, useEffect } from "react";
-
+import React, {  useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMembers, setChatId } from "../../redux/slices/chatSlice";
 import UseUserToken from "../../hooks/useUserToken";
 import ChatMembers from "../ChatMembers/ChatMembers";
 import {
-  fetchChats,
-  getChatMessages,
+  setChatId,
   setMessages,
-  createMessage,
-  setError,
 } from "../../redux/slices/chatSlice";
+import { getChatMessages } from "../../api/getChatMessages";
 import { Box } from "@mui/material";
-import PropTypes from "prop-types";
-
+import { fetchChats } from "../../redux/thunks/chatThunk";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 function Chats() {
   const { token } = UseUserToken();
-
-  //  const [chats, setChats] = useState(null)
   const dispatch = useDispatch();
   const chats = useSelector((state) => state.chat.chats);
-
   const error = useSelector((state) => state.chat.error);
   useEffect(() => {
-    dispatch(fetchChats(token));
+    dispatch(fetchChats());
   }, [dispatch, token]);
 
   async function fetchMessages(chatId) {
@@ -32,26 +26,33 @@ function Chats() {
     dispatch(setMessages(data));
     dispatch(setChatId(chatId));
   }
+	const theme = createTheme({
+		typography: {
+	
+			fontFamily: 'Segoe UI, sans-serif',
 
+		},
+    	})
   return (
+        <ThemeProvider theme={theme}>
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
         width: "100%",
+       
       }}
     >
-      {/* <div onClick={() => {}} style={{width: '100%'}}> */}
       {chats?.map((chat) => (
         <ChatMembers
-          fetchMessages={fetchMessages}
           key={chat.id}
+          fetchMessages={fetchMessages}
           chatmembers={chat}
         />
       ))}
-      {/* </div> */}
     </Box>
+    </ThemeProvider>
   );
 }
 
