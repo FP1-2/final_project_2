@@ -40,13 +40,11 @@ public class NotificationCreator {
 
   public void likeNotification(Like like) {
     Notification notification = new Notification();
-    notification.setPost(like.getPost());
-    notification.setUser(like.getUser());
     notification.setType(NotificationType.LIKE);
     notification.setLink(String.format("%s/#/%d", baseUrl, like.getPost().getId()));
     notification.setText(String.format("User %s liked your post %s",
-      notification.getUser().getUsername(),
-      notification.getPost().getDescription()));
+      like.getUser().getUsername(),
+      like.getPost().getDescription()));
     notification.setNotifyingUser(like.getPost().getUser());
 
     notificationService.createNewNotification(notification);
@@ -67,13 +65,11 @@ public class NotificationCreator {
   public void featuredNotification(Post post, List<UserDtoOut> followers) {
     followers.forEach(user -> {
       Notification notification = new Notification();
-      notification.setPost(post);
-      notification.setUser(post.getUser());
       notification.setType(NotificationType.FEATURED);
       notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
       notification.setText(String.format("Your featured user %s has new post: %s",
-        notification.getUser().getUsername(),
-        notification.getPost().getDescription()));
+        post.getUser().getUsername(),
+        post.getDescription()));
 
       notification.setNotifyingUser(mapper.map(user, User.class));
 
@@ -84,13 +80,11 @@ public class NotificationCreator {
   public void repostNotification(Post post) {
 
     Notification notification = new Notification();
-    notification.setPost(post);
-    notification.setUser(post.getUser());
     notification.setType(NotificationType.REPOST);
     notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s reposted your post: %s",
-      notification.getUser().getUsername(),
-      notification.getPost().getDescription()));
+      post.getUser().getUsername(),
+      post.getDescription()));
 
     notification.setNotifyingUser(post.getOriginalPost().getUser());
 
@@ -100,13 +94,11 @@ public class NotificationCreator {
   public void commentNotification(Post post) {
 
     Notification notification = new Notification();
-    notification.setPost(post);
-    notification.setUser(post.getUser());
     notification.setType(NotificationType.REPOST);
     notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s commented your post: %s",
-            notification.getUser().getUsername(),
-            notification.getPost().getDescription()));
+      post.getUser().getUsername(),
+      post.getDescription()));
 
     notification.setNotifyingUser(post.getOriginalPost().getUser());
 
@@ -116,10 +108,9 @@ public class NotificationCreator {
   public void subscriberNotification(User user) {
 
     Notification notification = new Notification();
-    notification.setUser(getUser());
     notification.setType(NotificationType.SUBSCRIBER);
     notification.setLink(String.format("%s/#/user/info/%d", baseUrl, user.getId()));
-    notification.setText(String.format("User %s subscribed to your account", notification.getUser().getUsername()));
+    notification.setText(String.format("User %s subscribed to your account", getUser().getUsername()));
     notification.setNotifyingUser(user);
 
     notificationService.createNewNotification(notification);
@@ -135,14 +126,12 @@ public class NotificationCreator {
       .forEach(
         user -> {
           Notification notification = new Notification();
-          notification.setUser(message.getUser());
           notification.setType(NotificationType.MESSAGE);
-          notification.setMessage(message);
           notification.setLink(String.format("%s/#/get-messages-chat/%d",
             baseUrl,
             message.getChat().getId()));
           notification.setText(String.format("User %s sent you new message: %s",
-            notification.getUser().getUsername(),
+            message.getUser().getUsername(),
             message.getText()));
           notification.setNotifyingUser(user);
 
@@ -151,11 +140,4 @@ public class NotificationCreator {
       );
   }
 
-  public void deleteByPostId(Long postId) {
-    notificationService.deleteByPostId(postId);
-  }
-
-  public void deleteByMessageId(Long messageId) {
-    notificationService.deleteByMessageId(messageId);
-  }
 }

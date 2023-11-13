@@ -40,14 +40,6 @@ public class PostService {
             .orElseThrow(() -> new PostNotFoundException("No such post")),PostDtoOut.class);
   }
 
-  public List<PostDtoOut> findByIds(List<Long> postIds) {
-    return postIds.stream().map(this::findById).toList();
-  }
-
-  public List<PostDtoOut> findLikedPostsByUserId(Long userId) {
-    return likeService.getLikesForUser();
-  }
-
   public List<PostDtoOut> getAllPost(Integer page, Integer size) {
 
     PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
@@ -303,7 +295,6 @@ public class PostService {
 
     Optional<Post> repost = postRepo.findByUserAndOriginalPostAndTypePost(user, originalPost, TypePost.REPOST);
     if (repost.isPresent())  {
-      //notificationCreator.deleteByPost(repost.get());
       postRepo.delete(repost.get());
     } else {
       saveByType(user, originalPost, postDtoIn, TypePost.REPOST);

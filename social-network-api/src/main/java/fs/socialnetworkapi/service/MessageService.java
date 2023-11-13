@@ -33,7 +33,6 @@ public class MessageService {
   private final MessageRepo messageRepo;
   private final ModelMapper mapper;
   private final UserService userService;
-  private final NotificationService notificationService;
 
   @Autowired
   private final NotificationCreator notificationCreator;
@@ -112,11 +111,6 @@ public class MessageService {
             .stream()
             .map(message -> mapper.map(message, MessageDtoOut.class))
             .toList();
-  }
-
-  public void deleteMessage(Message message) {
-    messageRepo.delete(message);
-    notificationService.deleteByMessageId(message.getId());
   }
 
   public List<Long> getChatsByUser(Long userId) {

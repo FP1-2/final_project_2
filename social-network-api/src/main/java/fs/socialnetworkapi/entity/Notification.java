@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,18 +18,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Table(name = "notifications")
 public class Notification extends AbstractEntity {
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private User user;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "post_id")
-  private Post post;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "message_id")
-  private Message message;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "notifying_user_id")
@@ -51,9 +38,6 @@ public class Notification extends AbstractEntity {
     }
     Notification that = (Notification) obj;
     return active == that.active
-      && Objects.equals(user, that.user)
-      && Objects.equals(post, that.post)
-      && Objects.equals(message, that.message)
       && Objects.equals(notifyingUser, that.notifyingUser)
       && Objects.equals(text, that.text)
       && type == that.type
@@ -62,7 +46,7 @@ public class Notification extends AbstractEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(user, post, message, notifyingUser, text, type, link, active);
+    return Objects.hash(notifyingUser, text, type, link, active);
   }
 
 }
