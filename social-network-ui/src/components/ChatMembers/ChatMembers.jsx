@@ -1,14 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Avatar, Box } from "@mui/material";
-// import AvatarWithoutImg from "../AvatarWithoutImg/AvatarWithoutImg";
+import { Avatar, Box,Typography } from "@mui/material";
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 function ChatMembers({ chatmembers, fetchMessages }) {
   const lastMessage = chatmembers.lastMessage;
-
+	const theme = createTheme({
+		typography: {
+		p: {
+			fontFamily: 'Segoe UI, sans-serif',
+		},
+		h3: {
+			'@media (max-width: 450px)': {
+				letterSpacing: '0.2rem',
+			},
+			'@media (max-width: 350px)': {
+				letterSpacing: '0',
+			},
+		},
+	},
+	})
   return (
     <>
-      {lastMessage && (
+    <ThemeProvider theme={theme}>
+            {lastMessage && (
         <Box key={chatmembers.id}>
           <Box
             onClick={() => fetchMessages(chatmembers.id)}
@@ -23,6 +38,7 @@ function ChatMembers({ chatmembers, fetchMessages }) {
             }}
           >
             <Box>
+              
               <Box>
                 {lastMessage.user.avatar ? (
                   <Avatar
@@ -57,16 +73,18 @@ function ChatMembers({ chatmembers, fetchMessages }) {
               }}
             >
               <Box>
-                <div>{lastMessage.user.firstName}</div>
+                <Box><Typography>{lastMessage.user.firstName} </Typography></Box>
 
-                <div>{lastMessage.user.username}</div>
+                <Box><Typography>{lastMessage.user.username}</Typography></Box>
               </Box>
 
-              <div>{lastMessage.text}</div>
+              <Box><Typography>{lastMessage.text}</Typography></Box>
             </Box>
           </Box>
         </Box>
       )}
+    </ThemeProvider>
+
     </>
   );
 }

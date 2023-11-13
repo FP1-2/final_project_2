@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button } from "@mui/material";
+import { Box, Button,Typography, } from "@mui/material";
 import Chats from "../../components/Chats/Chats";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import styles from "./MessagePage.module.scss";
 import Message from "../../components/Message/Message";
-// import Message2 from "../../components/Message/Message2"
 import ModalNewChat from "../../components/ModalNewChat/ModalNewChat";
 import { openChatModal } from "../../redux/slices/chatSlice";
 import { fetchChats } from "../../redux/thunks/chatThunk";
@@ -49,10 +48,18 @@ function MessagePage() {
   //   }
 	const theme = createTheme({
 		typography: {
-			p: {
+		p: {
 			fontFamily: 'Segoe UI, sans-serif',
 		},
+		h3: {
+			'@media (max-width: 450px)': {
+				letterSpacing: '0.2rem',
+			},
+			'@media (max-width: 350px)': {
+				letterSpacing: '0',
+			},
 		},
+	},
 	})
   return (
     <ThemeProvider theme={theme}>
@@ -70,8 +77,14 @@ function MessagePage() {
           }}
         >
           <div className={styles.flex}>
-            <h1> Messages </h1>
-            <div className={styles.messageIcon}>
+            	<Typography
+									variant='h2'
+									sx={{
+										marginBottom: '0.3rem',
+										fontWeight: '700',
+									}}
+								> Messages </Typography>
+            {/*<div className={styles.messageIcon}>*/}
               <span>
                 {<SettingsOutlinedIcon fontSize="30px" />}{" "}
                 {isOpen && <ModalNewChat />}{" "}
@@ -81,7 +94,7 @@ function MessagePage() {
                 {isOpen && <ModalNewChat />}{" "}
               </span>
             </div>
-          </div>
+          {/*</div>*/}
           <div className={styles.inputContainer}>
             <input
               type="text"
@@ -115,13 +128,30 @@ function MessagePage() {
             {messages ? (
               <Message />
             ) : (
-              <div className={styles.subLeftGrid}>
-                <div className={styles.subLeft}>
-                  <h2>Select a message </h2>
-                  <p>
+              <Box sx={{
+                height: '100%',
+                 fontSize: "1rem",
+                fontWeight: 400,
+              }}>
+                
+                  <Box sx={{
+                height: '100%',
+                display: 'flex',
+                    flexDirection: 'column',
+                 alignItems: 'center'
+              }}>
+                    <Typography
+                      variant='h5'
+                      >
+
+                  Select a message
+                    </Typography>
+                  <Box>
+                    <Typography>
                     Choose from your existing conversations, start a new one, or
                     just keep swimming.
-                  </p>
+                    </Typography>
+                  </Box>
                   {isOpen && <ModalNewChat />}
                   <Button
                     variant="contained"
@@ -140,12 +170,13 @@ function MessagePage() {
                       backgroundColor: "#1DA1F2",
                     }}
                     onClick={handleOpenModal}
-                    className={styles.newMessageBtn}
+                    
                   >
                     New message
                   </Button>
-                </div>
-              </div>
+
+                </Box>
+              </Box>
             )}
           </Box>
         </Box>

@@ -1,13 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Avatar } from "@mui/material";
-import AvatarWithoutImg from "../AvatarWithoutImg/AvatarWithoutImg";
+import { Box, Avatar,Typography } from "@mui/material";
+
 
 function MessageItem({ message }) {
   return (
     <Box>
       <Box>
-        {message.createdDate.split("T")[0]}
+           <Typography>
+               {message.createdDate.split("T")[0]}
+           </Typography>
+       
         {message.user.avatar ? (
           <Avatar
             sx={{
@@ -32,7 +35,10 @@ function MessageItem({ message }) {
           </Avatar>
         )}
       </Box>
-      {message.text}
+      <Typography>
+          {message.text}
+      </Typography>
+     
     </Box>
   );
 }
