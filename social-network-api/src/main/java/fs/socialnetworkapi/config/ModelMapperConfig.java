@@ -1,13 +1,15 @@
 package fs.socialnetworkapi.config;
 
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
+import fs.socialnetworkapi.dto.notification.NotificationDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.dto.post.OriginalPostDto;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Chat;
-import fs.socialnetworkapi.entity.Message;
+import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.entity.Message;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -27,6 +29,8 @@ public class ModelMapperConfig {
     modelMapper.createTypeMap(Post.class, PostDtoOut.class);
 
     modelMapper.createTypeMap(Post.class, OriginalPostDto.class);
+
+    modelMapper.createTypeMap(Notification.class, NotificationDtoOut.class);
 
     Converter<Chat, Long> convertChatToChatId = (src) -> src.getSource().getId();
 
