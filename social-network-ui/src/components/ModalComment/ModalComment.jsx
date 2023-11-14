@@ -21,8 +21,8 @@ function ModalComment ({
   post,
   setOpenModal,
   open,
-  commentsCount,
-  setCommentsCount
+  setCommentsCount,
+  setComments
 }) {
   let postDate
   post ? (postDate = formatPostDate(post.createdDate)) : null
@@ -120,8 +120,8 @@ function ModalComment ({
         <CommentWriteWindow
           postId={post.id}
           close={handleClose}
-          commentsCount={commentsCount}
           setCommentsCount={setCommentsCount}
+          setComments={setComments}
         />
       </Box>
     </Modal>
@@ -129,10 +129,10 @@ function ModalComment ({
 }
 
 ModalComment.propTypes = {
-  post: PropTypes.object,
-  setOpenModal: PropTypes.func,
-  open: PropTypes.bool,
-  setCommentsCount: PropTypes.func,
-  commentsCount: PropTypes.number
+  post: PropTypes.object.isRequired,
+  setOpenModal: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  setCommentsCount: PropTypes.func.isRequired,
+  setComments: PropTypes.func
 }
 export default ModalComment
