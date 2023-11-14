@@ -7,9 +7,10 @@ import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import styles from "./MessagePage.module.scss";
 import Message from "../../components/Message/Message";
 import ModalNewChat from "../../components/ModalNewChat/ModalNewChat";
-import { openChatModal } from "../../redux/slices/chatSlice";
+import {openChatModal, setChats, setUsers} from "../../redux/slices/chatSlice";
 import { fetchChats } from "../../redux/thunks/chatThunk";
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import {getAllUsers} from "../../api/getAllUsers";
 function MessagePage() {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
@@ -18,6 +19,8 @@ function MessagePage() {
   const isOpen = useSelector((state) => state.chat.modalProps.isOpenChat);
   const userId = useSelector((state) => state.user?.userId);
   const messages = useSelector((state) => state.chat.messages);
+  const chats = useSelector((state) => state.chat.chats);
+  const chatsStorage = useSelector((state) => state.chat.chatsStorage);
 
   const handleOpenModal = () => {
     dispatch(openChatModal());
@@ -28,24 +31,25 @@ function MessagePage() {
     }
   }, [dispatch, userId]);
 
-  //  const handleSearch = async () => {
-  //   try {
-  //     const response = await axios.post ('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/search');
-  //     if (response === 200) {
-  //       const data = await response.json();
-  //       setUser(data);
-  //       setErr(false);
-  //     } else {
-  //       setErr(true);
-  //     }
-  //   } catch (error) {
-  //     setErr(true);
-  //   }
-  // }
-  //  const handleKey = (e) => {
-  //     e.target.value === "Enter" && handleSearch()
-  //     setChatComponentActive(true)
-  //   }
+    async function findChats(event) {
+        const username = event.target.value;
+        const newChats = [];
+        for (let i = 0; i < chatsStorage.length; i++) {
+            let index = chatsStorage[i].members.findIndex(x => (
+                    (x.username.includes(username)) ||
+                    (x.firstName.includes(username)) ||
+                    (x.lastName.includes(username))
+                )
+            );
+
+            if (index >= 0) {
+                newChats.push(chatsStorage[i])
+            }
+        }
+
+        dispatch(setChats(newChats));
+    }
+
 	const theme = createTheme({
 		typography: {
 		p: {
@@ -100,6 +104,8 @@ function MessagePage() {
               type="text"
               placeholder="Search Direct Messages"
               className={styles.searchInput}
+              onChange={findChats}
+            
             />
           </div>
 

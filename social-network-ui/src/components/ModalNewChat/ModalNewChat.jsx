@@ -16,6 +16,7 @@ function ModalNewChat() {
   const { token } = UseUserToken();
   const chatMember = useSelector((state) => state.chat.newChatMembers);
   const users = useSelector((state) => state.chat.users);
+    const chats = useSelector((state) => state.chat.chats);
    const userId = useSelector((state) => state.user?.userId);
   const dispatch = useDispatch();
 
@@ -32,16 +33,28 @@ function ModalNewChat() {
   }
   async function sendChat() {
     try {
-      const chatData = {
-        membersChat: [chatMember],
-      };
+        let chatId = null;
+        for (var i = 0; i < chats.length; i++) {
+            let index = chats[i].members.findIndex(x => x.id === Number(chatMember));
 
-      const chatId = await createChat(chatData, token);
-      dispatch(fetchChats(userId));
-      dispatch(setChatId(chatId));
-      const updatedChat = await getChatMessages(chatId, token);
-      dispatch(setMessages(updatedChat));
-      handleCloseModal();
+            if (index >= 0 && !chatId) {
+                chatId = chats[i].id;
+            }
+        }
+
+        if (!chatId) {
+            const chatData = {
+                membersChat: [chatMember],
+            };
+
+            chatId = await createChat(chatData, token);
+        }
+
+        dispatch(fetchChats(userId));
+        dispatch(setChatId(chatId));
+        const updatedChat = await getChatMessages(chatId, token);
+        dispatch(setMessages(updatedChat));
+        handleCloseModal();
     } catch (error) {
       if (error.response) {
         dispatch(
