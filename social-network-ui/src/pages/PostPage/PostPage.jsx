@@ -67,7 +67,10 @@ function PostPage () {
   })
 
   return (
-    <>
+    <Box sx={{
+        maxHeight: '100vh',
+        overflowY: 'auto'
+      }}>
       {error && <h2>{error}</h2>}
 
       {post.id && (
@@ -104,7 +107,7 @@ function PostPage () {
           </Button>
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 
