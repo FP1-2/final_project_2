@@ -17,21 +17,25 @@ export const fetchChats = createAsyncThunk(
       const chatsIDs = await getChats(userId, token);
       const chatPromises = chatsIDs.map(async (chatId) => {
         const data = await getChatMessages(chatId, token);
-
+        const chatMembers = await getChatMembers(chatId, token);
         let lastMessage = null;
+        userId = Number(userId)
 
         if (data.length > 0) {
           lastMessage = data[data.length - 1];
         } else {
-          const chatMembers = await getChatMembers(chatId, token);
-          lastMessage = {
-            text: "",
-            // user: chatMembers.length > 1 ? chatMembers[1] : chatMembers[0],
-             user:  chatMembers[0]
-          };
+          lastMessage = { text: "", user:  chatMembers[0] };
         }
 
-        return { id: chatId, lastMessage: lastMessage };
+        if(lastMessage.user.id === userId) {
+          let index = chatMembers.findIndex(x => x.id !== userId);
+
+          if(index >= 0) {
+            lastMessage.user = chatMembers[index];
+          }
+        }
+
+        return { id: chatId, lastMessage: lastMessage , members: chatMembers};
       });
 
       const updatedChats = await Promise.all(chatPromises);

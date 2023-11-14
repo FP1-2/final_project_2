@@ -8,6 +8,7 @@ const userId = getUserId()
 
 const initialState = {
   chats: [],
+  chatsStorage: [],
   error: null,
   messages: null,
   chatId: null,
@@ -24,6 +25,9 @@ export const chatSlice = createSlice({
   reducers: {
     setChats: (state, action) => {
       return { ...state, chats: action.payload };
+    },
+    setChatsStorage: (state, action) => {
+      return { ...state, chatsStorage: action.payload };
     },
     setError: (state, action) => {
       return { ...state, error: action.payload };
@@ -55,7 +59,7 @@ export const chatSlice = createSlice({
 
     builder.addCase(fetchChats.fulfilled, (state, action) => {
 
-     return {...state, chats: action.payload}
+     return {...state, chats: action.payload , chatsStorage: action.payload }
     })
   },
 });
