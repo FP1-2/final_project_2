@@ -15,6 +15,7 @@ import PostButton from '../PostButton/PostButton'
 import { useNavigate } from 'react-router-dom'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 import { useSelector } from 'react-redux';
+import CircularProgress from '@mui/material/CircularProgress'
 
 function CommentWriteWindow ({
   postId,
@@ -28,8 +29,10 @@ function CommentWriteWindow ({
   const [photo, setPhoto] = useState('')
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const [photoLoading, setPhotoLoading] = useState(null)
   const navigate = useNavigate()
-  const {avatar, firstName, lastName} = useSelector((state) => state.user.userData)
+  const { avatar, firstName, lastName } = useSelector((state) => state.user.userData)
+  
 
   const handleModalComment = () => {
     setSuccess('Comment sent. Click to open the post')
@@ -43,16 +46,26 @@ function CommentWriteWindow ({
     setDescription('')
   }
 
-  const handlePhotoInput = event => {
-    const formData = new FormData()
-    formData.append('file', event.target.files[0])
-    formData.append('upload_preset', 'danit2023')
-    axios
-      .post('https://api.cloudinary.com/v1_1/dl4ihoods/image/upload', formData)
-      .then(response => {
-        setPhoto(response.data.url)
-      })
-  }
+const handlePhotoInput = async (event) => {
+     try {
+         const selectedFile = event.target.files[0];
+         if (selectedFile) {
+             const formData = new FormData();
+             formData.append('file', selectedFile);
+             formData.append('upload_preset', 'danit2023');
+             setPhotoLoading(true)
+             const response = await axios.post(
+                 'https://api.cloudinary.com/v1_1/dl4ihoods/image/upload',
+                 formData
+             );
+             setPhoto(response.data.url);
+             setError(null);
+         }
+     } catch (err) {
+         setError(err.message);
+     }
+     finally { setPhotoLoading(false) }
+};
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -148,8 +161,9 @@ function CommentWriteWindow ({
             />
           </>
         ) : (
-          <ImageInput file={photo} onChange={handlePhotoInput} />
+          <ImageInput file={photo} onChange={handlePhotoInput} inputName='commentInput'/>
         )}
+        {photoLoading && <CircularProgress/>}
       </Box>
     </form>
   )

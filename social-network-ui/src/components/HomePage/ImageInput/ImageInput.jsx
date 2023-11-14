@@ -8,14 +8,14 @@ const ImageInput = (props) => {
     <div>
       <input
         type='file'
-        id='fileInput'
+        id={props.inputName}
         name='image'
         className={styles.customFileInput}
         value={props.value}
         onChange={props.onChange}
       />
-      <label htmlFor='fileInput' className={styles.customFileLabel}>
-        <AddPhotoAlternateIcon />
+      <label htmlFor={props.inputName} className={styles.customFileLabel}>
+        <AddPhotoAlternateIcon sx={{color: 'grey'}}/>
       </label>
     </div>
   );
@@ -23,5 +23,6 @@ const ImageInput = (props) => {
 ImageInput.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  inputName: PropTypes.string.isRequired
 };
 export default ImageInput;

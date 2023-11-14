@@ -14,18 +14,19 @@ import ImageInput from '../HomePage/ImageInput/ImageInput'
 import axios from 'axios'
 import getUserId from '../../utils/getUserId'
 import { useNavigate } from 'react-router-dom'
+import CircularProgress from '@mui/material/CircularProgress'
 
 function ModalAddPost ({ open, setOpenModal }) {
   const [description, setDescription] = useState('')
   const [photo, setPhoto] = useState('')
   const [error, setError] = useState(null)
-    const [postId, setPostId] = useState(null)
+    const [photoLoading, setPhotoLoading] = useState(null)
   const { avatar, firstName, lastName } = useSelector(
     state => state.user.userData
   )
   const { token } = UseUserToken()
-    const userId = getUserId()
-    const navigate = useNavigate()
+  const userId = getUserId()
+  const navigate = useNavigate()
 
   const handleClose = () => {
     setPhoto('')
@@ -34,16 +35,26 @@ function ModalAddPost ({ open, setOpenModal }) {
     setOpenModal(false)
   }
 
-  const handlePhotoInput = event => {
-    const formData = new FormData()
-    formData.append('file', event.target.files[0])
-    formData.append('upload_preset', 'danit2023')
-    axios
-      .post('https://api.cloudinary.com/v1_1/dl4ihoods/image/upload', formData)
-      .then(response => {
-        setPhoto(response.data.url)
-      })
-  }
+ const handlePhotoInput = async (event) => {
+     try {
+         const selectedFile = event.target.files[0];
+         if (selectedFile) {
+             const formData = new FormData();
+             formData.append('file', selectedFile);
+             formData.append('upload_preset', 'danit2023');
+             setPhotoLoading(true)
+             const response = await axios.post(
+                 'https://api.cloudinary.com/v1_1/dl4ihoods/image/upload',
+                 formData
+             );
+             setPhoto(response.data.url);
+             setError(null);
+         }
+     } catch (err) {
+         setError(err.message);
+     }
+     finally { setPhotoLoading(false) }
+};
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -70,9 +81,8 @@ function ModalAddPost ({ open, setOpenModal }) {
 
       if (response.status === 200) {
         setError(null)
-          setPostId(response.data.id)
-          navigate(`/post/${postId}`)
-          handleClose()
+        navigate(`/post/${response.data.id}`)
+        handleClose()
       } else {
         setError(`Error ${response.status}: ${response.data}`)
       }
@@ -90,35 +100,38 @@ function ModalAddPost ({ open, setOpenModal }) {
           </Button>
         </CustomTooltip>
         <form className={styles.writeWindow} onSubmit={handleSubmit}>
-          <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2 }}>
-            {avatar ? (
-              <Avatar
-                alt={`${firstName} ${lastName}`}
-                src={avatar}
-                sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
-              />
-            ) : (
-              <Avatar
-                sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
-              >
-                {firstName.charAt(0)}
-                {lastName.charAt(0)}
-              </Avatar>
-            )}
+          <>
+            <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2 }}>
+              {avatar ? (
+                <Avatar
+                  alt={`${firstName} ${lastName}`}
+                  src={avatar}
+                  sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
+                />
+              ) : (
+                <Avatar
+                  sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
+                >
+                  {firstName.charAt(0)}
+                  {lastName.charAt(0)}
+                </Avatar>
+              )}
 
-            <MultilineTextFields
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-            />
-            <PostButton onClick={handlePost}>Post</PostButton>
-          </Box>
-          {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
+              <MultilineTextFields
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+              />
+              <PostButton onClick={handlePost}>Post</PostButton>
+            </Box>
+            {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
             {photo ? (
-              <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center'
+                }}
+              >
                 <CustomTooltip title='Delete photo'>
                   <Button
                     onClick={() => {
@@ -137,9 +150,13 @@ function ModalAddPost ({ open, setOpenModal }) {
                   publicId={photo}
                 />
               </Box>
-            ) : (
-              <ImageInput file={photo} onChange={handlePhotoInput} />
-            )}
+                      ) : (
+                              
+              <ImageInput file={photo} onChange={handlePhotoInput} inputName='TweetButtonInput' />
+                      )}
+                      {photoLoading && <CircularProgress/>}
+                      
+          </>
         </form>
       </Box>
     </Modal>

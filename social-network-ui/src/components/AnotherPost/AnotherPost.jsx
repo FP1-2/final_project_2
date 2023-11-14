@@ -18,7 +18,7 @@ import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded'
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
@@ -72,6 +72,7 @@ function AnotherPost ({
   const dispatch = useDispatch()
   const isMinePost = thisPost?.user?.id == userId
   const isFollow = followings.includes(thisPost?.user?.id)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
@@ -179,6 +180,7 @@ function AnotherPost ({
   function handleDeletePost () {
     setPostIsDeleted(true)
     setDeletedCommentsCount && setDeletedCommentsCount(prev => prev + 1)
+    hasCommentWriteWindow && navigate(`/home`)
   }
 
   async function deletePost () {

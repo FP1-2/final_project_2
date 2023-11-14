@@ -87,7 +87,7 @@ const TwitterWriteWindow = ({
 				></Image>
 			)}
 			<div className={styles.writeWindowFooter}>
-				<ImageInput file={photo} onChange={handlePhotoInput} />
+				<ImageInput file={photo} onChange={handlePhotoInput} inputName='homePageInput' />
 
 				<button className={styles.postBtn}>Post</button>
 			</div>
