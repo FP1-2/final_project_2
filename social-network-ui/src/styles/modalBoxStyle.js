@@ -3,7 +3,7 @@ export const modalBoxstyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  minHeight: '50vh',
+  // minHeight: '50vh',
   overflowY: 'auto',
   maxHeight: '100vh',
   bgcolor: 'background.paper',

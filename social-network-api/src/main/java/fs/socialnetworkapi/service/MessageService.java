@@ -5,7 +5,6 @@ import fs.socialnetworkapi.dto.message.MessageDtoIn;
 import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.entity.Message;
 import fs.socialnetworkapi.entity.ChatUser;
@@ -16,6 +15,10 @@ import fs.socialnetworkapi.repos.MessageRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
@@ -33,20 +36,24 @@ public class MessageService {
   private final MessageRepo messageRepo;
   private final ModelMapper mapper;
   private final UserService userService;
-  private final NotificationService notificationService;
+
+  @Autowired
+  private final NotificationCreator notificationCreator;
+
+  private User getUser() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
 
   public Optional<Long> createChat(CreateChatDtoIn createChatDtoIn) {
 
-    if (createChatDtoIn.getMembersChat().size() == 0) {
+    if (createChatDtoIn.getMembersChat().isEmpty()) {
       return Optional.empty();
     }
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     Chat newChat = chatRepo.save(new Chat());
-    ChatUser chatUser = new ChatUser(user.getId(), newChat.getId());
-
-    chatUser = chatUserRepo.save(chatUser);
+    chatUserRepo.save(new ChatUser(user.getId(), newChat.getId()));
 
     createChatDtoIn.getMembersChat()
             .forEach(memberChat -> chatUserRepo.save(
@@ -60,7 +67,7 @@ public class MessageService {
 
     Chat chat = findById(chatId);
 
-    if (createChatDtoIn.getMembersChat().size() == 0) {
+    if (createChatDtoIn.getMembersChat().isEmpty()) {
       return Optional.empty();
     }
 
@@ -80,7 +87,7 @@ public class MessageService {
 
   public MessageDtoOut addMessage(MessageDtoIn messageDtoIn) {
 
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = getUser();
 
     return addMessage(messageDtoIn, user);
   }
@@ -94,24 +101,21 @@ public class MessageService {
     message.setText(messageDtoIn.getText());
     message.setUser(user);
     Message messageToSave = messageRepo.save(message);
-    //sendMessageNotification(messageToSave);
+    sendMessageNotification(messageToSave);
 
     return mapper.map(messageToSave,MessageDtoOut.class);
   }
 
-  public List<MessageDtoOut> getMessagesChat(Long chatId) {
+  public List<MessageDtoOut> getMessagesChat(Long chatId, Integer page, Integer size) {
 
     Chat chat = findById(chatId);
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
-    return chat.getMessages()
+    Page<Message>  allMessage = messageRepo.findByChat(chat, pageRequest);
+    return allMessage
             .stream()
             .map(message -> mapper.map(message, MessageDtoOut.class))
             .toList();
-  }
-
-  public void deleteMessage(Message message) {
-    messageRepo.delete(message);
-    notificationService.deleteByMessageId(message.getId());
   }
 
   public List<Long> getChatsByUser(Long userId) {
@@ -123,7 +127,7 @@ public class MessageService {
   }
 
   private void sendMessageNotification(Message message) {
-    List<Notification> notifications = new NotificationCreator().messageNotification(message);
+    notificationCreator.messageNotification(message);
   }
 
   private Chat findById(Long chatId) {

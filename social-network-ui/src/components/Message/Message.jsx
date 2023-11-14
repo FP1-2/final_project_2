@@ -1,45 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import MessageItem from "./MessageItem";
 import InputCreatMessage from "../InputCreateMessage/InputCreateMessage";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 function Message() {
   const messages = useSelector((state) => state.chat.messages);
   const chatId = useSelector((state) => state.chat.chatId);
-  const [hasMore, setHasMore] = useState(true);
- 
-  return (
-    <Box sx={{
-      width: '100%',
-      display: 'flex'
-    }}>
 
+  const scrollContainerRef = useRef(null);
+  const lastMessageRef = useRef(null);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+  return (
+    <>
+      <Box
+        className="ref"
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          maxHeight: "80vh",
+          overflowY: "auto",
+        }}
+      >
         <Box
+          ref={scrollContainerRef}
           sx={{
-            width: '100%',
-            //  position: "fixed",
-            // top: 0,
-            height: "80%",
+            width: "100%",
+            flexGrow: 1,
           }}
         >
-          {messages?.map((message) => (
-            <MessageItem key={message.id} message={message} />
-          )).slice(-5)}
+          {messages?.map((message, index) => (
+            <div
+              key={message.id}
+              ref={index === messages.length - 1 ? lastMessageRef : null}
+            >
+              <MessageItem message={message} />
+            </div>
+          ))}
         </Box>
-
+      </Box>
 
       <Box
         sx={{
-          position: "fixed",
-          bottom: 0,
-          width: "80%",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignContent: "flex-end",
+          alignItems: "center",
+          mt: "30px",
         }}
       >
         <InputCreatMessage chatId={chatId} />
       </Box>
-    </Box>
+    </>
   );
 }
 

@@ -2,7 +2,6 @@ import {
   format,
   differenceInHours,
   differenceInMinutes,
-  differenceInSeconds
 } from 'date-fns'
 import { getTimezoneOffset, toDate } from 'date-fns-tz'
 
@@ -19,7 +18,6 @@ function formatPostDate (dateString) {
   const postDateInUserTimeZone = toDate(postDateCorrected)
   const hoursDiff = differenceInHours(now, postDateInUserTimeZone)
   const minutesDiff = differenceInMinutes(now, postDateInUserTimeZone)
-  const secondsDiff = differenceInSeconds(now, postDateInUserTimeZone)
   const formatedPostDate = format(postDateInUserTimeZone, 'dd MMM. yyyy')
 
   switch (true) {
@@ -30,7 +28,7 @@ function formatPostDate (dateString) {
     case minutesDiff >= 1:
       return `${minutesDiff} minutes ago`
     default:
-      return `${secondsDiff} seconds ago`
+      return `just now`
   }
 }
 

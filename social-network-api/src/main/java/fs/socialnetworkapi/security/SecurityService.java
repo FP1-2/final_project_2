@@ -49,13 +49,14 @@ public class SecurityService {
     Map<String,Object> claims = new HashMap<>();
     claims.put("roles",user.getRoles());
     claims.put("email", user.getEmail());
+    claims.put("username", user.getUsername());
     claims.put(Claims.ID,user.getId().toString());
 
     return generateToken(claims, user.getEmail());
   }
 
   private TokenDetails generateToken(Map<String, Object> claims, String subject) {
-    Long expirationTimeInMillis = expirationInSeconds * 1000L;
+    long expirationTimeInMillis = expirationInSeconds * 1000L;
     LocalDateTime expirationDate = LocalDateTime.now().plusSeconds(expirationTimeInMillis);
     return generateToken(expirationDate, claims, subject);
   }

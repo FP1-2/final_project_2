@@ -1,52 +1,60 @@
 import React, { useEffect } from "react";
-import {
-  getAllUsers,
-  closeChatModal,
-  createChat,
-  getChatMembers,
-  setChatId,
-  setError, fetchChats, getChatMessages, setMessages,
-} from '../../redux/slices/chatSlice'
+import { setChatId, setError, setMessages } from "../../redux/slices/chatSlice";
+import { getAllUsers } from "../../api/getAllUsers";
+import { closeChatModal, setUsers } from "../../redux/slices/chatSlice";
+import { getChatMessages } from "../../api/getChatMessages";
+import { createChat } from "../../api/postCreateChat";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Box,
-  Checkbox,
-  Modal,
-  FormLabel,
-  InputLabel,
-  TextField,
-  FormGroup,
-  FormControlLabel,
-  Button,
-} from "@mui/material";
+import { fetchChats } from "../../redux/thunks/chatThunk";
+import { Box, Modal, ThemeProvider, TextField, Button } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 import ModalForm from "./ModalForm";
 import UseUserToken from "../../hooks/useUserToken";
 import Chats from "../Chats/Chats";
 
 function ModalNewChat() {
-   const chatMember = useSelector((state) => state.chat.newChatMembers);
+  const { token } = UseUserToken();
+  const chatMember = useSelector((state) => state.chat.newChatMembers);
+  const users = useSelector((state) => state.chat.users);
+    const chats = useSelector((state) => state.chat.chats);
+   const userId = useSelector((state) => state.user?.userId);
   const dispatch = useDispatch();
-  const users = getAllUsers();
-  console.log(users);
+
   const isOpen = useSelector((state) => state.chat.modalProps.isOpenChat);
   const handleCloseModal = () => {
     dispatch(closeChatModal(!isOpen));
   };
 
-  const { token } = UseUserToken();
+  async function findUsers(event) {
+    const username = event.target.value;
+    const users = await getAllUsers(username, token);
 
+    dispatch(setUsers(users));
+  }
   async function sendChat() {
     try {
-      const chatData = {
-        membersChat: [chatMember],
-      };
+        let chatId = null;
+        for (var i = 0; i < chats.length; i++) {
+            let index = chats[i].members.findIndex(x => x.id === Number(chatMember));
 
-      const chatId = await createChat(chatData, token);
-      dispatch(fetchChats(token));
-      dispatch(setChatId(chatId));
-      const updatedChat = await getChatMessages(chatId, token);
-      dispatch(setMessages(updatedChat));
-      handleCloseModal()
+            if (index >= 0 && !chatId) {
+                chatId = chats[i].id;
+            }
+        }
+
+        if (!chatId) {
+            const chatData = {
+                membersChat: [chatMember],
+            };
+
+            chatId = await createChat(chatData, token);
+        }
+
+        dispatch(fetchChats(userId));
+        dispatch(setChatId(chatId));
+        const updatedChat = await getChatMessages(chatId, token);
+        dispatch(setMessages(updatedChat));
+        handleCloseModal();
     } catch (error) {
       if (error.response) {
         dispatch(
@@ -58,14 +66,19 @@ function ModalNewChat() {
         dispatch(setError(`Error: ${error?.message}`));
       }
     }
-
   }
-  // useEffect(() => {
-  //   dispatch(createChat(token));
-  // }, [chat, token]);
-
+const theme = createTheme({
+	// custom theme
+	typography: {
+		h3: {
+			fontSize: "2.5rem",
+			fontWeight: 700,
+		},
+	},
+});
   return (
-    <Box>
+    <ThemeProvider theme={theme}>
+    <Box >
       <Modal open={isOpen} onClose={() => handleCloseModal()}>
         <Box
           sx={{
@@ -100,8 +113,10 @@ function ModalNewChat() {
               width: "100%",
             }}
           >
-            <div>x</div>
-            <div>New message</div>
+            <Box onClick={() => handleCloseModal()} sx={{
+              cursor: 'pointer'
+            }}>&#10005;</Box>
+            <Box>New message</Box>
             {<Chats /> && <Button onClick={() => sendChat()}>next</Button>}
           </Box>
           <Box
@@ -109,16 +124,20 @@ function ModalNewChat() {
               width: "100%",
             }}
           >
-            <TextField sx={{ width: "100%" }} label="search people"></TextField>
+            <TextField
+              onChange={findUsers}
+              sx={{ width: "100%" }}
+              label="search people"
+            ></TextField>
             <Box>
-              {users?.map((user) => (
-                <ModalForm key={user.id} user={user} />
-              ))}
+              {users &&
+                users?.map((user) => <ModalForm key={user.id} user={user} />)}
             </Box>
           </Box>
         </Box>
       </Modal>
     </Box>
+    </ThemeProvider>
   );
 }
 

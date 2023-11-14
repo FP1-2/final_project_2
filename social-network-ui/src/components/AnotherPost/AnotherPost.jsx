@@ -18,7 +18,7 @@ import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded'
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined'
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import UseUserToken from '../../hooks/useUserToken'
 import formatPostDate from '../../utils/formatPostDate'
@@ -28,7 +28,7 @@ import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import CommentWriteWindow from '../ModalComment/CommentWriteWindow'
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
 
 const style = {
   position: 'absolute',
@@ -51,8 +51,8 @@ function AnotherPost ({
   deletedCommentsCount,
   setDeletedCommentsCount
 }) {
-  const isRepost = post.typePost === 'REPOST'
-  const isComment = post.typePost === 'COMMENT'
+  const isRepost = post?.typePost === 'REPOST'
+  const isComment = post?.typePost === 'COMMENT'
   let thisPost
   isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
   const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
@@ -72,10 +72,11 @@ function AnotherPost ({
   const dispatch = useDispatch()
   const isMinePost = thisPost?.user?.id == userId
   const isFollow = followings.includes(thisPost?.user?.id)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
-      setCountComments(thisPost?.countComments - deletedCommentsCount)
+      setCountComments((prev) => prev - deletedCommentsCount)
     }
   }, [deletedCommentsCount])
 
@@ -179,6 +180,7 @@ function AnotherPost ({
   function handleDeletePost () {
     setPostIsDeleted(true)
     setDeletedCommentsCount && setDeletedCommentsCount(prev => prev + 1)
+    hasCommentWriteWindow && navigate(`/home`)
   }
 
   async function deletePost () {
@@ -401,10 +403,10 @@ function AnotherPost ({
       </Card>
       <ModalComment
         post={thisPost}
-        commentsCount={countComments}
         open={openCommentModal}
         setOpenModal={setOpenCommentModal}
         setCommentsCount={setCountComments}
+        setComments={setComments}
       />
       <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
         <Box sx={style}>

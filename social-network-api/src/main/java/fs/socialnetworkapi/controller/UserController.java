@@ -43,13 +43,13 @@ public class UserController {
 
   @GetMapping("followers/{user_id}") //підписчики
   public ResponseEntity<List<UserDtoOut>> getFollowers(@PathVariable(value = "user_id") Long userId) {
-    List<UserDtoOut> followers = userService.getFollowers(userId);
+    List<UserDtoOut> followers = userService.getFollowersDto(userId);
     return ResponseEntity.ok(followers);
   }
 
   @GetMapping("followings/{user_id}") //підписки
   public ResponseEntity<List<UserDtoOut>> getFollowings(@PathVariable(value = "user_id") Long userId) {
-    List<UserDtoOut> followings = userService.getFollowings(userId);
+    List<UserDtoOut> followings = userService.getFollowingsDto(userId);
     return ResponseEntity.ok(followings);
   }
 

@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import AnotherPost from '../../components/AnotherPost/AnotherPost'
 import getPost from '../../api/getPost'
+import getComments from '../../api/getComments'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 import { style } from '../../styles/circularProgressStyle'
+import UseUserToken from '../../hooks/useUserToken'
+import { Button } from '@mui/material'
 
 function PostPage () {
   const params = useParams()
@@ -13,14 +16,22 @@ function PostPage () {
   const [post, setPost] = useState({})
   const [comments, setComments] = useState([])
   const [deletedCommentsCount, setDeletedCommentsCount] = useState(0)
+  const [isComment, setIsComment] = useState(false)
+  const bottomRef = useRef()
+  const { token } = UseUserToken()
+  // comments page
+  const [page, setPage] = useState(0)
+  // comments per page
+  const size = 5
+  const moreComments = post?.countComments > comments.length
 
   useEffect(() => {
-      async function fetchPost() {
-        setLoading(true)
+    async function fetchPost () {
+      setLoading(true)
       try {
-        const data = await getPost(params.postId)
-          setPost(data)
-        setComments(data.comments)
+        const data = await getPost(params.postId, token)
+        setPost(data)
+        data.typePost === 'COMMENT' ? setIsComment(true) : setIsComment(false)
       } catch (error) {
         if (error.response) {
           setError(`Error ${error.response?.status}: ${error.response?.data}`)
@@ -34,28 +45,52 @@ function PostPage () {
       }
     }
     fetchPost()
-  }, [params])
+  }, [params.postId])
+
+  useEffect(() => {
+    async function fetchComments () {
+      try {
+        setLoading(true)
+        const commentsData = await getComments(params.postId, token, page, size)
+        setComments(prev => [...prev, ...commentsData])
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchComments()
+  }, [params.postId, page])
+
+  useEffect(() => {
+    isComment && bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
+  })
 
   return (
-    <>
-      {loading && (
-        <Box sx={style}>
-          <CircularProgress />
-        </Box>
-      )}
-
+    <Box sx={{
+        maxHeight: '100vh',
+        overflowY: 'auto'
+      }}>
       {error && <h2>{error}</h2>}
 
-      {!error && !loading && (
-        <AnotherPost
-          post={post}
-          setComments={setComments}
-          hasCommentWriteWindow={true}
-          deletedCommentsCount={deletedCommentsCount}
-        />
+      {post.id && (
+        <>
+          {isComment && (
+            <AnotherPost
+              post={post.originalPost}
+              deletedCommentsCount={deletedCommentsCount}
+            />
+          )}
+          <AnotherPost
+            post={post}
+            setComments={setComments}
+            hasCommentWriteWindow={true}
+            deletedCommentsCount={deletedCommentsCount}
+          />
+          <div ref={bottomRef}></div>
+        </>
       )}
-      {!error &&
-        !loading &&
+      {comments.length > 0 &&
         comments.map(post => (
           <AnotherPost
             key={post.id}
@@ -63,7 +98,16 @@ function PostPage () {
             setDeletedCommentsCount={setDeletedCommentsCount}
           />
         ))}
-    </>
+
+      <Box sx={style}>
+        {loading && <CircularProgress />}
+        {!error && !loading && moreComments && (
+          <Button onClick={() => setPage(prev => prev + 1)}>
+            Show more comments
+          </Button>
+        )}
+      </Box>
+    </Box>
   )
 }
 

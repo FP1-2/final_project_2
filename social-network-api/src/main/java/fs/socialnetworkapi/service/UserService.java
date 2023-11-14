@@ -4,12 +4,12 @@ import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
-import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,8 +20,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
-
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,9 @@ public class UserService implements UserDetailsService {
   private final ModelMapper mapper;
   private final PasswordEncoder passwordEncoder;
   private final PostRepo postRepo;
+
+  @Autowired
+  private final NotificationCreator notificationCreator;
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
@@ -59,10 +64,9 @@ public class UserService implements UserDetailsService {
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
     UserDtoOut userDtoOut = mapper.map(user, UserDtoOut.class);
-    userDtoOut.setUserFollowingCount(getFollowings(userId).size());
-    userDtoOut.setUserFollowersCount(getFollowers(userId).size());
+    userDtoOut.setUserFollowingCount(getFollowingsDto(userId).size());
+    userDtoOut.setUserFollowersCount(getFollowersDto(userId).size());
     userDtoOut.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
-
     return userDtoOut;
   }
 
@@ -139,7 +143,7 @@ public class UserService implements UserDetailsService {
     User currentUser = getUser();
 
     User user = findById(userId);
-    sendSubscriberNotification(user);
+    notificationCreator.subscriberNotification(user);
     user.getFollowers().add(currentUser);
     saveUser(user);
   }
@@ -163,6 +167,14 @@ public class UserService implements UserDetailsService {
       .stream()
       .map(u -> mapper.map(u, UserDtoOut.class))
       .toList();
+  }
+
+  public Set<User> getFollowings(Long userId) {
+    return findById(userId).getFollowings();
+  }
+
+  public Set<User> getFollowers(Long userId) {
+    return findById(userId).getFollowers();
   }
 
   @Override
@@ -233,10 +245,10 @@ public class UserService implements UserDetailsService {
   private List<UserDtoOut> showPopularUser(List<User> users, boolean isFollowers) {
     return users
       .stream()
-      .map(p -> mapper.map(p, UserDtoOut.class))
+      .map(p->mapper.map(p,UserDtoOut.class))
       .peek(userDtoOut -> {
-        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
-        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowingCount(getFollowingsDto(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowersDto(userDtoOut.getId()).size());
         userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
         userDtoOut.setUserFollowers(isFollowers);
       })

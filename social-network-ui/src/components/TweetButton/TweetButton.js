@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 //MUI
 import { Button, Box } from '@mui/material'
+import ModalAddPost from '../ModalAddPost/ModalAddPost'
 
 const TweetButton = () => {
+	const [openModal, setOpenModal] = useState(false)
+
 	return (
 		<Box
 			sx={{
@@ -20,9 +23,11 @@ const TweetButton = () => {
 					borderRadius: 7,
 				}}
 				variant='contained'
+				onClick={() => {setOpenModal(true)}}
 			>
 				Tweet
 			</Button>
+			<ModalAddPost open={openModal} setOpenModal={setOpenModal} />
 		</Box>
 	)
 }

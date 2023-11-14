@@ -1,50 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Avatar, Box, CssBaseline, Button } from "@mui/material";
+import { Box, Button,Typography, } from "@mui/material";
 import Chats from "../../components/Chats/Chats";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import classNames from "classnames";
 import styles from "./MessagePage.module.scss";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import Message from "../../components/Message/Message";
 import ModalNewChat from "../../components/ModalNewChat/ModalNewChat";
-import { openChatModal } from "../../redux/slices/chatSlice";
-
+import {openChatModal, setChats, setUsers} from "../../redux/slices/chatSlice";
+import { fetchChats } from "../../redux/thunks/chatThunk";
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import {getAllUsers} from "../../api/getAllUsers";
 function MessagePage() {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
   const isOpen = useSelector((state) => state.chat.modalProps.isOpenChat);
-
+  const userId = useSelector((state) => state.user?.userId);
   const messages = useSelector((state) => state.chat.messages);
+  const chats = useSelector((state) => state.chat.chats);
+  const chatsStorage = useSelector((state) => state.chat.chatsStorage);
 
   const handleOpenModal = () => {
     dispatch(openChatModal());
   };
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchChats(userId));
+    }
+  }, [dispatch, userId]);
 
-  //  const handleSearch = async () => {
-  //   try {
-  //     const response = await axios.post ('http://twitterdanit.us-east-1.elasticbeanstalk.com/api/v1/search');
-  //     if (response === 200) {
-  //       const data = await response.json();
-  //       setUser(data);
-  //       setErr(false);
-  //     } else {
-  //       setErr(true);
-  //     }
-  //   } catch (error) {
-  //     setErr(true);
-  //   }
-  // }
-  //  const handleKey = (e) => {
-  //     e.target.value === "Enter" && handleSearch()
-  //     setChatComponentActive(true)
-  //   }
+    async function findChats(event) {
+        const username = event.target.value;
+        const newChats = [];
+        for (let i = 0; i < chatsStorage.length; i++) {
+            let index = chatsStorage[i].members.findIndex(x => (
+                    (x.username.includes(username)) ||
+                    (x.firstName.includes(username)) ||
+                    (x.lastName.includes(username))
+                )
+            );
 
+            if (index >= 0) {
+                newChats.push(chatsStorage[i])
+            }
+        }
+
+        dispatch(setChats(newChats));
+    }
+
+	const theme = createTheme({
+		typography: {
+		p: {
+			fontFamily: 'Segoe UI, sans-serif',
+		},
+		h3: {
+			'@media (max-width: 450px)': {
+				letterSpacing: '0.2rem',
+			},
+			'@media (max-width: 350px)': {
+				letterSpacing: '0',
+			},
+		},
+	},
+	})
   return (
+    <ThemeProvider theme={theme}>
     <Box>
       <Box
         sx={{
@@ -59,8 +81,14 @@ function MessagePage() {
           }}
         >
           <div className={styles.flex}>
-            <h1> Messages </h1>
-            <div className={styles.messageIcon}>
+            	<Typography
+									variant='h2'
+									sx={{
+										marginBottom: '0.3rem',
+										fontWeight: '700',
+									}}
+								> Messages </Typography>
+            {/*<div className={styles.messageIcon}>*/}
               <span>
                 {<SettingsOutlinedIcon fontSize="30px" />}{" "}
                 {isOpen && <ModalNewChat />}{" "}
@@ -70,22 +98,23 @@ function MessagePage() {
                 {isOpen && <ModalNewChat />}{" "}
               </span>
             </div>
-          </div>
+          {/*</div>*/}
           <div className={styles.inputContainer}>
             <input
               type="text"
               placeholder="Search Direct Messages"
               className={styles.searchInput}
+              onChange={findChats}
+            
             />
           </div>
-          <div></div>
-          {/* </Box>
-        <Box> */}
+
+        
         </Box>
         <Box
           sx={{
             display: "flex",
-            // justifyContent: 'space-between'
+           
           }}
         >
           <Box
@@ -105,15 +134,30 @@ function MessagePage() {
             {messages ? (
               <Message />
             ) : (
-              <div className={styles.subLeftGrid}>
-                <div className={styles.subLeft}>
-                  <h2>Select a message </h2>
+              <Box sx={{
+                height: '100%',
+                 fontSize: "1rem",
+                fontWeight: 400,
+              }}>
+                
+                  <Box sx={{
+                height: '100%',
+                display: 'flex',
+                    flexDirection: 'column',
+                 alignItems: 'center'
+              }}>
+                    <Typography
+                      variant='h5'
+                      >
 
-                  <p>
+                  Select a message
+                    </Typography>
+                  <Box>
+                    <Typography>
                     Choose from your existing conversations, start a new one, or
                     just keep swimming.
-                  </p>
-
+                    </Typography>
+                  </Box>
                   {isOpen && <ModalNewChat />}
                   <Button
                     variant="contained"
@@ -132,17 +176,19 @@ function MessagePage() {
                       backgroundColor: "#1DA1F2",
                     }}
                     onClick={handleOpenModal}
-                    className={styles.newMessageBtn}
+                    
                   >
                     New message
                   </Button>
-                </div>
-              </div>
+
+                </Box>
+              </Box>
             )}
           </Box>
         </Box>
       </Box>
     </Box>
+    </ThemeProvider>
   );
 }
 

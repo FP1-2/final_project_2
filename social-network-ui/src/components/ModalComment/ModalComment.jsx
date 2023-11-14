@@ -11,18 +11,18 @@ import {
 import { PropTypes } from 'prop-types'
 import formatPostDate from '../../utils/formatPostDate'
 import CloseIcon from '@mui/icons-material/Close'
-import CommentWriteWindow from './CommentWriteWindow'
 import { Link } from 'react-router-dom'
 import styles from '../AnotherPost/AnotherPost.module.scss'
 import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
 
 function ModalComment ({
   post,
   setOpenModal,
   open,
-  commentsCount,
-  setCommentsCount
+  setCommentsCount,
+  setComments
 }) {
   let postDate
   post ? (postDate = formatPostDate(post.createdDate)) : null
@@ -120,8 +120,8 @@ function ModalComment ({
         <CommentWriteWindow
           postId={post.id}
           close={handleClose}
-          commentsCount={commentsCount}
           setCommentsCount={setCommentsCount}
+          setComments={setComments}
         />
       </Box>
     </Modal>
@@ -129,10 +129,10 @@ function ModalComment ({
 }
 
 ModalComment.propTypes = {
-  post: PropTypes.object,
-  setOpenModal: PropTypes.func,
-  open: PropTypes.bool,
-  setCommentsCount: PropTypes.func,
-  commentsCount: PropTypes.number
+  post: PropTypes.object.isRequired,
+  setOpenModal: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  setCommentsCount: PropTypes.func.isRequired,
+  setComments: PropTypes.func
 }
 export default ModalComment

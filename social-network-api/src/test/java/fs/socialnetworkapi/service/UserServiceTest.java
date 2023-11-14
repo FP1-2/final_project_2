@@ -2,7 +2,6 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.User;
-import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -238,7 +237,7 @@ class UserServiceTest {
     Mockito.when(userRepo.findById(1L)).thenReturn(Optional.of(currentUser));
     Mockito.when(mapper.map(any(User.class), eq(UserDtoOut.class))).thenReturn(any(UserDtoOut.class));
 
-    List<UserDtoOut> followings = userService.getFollowings(1L);
+    List<UserDtoOut> followings = userService.getFollowingsDto(1L);
     verify(userRepo, times(1)).findById(any());
     assertEquals(1,followings.size());
   }

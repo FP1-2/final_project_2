@@ -147,6 +147,8 @@ const ProfilePage = () => {
 	useEffect(() => {
 		//load posts when user change post type
 		loadNewPosts(choosenTypePost)
+		setIsLoadingMoreFull(false)
+		setPage(1)
 	}, [choosenTypePost])
 
 	if (user) {
@@ -254,7 +256,7 @@ const ProfilePage = () => {
 
 	const loadMorePosts = async () => {
 		//load more posts with pagination
-		if (isLoadingMore) return
+		if (isLoadingMore || isLoadingMoreFull) return
 
 		setIsLoadingMore(true)
 
@@ -269,9 +271,12 @@ const ProfilePage = () => {
 					},
 				}
 			)
+			console.log(data)
 			if (data.length > 0) {
 				setUserPosts(prevPosts => [...prevPosts, ...data])
 				setPage(prevPage => prevPage + 1)
+			} else {
+				setIsLoadingMoreFull(true)
 			}
 		} catch (error) {
 			console.error(error)
