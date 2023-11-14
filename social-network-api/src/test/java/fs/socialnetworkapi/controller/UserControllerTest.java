@@ -87,7 +87,7 @@ class UserControllerTest {
     // Arrange
     Long currentUserId = 1L;
     List<UserDtoOut> followers = new ArrayList<>();
-    when(userService.getFollowers(currentUserId)).thenReturn(followers);
+    when(userService.getFollowersDto(currentUserId)).thenReturn(followers);
 
     // Act
     ResponseEntity<List<UserDtoOut>> responseEntity = userController.getFollowers(currentUserId);
@@ -95,7 +95,7 @@ class UserControllerTest {
     // Assert
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     assertEquals(followers, responseEntity.getBody());
-    verify(userService, times(1)).getFollowers(currentUserId);
+    verify(userService, times(1)).getFollowersDto(currentUserId);
   }
 
   @Test
@@ -103,7 +103,7 @@ class UserControllerTest {
     // Arrange
     Long currentUserId = 1L;
     List<UserDtoOut> followings = new ArrayList<>();
-    when(userService.getFollowings(currentUserId)).thenReturn(followings);
+    when(userService.getFollowingsDto(currentUserId)).thenReturn(followings);
 
     // Act
     ResponseEntity<List<UserDtoOut>> responseEntity = userController.getFollowings(currentUserId);
@@ -111,7 +111,7 @@ class UserControllerTest {
     // Assert
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     assertEquals(followings, responseEntity.getBody());
-    verify(userService, times(1)).getFollowings(currentUserId);
+    verify(userService, times(1)).getFollowingsDto(currentUserId);
   }
 
    @Test

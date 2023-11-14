@@ -74,7 +74,7 @@ public class PostService {
 
     User user = userService.getUser();
 
-    Set<User> followings = user.getFollowings();
+    Set<User> followings = userService.getFollowings(user.getId());
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
     PageRequest pageRequest = getPageRequest(page, size);
 
@@ -316,7 +316,7 @@ public class PostService {
 
   private Post save(Post post, TypePost typePost) {
     Post postToSave = postRepo.save(post);
-    notificationCreator.sendPostByTypePost(postToSave, typePost, userService.getFollowers(post.getUser().getId()));
+    notificationCreator.sendPostByTypePost(postToSave, typePost, userService.getFollowersDto(post.getUser().getId()));
     return postToSave;
   }
 
