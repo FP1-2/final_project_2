@@ -16,7 +16,7 @@ function Favourites () {
 
   const userId = useSelector(state => state.user.userId)
   const { token } = UseUserToken()
-  const size = 5
+  const size = 10
 
   useEffect(() => {
     async function getPosts () {
@@ -62,7 +62,10 @@ function Favourites () {
   }, [])
 
   return (
-    <>
+    <Box sx={{
+        maxHeight: '100vh',
+        overflowY: 'auto'
+      }}>
       {error && <h2>{error}</h2>}
 
       {!error &&
@@ -71,7 +74,7 @@ function Favourites () {
       <Box sx={style}>
         {loading && <CircularProgress />}
       </Box>
-    </>
+    </Box>
   )
 }
 
