@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import ImageInput from '../HomePage/ImageInput/ImageInput'
 import MultilineTextFields from '../HomePage/WriteInput/MultilineTextFields'
 import Avatar from '@mui/material/Avatar'
@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
 import { Image } from 'cloudinary-react'
 import UseUserToken from './../../hooks/useUserToken'
 import getUserId from '../../utils/getUserId'
-import getUserData from '../../api/getUserInfo'
 import styles from './CommentWriteWindow.module.scss'
 import axios from 'axios'
 import { Button, Typography } from '@mui/material'
@@ -15,6 +14,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
 import { useNavigate } from 'react-router-dom'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
+import { useSelector } from 'react-redux';
 
 function CommentWriteWindow ({
   postId,
@@ -28,21 +28,8 @@ function CommentWriteWindow ({
   const [photo, setPhoto] = useState('')
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
-  const [user, setUser] = useState(null)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    async function fetchData () {
-      try {
-        const user = await getUserData(userId, token)
-        setUser(user)
-      } catch (error) {
-        setError(error)
-      }
-    }
-
-    fetchData()
-  }, [userId, token])
+  const {avatar, firstName, lastName} = useSelector((state) => state.user.userData)
 
   const handleModalComment = () => {
     setSuccess('Comment sent. Click to open the post')
@@ -110,18 +97,18 @@ function CommentWriteWindow ({
   return (
     <form className={styles.writeWindow} onSubmit={handleSubmit}>
       <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2 }}>
-        {user?.avatar ? (
+        {avatar ? (
           <Avatar
-            alt={`${user?.firstName} ${user?.lastName}`}
-            src={user?.avatar}
+            alt={`${firstName} ${lastName}`}
+            src={avatar}
             sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
           />
         ) : (
           <Avatar
             sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
           >
-            {user?.firstName.charAt(0)}
-            {user?.lastName.charAt(0)}
+            {firstName.charAt(0)}
+            {lastName.charAt(0)}
           </Avatar>
         )}
 
