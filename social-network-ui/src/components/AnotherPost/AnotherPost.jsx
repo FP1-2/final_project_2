@@ -401,10 +401,10 @@ function AnotherPost ({
       </Card>
       <ModalComment
         post={thisPost}
-        commentsCount={countComments}
         open={openCommentModal}
         setOpenModal={setOpenCommentModal}
         setCommentsCount={setCountComments}
+        setComments={setComments}
       />
       <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
         <Box sx={style}>
