@@ -62,6 +62,7 @@ public class UserService implements UserDetailsService {
     userDtoOut.setUserFollowingCount(getFollowings(userId).size());
     userDtoOut.setUserFollowersCount(getFollowers(userId).size());
     userDtoOut.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
+
     return userDtoOut;
   }
 
@@ -197,8 +198,10 @@ public class UserService implements UserDetailsService {
   }
 
   public List<UserDtoOut> findPopularUser() {
+    User user = getUser();
     List<User> users = userRepo.findAll();
     List<User> popularUsers = new ArrayList<>();
+    boolean isFollowers = false;
 
     for (int i = 0; i < users.size(); i++) {
       if (users.get(i).getFollowers().size() > 0) {
@@ -209,9 +212,15 @@ public class UserService implements UserDetailsService {
     Collections.sort(popularUsers, followersComparator);
     List<User> fivePopularUser = popularUsers.subList(0,5);
 
+    for (int j = 0; j < fivePopularUser.size(); j++)
+      if (fivePopularUser.get(j).getFollowers() == user.getFollowers()) {
+        isFollowers = true;
+      } else {
+        isFollowers = false;
+      }
+    System.out.println(isFollowers);
 
-
-    return showAllUserWithUsername(fivePopularUser);
+    return showPopularUser(fivePopularUser, isFollowers);
   }
 
   public class PopularUserComparator implements Comparator<User> {
@@ -219,6 +228,19 @@ public class UserService implements UserDetailsService {
     public int compare(User o1, User o2) {
       return o2.getFollowers().size() - o1.getFollowers().size();
     }
+  }
+
+  private List<UserDtoOut> showPopularUser(List<User> users, boolean isFollowers) {
+    return users
+      .stream()
+      .map(p -> mapper.map(p, UserDtoOut.class))
+      .peek(userDtoOut -> {
+        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
+        userDtoOut.setUserFollowers(isFollowers);
+      })
+      .toList();
   }
 
 }
