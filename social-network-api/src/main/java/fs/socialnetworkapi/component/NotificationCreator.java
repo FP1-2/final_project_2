@@ -41,7 +41,7 @@ public class NotificationCreator {
   public void likeNotification(Like like) {
     Notification notification = new Notification();
     notification.setType(NotificationType.LIKE);
-    notification.setLink(String.format("%s/#/%d", baseUrl, like.getPost().getId()));
+    notification.setLink(String.format("%s/#/post/%d", baseUrl, like.getPost().getId()));
     notification.setText(String.format("User %s liked your post %s",
       like.getUser().getUsername(),
       like.getPost().getDescription()));
@@ -66,7 +66,7 @@ public class NotificationCreator {
     followers.forEach(user -> {
       Notification notification = new Notification();
       notification.setType(NotificationType.FEATURED);
-      notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
+      notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
       notification.setText(String.format("Your featured user %s has new post: %s",
         post.getUser().getUsername(),
         post.getDescription()));
@@ -81,7 +81,7 @@ public class NotificationCreator {
 
     Notification notification = new Notification();
     notification.setType(NotificationType.REPOST);
-    notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
+    notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s reposted your post: %s",
       post.getUser().getUsername(),
       post.getDescription()));
@@ -95,7 +95,7 @@ public class NotificationCreator {
 
     Notification notification = new Notification();
     notification.setType(NotificationType.REPOST);
-    notification.setLink(String.format("%s/#/%d", baseUrl, post.getId()));
+    notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s commented your post: %s",
       post.getUser().getUsername(),
       post.getDescription()));
@@ -109,7 +109,7 @@ public class NotificationCreator {
 
     Notification notification = new Notification();
     notification.setType(NotificationType.SUBSCRIBER);
-    notification.setLink(String.format("%s/#/user/info/%d", baseUrl, user.getId()));
+    notification.setLink(String.format("%s/#/profile/%d", baseUrl, user.getId()));
     notification.setText(String.format("User %s subscribed to your account", getUser().getUsername()));
     notification.setNotifyingUser(user);
 
@@ -127,9 +127,8 @@ public class NotificationCreator {
         user -> {
           Notification notification = new Notification();
           notification.setType(NotificationType.MESSAGE);
-          notification.setLink(String.format("%s/#/get-messages-chat/%d",
-            baseUrl,
-            message.getChat().getId()));
+          notification.setLink(String.format("%s/#/messages",
+            baseUrl));
           notification.setText(String.format("User %s sent you new message: %s",
             message.getUser().getUsername(),
             message.getText()));

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -63,8 +64,8 @@ public class UserService implements UserDetailsService {
   public UserDtoOut showUser(Long userId) {
     User user = userRepo.getReferenceById(userId);
     UserDtoOut userDtoOut = mapper.map(user, UserDtoOut.class);
-    userDtoOut.setUserFollowingCount(getFollowings(userId).size());
-    userDtoOut.setUserFollowersCount(getFollowers(userId).size());
+    userDtoOut.setUserFollowingCount(getFollowingsDto(userId).size());
+    userDtoOut.setUserFollowersCount(getFollowersDto(userId).size());
     userDtoOut.setUserTweetCount(getUserPosts(userId, 0, 1000000).size());// need to correct
     return userDtoOut;
   }
@@ -154,18 +155,26 @@ public class UserService implements UserDetailsService {
     saveUser(user);
   }
 
-  public List<UserDtoOut> getFollowers(Long userId) {
-    return findById(userId).getFollowers()
+  public List<UserDtoOut> getFollowersDto(Long userId) {
+    return getFollowers(userId)
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
   }
 
-  public List<UserDtoOut> getFollowings(Long userId) {
-    return findById(userId).getFollowings()
+  public List<UserDtoOut> getFollowingsDto(Long userId) {
+    return getFollowings(userId)
             .stream()
             .map(u -> mapper.map(u, UserDtoOut.class))
             .toList();
+  }
+
+  public Set<User> getFollowings(Long userId) {
+    return findById(userId).getFollowings();
+  }
+
+  public Set<User> getFollowers(Long userId) {
+    return findById(userId).getFollowers();
   }
 
   @Override
@@ -189,8 +198,8 @@ public class UserService implements UserDetailsService {
       .stream()
       .map(p->mapper.map(p,UserDtoOut.class))
       .peek(userDtoOut -> {
-        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
-        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowingCount(getFollowingsDto(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowersDto(userDtoOut.getId()).size());
         userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
       })
       .toList();

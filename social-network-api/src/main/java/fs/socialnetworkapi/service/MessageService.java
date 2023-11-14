@@ -16,6 +16,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
@@ -103,11 +106,13 @@ public class MessageService {
     return mapper.map(messageToSave,MessageDtoOut.class);
   }
 
-  public List<MessageDtoOut> getMessagesChat(Long chatId) {
+  public List<MessageDtoOut> getMessagesChat(Long chatId, Integer page, Integer size) {
 
     Chat chat = findById(chatId);
+    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
-    return chat.getMessages()
+    Page<Message>  allMessage = messageRepo.findByChat(chat, pageRequest);
+    return allMessage
             .stream()
             .map(message -> mapper.map(message, MessageDtoOut.class))
             .toList();

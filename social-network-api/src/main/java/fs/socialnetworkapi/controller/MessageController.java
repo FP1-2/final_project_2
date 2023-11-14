@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -71,9 +72,11 @@ public class MessageController {
   }
 
   @GetMapping("get-messages-chat/{chatId}")
-  public ResponseEntity<List<MessageDtoOut>> getMessagesChat(@PathVariable("chatId") Long chatId) {
+  public ResponseEntity<List<MessageDtoOut>> getMessagesChat(@PathVariable("chatId") Long chatId,
+                                                    @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                    @RequestParam(value = "size", defaultValue = "10") Integer size) {
 
-    return ResponseEntity.ok(messageService.getMessagesChat(chatId));
+    return ResponseEntity.ok(messageService.getMessagesChat(chatId, page, size));
 
   }
 
