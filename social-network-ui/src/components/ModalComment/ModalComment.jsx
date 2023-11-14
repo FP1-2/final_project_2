@@ -130,8 +130,8 @@ function ModalComment ({
 
 ModalComment.propTypes = {
   post: PropTypes.object.isRequired,
-  setOpenModal: PropTypes.func,
-  open: PropTypes.bool,
+  setOpenModal: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
   setCommentsCount: PropTypes.func.isRequired,
   setComments: PropTypes.func
 }
