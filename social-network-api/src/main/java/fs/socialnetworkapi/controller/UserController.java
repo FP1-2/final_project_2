@@ -110,6 +110,7 @@ public class UserController {
       ? ResponseEntity.ok().build()
       : ResponseEntity.badRequest().body("Password reset failed");
   }
+
   @GetMapping("find-popular-user")
   public List<UserDtoOut> findPopularUser() {
     return userService.findPopularUser();

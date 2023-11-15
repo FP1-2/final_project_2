@@ -20,9 +20,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Comparator;
 import java.util.UUID;
 
 @Service
@@ -155,14 +157,14 @@ public class UserService implements UserDetailsService {
     saveUser(user);
   }
 
-  public List<UserDtoOut> getFollowers(Long userId) {
+  public List<UserDtoOut> getFollowersDto(Long userId) {
     return findById(userId).getFollowers()
       .stream()
       .map(u -> mapper.map(u, UserDtoOut.class))
       .toList();
   }
 
-  public List<UserDtoOut> getFollowings(Long userId) {
+  public List<UserDtoOut> getFollowingsDto(Long userId) {
     return findById(userId).getFollowings()
       .stream()
       .map(u -> mapper.map(u, UserDtoOut.class))
@@ -180,10 +182,6 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return findByEmail(username);
-  }
-
-  private void sendSubscriberNotification(User user) {
-    Notification notification = new NotificationCreator().subscriberNotification(user);
   }
 
   public boolean isUsernameUnique(String username) {
@@ -210,39 +208,28 @@ public class UserService implements UserDetailsService {
   }
 
   public List<UserDtoOut> findPopularUser() {
-    User user = getUser();
     List<User> users = userRepo.findAll();
     List<User> popularUsers = new ArrayList<>();
-    boolean isFollowers = false;
 
-    for (int i = 0; i < users.size(); i++) {
-      if (users.get(i).getFollowers().size() > 0) {
-        popularUsers.add(users.get(i));
+    for (User user : users) {
+      if (user.getFollowers().size() > 0) {
+        popularUsers.add(user);
       }
     }
-    Comparator followersComparator = new PopularUserComparator();
-    Collections.sort(popularUsers, followersComparator);
+    Comparator<User> followersComparator = new PopularUserComparator();
+    popularUsers.sort(followersComparator);
     List<User> fivePopularUser = popularUsers.subList(0,5);
-
-    for (int j = 0; j < fivePopularUser.size(); j++)
-      if (fivePopularUser.get(j).getFollowers() == user.getFollowers()) {
-        isFollowers = true;
-      } else {
-        isFollowers = false;
-      }
-    System.out.println(isFollowers);
-
-    return showPopularUser(fivePopularUser, isFollowers);
+    return showPopularUser(fivePopularUser);
   }
 
-  public class PopularUserComparator implements Comparator<User> {
+  public static class PopularUserComparator implements Comparator<User> {
     @Override
     public int compare(User o1, User o2) {
       return o2.getFollowers().size() - o1.getFollowers().size();
     }
   }
 
-  private List<UserDtoOut> showPopularUser(List<User> users, boolean isFollowers) {
+  private List<UserDtoOut> showPopularUser(List<User> users) {
     return users
       .stream()
       .map(p->mapper.map(p,UserDtoOut.class))
@@ -250,9 +237,31 @@ public class UserService implements UserDetailsService {
         userDtoOut.setUserFollowingCount(getFollowingsDto(userDtoOut.getId()).size());
         userDtoOut.setUserFollowersCount(getFollowersDto(userDtoOut.getId()).size());
         userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
-        userDtoOut.setUserFollowers(isFollowers);
+        userDtoOut.setUserFollowers(isFollowers(findById(userDtoOut.getId())));
       })
       .toList();
+  }
+
+  private boolean isFollowers(User user) {
+    boolean isFollowers = false;
+    User userToken = getUser();
+    String u = userToken.getEmail();
+    User user1 = findByEmail(u);
+    Set<User> followingsUser = user1.getFollowings();
+
+    List<User> userFollowings = convertToList(followingsUser);
+
+    for (User userFollowing : userFollowings) {
+      if (userFollowing.getId().equals(user.getId())) {
+        isFollowers = true;
+        System.out.println(userFollowing.getId());
+      }
+    }
+    return isFollowers;
+  }
+
+  public static <T> List<T> convertToList(Set<T> set) {
+    return new ArrayList<>(set);
   }
 
 }
