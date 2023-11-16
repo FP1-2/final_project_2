@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import getLikedPosts from '../../api/getLikedPosts'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
@@ -16,7 +16,8 @@ function Favourites () {
 
   const userId = useSelector(state => state.user.userId)
   const { token } = UseUserToken()
-  const size = 10
+  const size = 5
+  const containerRef = useRef()
 
   useEffect(() => {
     async function getPosts () {
@@ -43,29 +44,55 @@ function Favourites () {
     }
   }, [userId, page, hasMore])
 
-  useEffect(() => {
+useEffect(() => {
+  const container = containerRef.current
+  container.focus()
+
     const handleScroll = () => {
-      const scrollTop = document.documentElement.scrollTop
-      const windowHeight = window.innerHeight
-      const scrollHeight = document.documentElement.scrollHeight
+      const scrollTop = container.scrollTop
+      const windowHeight = container.clientHeight
+      const scrollHeight = container.scrollHeight
 
       if (scrollTop + windowHeight >= scrollHeight - 20) {
         setPage(prev => prev + 1)
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+  container.addEventListener('scroll', handleScroll)
+  
+      const handleKeyDown = event => {
+      switch (event.key) {
+        case 'PageDown':
+          container.scrollTop += container.clientHeight
+          break
+        case 'PageUp':
+          container.scrollTop -= container.clientHeight
+          break
+        case 'Home':
+          container.scrollTop = 0
+          break
+        case 'End':
+          container.scrollTop = container.scrollHeight
+          break
+      }
+    }
+
+    container.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      container.removeEventListener('scroll', handleScroll)
+      container.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
 
   return (
     <Box sx={{
         maxHeight: '100vh',
-        overflowY: 'auto'
-      }}>
+      overflowY: 'auto',
+        outline: 'none'
+    }}
+      ref={containerRef}
+    tabIndex={0}>
       {error && <h2>{error}</h2>}
 
       {!error &&

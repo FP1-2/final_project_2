@@ -20,7 +20,7 @@ function ModalAddPost ({ open, setOpenModal }) {
   const [description, setDescription] = useState('')
   const [photo, setPhoto] = useState('')
   const [error, setError] = useState(null)
-    const [photoLoading, setPhotoLoading] = useState(null)
+  const [photoLoading, setPhotoLoading] = useState(null)
   const { avatar, firstName, lastName } = useSelector(
     state => state.user.userData
   )
@@ -35,26 +35,27 @@ function ModalAddPost ({ open, setOpenModal }) {
     setOpenModal(false)
   }
 
- const handlePhotoInput = async (event) => {
-     try {
-         const selectedFile = event.target.files[0];
-         if (selectedFile) {
-             const formData = new FormData();
-             formData.append('file', selectedFile);
-             formData.append('upload_preset', 'danit2023');
-             setPhotoLoading(true)
-             const response = await axios.post(
-                 'https://api.cloudinary.com/v1_1/dl4ihoods/image/upload',
-                 formData
-             );
-             setPhoto(response.data.url);
-             setError(null);
-         }
-     } catch (err) {
-         setError(err.message);
-     }
-     finally { setPhotoLoading(false) }
-};
+  const handlePhotoInput = async event => {
+    try {
+      const selectedFile = event.target.files[0]
+      if (selectedFile) {
+        const formData = new FormData()
+        formData.append('file', selectedFile)
+        formData.append('upload_preset', 'danit2023')
+        setPhotoLoading(true)
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/dl4ihoods/image/upload',
+          formData
+        )
+        setPhoto(response.data.url)
+        setError(null)
+      }
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setPhotoLoading(false)
+    }
+  }
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -150,12 +151,14 @@ function ModalAddPost ({ open, setOpenModal }) {
                   publicId={photo}
                 />
               </Box>
-                      ) : (
-                              
-              <ImageInput file={photo} onChange={handlePhotoInput} inputName='TweetButtonInput' />
-                      )}
-                      {photoLoading && <CircularProgress/>}
-                      
+            ) : (
+              <ImageInput
+                file={photo}
+                onChange={handlePhotoInput}
+                inputName='TweetButtonInput'
+              />
+            )}
+            {photoLoading && <CircularProgress />}
           </>
         </form>
       </Box>

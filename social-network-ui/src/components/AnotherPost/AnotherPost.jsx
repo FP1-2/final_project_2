@@ -44,7 +44,7 @@ const style = {
   textAlign: 'center'
 }
 
-function AnotherPost ({
+function AnotherPost({
   post,
   setComments,
   hasCommentWriteWindow,
@@ -68,7 +68,7 @@ function AnotherPost ({
   const url = process.env.REACT_APP_SERVER_URL
   const postDate = formatPostDate(thisPost?.createdDate)
   const userId = getUserId()
-  const followings = useSelector(state => state.user.followings)
+  const followings = useSelector(state => state.user.followings) || []
   const dispatch = useDispatch()
   const isMinePost = thisPost?.user?.id == userId
   const isFollow = followings.includes(thisPost?.user?.id)

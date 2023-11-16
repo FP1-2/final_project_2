@@ -17,7 +17,7 @@ import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 import { useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress'
 
-function CommentWriteWindow ({
+function CommentWriteWindow({
   postId,
   close,
   setCommentsCount,
