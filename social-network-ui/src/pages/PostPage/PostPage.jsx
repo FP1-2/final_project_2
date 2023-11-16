@@ -18,6 +18,7 @@ function PostPage () {
   const [deletedCommentsCount, setDeletedCommentsCount] = useState(0)
   const [isComment, setIsComment] = useState(false)
   const bottomRef = useRef()
+  const containerRef = useRef()
   const { token } = UseUserToken()
   // comments page
   const [page, setPage] = useState(0)
@@ -66,11 +67,23 @@ function PostPage () {
     isComment && bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
   })
 
+  useEffect(() => {
+    const container = containerRef.current
+    container.focus()
+    return () => {
+    }
+  }, [])
+
   return (
-    <Box sx={{
+    <Box
+      sx={{
         maxHeight: '100vh',
-        overflowY: 'auto'
-      }}>
+        overflowY: 'auto',
+        outline: 'none'
+      }}
+      ref={containerRef}
+      tabIndex={0}
+    >
       {error && <h2>{error}</h2>}
 
       {post.id && (
