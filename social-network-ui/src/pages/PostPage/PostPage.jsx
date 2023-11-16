@@ -79,7 +79,10 @@ function PostPage () {
       sx={{
         maxHeight: '100vh',
         overflowY: 'auto',
-        outline: 'none'
+        outline: 'none',
+        '&::-webkit-scrollbar': {
+          width: '0'
+        }
       }}
       ref={containerRef}
       tabIndex={0}

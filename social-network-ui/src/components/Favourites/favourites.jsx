@@ -44,9 +44,9 @@ function Favourites () {
     }
   }, [userId, page, hasMore])
 
-useEffect(() => {
-  const container = containerRef.current
-  container.focus()
+  useEffect(() => {
+    const container = containerRef.current
+    container.focus()
 
     const handleScroll = () => {
       const scrollTop = container.scrollTop
@@ -58,9 +58,9 @@ useEffect(() => {
       }
     }
 
-  container.addEventListener('scroll', handleScroll)
-  
-      const handleKeyDown = event => {
+    container.addEventListener('scroll', handleScroll)
+
+    const handleKeyDown = event => {
       switch (event.key) {
         case 'PageDown':
           container.scrollTop += container.clientHeight
@@ -86,21 +86,24 @@ useEffect(() => {
   }, [])
 
   return (
-    <Box sx={{
+    <Box
+      sx={{
         maxHeight: '100vh',
-      overflowY: 'auto',
-        outline: 'none'
-    }}
+        overflowY: 'auto',
+        outline: 'none',
+        '&::-webkit-scrollbar': {
+          width: '0'
+        }
+      }}
       ref={containerRef}
-    tabIndex={0}>
+      tabIndex={0}
+    >
       {error && <h2>{error}</h2>}
 
       {!error &&
         favourites.map(post => <AnotherPost key={post.id} post={post} />)}
 
-      <Box sx={style}>
-        {loading && <CircularProgress />}
-      </Box>
+      <Box sx={style}>{loading && <CircularProgress />}</Box>
     </Box>
   )
 }
