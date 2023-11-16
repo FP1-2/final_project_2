@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,14 +33,10 @@ public class NotificationCreator {
   @Value("${myapp.baseUrl}")
   private String baseUrl;
 
-  private User getUser() {
-    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-  }
-
   public void likeNotification(Like like) {
     Notification notification = new Notification();
+    notification.setFromUser(like.getUser());
     notification.setType(NotificationType.LIKE);
-    notification.setPhoto(like.getUser().getAvatar());
     notification.setLink(String.format("%s/#/post/%d", baseUrl, like.getPost().getId()));
     notification.setText(String.format("User %s liked your post", like.getUser().getUsername()));
     notification.setNotifyingUser(like.getPost().getUser());
@@ -61,14 +56,13 @@ public class NotificationCreator {
   }
 
   public void featuredNotification(Post post, List<UserDtoOut> followers) {
-    String photo = post.getUser().getAvatar();
     String link = String.format("%s/#/post/%d", baseUrl, post.getId());
     String text = String.format("Your featured user %s has new post", post.getUser().getUsername());
 
     followers.forEach(user -> {
       Notification notification = new Notification();
+      notification.setFromUser(post.getUser());
       notification.setType(NotificationType.FEATURED);
-      notification.setPhoto(photo);
       notification.setLink(link);
       notification.setText(text);
       notification.setNotifyingUser(mapper.map(user, User.class));
@@ -78,8 +72,8 @@ public class NotificationCreator {
 
   public void repostNotification(Post post) {
     Notification notification = new Notification();
+    notification.setFromUser(post.getUser());
     notification.setType(NotificationType.REPOST);
-    notification.setPhoto(post.getUser().getAvatar());
     notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s reposted your post", post.getUser().getUsername()));
     notification.setNotifyingUser(post.getOriginalPost().getUser());
@@ -88,8 +82,8 @@ public class NotificationCreator {
 
   public void commentNotification(Post post) {
     Notification notification = new Notification();
+    notification.setFromUser(post.getUser());
     notification.setType(NotificationType.REPOST);
-    notification.setPhoto(post.getUser().getAvatar());
     notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s commented your post", post.getUser().getUsername()));
     notification.setNotifyingUser(post.getOriginalPost().getUser());
@@ -98,8 +92,8 @@ public class NotificationCreator {
 
   public void subscriberNotification(User follower, User following) {
     Notification notification = new Notification();
+    notification.setFromUser(follower);
     notification.setType(NotificationType.SUBSCRIBER);
-    notification.setPhoto(follower.getAvatar());
     notification.setLink(String.format("%s/#/profile/%d", baseUrl, follower.getId()));
     notification.setText(String.format("User %s subscribed to your account", follower.getUsername()));
     notification.setNotifyingUser(following);
@@ -107,7 +101,6 @@ public class NotificationCreator {
   }
 
   public void messageNotification(Message message) {
-    String photo = message.getUser().getAvatar();
     String link = String.format("%s/#/messages", baseUrl);
     String text = String.format("User %s sent you new message", message.getUser().getUsername());
 
@@ -119,8 +112,8 @@ public class NotificationCreator {
       .forEach(
         user -> {
           Notification notification = new Notification();
+          notification.setFromUser(message.getUser());
           notification.setType(NotificationType.MESSAGE);
-          notification.setPhoto(photo);
           notification.setLink(link);
           notification.setText(text);
           notification.setNotifyingUser(user);
