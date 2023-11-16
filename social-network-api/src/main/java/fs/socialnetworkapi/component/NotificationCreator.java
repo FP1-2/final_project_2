@@ -83,7 +83,7 @@ public class NotificationCreator {
   public void commentNotification(Post post) {
     Notification notification = new Notification();
     notification.setFromUser(post.getUser());
-    notification.setType(NotificationType.REPOST);
+    notification.setType(NotificationType.COMMENT);
     notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s commented your post", post.getUser().getUsername()));
     notification.setNotifyingUser(post.getOriginalPost().getUser());
