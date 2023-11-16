@@ -115,9 +115,17 @@ const ProfilePage = () => {
 	//refs
 	const scrollHeight = useRef()
 	const postRef = useRef()
+	const profileRef = useRef()
 	//user const
 	let userBirthdayData = null
 	let userJoinedData = null
+
+	useEffect(() => {
+		if (scrollHeight.current) {
+			console.log(scrollHeight.current)
+			scrollHeight.current.focus()
+		}
+	}, [scrollHeight.current])
 
 	useEffect(() => {
 		//user profile info load/upd
@@ -305,9 +313,11 @@ const ProfilePage = () => {
 			<ModalFollow />
 			<Box
 				ref={scrollHeight}
+				tabIndex={0}
 				sx={{
 					overflow: 'scroll',
 					height: '100vh',
+					outline: 'none',
 					'&::-webkit-scrollbar': {
 						width: '0',
 					},
@@ -318,6 +328,7 @@ const ProfilePage = () => {
 			>
 				{user && (
 					<Box
+						ref={profileRef}
 						sx={{
 							height: '560px',
 							width: '100%',
@@ -597,6 +608,7 @@ const ProfilePage = () => {
 							sx={{
 								p: 2,
 								width: '100%',
+								outline: 'none',
 							}}
 							ref={postRef}
 						>
