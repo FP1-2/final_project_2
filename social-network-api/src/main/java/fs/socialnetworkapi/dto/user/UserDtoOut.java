@@ -24,6 +24,7 @@ public class UserDtoOut {
   private int userTweetCount;
   private int userFollowersCount;
   private int userFollowingCount;
+  private boolean userFollowers;
 
   @Override
   public boolean equals(Object obj) {
@@ -48,7 +49,8 @@ public class UserDtoOut {
             && Objects.equals(userLink, that.userLink)
             && Objects.equals(userTweetCount, that.userTweetCount)
             && Objects.equals(userFollowersCount, that.userFollowersCount)
-            && Objects.equals(userFollowingCount, that.userFollowingCount);
+            && Objects.equals(userFollowingCount, that.userFollowingCount)
+            && Objects.equals(userFollowers, that.userFollowers);
   }
 
   @Override
