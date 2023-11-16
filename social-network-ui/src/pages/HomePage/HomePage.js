@@ -8,6 +8,7 @@ import getFollowingsPosts from './../../api/getFollowingsPosts'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { style } from '../../styles/circularProgressStyle'
+import { Button } from '@mui/material'
 
 const Home = () => {
   const [tweetPosts, setTweetPost] = useState([])
@@ -24,15 +25,28 @@ const Home = () => {
   const userData = useSelector(state => state.user.userData)
   const containerRef = useRef()
 
+  const handleAllPosts = () => {
+    !showAllPosts && setTweetPost([])
+    setPage(0)
+    setShowAllPosts(true)
+  }
+
+  const handleFollowing = () => {
+    showAllPosts && setTweetPost([])
+    setPage(0)
+    setShowAllPosts(false)
+  }
+
   useEffect(() => {
     async function getPosts () {
+      console.log('effect')
       try {
         setLoading(true)
         let data
         showAllPosts
           ? (data = await getAllPosts(token, page, size))
           : (data = await getFollowingsPosts(token, page, size))
-        setTweetPost(prev => [...prev, ...data.reverse()])
+        setTweetPost(prev => [...prev, ...data])
         setHasMore(data.length > 0)
       } catch (error) {
         if (error.response) {
@@ -47,7 +61,7 @@ const Home = () => {
       }
     }
     hasMore && getPosts()
-  }, [page, hasMore])
+  }, [page, hasMore, showAllPosts])
 
   useEffect(() => {
     const container = containerRef.current
@@ -104,6 +118,10 @@ const Home = () => {
       ref={containerRef}
       tabIndex={0}
     >
+      <Box sx={{display: 'flex'}}>
+			  <Button sx={{ width: '100%', color: !showAllPosts ? 'grey' : null}} onClick={handleAllPosts}>All posts</Button>
+        <Button sx={{width: '100%', color: showAllPosts ? 'grey' : null}} onClick={handleFollowing}>Following</Button>
+      </Box>
       <TwitterWriteWindow
         setTweetPost={setTweetPost}
         tweetPosts={tweetPosts}
