@@ -139,10 +139,6 @@ const Home = () => {
       <TwitterWriteWindow
         setTweetPost={setTweetPost}
         tweetPosts={tweetPosts}
-        userPhoto={userPhoto}
-        firstName={firstName}
-        lastName={lastName}
-        token={token}
       />
       {error && <h2>{error}</h2>}
       {!error && <PostWrapper tweets={tweetPosts} />}
