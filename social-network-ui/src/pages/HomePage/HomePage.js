@@ -41,6 +41,7 @@ const Home = () => {
     async function getPosts () {
       console.log('effect')
       try {
+        setError(null)
         setLoading(true)
         let data
         showAllPosts
@@ -118,9 +119,19 @@ const Home = () => {
       ref={containerRef}
       tabIndex={0}
     >
-      <Box sx={{display: 'flex'}}>
-			  <Button sx={{ width: '100%', color: !showAllPosts ? 'grey' : null}} onClick={handleAllPosts}>All posts</Button>
-        <Button sx={{width: '100%', color: showAllPosts ? 'grey' : null}} onClick={handleFollowing}>Following</Button>
+      <Box sx={{ display: 'flex' }}>
+        <Button
+          sx={{ width: '100%', color: !showAllPosts ? 'grey' : null }}
+          onClick={handleAllPosts}
+        >
+          All posts
+        </Button>
+        <Button
+          sx={{ width: '100%', color: showAllPosts ? 'grey' : null }}
+          onClick={handleFollowing}
+        >
+          Following
+        </Button>
       </Box>
       <TwitterWriteWindow
         setTweetPost={setTweetPost}
