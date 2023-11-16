@@ -99,9 +99,10 @@ public class PostService {
   public PostDtoOut savePost(PostDtoIn postDtoIn) {
 
     User user = userService.getUser();
+    User current = userService.findById(user.getId());
 
     Post post = mapper.map(postDtoIn, Post.class);
-    post.setUser(user);
+    post.setUser(current);
     post.setTypePost(TypePost.POST);
     Post postToSave = save(post, TypePost.POST);
 
@@ -111,6 +112,7 @@ public class PostService {
   public PostDtoOut saveByTypeAndOriginalPost(Long originalPostId, PostDtoIn postDtoIn, TypePost typePost) {
 
     User user = userService.getUser();
+    User current = userService.findById(user.getId());
 
     Post originalPost = postRepo.findById(originalPostId)
             .orElseThrow(() -> new PostNotFoundException(
@@ -118,10 +120,10 @@ public class PostService {
 
     switch (typePost) {
       case REPOST:
-        return saveOrDeleteRepost(user, originalPost, postDtoIn);
+        return saveOrDeleteRepost(current, originalPost, postDtoIn);
 
       case COMMENT:
-        return saveByType(user, originalPost, postDtoIn, TypePost.COMMENT);
+        return saveByType(current, originalPost, postDtoIn, TypePost.COMMENT);
 
       default:
         return getPostById(originalPostId);
@@ -316,7 +318,7 @@ public class PostService {
 
   private Post save(Post post, TypePost typePost) {
     Post postToSave = postRepo.save(post);
-    notificationCreator.sendPostByTypePost(postToSave, typePost, userService.getFollowersDto(post.getUser().getId()));
+    notificationCreator.sendPostNotification(postToSave, typePost, userService.getFollowersDto(post.getUser().getId()));
     return postToSave;
   }
 

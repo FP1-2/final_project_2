@@ -23,6 +23,9 @@ public class NotificationDtoOut {
   private Long id;
 
   @EqualsAndHashCode.Include
+  private UserDtoOut fromUser;
+
+  @EqualsAndHashCode.Include
   private UserDtoOut notifyingUser;
 
   private String text;

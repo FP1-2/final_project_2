@@ -19,6 +19,10 @@ import java.util.Objects;
 @Table(name = "notifications")
 public class Notification extends AbstractEntity {
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "from_user_id")
+  private User fromUser;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "notifying_user_id")
   private User notifyingUser;
@@ -37,7 +41,7 @@ public class Notification extends AbstractEntity {
       return false;
     }
     Notification that = (Notification) obj;
-    return active == that.active
+    return Objects.equals(fromUser, that.fromUser)
       && Objects.equals(notifyingUser, that.notifyingUser)
       && Objects.equals(text, that.text)
       && type == that.type
@@ -46,7 +50,7 @@ public class Notification extends AbstractEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(notifyingUser, text, type, link, active);
+    return Objects.hash(fromUser, notifyingUser, text, type, link);
   }
 
 }
