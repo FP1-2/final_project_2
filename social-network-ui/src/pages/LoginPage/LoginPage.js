@@ -85,7 +85,7 @@ const LoginPage = () => {
 				setLoginError('Invalid email or password. Please try again.')
 			}
 		} catch (error) {
-			console.error(error)
+			console.error(data.error)
 		}
 	}
 

@@ -22,7 +22,6 @@ const useMenuItems = () => {
 			link: `/profile/${userId}`,
 			icon: <PersonRoundedIcon />,
 		},
-		{ label: 'Explore', link: '/explore', icon: <SearchIcon /> },
 		{
 			label: 'Notifications',
 			link: '/notifications',

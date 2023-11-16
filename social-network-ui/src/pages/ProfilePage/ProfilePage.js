@@ -92,6 +92,7 @@ const ProfilePage = () => {
 	const dispatch = useDispatch()
 	const localUserId = useSelector(state => state.user?.userId)
 	const isOpen = useSelector(state => state.modalEdit.modalProps.isOpen)
+	const followingsCount = useSelector(state => state.user?.followings)
 	//user state
 	const [user, setUser] = useState(null)
 	const [userFollowersCountState, setUserFollowersCountState] = useState(0)
@@ -126,6 +127,7 @@ const ProfilePage = () => {
 				const userData = await getUserData(params.userId, token)
 				setUser(userData)
 				setUserFollowersCountState(userData.userFollowersCount)
+				setUserFollowingCountState(userData.userFollowingCount)
 				if (isFrstLoad) setIsLoading(false)
 			})()
 		}
@@ -536,39 +538,42 @@ const ProfilePage = () => {
 										)}
 									</Box>
 								</Box>
-								{userFollowersCountState !== (null || undefined) && (
-									<Box // need to rework box to links
-										sx={{
-											display: 'flex',
-											justifyContent: 'flex-start',
-											alignItems: 'center',
-											gap: '30px',
-										}}
-									>
+								{userFollowersCountState !== (null || undefined) &&
+									followingsCount && (
 										<Box
-											sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
-											onClick={() => dispatch(openFollowModal('followings'))}
+											sx={{
+												display: 'flex',
+												justifyContent: 'flex-start',
+												alignItems: 'center',
+												gap: '30px',
+											}}
 										>
-											<Typography variant='p' sx={{ fontWeight: 700 }}>
-												{user.userFollowingCount}
-											</Typography>
-											<Typography sx={{ opacity: 0.6 }} variant='p'>
-												Following
-											</Typography>
+											<Box
+												sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
+												onClick={() => dispatch(openFollowModal('followings'))}
+											>
+												<Typography variant='p' sx={{ fontWeight: 700 }}>
+													{notEqual
+														? followingsCount.length
+														: userFollowingCountState}
+												</Typography>
+												<Typography sx={{ opacity: 0.6 }} variant='p'>
+													Following
+												</Typography>
+											</Box>
+											<Box
+												sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
+												onClick={() => dispatch(openFollowModal('followers'))}
+											>
+												<Typography variant='p' sx={{ fontWeight: 700 }}>
+													{userFollowersCountState}
+												</Typography>
+												<Typography sx={{ opacity: 0.6 }} variant='p'>
+													Followers
+												</Typography>
+											</Box>
 										</Box>
-										<Box
-											sx={{ display: 'flex', gap: '5px', cursor: 'pointer' }}
-											onClick={() => dispatch(openFollowModal('followers'))}
-										>
-											<Typography variant='p' sx={{ fontWeight: 700 }}>
-												{userFollowersCountState}
-											</Typography>
-											<Typography sx={{ opacity: 0.6 }} variant='p'>
-												Followers
-											</Typography>
-										</Box>
-									</Box>
-								)}
+									)}
 							</Box>
 						</Box>
 					</Box>
