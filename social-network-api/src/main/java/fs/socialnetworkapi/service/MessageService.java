@@ -93,13 +93,14 @@ public class MessageService {
   }
 
   public MessageDtoOut addMessage(MessageDtoIn messageDtoIn, User user) {
+    User current = userService.findById(user.getId());
 
     Chat chat = findById(messageDtoIn.getChatId());
 
     Message message = new Message();
     message.setChat(chat);
     message.setText(messageDtoIn.getText());
-    message.setUser(user);
+    message.setUser(current);
     Message messageToSave = messageRepo.save(message);
     sendMessageNotification(messageToSave);
 

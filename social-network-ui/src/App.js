@@ -85,7 +85,7 @@ function App() {
 	}, [dispatch, isAuth])
 
 	if (appLoading) return <AppSkeleton />
-	
+
 	return (
 		<ThemeProvider theme={theme}>
 			{isAuth && !userDataLoading ? (

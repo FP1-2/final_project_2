@@ -7,6 +7,7 @@ import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
+import fs.socialnetworkapi.repos.UserRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class LikeService {
 
   private final LikeRepo likeRepo;
   private final PostRepo postRepo;
+  private final UserRepo userRepo;
   private final ModelMapper mapper;
 
   @Autowired
@@ -48,13 +50,14 @@ public class LikeService {
 
   public String likePost(Long postId) {
     User user = getUser();
+    User current = userRepo.findByUsername(user.getUsername());
     Post post = postRepo.findPostWithUser(postId);
     Optional<Like> like = likeRepo.findByPostIdAndUserId(postId, user.getId());
     if (like.isPresent()) {
       likeRepo.delete(like.get());
       return "Unliked";
     } else {
-      sendLikeNotification(likeRepo.save(new Like(user, post)));
+      sendLikeNotification(likeRepo.save(new Like(current, post)));
       return "Liked";
     }
   }

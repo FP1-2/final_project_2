@@ -19,9 +19,13 @@ const ModalFollow = () => {
 	const modalContent = useSelector(
 		state => state.modalFollow.modalProps.modalContent
 	)
+	const followingsCount = useSelector(state => state.user?.followings)
+	const localUserId = useSelector(state => state.user?.userId)
 	//state
 	const [userFollowUsers, setUserFollowUsers] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	const [changer, setChanger] = useState(false)
+
 	//redux
 	const dispatch = useDispatch()
 	//router
@@ -39,7 +43,13 @@ const ModalFollow = () => {
 				setIsLoading(false)
 			})()
 		}
-	}, [isModalOpen])
+	}, [isModalOpen, changer])
+	useEffect(() => {
+		//load lists when open modal
+		if (params.userId === localUserId) {
+			setChanger(prev => !prev)
+		}
+	}, [followingsCount.length])
 
 	return (
 		<Modal open={isModalOpen} onClose={() => dispatch(closeModal())}>

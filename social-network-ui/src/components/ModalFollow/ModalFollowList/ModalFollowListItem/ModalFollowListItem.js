@@ -4,14 +4,17 @@ import { Box, Typography } from '@mui/material'
 //Router
 import { Link } from 'react-router-dom'
 //Redux
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+	addFollowing,
+	removeFollowing,
+} from './../../../../redux/slices/userSlice'
 //Components
 import UserTag from '../../../UserTag/UserTag'
 import AdaptiveAvatar from '../../../AdaptiveAvatar/AdaptiveAvatar'
 import FollowButton from '../../../FollowButton/FollowButton'
 //Custom hooks
 import UseUserToken from '../../../../hooks/useUserToken'
-import useIsUserFollowing from '../../../../hooks/useIsUserFollowing'
 //NPMs
 import PropTypes from 'prop-types'
 import axios from 'axios'
@@ -19,14 +22,24 @@ import axios from 'axios'
 const ModalFollowListItem = ({ item }) => {
 	//states
 	const [loadIsDone, setLoadIsDone] = useState(false)
+	const [isMe, setIsMe] = useState(false)
+	const [isFollowing, setIsFollowing] = useState(false)
+
 	//Custom hooks
-	const { isFollowing, checkIsFollowing } = useIsUserFollowing()
 	const { token } = UseUserToken()
+	//redux
+	const dispatch = useDispatch()
+	const userId = useSelector(state => state.user?.userId)
+	const followings = useSelector(state => state.user.followings)
 
 	useEffect(() => {
-		if (item.id) {
-			checkIsFollowing(item.id)
+		if (item.id && userId) {
 			setLoadIsDone(true)
+			const isFollow = followings.includes(Number(item.id))
+			setIsFollowing(isFollow)
+			if (Number(userId) === Number(item.id)) {
+				setIsMe(true)
+			}
 		}
 	}, [item.id])
 
@@ -43,10 +56,11 @@ const ModalFollowListItem = ({ item }) => {
 				}
 			)
 			console.log(`user is ${follow ? 'subscribe' : 'unsubscribe'}`)
+			dispatch(follow ? addFollowing(userId) : removeFollowing(userId))
 		} catch (error) {
 			console.error(error)
 		} finally {
-			checkIsFollowing(userId)
+			setIsFollowing(follow)
 		}
 	}
 
@@ -103,7 +117,7 @@ const ModalFollowListItem = ({ item }) => {
 							<UserTag userTag={item.username} />
 						</Link>
 					</Box>
-					{loadIsDone && (
+					{loadIsDone && !isMe && (
 						<FollowButton
 							handleFollowChange={handleFollowChange}
 							userId={item.id}

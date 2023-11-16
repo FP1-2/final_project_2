@@ -50,6 +50,7 @@ const TwitterHeader = () => {
 					sx={{
 						px: 3,
 						pt: 1.5,
+						mb: 2.5
 					}}
 				>
 					<IconTwitter link='home' md={true} />

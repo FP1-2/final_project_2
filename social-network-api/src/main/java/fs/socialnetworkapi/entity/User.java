@@ -43,15 +43,15 @@ public class User extends AbstractEntity implements UserDetails {
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
           name = "subscriptions",
-          joinColumns = {@JoinColumn(name = "follower_id")},
-          inverseJoinColumns = {@JoinColumn(name = "following_id")})
+          joinColumns = {@JoinColumn(name = "following_id")},
+          inverseJoinColumns = {@JoinColumn(name = "follower_id")})
   private Set<User> followers = new HashSet<>();
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
           name = "subscriptions",
-          joinColumns = {@JoinColumn(name = "following_id")},
-          inverseJoinColumns = {@JoinColumn(name = "follower_id")})
+          joinColumns = {@JoinColumn(name = "follower_id")},
+          inverseJoinColumns = {@JoinColumn(name = "following_id")})
   private Set<User> followings = new HashSet<>();
 
   @Override

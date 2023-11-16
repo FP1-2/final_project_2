@@ -20,9 +20,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Comparator;
 import java.util.UUID;
 
 @Service
@@ -46,7 +48,7 @@ public class UserService implements UserDetailsService {
 
   public User findById(Long userId) {
     return userRepo.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
+      .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %d not found", userId)));
   }
 
   public User findByEmail(String email) {
@@ -103,8 +105,8 @@ public class UserService implements UserDetailsService {
   public UserDtoOut addUser(UserDtoIn userDtoIn) {
     User userFromDb = findByEmail(userDtoIn.getEmail());
     return (userFromDb == null)
-            ? createUser(userDtoIn)
-            : mapper.map(userFromDb, UserDtoOut.class);
+      ? createUser(userDtoIn)
+      : mapper.map(userFromDb, UserDtoOut.class);
   }
 
   private UserDtoOut createUser(UserDtoIn userDtoIn) {
@@ -119,10 +121,10 @@ public class UserService implements UserDetailsService {
 
   private void sendActivationCode(UserDtoIn userDtoIn) {
     String message = String.format(
-            "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
-            userDtoIn.getFirstName(),
-            baseUrl,
-            userDtoIn.getActivationCode()
+      "Hello, %s!\nWelcome to Twitter. Please, visit next link: %sapi/v1/activate/%s",
+      userDtoIn.getFirstName(),
+      baseUrl,
+      userDtoIn.getActivationCode()
     );
     mailService.send(userDtoIn.getEmail(), "Activation code", message);
   }
@@ -140,12 +142,12 @@ public class UserService implements UserDetailsService {
   }
 
   public void subscribe(Long userId) {
-    User currentUser = getUser();
+    User follower = userRepo.findByUsername(getUser().getUsername());
 
-    User user = findById(userId);
-    notificationCreator.subscriberNotification(user);
-    user.getFollowers().add(currentUser);
-    saveUser(user);
+    User following = findById(userId);
+    notificationCreator.subscriberNotification(follower, following);
+    following.getFollowers().add(follower);
+    saveUser(following);
   }
 
   public void unsubscribe(Long userId) {
@@ -156,17 +158,17 @@ public class UserService implements UserDetailsService {
   }
 
   public List<UserDtoOut> getFollowersDto(Long userId) {
-    return getFollowers(userId)
-            .stream()
-            .map(u -> mapper.map(u, UserDtoOut.class))
-            .toList();
+    return findById(userId).getFollowers()
+      .stream()
+      .map(u -> mapper.map(u, UserDtoOut.class))
+      .toList();
   }
 
   public List<UserDtoOut> getFollowingsDto(Long userId) {
-    return getFollowings(userId)
-            .stream()
-            .map(u -> mapper.map(u, UserDtoOut.class))
-            .toList();
+    return findById(userId).getFollowings()
+      .stream()
+      .map(u -> mapper.map(u, UserDtoOut.class))
+      .toList();
   }
 
   public Set<User> getFollowings(Long userId) {
@@ -196,12 +198,70 @@ public class UserService implements UserDetailsService {
   private List<UserDtoOut> showAllUserWithUsername(List<User> users) {
     return users
       .stream()
+      .map(p -> mapper.map(p, UserDtoOut.class))
+      .peek(userDtoOut -> {
+        userDtoOut.setUserFollowingCount(getFollowings(userDtoOut.getId()).size());
+        userDtoOut.setUserFollowersCount(getFollowers(userDtoOut.getId()).size());
+        userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
+      })
+      .toList();
+  }
+
+  public List<UserDtoOut> findPopularUser() {
+    List<User> users = userRepo.findAll();
+    List<User> popularUsers = new ArrayList<>();
+
+    for (User user : users) {
+      if (user.getFollowers().size() > 0) {
+        popularUsers.add(user);
+      }
+    }
+    Comparator<User> followersComparator = new PopularUserComparator();
+    popularUsers.sort(followersComparator);
+    List<User> fivePopularUser = popularUsers.subList(0,5);
+    return showPopularUser(fivePopularUser);
+  }
+
+  public static class PopularUserComparator implements Comparator<User> {
+    @Override
+    public int compare(User o1, User o2) {
+      return o2.getFollowers().size() - o1.getFollowers().size();
+    }
+  }
+
+  private List<UserDtoOut> showPopularUser(List<User> users) {
+    return users
+      .stream()
       .map(p->mapper.map(p,UserDtoOut.class))
       .peek(userDtoOut -> {
         userDtoOut.setUserFollowingCount(getFollowingsDto(userDtoOut.getId()).size());
         userDtoOut.setUserFollowersCount(getFollowersDto(userDtoOut.getId()).size());
         userDtoOut.setUserTweetCount(getUserPosts(userDtoOut.getId(), 0, 1000000).size());// need to correct
+        userDtoOut.setUserFollowers(isFollowers(findById(userDtoOut.getId())));
       })
       .toList();
   }
+
+  private boolean isFollowers(User user) {
+    boolean isFollowers = false;
+    User userToken = getUser();
+    String u = userToken.getEmail();
+    User user1 = findByEmail(u);
+    Set<User> followingsUser = user1.getFollowings();
+
+    List<User> userFollowings = convertToList(followingsUser);
+
+    for (User userFollowing : userFollowings) {
+      if (userFollowing.getId().equals(user.getId())) {
+        isFollowers = true;
+        System.out.println(userFollowing.getId());
+      }
+    }
+    return isFollowers;
+  }
+
+  public static <T> List<T> convertToList(Set<T> set) {
+    return new ArrayList<>(set);
+  }
+
 }
