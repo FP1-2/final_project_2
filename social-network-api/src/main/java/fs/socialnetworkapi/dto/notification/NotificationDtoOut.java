@@ -25,6 +25,7 @@ public class NotificationDtoOut {
   @EqualsAndHashCode.Include
   private UserDtoOut notifyingUser;
 
+  private String photo;
   private String text;
   private NotificationType type;
   private String link;

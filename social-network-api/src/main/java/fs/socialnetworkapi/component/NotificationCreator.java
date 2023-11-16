@@ -41,16 +41,14 @@ public class NotificationCreator {
   public void likeNotification(Like like) {
     Notification notification = new Notification();
     notification.setType(NotificationType.LIKE);
+    notification.setPhoto(like.getUser().getAvatar());
     notification.setLink(String.format("%s/#/post/%d", baseUrl, like.getPost().getId()));
-    notification.setText(String.format("User %s liked your post %s",
-      like.getUser().getUsername(),
-      like.getPost().getDescription()));
+    notification.setText(String.format("User %s liked your post", like.getUser().getUsername()));
     notification.setNotifyingUser(like.getPost().getUser());
-
     notificationService.createNewNotification(notification);
   }
 
-  public void sendPostByTypePost(Post postToSave, TypePost typePost, List<UserDtoOut> followers) {
+  public void sendPostNotification(Post postToSave, TypePost typePost, List<UserDtoOut> followers) {
     if (typePost.equals(TypePost.POST)) {
       featuredNotification(postToSave, followers);
     }
@@ -63,60 +61,55 @@ public class NotificationCreator {
   }
 
   public void featuredNotification(Post post, List<UserDtoOut> followers) {
+    String photo = post.getUser().getAvatar();
+    String link = String.format("%s/#/post/%d", baseUrl, post.getId());
+    String text = String.format("Your featured user %s has new post", post.getUser().getUsername());
+
     followers.forEach(user -> {
       Notification notification = new Notification();
       notification.setType(NotificationType.FEATURED);
-      notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
-      notification.setText(String.format("Your featured user %s has new post: %s",
-        post.getUser().getUsername(),
-        post.getDescription()));
-
+      notification.setPhoto(photo);
+      notification.setLink(link);
+      notification.setText(text);
       notification.setNotifyingUser(mapper.map(user, User.class));
-
       notificationService.createNewNotification(notification);
     });
   }
 
   public void repostNotification(Post post) {
-
     Notification notification = new Notification();
     notification.setType(NotificationType.REPOST);
+    notification.setPhoto(post.getUser().getAvatar());
     notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
-    notification.setText(String.format("User %s reposted your post: %s",
-      post.getUser().getUsername(),
-      post.getDescription()));
-
+    notification.setText(String.format("User %s reposted your post", post.getUser().getUsername()));
     notification.setNotifyingUser(post.getOriginalPost().getUser());
-
     notificationService.createNewNotification(notification);
   }
 
   public void commentNotification(Post post) {
-
     Notification notification = new Notification();
     notification.setType(NotificationType.REPOST);
+    notification.setPhoto(post.getUser().getAvatar());
     notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
-    notification.setText(String.format("User %s commented your post: %s",
-      post.getUser().getUsername(),
-      post.getDescription()));
-
+    notification.setText(String.format("User %s commented your post", post.getUser().getUsername()));
     notification.setNotifyingUser(post.getOriginalPost().getUser());
-
     notificationService.createNewNotification(notification);
   }
 
-  public void subscriberNotification(User user) {
-
+  public void subscriberNotification(User follower, User following) {
     Notification notification = new Notification();
     notification.setType(NotificationType.SUBSCRIBER);
-    notification.setLink(String.format("%s/#/profile/%d", baseUrl, user.getId()));
-    notification.setText(String.format("User %s subscribed to your account", getUser().getUsername()));
-    notification.setNotifyingUser(user);
-
+    notification.setPhoto(follower.getAvatar());
+    notification.setLink(String.format("%s/#/profile/%d", baseUrl, follower.getId()));
+    notification.setText(String.format("User %s subscribed to your account", follower.getUsername()));
+    notification.setNotifyingUser(following);
     notificationService.createNewNotification(notification);
   }
 
   public void messageNotification(Message message) {
+    String photo = message.getUser().getAvatar();
+    String link = String.format("%s/#/messages", baseUrl);
+    String text = String.format("User %s sent you new message", message.getUser().getUsername());
 
     message.getChat()
       .getChatUsers()
@@ -127,13 +120,10 @@ public class NotificationCreator {
         user -> {
           Notification notification = new Notification();
           notification.setType(NotificationType.MESSAGE);
-          notification.setLink(String.format("%s/#/messages",
-            baseUrl));
-          notification.setText(String.format("User %s sent you new message: %s",
-            message.getUser().getUsername(),
-            message.getText()));
+          notification.setPhoto(photo);
+          notification.setLink(link);
+          notification.setText(text);
           notification.setNotifyingUser(user);
-
           notificationService.createNewNotification(notification);
         }
       );

@@ -140,12 +140,12 @@ public class UserService implements UserDetailsService {
   }
 
   public void subscribe(Long userId) {
-    User currentUser = getUser();
+    User follower = userRepo.findByUsername(getUser().getUsername());
 
-    User user = findById(userId);
-    notificationCreator.subscriberNotification(user);
-    user.getFollowers().add(currentUser);
-    saveUser(user);
+    User following = findById(userId);
+    notificationCreator.subscriberNotification(follower, following);
+    following.getFollowers().add(follower);
+    saveUser(following);
   }
 
   public void unsubscribe(Long userId) {

@@ -23,6 +23,7 @@ public class Notification extends AbstractEntity {
   @JoinColumn(name = "notifying_user_id")
   private User notifyingUser;
 
+  private String photo;
   private String text;
   private NotificationType type;
   private String link;
@@ -37,8 +38,7 @@ public class Notification extends AbstractEntity {
       return false;
     }
     Notification that = (Notification) obj;
-    return active == that.active
-      && Objects.equals(notifyingUser, that.notifyingUser)
+    return Objects.equals(notifyingUser, that.notifyingUser)
       && Objects.equals(text, that.text)
       && type == that.type
       && Objects.equals(link, that.link);
@@ -46,7 +46,7 @@ public class Notification extends AbstractEntity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(notifyingUser, text, type, link, active);
+    return Objects.hash(notifyingUser, text, type, link);
   }
 
 }
