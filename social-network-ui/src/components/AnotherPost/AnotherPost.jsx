@@ -31,17 +31,17 @@ import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
 import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  overflowY: 'auto',
-  bgcolor: 'background.paper',
-  border: '1px solid #000',
-  boxShadow: 24,
-  borderRadius: '7px',
-  p: 2,
-  textAlign: 'center'
+	position: 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	overflowY: 'auto',
+	bgcolor: 'background.paper',
+	border: '1px solid #000',
+	boxShadow: 24,
+	borderRadius: '7px',
+	p: 2,
+	textAlign: 'center',
 }
 
 function AnotherPost({
@@ -74,163 +74,163 @@ function AnotherPost({
   const isFollow = followings.includes(thisPost?.user?.id)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
-      setCountComments((prev) => prev - deletedCommentsCount)
-    }
-  }, [deletedCommentsCount])
+	useEffect(() => {
+		if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
+			setCountComments(prev => prev - deletedCommentsCount)
+		}
+	}, [deletedCommentsCount])
 
-  function comment () {
-    setOpenCommentModal(true)
-  }
+	function comment() {
+		setOpenCommentModal(true)
+	}
 
-  async function like () {
-    try {
-      const response = await axios.post(
-        url + `/api/v1/likes/like/${thisPost.id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      if (response.status === 200) {
-        toggleLiked()
-        setError(null)
-      } else {
-        setError(`Error ${response.status}: ${response.error}`)
-      }
-    } catch (err) {
-      setError(`Error: ${err}`)
-    }
-  }
+	async function like() {
+		try {
+			const response = await axios.post(
+				url + `/api/v1/likes/like/${thisPost.id}`,
+				{},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			if (response.status === 200) {
+				toggleLiked()
+				setError(null)
+			} else {
+				setError(`Error ${response.status}: ${response.error}`)
+			}
+		} catch (err) {
+			setError(`Error: ${err}`)
+		}
+	}
 
-  async function repost () {
-    try {
-      const response = await axios.post(
-        url + `/api/v1/post/${thisPost.id}/repost`,
-        {
-          id: 0,
-          userId: 0,
-          photo: '',
-          description: ''
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      if (response.status === 200) {
-        toggleRepost()
-        setError(null)
-      } else {
-        setError(`Error ${response.status}: ${response.error}`)
-      }
-    } catch (err) {
-      setError(`Error: ${err}`)
-    }
-  }
+	async function repost() {
+		try {
+			const response = await axios.post(
+				url + `/api/v1/post/${thisPost.id}/repost`,
+				{
+					id: 0,
+					userId: 0,
+					photo: '',
+					description: '',
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			if (response.status === 200) {
+				toggleRepost()
+				setError(null)
+			} else {
+				setError(`Error ${response.status}: ${response.error}`)
+			}
+		} catch (err) {
+			setError(`Error: ${err}`)
+		}
+	}
 
-  function toggleLiked () {
-    isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
-    setIsLiked(!isLiked)
-  }
+	function toggleLiked() {
+		isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
+		setIsLiked(!isLiked)
+	}
 
-  async function repost () {
-    try {
-      const response = await axios.post(
-        url + `/api/v1/post/${thisPost.id}/repost`,
-        {
-          id: 0,
-          userId: 0,
-          photo: '',
-          description: ''
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      if (response.status === 200) {
-        toggleRepost()
-        setError(null)
-      } else {
-        setError(`Error ${response.status}: ${response.error}`)
-      }
-    } catch (err) {
-      setError(`Error: ${err}`)
-    }
-  }
+	async function repost() {
+		try {
+			const response = await axios.post(
+				url + `/api/v1/post/${thisPost.id}/repost`,
+				{
+					id: 0,
+					userId: 0,
+					photo: '',
+					description: '',
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			if (response.status === 200) {
+				toggleRepost()
+				setError(null)
+			} else {
+				setError(`Error ${response.status}: ${response.error}`)
+			}
+		} catch (err) {
+			setError(`Error: ${err}`)
+		}
+	}
 
-  function toggleLiked () {
-    isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
-    setIsLiked(!isLiked)
-  }
+	function toggleLiked() {
+		isLiked ? setLikes(likes - 1) : setLikes(likes + 1)
+		setIsLiked(!isLiked)
+	}
 
-  function toggleRepost () {
-    isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
-    setIsReposted(!isReposted)
-  }
+	function toggleRepost() {
+		isReposted ? setReposts(reposts - 1) : setReposts(reposts + 1)
+		setIsReposted(!isReposted)
+	}
 
-  function handleDeletePost () {
-    setPostIsDeleted(true)
-    setDeletedCommentsCount && setDeletedCommentsCount(prev => prev + 1)
-    hasCommentWriteWindow && navigate(`/home`)
-  }
+	function handleDeletePost() {
+		setPostIsDeleted(true)
+		setDeletedCommentsCount && setDeletedCommentsCount(prev => prev + 1)
+		hasCommentWriteWindow && navigate(`/home`)
+	}
 
-  async function deletePost () {
-    try {
-      const response = await axios.delete(url + `/api/v1/post/${thisPost.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      response.status === 200
-        ? handleDeletePost()
-        : setError(`Error ${response.status}: ${response.error}`)
-    } catch (err) {
-      setError(`Error: ${err}`)
-    } finally {
-      setOpenDeleteModal(false)
-    }
-  }
+	async function deletePost() {
+		try {
+			const response = await axios.delete(url + `/api/v1/post/${thisPost.id}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			response.status === 200
+				? handleDeletePost()
+				: setError(`Error ${response.status}: ${response.error}`)
+		} catch (err) {
+			setError(`Error: ${err}`)
+		} finally {
+			setOpenDeleteModal(false)
+		}
+	}
 
-  async function toggleFollow () {
-    try {
-      let response
-      if (!isFollow) {
-        response = await axios.get(
-          url + `/api/v1/subscribe/${thisPost.user.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-        dispatch(addFollowing(thisPost.user.id))
-      } else {
-        response = await axios.get(
-          url + `/api/v1/unsubscribe/${thisPost.user.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-        dispatch(removeFollowing(thisPost.user.id))
-      }
-      response.status === 200
-        ? setError(null)
-        : setError(`Error ${response.status}: ${response.error}`)
-    } catch (error) {
-      setError(`Error: ${error}`)
-    }
-  }
+	async function toggleFollow() {
+		try {
+			let response
+			if (!isFollow) {
+				response = await axios.get(
+					url + `/api/v1/subscribe/${thisPost.user.id}`,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				)
+				dispatch(addFollowing(thisPost.user.id))
+			} else {
+				response = await axios.get(
+					url + `/api/v1/unsubscribe/${thisPost.user.id}`,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				)
+				dispatch(removeFollowing(thisPost.user.id))
+			}
+			response.status === 200
+				? setError(null)
+				: setError(`Error ${response.status}: ${response.error}`)
+		} catch (error) {
+			setError(`Error: ${error}`)
+		}
+	}
 
   return postIsDeleted ? null : (
     <>
@@ -422,10 +422,10 @@ function AnotherPost({
 }
 
 AnotherPost.propTypes = {
-  post: PropTypes.object.isRequired,
-  setComments: PropTypes.func,
-  hasCommentWriteWindow: PropTypes.bool,
-  deletedCommentsCount: PropTypes.number,
-  setDeletedCommentsCount: PropTypes.func
+	post: PropTypes.object.isRequired,
+	setComments: PropTypes.func,
+	hasCommentWriteWindow: PropTypes.bool,
+	deletedCommentsCount: PropTypes.number,
+	setDeletedCommentsCount: PropTypes.func,
 }
 export default AnotherPost

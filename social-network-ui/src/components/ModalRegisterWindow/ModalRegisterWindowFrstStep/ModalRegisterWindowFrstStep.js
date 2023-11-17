@@ -116,11 +116,9 @@ const ModalRegisterWindowFrstStep = ({
 	const handleNextRegistrationStep = obj => {
 		// add first part of register data
 		dispatch(register(obj))
-		setIsLoading(true)
-		setTimeout(() => {
-			setIsLoading(false)
-			setRegisterStep(prevStep => prevStep + 1)
-		}, 1000)
+		// setIsLoading(true)
+		// setIsLoading(false)
+		setRegisterStep(prevStep => prevStep + 1)
 	}
 	const resetInfo = () => {
 		// reset info on the fields

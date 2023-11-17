@@ -14,6 +14,7 @@ const NotificationList = ({ notifications }) => {
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
+				width: '100%',
 				gap: 2.5,
 				py: 2,
 			}}
