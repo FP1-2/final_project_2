@@ -3,7 +3,6 @@ import {
   Button,
   Modal,
   Box,
-  Avatar,
   Typography,
   Card,
   CardContent
@@ -16,6 +15,7 @@ import styles from '../AnotherPost/AnotherPost.module.scss'
 import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
+import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
 function ModalComment ({
   post,
@@ -56,7 +56,7 @@ function ModalComment ({
                   }
                 }}
               >
-                {post.user.avatar ? (
+                {/* {post.user.avatar ? (
                   <Avatar
                     alt={`${post.user.firstName} ${post.user.lastName}`}
                     src={post.user.avatar}
@@ -79,7 +79,8 @@ function ModalComment ({
                     {post.user.firstName.charAt(0)}
                     {post.user.lastName.charAt(0)}
                   </Avatar>
-                )}
+                )} */}
+                <AdaptiveAvatar src={post?.user?.avatar} alt={`${post?.user?.firstName} ${post?.user?.lastName}`} firstName={post?.user?.firstName || '?'} />
               </Box>
             </Link>
             <Box

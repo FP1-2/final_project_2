@@ -12,7 +12,7 @@ const getApiPosts = async (token, userId) => {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    throw error
   }
 };
 

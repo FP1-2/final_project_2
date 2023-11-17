@@ -1,28 +1,22 @@
 import React, { useState } from 'react'
 import ImageInput from '../HomePage/ImageInput/ImageInput'
 import MultilineTextFields from '../HomePage/WriteInput/MultilineTextFields'
-import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import PropTypes from 'prop-types'
 import { Image } from 'cloudinary-react'
 import UseUserToken from './../../hooks/useUserToken'
 import getUserId from '../../utils/getUserId'
-import styles from './CommentWriteWindow.module.scss'
 import axios from 'axios'
 import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import PostButton from '../PostButton/PostButton'
 import { useNavigate } from 'react-router-dom'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 import CircularProgress from '@mui/material/CircularProgress'
+import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
-function CommentWriteWindow ({
-  postId,
-  close,
-  setCommentsCount,
-  setComments
-}) {
+function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
   const { token } = UseUserToken()
   const userId = getUserId()
   const [description, setDescription] = useState('')
@@ -31,8 +25,7 @@ function CommentWriteWindow ({
   const [success, setSuccess] = useState(null)
   const [photoLoading, setPhotoLoading] = useState(null)
   const navigate = useNavigate()
-  const { avatar, firstName, lastName } = useSelector((state) => state.user.userData)
-  
+  const userData = useSelector(state => state.user.userData)
 
   const handleModalComment = () => {
     setSuccess('Comment sent. Click to open the post')
@@ -46,29 +39,26 @@ function CommentWriteWindow ({
     setDescription('')
   }
 
-const handlePhotoInput = async (event) => {
-     try {
-         const selectedFile = event.target.files[0];
-         if (selectedFile) {
-             const formData = new FormData();
-             formData.append('file', selectedFile);
-             formData.append('upload_preset', 'danit2023');
-             setPhotoLoading(true)
-             const response = await axios.post(
-                 'https://api.cloudinary.com/v1_1/dl4ihoods/image/upload',
-                 formData
-             );
-             setPhoto(response.data.url);
-             setError(null);
-         }
-     } catch (err) {
-         setError(err.message);
-     }
-     finally { setPhotoLoading(false) }
-};
-
-  const handleSubmit = event => {
-    event.preventDefault()
+  const handlePhotoInput = async event => {
+    try {
+      const selectedFile = event.target.files[0]
+      if (selectedFile) {
+        const formData = new FormData()
+        formData.append('file', selectedFile)
+        formData.append('upload_preset', 'danit2023')
+        setPhotoLoading(true)
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/dl4ihoods/image/upload',
+          formData
+        )
+        setPhoto(response.data.url)
+        setError(null)
+      }
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setPhotoLoading(false)
+    }
   }
 
   const handlePost = async () => {
@@ -94,11 +84,10 @@ const handlePhotoInput = async (event) => {
 
       if (response.status === 200) {
         setError(null)
-        setCommentsCount((prev) => prev + 1)
-        setComments && setComments((prev) => [response.data, ...prev])
-        console.log(response.data);
+        setCommentsCount(prev => prev + 1)
+        setComments && setComments(prev => [response.data, ...prev])
+        console.log(response.data)
         close ? handleModalComment() : handleComment()
-
       } else {
         setError(`Error ${response.status}: ${response.data}`)
       }
@@ -108,22 +97,14 @@ const handlePhotoInput = async (event) => {
   }
 
   return (
-    <form className={styles.writeWindow} onSubmit={handleSubmit}>
-      <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2 }}>
-        {avatar ? (
-          <Avatar
-            alt={`${firstName} ${lastName}`}
-            src={avatar}
-            sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
-          />
-        ) : (
-          <Avatar
-            sx={{ width: 50, height: 50, mr: 2, alignSelf: 'flex-start' }}
-          >
-            {firstName.charAt(0)}
-            {lastName.charAt(0)}
-          </Avatar>
-        )}
+    <>
+      <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 2 }}>
+        {userData && <AdaptiveAvatar
+          src={userData?.avatar}
+          alt={`${userData?.firstName} ${userData?.lastName}`}
+          big={false}
+          firstName={userData?.firstName || '?'}
+        />}
 
         <MultilineTextFields
           value={description}
@@ -161,11 +142,15 @@ const handlePhotoInput = async (event) => {
             />
           </>
         ) : (
-          <ImageInput file={photo} onChange={handlePhotoInput} inputName='commentInput'/>
+          <ImageInput
+            file={photo}
+            onChange={handlePhotoInput}
+            inputName='commentInput'
+          />
         )}
-        {photoLoading && <CircularProgress/>}
+        {photoLoading && <CircularProgress />}
       </Box>
-    </form>
+    </>
   )
 }
 

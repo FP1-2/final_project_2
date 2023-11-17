@@ -3,7 +3,6 @@ import {
   Button,
   Modal,
   Box,
-  Avatar,
   Typography,
   Card,
   CardContent,
@@ -29,6 +28,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
+import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
 const style = {
   position: 'absolute',
@@ -44,7 +44,7 @@ const style = {
   textAlign: 'center'
 }
 
-function AnotherPost ({
+function AnotherPost({
   post,
   setComments,
   hasCommentWriteWindow,
@@ -68,7 +68,7 @@ function AnotherPost ({
   const url = process.env.REACT_APP_SERVER_URL
   const postDate = formatPostDate(thisPost?.createdDate)
   const userId = getUserId()
-  const followings = useSelector(state => state.user.followings)
+  const followings = useSelector(state => state.user.followings) || []
   const dispatch = useDispatch()
   const isMinePost = thisPost?.user?.id == userId
   const isFollow = followings.includes(thisPost?.user?.id)
@@ -237,7 +237,7 @@ function AnotherPost ({
       <Card variant='outlined'>
         {isRepost && (
           <Box sx={{ pl: 1 }}>
-            <Link to={'/user/' + post.user.id} className={styles.link}>
+            <Link to={'/profile/' + post.user.id} className={styles.link}>
               <Typography
                 variant='p'
                 sx={{ display: 'flex', alignItems: 'center', color: 'grey' }}
@@ -267,18 +267,7 @@ function AnotherPost ({
                 }
               }}
             >
-              {thisPost.user.avatar ? (
-                <Avatar
-                  alt={`${thisPost?.user?.firstName} ${thisPost?.user?.lastName}`}
-                  src={thisPost.user.avatar}
-                  sx={{ width: 50, height: 50, alignSelf: 'flex-start' }}
-                />
-              ) : (
-                <Avatar sx={{ width: 50, height: 50, alignSelf: 'flex-start' }}>
-                  {thisPost?.user?.firstName.charAt(0)}
-                  {thisPost?.user?.lastName.charAt(0)}
-                </Avatar>
-              )}
+              <AdaptiveAvatar src={thisPost?.user?.avatar} alt={`${thisPost?.user?.firstName} ${thisPost?.user?.lastName}`} firstName={thisPost?.user?.firstName || '?'} />
             </Box>
           </Link>
           <Box
