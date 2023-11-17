@@ -14,13 +14,13 @@ export const modalBoxstyle = {
   '@media (min-width: 1800px)': {
     width: '40%'
   },
-  '@media (max-width: 1380px)': {
+  '@media (min-width: 1380px)': {
     width: '55%'
   },
-  '@media (max-width: 1280px)': {
+  '@media (min-width: 1280px)': {
     width: '60%'
   },
-  '@media (max-width: 1180px)': {
+  '@media (max-width: 1279px)': {
     width: '70%'
   },
   '@media (max-width: 960px)': {

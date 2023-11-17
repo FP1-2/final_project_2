@@ -17,9 +17,14 @@ const buttonStyles = {
   // mt: 'auto'
 }
 
-function PostButton ({ onClick, children }) {
+function PostButton ({ onClick, children, disabled }) {
   return (
-    <Button onClick={() => onClick()} variant='contained' sx={buttonStyles}>
+    <Button
+      disabled={disabled}
+      onClick={() => onClick()}
+      variant='contained'
+      sx={buttonStyles}
+    >
       {children}
     </Button>
   )
@@ -28,6 +33,7 @@ function PostButton ({ onClick, children }) {
 export default PostButton
 
 PostButton.propTypes = {
-    onClick: PropTypes.func,
-    children: PropTypes.any
+  onClick: PropTypes.func,
+  children: PropTypes.any,
+  disabled: PropTypes.bool
 }

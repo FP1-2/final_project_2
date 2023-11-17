@@ -106,7 +106,12 @@ function ModalAddPost ({ open, setOpenModal }) {
                 value={description}
                 onChange={e => setDescription(e.target.value)}
               />
-              <PostButton onClick={handlePost}>Post</PostButton>
+              <PostButton
+                onClick={handlePost}
+                disabled={!description && !photo}
+              >
+                Post
+              </PostButton>
             </Box>
             {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
             {photo ? (
@@ -136,15 +141,18 @@ function ModalAddPost ({ open, setOpenModal }) {
                 />
               </Box>
             ) : (
-              <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                <ImageInput
-                  file={photo}
-                  onChange={handlePhotoInput}
-                  inputName='TweetButtonInput'
-                />
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                {photoLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <ImageInput
+                    file={photo}
+                    onChange={handlePhotoInput}
+                    inputName='TweetButtonInput'
+                  />
+                )}
               </Box>
             )}
-            {photoLoading && <CircularProgress />}
           </>
         )}
       </Box>
