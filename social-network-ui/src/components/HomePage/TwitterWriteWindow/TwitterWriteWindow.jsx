@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styles from './TwitterWriteWindow.module.scss'
 import ImageInput from '../ImageInput/ImageInput'
 import MultilineTextFields from '../WriteInput/MultilineTextFields'
 import { Button, Modal, Box, Typography } from '@mui/material'
@@ -95,11 +94,13 @@ const TwitterWriteWindow = ({ setTweetPost, tweetPosts }) => {
           onChange={e => setDescription(e.target.value)}
         />
         {!photo && (
-          <ImageInput
-            file={photo}
-            onChange={handlePhotoInput}
-            inputName='HomePageInput'
-          />
+          <Box sx={{alignSelf: 'end'}}>
+            <ImageInput
+              file={photo}
+              onChange={handlePhotoInput}
+              inputName='HomePageInput'
+            />
+          </Box>
         )}
         <PostButton onClick={handlePost}>Post</PostButton>
       </Box>
@@ -130,8 +131,12 @@ const TwitterWriteWindow = ({ setTweetPost, tweetPosts }) => {
             publicId={photo}
           />
         </Box>
-		  )}
-		{photoLoading && <Box sx={{display: 'flex', justifyContent: 'center', m: 2}}><CircularProgress /></Box>}
+      )}
+      {photoLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', m: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Box>
   )
 }
