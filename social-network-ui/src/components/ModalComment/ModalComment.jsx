@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 import styles from '../AnotherPost/AnotherPost.module.scss'
 import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow'
 import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
 function ModalComment ({
@@ -56,7 +56,12 @@ function ModalComment ({
                   }
                 }}
               >
-                <AdaptiveAvatar src={post?.user?.avatar} alt={`${post?.user?.firstName} ${post?.user?.lastName}`} firstName={post?.user?.firstName || '?'} />
+                <AdaptiveAvatar
+                  src={post?.user?.avatar}
+                  alt={`${post?.user?.firstName} ${post?.user?.lastName}`}
+                  firstName={post?.user?.firstName || '?'}
+                  size='3rem'
+                />
               </Box>
             </Link>
             <Box

@@ -100,7 +100,6 @@ function ModalAddPost ({ open, setOpenModal }) {
               <AdaptiveAvatar
                 src={userData?.avatar}
                 alt={`${userData?.firstName} ${userData?.lastName}`}
-                big={false}
                 firstName={userData?.firstName || '?'}
               />
               <MultilineTextFields

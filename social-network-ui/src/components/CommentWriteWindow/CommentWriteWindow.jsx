@@ -102,7 +102,6 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
         {userData && <AdaptiveAvatar
           src={userData?.avatar}
           alt={`${userData?.firstName} ${userData?.lastName}`}
-          big={false}
           firstName={userData?.firstName || '?'}
         />}
 

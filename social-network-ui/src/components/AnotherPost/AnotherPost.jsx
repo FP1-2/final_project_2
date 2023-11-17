@@ -267,7 +267,7 @@ function AnotherPost({
                 }
               }}
             >
-              <AdaptiveAvatar src={thisPost?.user?.avatar} alt={`${thisPost?.user?.firstName} ${thisPost?.user?.lastName}`} firstName={thisPost?.user?.firstName || '?'} />
+              <AdaptiveAvatar size='3rem' src={thisPost?.user?.avatar} alt={`${thisPost?.user?.firstName} ${thisPost?.user?.lastName}`} firstName={thisPost?.user?.firstName || '?'} />
             </Box>
           </Link>
           <Box
