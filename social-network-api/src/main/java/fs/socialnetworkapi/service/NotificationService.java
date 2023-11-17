@@ -60,8 +60,7 @@ public class NotificationService {
       .forEach(n -> {
         n.setActive(false);
         notificationRepo.save(n);
-      }
-    );
+      });
   }
 
 }
