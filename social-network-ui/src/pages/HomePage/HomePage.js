@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { style } from '../../styles/circularProgressStyle'
 import { Button, Typography } from '@mui/material'
+import { debounce } from 'lodash'
 
 const Home = () => {
   const [tweetPosts, setTweetPost] = useState([])
@@ -23,6 +24,8 @@ const Home = () => {
   const { token } = UseUserToken()
   const containerRef = useRef()
   const container = containerRef.current
+
+  console.log(page)
 
   const handleAllPosts = () => {
     !showAllPosts && setTweetPost([])
@@ -42,7 +45,6 @@ const Home = () => {
 
   useEffect(() => {
     async function getPosts () {
-      console.log('effect')
       try {
         setError(null)
         setLoading(true)
@@ -65,13 +67,13 @@ const Home = () => {
       }
     }
     hasMore && getPosts()
-  }, [page, hasMore, showAllPosts])
+  }, [page, showAllPosts])
 
   useEffect(() => {
     const container = containerRef.current
     container.focus()
 
-    const handleScroll = () => {
+    const handleScroll = debounce(() => {
       const scrollTop = container.scrollTop
       const windowHeight = container.clientHeight
       const scrollHeight = container.scrollHeight
@@ -79,7 +81,7 @@ const Home = () => {
       if (scrollTop + windowHeight >= scrollHeight - 20) {
         setPage(prev => prev + 1)
       }
-    }
+    }, 100)
 
     container.addEventListener('scroll', handleScroll)
 
@@ -127,7 +129,7 @@ const Home = () => {
           backgroundColor: 'RGBA(255, 255, 255, .95)',
           position: 'sticky',
           top: 0,
-          zIndex: 1,
+          zIndex: 1
         }}
       >
         <Button

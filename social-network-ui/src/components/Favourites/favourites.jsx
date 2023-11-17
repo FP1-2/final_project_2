@@ -6,6 +6,7 @@ import AnotherPost from '../AnotherPost/AnotherPost'
 import { style } from '../../styles/circularProgressStyle'
 import { useSelector } from 'react-redux'
 import UseUserToken from '../../hooks/useUserToken'
+import { debounce } from 'lodash'
 
 function Favourites () {
   const [favourites, setFavourites] = useState([])
@@ -48,7 +49,7 @@ function Favourites () {
     const container = containerRef.current
     container.focus()
 
-    const handleScroll = () => {
+const handleScroll = debounce(() => {
       const scrollTop = container.scrollTop
       const windowHeight = container.clientHeight
       const scrollHeight = container.scrollHeight
@@ -56,7 +57,7 @@ function Favourites () {
       if (scrollTop + windowHeight >= scrollHeight - 20) {
         setPage(prev => prev + 1)
       }
-    }
+    }, 100)
 
     container.addEventListener('scroll', handleScroll)
 
