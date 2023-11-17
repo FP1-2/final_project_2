@@ -84,6 +84,7 @@ const TwitterWriteWindow = ({ setTweetPost, tweetPosts }) => {
           <AdaptiveAvatar
             src={userData?.avatar}
             alt={`${userData?.firstName} ${userData?.lastName}`}
+            size='3rem'
             firstName={userData?.firstName || '?'}
           />
         )}

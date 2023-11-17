@@ -98,11 +98,12 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
 
   return (
     <>
-      <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 2 }}>
+      <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 2, pl: 2, pr: 2 }}>
         {userData && (
           <AdaptiveAvatar
             src={userData?.avatar}
             alt={`${userData?.firstName} ${userData?.lastName}`}
+            size='3rem'
             firstName={userData?.firstName || '?'}
           />
         )}

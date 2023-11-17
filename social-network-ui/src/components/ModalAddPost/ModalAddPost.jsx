@@ -96,11 +96,12 @@ function ModalAddPost ({ open, setOpenModal }) {
                 <CloseIcon />
               </Button>
             </CustomTooltip>
-            <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2, gap: 1 }}>
+            <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2, pt: 1, gap: 1 }}>
               <AdaptiveAvatar
                 src={userData?.avatar}
                 alt={`${userData?.firstName} ${userData?.lastName}`}
                 firstName={userData?.firstName || '?'}
+                size='3rem'
               />
               <MultilineTextFields
                 value={description}
