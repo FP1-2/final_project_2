@@ -133,7 +133,7 @@ const Home = () => {
         <Button
           sx={{
             width: '100%',
-            minHeight: '4rem',
+            minHeight: '3.5rem',
             fontSize: '1rem',
             color: !showAllPosts ? 'grey' : null
           }}
@@ -154,7 +154,7 @@ const Home = () => {
         <Button
           sx={{
             width: '100%',
-            minHeight: '4rem',
+            minHeight: '3.5rem',
             fontSize: '1rem',
             textTransform: 'capitalize',
             color: showAllPosts ? 'grey' : null
