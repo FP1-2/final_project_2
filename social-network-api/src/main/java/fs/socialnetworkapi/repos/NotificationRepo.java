@@ -12,4 +12,6 @@ public interface NotificationRepo extends JpaRepository<Notification, Long> {
 
   List<Notification> findAllByNotifyingUserId(Long notifyingUserId, PageRequest pageRequest);
 
+  List<Notification> findAllByNotifyingUserId(Long notifyingUserId);
+
 }

@@ -45,4 +45,10 @@ public class NotificationController {
             : ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Notification is not active.");
   }
 
+  @PostMapping("/read")
+  public ResponseEntity<?> readAll() {
+    notificationService.readAll();
+    return ResponseEntity.ok().build();
+  }
+
 }

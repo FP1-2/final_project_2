@@ -34,6 +34,9 @@ public class NotificationCreator {
   private String baseUrl;
 
   public void likeNotification(Like like) {
+    if (like.getUser().equals(like.getPost().getUser())) {
+      return;
+    }
     Notification notification = new Notification();
     notification.setFromUser(like.getUser());
     notification.setType(NotificationType.LIKE);
@@ -46,6 +49,9 @@ public class NotificationCreator {
   public void sendPostNotification(Post postToSave, TypePost typePost, List<UserDtoOut> followers) {
     if (typePost.equals(TypePost.POST)) {
       featuredNotification(postToSave, followers);
+    } else if (postToSave.getOriginalPost() != null
+      && postToSave.getUser().equals(postToSave.getOriginalPost().getUser())) {
+      return;
     }
     if (typePost.equals(TypePost.REPOST)) {
       repostNotification(postToSave);

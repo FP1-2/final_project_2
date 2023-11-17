@@ -3,7 +3,7 @@ package fs.socialnetworkapi.service;
 import fs.socialnetworkapi.dto.notification.NotificationDtoOut;
 import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
-import fs.socialnetworkapi.exception.PostNotFoundException;
+import fs.socialnetworkapi.exception.NotificationNotFoundException;
 import fs.socialnetworkapi.repos.NotificationRepo;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -44,13 +44,24 @@ public class NotificationService {
 
   public boolean markNotificationAsRead(Long notificationId) {
     Notification notification = notificationRepo.findById(notificationId)
-            .orElseThrow(() -> new PostNotFoundException("No such notification"));
+            .orElseThrow(() -> new NotificationNotFoundException("No such notification"));
     if (notification.isActive()) {
       notification.setActive(false);
       notificationRepo.save(notification);
       return true;
     }
     return false;
+  }
+
+  public void readAll() {
+    notificationRepo.findAllByNotifyingUserId(getUser().getId())
+      .stream()
+      .filter(Notification::isActive)
+      .forEach(n -> {
+        n.setActive(false);
+        notificationRepo.save(n);
+      }
+    );
   }
 
 }
