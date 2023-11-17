@@ -160,8 +160,6 @@ const ModalRegisterWindowSecondStep = ({
 		secondPart.password = scndPassword
 		secondPart.address = city
 
-		console.log(secondPart)
-
 		const obj = {
 			// add secod part of register data
 			...secondPart,
@@ -177,7 +175,6 @@ const ModalRegisterWindowSecondStep = ({
 		resetForm()
 		;(async () => {
 			const response = await postRegistrationData({ ...userObj, ...obj })
-			console.log(response)
 			setIsLoading(false)
 			setIsRegisterDone(true)
 			setIsOkayAlert(true)

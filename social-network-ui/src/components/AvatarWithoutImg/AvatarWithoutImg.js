@@ -8,13 +8,14 @@ const AvatarWithoutImg = ({ userName, border, big }) => {
 	return (
 		<Avatar
 			sx={{
-				width: big ? '8rem' : '6rem',
-				height: big ? '8rem' : '6rem',
+				width: big ? '4.5rem' : '2.5rem',
+				height: big ? '4.5rem' : '2.5rem',
 				bgcolor: 'rgb(29, 161, 241)',
 				p: 5,
 				fontSize: '3rem',
-				mb: 1,
 				border: border ? '3px solid white' : 'none',
+				textDecoration: 'none',
+				color: 'white',
 			}}
 		>
 			{userName?.charAt(0).toUpperCase()}

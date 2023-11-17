@@ -281,7 +281,6 @@ const ProfilePage = () => {
 					},
 				}
 			)
-			console.log(data)
 			if (data.length > 0) {
 				setUserPosts(prevPosts => [...prevPosts, ...data])
 				setPage(prevPage => prevPage + 1)

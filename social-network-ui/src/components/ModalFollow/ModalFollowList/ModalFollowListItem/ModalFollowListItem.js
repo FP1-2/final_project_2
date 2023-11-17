@@ -81,9 +81,19 @@ const ModalFollowListItem = ({ item }) => {
 						},
 					}}
 				>
-					<Link to={`/profile/${item.id}`}>
-						<AdaptiveAvatar src={item.avatar} firstName={item.firstName} />
-					</Link>
+					<Box
+						component={Link}
+						sx={{
+							textDecoration: 'none',
+						}}
+						to={`/profile/${item.id}`}
+					>
+						<AdaptiveAvatar
+							src={item.avatar}
+							firstName={item.firstName}
+							border={false}
+						/>
+					</Box>
 					<Box
 						sx={{
 							display: 'flex',
@@ -101,9 +111,9 @@ const ModalFollowListItem = ({ item }) => {
 								textOverflow: 'ellipsis',
 								overflow: 'hidden',
 								whiteSpace: 'nowrap',
+								textDecoration: 'none',
 							}}
 							to={`/profile/${item.id}`}
-							style={{ textDecoration: 'none' }}
 						>
 							<Typography
 								sx={{
@@ -113,9 +123,19 @@ const ModalFollowListItem = ({ item }) => {
 								variant='p'
 							>{`${item.firstName} ${item.lastName}`}</Typography>
 						</Box>
-						<Link to={`/profile/${item.id}`} style={{ textDecoration: 'none' }}>
+						<Box
+							component={Link}
+							to={`/profile/${item.id}`}
+							sx={{
+								maxWidth: '90%',
+								textOverflow: 'ellipsis',
+								overflow: 'hidden',
+								whiteSpace: 'nowrap',
+								textDecoration: 'none',
+							}}
+						>
 							<UserTag userTag={item.username} />
-						</Link>
+						</Box>
 					</Box>
 					{loadIsDone && !isMe && (
 						<FollowButton
