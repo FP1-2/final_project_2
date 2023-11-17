@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import getLikedPosts from '../../api/getLikedPosts'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
@@ -6,6 +6,7 @@ import AnotherPost from '../AnotherPost/AnotherPost'
 import { style } from '../../styles/circularProgressStyle'
 import { useSelector } from 'react-redux'
 import UseUserToken from '../../hooks/useUserToken'
+import { debounce } from 'lodash'
 
 function Favourites () {
   const [favourites, setFavourites] = useState([])
@@ -16,7 +17,8 @@ function Favourites () {
 
   const userId = useSelector(state => state.user.userId)
   const { token } = UseUserToken()
-  const size = 10
+  const size = 5
+  const containerRef = useRef()
 
   useEffect(() => {
     async function getPosts () {
@@ -44,36 +46,65 @@ function Favourites () {
   }, [userId, page, hasMore])
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = document.documentElement.scrollTop
-      const windowHeight = window.innerHeight
-      const scrollHeight = document.documentElement.scrollHeight
+    const container = containerRef.current
+    container.focus()
+
+const handleScroll = debounce(() => {
+      const scrollTop = container.scrollTop
+      const windowHeight = container.clientHeight
+      const scrollHeight = container.scrollHeight
 
       if (scrollTop + windowHeight >= scrollHeight - 20) {
         setPage(prev => prev + 1)
       }
+    }, 100)
+
+    container.addEventListener('scroll', handleScroll)
+
+    const handleKeyDown = event => {
+      switch (event.key) {
+        case 'PageDown':
+          container.scrollTop += container.clientHeight
+          break
+        case 'PageUp':
+          container.scrollTop -= container.clientHeight
+          break
+        case 'Home':
+          container.scrollTop = 0
+          break
+        case 'End':
+          container.scrollTop = container.scrollHeight
+          break
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    container.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      container.removeEventListener('scroll', handleScroll)
+      container.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
 
   return (
-    <Box sx={{
+    <Box
+      sx={{
         maxHeight: '100vh',
-        overflowY: 'auto'
-      }}>
+        overflowY: 'auto',
+        outline: 'none',
+        '&::-webkit-scrollbar': {
+          width: '0'
+        }
+      }}
+      ref={containerRef}
+      tabIndex={0}
+    >
       {error && <h2>{error}</h2>}
 
       {!error &&
         favourites.map(post => <AnotherPost key={post.id} post={post} />)}
 
-      <Box sx={style}>
-        {loading && <CircularProgress />}
-      </Box>
+      <Box sx={style}>{loading && <CircularProgress />}</Box>
     </Box>
   )
 }
