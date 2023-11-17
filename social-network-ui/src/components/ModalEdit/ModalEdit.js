@@ -59,7 +59,9 @@ const ModalEdit = ({ user, setUser }) => {
 	const { token } = UseUserToken()
 	//state >>>
 	const [imageUrl, setImageUrl] = useState('') // image url
-	const [backgroundImageUrl, setBackgroundImageUrl] = useState('') // bg
+	const [backgroundImageUrl, setBackgroundImageUrl] = useState(
+		user.bgProfileImage
+	) // bg
 	//>>//Loading state
 	const [error, setError] = useState('') // error
 	const [isBtnLoading, setIsBtnLoading] = useState(false)

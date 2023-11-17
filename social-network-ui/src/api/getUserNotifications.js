@@ -1,9 +1,11 @@
 import axios from 'axios'
 
-export default async function getUserNotifications(token) {
+export default async function getUserNotifications(token, page = 1, size = 10) {
 	try {
 		const { data } = await axios.get(
-			`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/notifications/all`,
+			`${
+				process.env.REACT_APP_SERVER_URL || ''
+			}/api/v1/notifications/all?page=${page}&size=${size}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,

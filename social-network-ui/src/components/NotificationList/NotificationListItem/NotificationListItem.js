@@ -72,6 +72,13 @@ const NotificationListItem = ({ data }) => {
 		<Box
 			onMouseEnter={isActive ? handleMouseEnter : () => {}}
 			onMouseLeave={isActive ? handleMouseLeave : () => {}}
+			onClick={
+				isActive
+					? () => {
+							markAsReadUserNotification(data.id, token)
+					  }
+					: () => {}
+			}
 			sx={{
 				display: 'flex',
 				justifyContent: 'space-between',
@@ -120,6 +127,8 @@ const NotificationListItem = ({ data }) => {
 			<AdaptiveAvatar
 				src={data.fromUser.avatar}
 				firstName={data.fromUser.firstName}
+				border={false}
+				size={'4rem'}
 			/>
 			<Box
 				sx={{

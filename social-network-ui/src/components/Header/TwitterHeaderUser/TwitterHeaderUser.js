@@ -84,7 +84,7 @@ const TwitterHeaderUser = () => {
 						>
 							<AdaptiveAvatar
 								src={userData.avatar}
-								big={false}
+								size={'2.5rem'}
 								border={false}
 								firstName={userData.firstName}
 							/>
