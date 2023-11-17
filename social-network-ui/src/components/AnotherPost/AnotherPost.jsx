@@ -387,6 +387,13 @@ function AnotherPost({
               </CustomTooltip>
             )}
           </CardActions>
+          {hasCommentWriteWindow && (
+        <CommentWriteWindow
+          postId={thisPost.id}
+          setCommentsCount={setCountComments}
+          setComments={setComments}
+        />
+      )}
           <Typography sx={{ color: 'red' }}> {error}</Typography>
         </CardContent>
       </Card>
@@ -410,13 +417,6 @@ function AnotherPost({
           </Box>
         </Box>
       </Modal>
-      {hasCommentWriteWindow && (
-        <CommentWriteWindow
-          postId={thisPost.id}
-          setCommentsCount={setCountComments}
-          setComments={setComments}
-        />
-      )}
     </>
   )
 }

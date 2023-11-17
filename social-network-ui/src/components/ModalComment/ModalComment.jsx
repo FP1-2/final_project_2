@@ -40,7 +40,7 @@ function ModalComment ({
         </CustomTooltip>
         <Card variant='outlined' sx={{ backgroundColor: 'rgb(241, 247, 255)' }}>
           <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Link to={'/user/' + post.user.id}>
+            <Link to={'/profile/' + post?.user?.id}>
               <Box
                 sx={{
                   position: 'relative',
@@ -56,30 +56,6 @@ function ModalComment ({
                   }
                 }}
               >
-                {/* {post.user.avatar ? (
-                  <Avatar
-                    alt={`${post.user.firstName} ${post.user.lastName}`}
-                    src={post.user.avatar}
-                    sx={{
-                      width: 50,
-                      height: 50,
-                      mr: 2,
-                      alignSelf: 'flex-start'
-                    }}
-                  />
-                ) : (
-                  <Avatar
-                    sx={{
-                      width: 50,
-                      height: 50,
-                      mr: 2,
-                      alignSelf: 'flex-start'
-                    }}
-                  >
-                    {post.user.firstName.charAt(0)}
-                    {post.user.lastName.charAt(0)}
-                  </Avatar>
-                )} */}
                 <AdaptiveAvatar src={post?.user?.avatar} alt={`${post?.user?.firstName} ${post?.user?.lastName}`} firstName={post?.user?.firstName || '?'} />
               </Box>
             </Link>
@@ -91,7 +67,7 @@ function ModalComment ({
                 alignItems: 'center'
               }}
             >
-              <Link to={'/user/' + post.user.id} className={styles.link}>
+              <Link to={'/profile/' + post.user.id} className={styles.link}>
                 <Typography
                   variant='h6'
                   sx={{ display: 'flex', alignItems: 'center' }}
@@ -99,7 +75,7 @@ function ModalComment ({
                   {post.user.firstName} {post.user.lastName}
                 </Typography>
               </Link>
-              <Link to={'/user/' + post.user.id} className={styles.link}>
+              <Link to={'/profile/' + post.user.id} className={styles.link}>
                 <Typography sx={{ display: 'flex', alignItems: 'center' }}>
                   @{post.user.username}
                 </Typography>
