@@ -7,7 +7,7 @@ import getFollowingsPosts from './../../api/getFollowingsPosts'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { style } from '../../styles/circularProgressStyle'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 
 const Home = () => {
   const [tweetPosts, setTweetPost] = useState([])
@@ -118,24 +118,57 @@ const Home = () => {
       ref={containerRef}
       tabIndex={0}
     >
-      <Box sx={{ display: 'flex' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          backgroundColor: 'RGBA(255, 255, 255, .95)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 1
+        }}
+      >
         <Button
-          sx={{ width: '100%', color: !showAllPosts ? 'grey' : null }}
+          sx={{
+            width: '100%',
+            minHeight: '4rem',
+            fontSize: '1rem',
+            color: !showAllPosts ? 'grey' : null
+          }}
           onClick={handleAllPosts}
         >
-          All posts
+          <Typography
+            sx={{
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              borderBottom: showAllPosts ? 'solid' : null
+            }}
+          >
+            All posts
+          </Typography>
         </Button>
         <Button
-          sx={{ width: '100%', color: showAllPosts ? 'grey' : null }}
+          sx={{
+            width: '100%',
+            minHeight: '4rem',
+            fontSize: '1rem',
+            color: showAllPosts ? 'grey' : null
+          }}
           onClick={handleFollowing}
         >
-          Following
+          <Typography
+            sx={{
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              borderBottom: !showAllPosts ? 'solid' : null
+            }}
+          >
+            Following
+          </Typography>
         </Button>
       </Box>
-      <TwitterWriteWindow
-        setTweetPost={setTweetPost}
-        tweetPosts={tweetPosts}
-      />
+      <TwitterWriteWindow setTweetPost={setTweetPost} tweetPosts={tweetPosts} />
       {error && <h2>{error}</h2>}
       {!error && <PostWrapper tweets={tweetPosts} />}
       {loading && (
