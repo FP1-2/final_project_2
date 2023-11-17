@@ -6,13 +6,13 @@ import AvatarWithoutImg from './../AvatarWithoutImg/AvatarWithoutImg'
 //NPMs
 import PropTypes from 'prop-types'
 
-const AdaptiveAvatar = ({ src, alt, firstName, big = true, border = true }) => {
+const AdaptiveAvatar = ({ src, alt, firstName, size, border = true }) => {
 	if (src) {
 		return (
 			<Avatar
 				sx={{
-					width: big ? '4.5rem' : '2.5rem',
-					height: big ? '4.5rem' : '2.5rem',
+					width: size,
+					height: size,
 					border: border ? '1px solid white' : 'none',
 				}}
 				src={src}
@@ -20,7 +20,7 @@ const AdaptiveAvatar = ({ src, alt, firstName, big = true, border = true }) => {
 			/>
 		)
 	} else {
-		return <AvatarWithoutImg border={border} userName={firstName} big={big} />
+		return <AvatarWithoutImg border={border} userName={firstName} size={size} />
 	}
 }
 
@@ -28,7 +28,7 @@ AdaptiveAvatar.propTypes = {
 	src: PropTypes.string,
 	alt: PropTypes.string,
 	firstName: PropTypes.string.isRequired,
-	big: PropTypes.bool,
+	size: PropTypes.string,
 	border: PropTypes.bool,
 }
 

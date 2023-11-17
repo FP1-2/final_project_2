@@ -42,6 +42,7 @@ import getUserData from '../../api/getUserInfo'
 import axios from 'axios'
 import { format } from 'date-fns'
 import { debounce } from 'lodash'
+import AdaptiveAvatar from '../../components/AdaptiveAvatar/AdaptiveAvatar'
 
 const theme = createTheme({
 	typography: {
@@ -122,7 +123,6 @@ const ProfilePage = () => {
 
 	useEffect(() => {
 		if (scrollHeight.current) {
-			console.log(scrollHeight.current)
 			scrollHeight.current.focus()
 		}
 	}, [scrollHeight.current])
@@ -392,21 +392,29 @@ const ProfilePage = () => {
 								bgcolor: 'rgb(29, 161, 241)',
 							}}
 						>
-							<Typography
-								variant='h3'
-								sx={{
-									paddingX: '1rem',
-									wordSpacing: '0.5rem',
-									letterSpacing: '0.4rem',
-									color: 'white',
-									textOverflow: 'ellipsis',
-									overflow: 'hidden',
-									whiteSpace: 'nowrap',
-									userSelect: 'none',
-								}}
-							>
-								{user.firstName} {user.lastName}
-							</Typography>
+							{user.bgProfileImage ? (
+								<Box
+									component='img'
+									sx={{ width: '100%', height: '100%' }}
+									src={user.bgProfileImage}
+								/>
+							) : (
+								<Typography
+									variant='h3'
+									sx={{
+										paddingX: '1rem',
+										wordSpacing: '0.5rem',
+										letterSpacing: '0.4rem',
+										color: 'white',
+										textOverflow: 'ellipsis',
+										overflow: 'hidden',
+										whiteSpace: 'nowrap',
+										userSelect: 'none',
+									}}
+								>
+									{user.firstName} {user.lastName}
+								</Typography>
+							)}
 						</Box>
 						<Box
 							sx={{
@@ -431,23 +439,12 @@ const ProfilePage = () => {
 										transform: 'translateY(-50%)',
 									}}
 								>
-									{user.avatar ? (
-										<Avatar
-											sx={{
-												width: '8rem',
-												height: '8rem',
-												mb: 1,
-												border: '3px solid white',
-											}}
-											src={user.avatar}
-										></Avatar>
-									) : (
-										<AvatarWithoutImg
-											border={true}
-											userName={user.firstName}
-											big={true}
-										/>
-									)}
+									<AdaptiveAvatar
+										src={user.avatar}
+										border={true}
+										size={'8rem'}
+										firstName={user.firstName}
+									/>
 								</Box>
 								{notEqual && (
 									<Button

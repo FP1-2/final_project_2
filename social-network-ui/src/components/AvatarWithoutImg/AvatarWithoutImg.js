@@ -4,14 +4,13 @@ import Avatar from '@mui/material/Avatar'
 //NPMs
 import PropTypes from 'prop-types'
 
-const AvatarWithoutImg = ({ userName, border, big }) => {
+const AvatarWithoutImg = ({ userName, border, size }) => {
 	return (
 		<Avatar
 			sx={{
-				width: big ? '4.5rem' : '2.5rem',
-				height: big ? '4.5rem' : '2.5rem',
+				width: size,
+				height: size,
 				bgcolor: 'rgb(29, 161, 241)',
-				p: 5,
 				fontSize: '3rem',
 				border: border ? '3px solid white' : 'none',
 				textDecoration: 'none',
@@ -26,12 +25,11 @@ const AvatarWithoutImg = ({ userName, border, big }) => {
 AvatarWithoutImg.propTypes = {
 	userName: PropTypes.string.isRequired,
 	border: PropTypes.bool,
-	big: PropTypes.bool,
+	size: PropTypes.string,
 }
 
 AvatarWithoutImg.defaultProps = {
 	border: false,
-	big: false,
 }
 
 export default AvatarWithoutImg

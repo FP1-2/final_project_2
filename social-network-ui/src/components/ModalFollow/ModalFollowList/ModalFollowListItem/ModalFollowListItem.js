@@ -92,6 +92,7 @@ const ModalFollowListItem = ({ item }) => {
 							src={item.avatar}
 							firstName={item.firstName}
 							border={false}
+							size={'4rem'}
 						/>
 					</Box>
 					<Box

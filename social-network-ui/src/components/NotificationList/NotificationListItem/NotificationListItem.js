@@ -128,6 +128,7 @@ const NotificationListItem = ({ data }) => {
 				src={data.fromUser.avatar}
 				firstName={data.fromUser.firstName}
 				border={false}
+				size={'4rem'}
 			/>
 			<Box
 				sx={{
