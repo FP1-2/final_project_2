@@ -22,12 +22,14 @@ const Home = () => {
 
   const { token } = UseUserToken()
   const containerRef = useRef()
+  const container = containerRef.current
 
   const handleAllPosts = () => {
     !showAllPosts && setTweetPost([])
     setHasMore(true)
     setPage(0)
     setShowAllPosts(true)
+    container.scrollTo(0, 0)
   }
 
   const handleFollowing = () => {
@@ -35,6 +37,7 @@ const Home = () => {
     setHasMore(true)
     setPage(0)
     setShowAllPosts(false)
+    container.scrollTo(0, 0)
   }
 
   useEffect(() => {
@@ -124,7 +127,7 @@ const Home = () => {
           backgroundColor: 'RGBA(255, 255, 255, .95)',
           position: 'sticky',
           top: 0,
-          zIndex: 1
+          zIndex: 1,
         }}
       >
         <Button
@@ -141,6 +144,7 @@ const Home = () => {
               height: '100%',
               display: 'flex',
               alignItems: 'center',
+              textTransform: 'capitalize',
               borderBottom: showAllPosts ? 'solid' : null
             }}
           >
@@ -152,6 +156,7 @@ const Home = () => {
             width: '100%',
             minHeight: '4rem',
             fontSize: '1rem',
+            textTransform: 'capitalize',
             color: showAllPosts ? 'grey' : null
           }}
           onClick={handleFollowing}
