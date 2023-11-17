@@ -133,6 +133,7 @@ const ProfilePage = () => {
 			;(async () => {
 				if (isFrstLoad) setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
+				console.log(userData)
 				setUser(userData)
 				setUserFollowersCountState(userData.userFollowersCount)
 				setUserFollowingCountState(userData.userFollowingCount)

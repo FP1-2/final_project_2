@@ -275,8 +275,8 @@ function AnotherPost({
 								/>
 							) : (
 								<Avatar sx={{ width: 50, height: 50, alignSelf: 'flex-start' }}>
-									{thisPost?.user?.firstName.charAt(0)}
-									{thisPost?.user?.lastName.charAt(0)}
+									{thisPost?.user?.firstName?.charAt(0)}
+									{thisPost?.user?.lastName?.charAt(0)}
 								</Avatar>
 							)}
 						</Box>
