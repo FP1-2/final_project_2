@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import TwitterWriteWindow from '../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow'
 import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper'
 import UseUserToken from '../../hooks/useUserToken'
-import { useSelector } from 'react-redux'
 import getAllPosts from './../../api/getAllPosts'
 import getFollowingsPosts from './../../api/getFollowingsPosts'
 import Box from '@mui/material/Box'
@@ -22,17 +21,18 @@ const Home = () => {
   const size = 5
 
   const { token } = UseUserToken()
-  const userData = useSelector(state => state.user.userData)
   const containerRef = useRef()
 
   const handleAllPosts = () => {
     !showAllPosts && setTweetPost([])
+    setHasMore(true)
     setPage(0)
     setShowAllPosts(true)
   }
 
   const handleFollowing = () => {
     showAllPosts && setTweetPost([])
+    setHasMore(true)
     setPage(0)
     setShowAllPosts(false)
   }
@@ -104,10 +104,6 @@ const Home = () => {
       container.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
-
-  const userPhoto = userData ? userData.avatar : ''
-  const firstName = userData ? userData.firstName : ''
-  const lastName = userData ? userData.lastName : ''
 
   return (
     <Box
