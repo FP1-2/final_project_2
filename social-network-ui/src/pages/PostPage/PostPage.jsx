@@ -29,8 +29,6 @@ function PostPage () {
 
   useEffect(() => {
     setComments([])
-    setPost(null)
-    setOriginalPost(null)
     setPage(0)
   }, [params.postId])
 
@@ -56,11 +54,11 @@ function PostPage () {
       }
     }
     isComment && fetchOriginalPost()
+    return setOriginalPost(null)
   }, [post?.originalPost])
 
   useEffect(() => {
     async function fetchPost () {
-      setOriginalPost(null)
       setLoading(true)
       try {
         const data = await getPost(params.postId, token)
@@ -79,6 +77,7 @@ function PostPage () {
       }
     }
     fetchPost()
+    return setPost(null)
   }, [params.postId])
 
   useEffect(() => {
@@ -97,14 +96,17 @@ function PostPage () {
   }, [params.postId, page])
 
   useEffect(() => {
-    const bottom = bottomRef.current
-    setTimeout(() => {
-      bottom.scrollIntoView({ behavior: 'smooth' })
-    }, 1000)
-  }, [params.postId])
+    if (isComment) {
+      const bottom = bottomRef.current
+      setTimeout(() => {
+        bottom.scrollIntoView({ behavior: 'smooth' })
+      }, 1000)
+      return setIsComment(false)
+    }
+  }, [params.postId, isComment])
 
   useEffect(() => {
-    const container = containerRef.current
+    let container = containerRef.current
     container?.focus()
   }, [])
 
@@ -125,7 +127,7 @@ function PostPage () {
 
       {post && (
         <>
-          {originalPost && isComment && (
+          {originalPost && (
             <AnotherPost
               post={originalPost}
               deletedCommentsCount={deletedCommentsCount}
