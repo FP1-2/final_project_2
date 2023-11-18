@@ -13,7 +13,8 @@ function PostPage () {
   const params = useParams()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [post, setPost] = useState({})
+  const [post, setPost] = useState(null)
+  const [originalPost, setOriginalPost] = useState(null)
   const [comments, setComments] = useState([])
   const [deletedCommentsCount, setDeletedCommentsCount] = useState(0)
   const [isComment, setIsComment] = useState(false)
@@ -25,6 +26,36 @@ function PostPage () {
   // comments per page
   const size = 5
   const moreComments = post?.countComments > comments.length
+
+  useEffect(() => {
+    setComments([])
+    setPage(0)
+  }, [params.postId])
+
+  useEffect(() => {
+    async function fetchOriginalPost () {
+      setLoading(true)
+      try {
+        let data
+        post?.originalPost
+          ? (data = await getPost(post.originalPost.id, token))
+          : null
+        setOriginalPost(data)
+      } catch (error) {
+        if (error.response) {
+          setError(`Error ${error.response?.status}: ${error.response?.data}`)
+        }
+        if (error.request) {
+          setError('Error: no response')
+        }
+        setError(`Error: ${error?.message}`)
+      } finally {
+        setLoading(false)
+      }
+    }
+    isComment && fetchOriginalPost()
+    return setOriginalPost(null)
+  }, [post?.originalPost])
 
   useEffect(() => {
     async function fetchPost () {
@@ -46,6 +77,7 @@ function PostPage () {
       }
     }
     fetchPost()
+    return setPost(null)
   }, [params.postId])
 
   useEffect(() => {
@@ -64,14 +96,18 @@ function PostPage () {
   }, [params.postId, page])
 
   useEffect(() => {
-    isComment && bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
-  })
+    if (isComment) {
+      const bottom = bottomRef.current
+      setTimeout(() => {
+        bottom.scrollIntoView({ behavior: 'smooth' })
+      }, 1000)
+      return setIsComment(false)
+    }
+  }, [params.postId, isComment])
 
   useEffect(() => {
-    const container = containerRef.current
-    container.focus()
-    return () => {
-    }
+    let container = containerRef.current
+    container?.focus()
   }, [])
 
   return (
@@ -89,11 +125,11 @@ function PostPage () {
     >
       {error && <h2>{error}</h2>}
 
-      {post.id && (
+      {post && (
         <>
-          {isComment && (
+          {originalPost && (
             <AnotherPost
-              post={post.originalPost}
+              post={originalPost}
               deletedCommentsCount={deletedCommentsCount}
             />
           )}
@@ -103,9 +139,9 @@ function PostPage () {
             hasCommentWriteWindow={true}
             deletedCommentsCount={deletedCommentsCount}
           />
-          <div ref={bottomRef}></div>
         </>
       )}
+      <div ref={bottomRef}></div>
       {comments.length > 0 &&
         comments.map(post => (
           <AnotherPost

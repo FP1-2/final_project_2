@@ -84,7 +84,7 @@ const TwitterWriteWindow = ({ setTweetPost, tweetPosts }) => {
           <AdaptiveAvatar
             src={userData?.avatar}
             alt={`${userData?.firstName} ${userData?.lastName}`}
-            big={false}
+            size='3rem'
             firstName={userData?.firstName || '?'}
           />
         )}
@@ -93,7 +93,7 @@ const TwitterWriteWindow = ({ setTweetPost, tweetPosts }) => {
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
-        {!photo && (
+        {!photo && !photoLoading &&(
           <Box sx={{alignSelf: 'end'}}>
             <ImageInput
               file={photo}
@@ -102,7 +102,7 @@ const TwitterWriteWindow = ({ setTweetPost, tweetPosts }) => {
             />
           </Box>
         )}
-        <PostButton onClick={handlePost}>Post</PostButton>
+        <PostButton onClick={handlePost} disabled={!description && !photo}>Post</PostButton>
       </Box>
       {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
       {photo && (

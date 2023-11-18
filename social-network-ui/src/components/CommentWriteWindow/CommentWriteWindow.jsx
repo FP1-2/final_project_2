@@ -98,19 +98,23 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
 
   return (
     <>
-      <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 2 }}>
-        {userData && <AdaptiveAvatar
-          src={userData?.avatar}
-          alt={`${userData?.firstName} ${userData?.lastName}`}
-          big={false}
-          firstName={userData?.firstName || '?'}
-        />}
+      <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 2, pl: 2, pr: 2 }}>
+        {userData && (
+          <AdaptiveAvatar
+            src={userData?.avatar}
+            alt={`${userData?.firstName} ${userData?.lastName}`}
+            size='3rem'
+            firstName={userData?.firstName || '?'}
+          />
+        )}
 
         <MultilineTextFields
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
-        <PostButton onClick={handlePost}>Post</PostButton>
+        <PostButton onClick={handlePost} disabled={!description && !photo}>
+          Post
+        </PostButton>
       </Box>
       {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
       {success && (
@@ -142,13 +146,18 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
             />
           </>
         ) : (
-          <ImageInput
-            file={photo}
-            onChange={handlePhotoInput}
-            inputName='commentInput'
-          />
+          <>
+            {photoLoading ? (
+              <CircularProgress />
+            ) : (
+              <ImageInput
+                file={photo}
+                onChange={handlePhotoInput}
+                inputName='TweetButtonInput'
+              />
+            )}
+          </>
         )}
-        {photoLoading && <CircularProgress />}
       </Box>
     </>
   )

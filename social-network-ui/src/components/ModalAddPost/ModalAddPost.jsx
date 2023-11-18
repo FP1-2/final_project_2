@@ -96,18 +96,23 @@ function ModalAddPost ({ open, setOpenModal }) {
                 <CloseIcon />
               </Button>
             </CustomTooltip>
-            <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2, gap: 1 }}>
+            <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2, pt: 1, gap: 1 }}>
               <AdaptiveAvatar
                 src={userData?.avatar}
                 alt={`${userData?.firstName} ${userData?.lastName}`}
-                big={false}
                 firstName={userData?.firstName || '?'}
+                size='3rem'
               />
               <MultilineTextFields
                 value={description}
                 onChange={e => setDescription(e.target.value)}
               />
-              <PostButton onClick={handlePost}>Post</PostButton>
+              <PostButton
+                onClick={handlePost}
+                disabled={!description && !photo}
+              >
+                Post
+              </PostButton>
             </Box>
             {error && <Typography sx={{ color: 'red' }}>{error}</Typography>}
             {photo ? (
@@ -137,15 +142,18 @@ function ModalAddPost ({ open, setOpenModal }) {
                 />
               </Box>
             ) : (
-              <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                <ImageInput
-                  file={photo}
-                  onChange={handlePhotoInput}
-                  inputName='TweetButtonInput'
-                />
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                {photoLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <ImageInput
+                    file={photo}
+                    onChange={handlePhotoInput}
+                    inputName='TweetButtonInput'
+                  />
+                )}
               </Box>
             )}
-            {photoLoading && <CircularProgress />}
           </>
         )}
       </Box>
