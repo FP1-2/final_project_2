@@ -1,4 +1,11 @@
 import React from 'react'
+import { PropTypes } from 'prop-types'
+// components
+import CustomTooltip from '../Custom Tooltip/CustomTooltip'
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow'
+import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
+import { Link } from 'react-router-dom'
+// MUI
 import {
   Button,
   Modal,
@@ -7,15 +14,12 @@ import {
   Card,
   CardContent
 } from '@mui/material'
-import { PropTypes } from 'prop-types'
-import formatPostDate from '../../utils/formatPostDate'
 import CloseIcon from '@mui/icons-material/Close'
-import { Link } from 'react-router-dom'
+// utils
+import formatPostDate from '../../utils/formatPostDate'
+// styles
 import styles from '../AnotherPost/AnotherPost.module.scss'
 import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
-import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow'
-import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
 function ModalComment ({
   post,
@@ -26,6 +30,7 @@ function ModalComment ({
 }) {
   let postDate
   post ? (postDate = formatPostDate(post.createdDate)) : null
+  
   const handleClose = () => {
     setOpenModal(false)
   }

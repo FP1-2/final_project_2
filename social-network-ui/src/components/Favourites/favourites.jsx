@@ -1,25 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react'
-import getLikedPosts from '../../api/getLikedPosts'
-import CircularProgress from '@mui/material/CircularProgress'
-import Box from '@mui/material/Box'
-import AnotherPost from '../AnotherPost/AnotherPost'
-import { style } from '../../styles/circularProgressStyle'
 import { useSelector } from 'react-redux'
+// components
+import AnotherPost from '../AnotherPost/AnotherPost'
+// API
+import getLikedPosts from '../../api/getLikedPosts'
+// hooks
 import UseUserToken from '../../hooks/useUserToken'
+// other libraries
 import { debounce } from 'lodash'
+// MUI
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+// styles
+import { style } from '../../styles/circularProgressStyle'
 
 function Favourites () {
+  // states
   const [favourites, setFavourites] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
+  // states for pagination
   const [page, setPage] = useState(0)
   const [hasMore, setHasMore] = useState(true)
-
+  // other hooks
   const userId = useSelector(state => state.user.userId)
   const { token } = UseUserToken()
-  const size = 5
   const containerRef = useRef()
+  // q-ty of posts on page for pagination
+  const size = 5
 
+  // getPosts
   useEffect(() => {
     async function getPosts () {
       try {
@@ -45,11 +55,13 @@ function Favourites () {
     }
   }, [userId, page, hasMore])
 
+  // scroll effect for pagination
   useEffect(() => {
+    // focus on main container for button scrolling
     const container = containerRef.current
     container.focus()
 
-const handleScroll = debounce(() => {
+    const handleScroll = debounce(() => {
       const scrollTop = container.scrollTop
       const windowHeight = container.clientHeight
       const scrollHeight = container.scrollHeight
@@ -61,6 +73,7 @@ const handleScroll = debounce(() => {
 
     container.addEventListener('scroll', handleScroll)
 
+    // scroll for pagination with buttons
     const handleKeyDown = event => {
       switch (event.key) {
         case 'PageDown':

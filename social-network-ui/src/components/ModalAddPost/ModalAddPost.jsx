@@ -1,31 +1,42 @@
 import React, { useState } from 'react'
-import { Button, Modal, Box, Typography } from '@mui/material'
-import { PropTypes } from 'prop-types'
-import CloseIcon from '@mui/icons-material/Close'
-import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
-import CustomTooltip from '../Custom Tooltip/CustomTooltip'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import UseUserToken from '../../hooks/useUserToken'
+// components
+import CustomTooltip from '../Custom Tooltip/CustomTooltip'
 import MultilineTextFields from '../HomePage/WriteInput/MultilineTextFields'
 import PostButton from '../PostButton/PostButton'
-import { Image } from 'cloudinary-react'
 import ImageInput from '../HomePage/ImageInput/ImageInput'
-import axios from 'axios'
-import getUserId from '../../utils/getUserId'
-import { useNavigate } from 'react-router-dom'
-import CircularProgress from '@mui/material/CircularProgress'
 import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
+// other libraries
+import { PropTypes } from 'prop-types'
+import axios from 'axios'
+// hooks
+import UseUserToken from '../../hooks/useUserToken'
+// utils
+import getUserId from '../../utils/getUserId'
+// MUI
+import { Button, Modal, Box, Typography } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import CircularProgress from '@mui/material/CircularProgress'
+// Cloudinary
+import { Image } from 'cloudinary-react'
+// styles
+import { modalBoxstyle as style } from './../../styles/modalBoxStyle'
 
 function ModalAddPost ({ open, setOpenModal }) {
+  // states
   const [description, setDescription] = useState('')
   const [photo, setPhoto] = useState('')
   const [error, setError] = useState(null)
   const [photoLoading, setPhotoLoading] = useState(null)
+  // hooks
   const userData = useSelector(state => state.user.userData)
   const { token } = UseUserToken()
-  const userId = getUserId()
   const navigate = useNavigate()
+  // other
+  const userId = getUserId()
 
+  // cleanup after closing
   const handleClose = () => {
     setPhoto('')
     setDescription('')
@@ -33,6 +44,7 @@ function ModalAddPost ({ open, setOpenModal }) {
     setOpenModal(false)
   }
 
+  // photo input
   const handlePhotoInput = async event => {
     try {
       const selectedFile = event.target.files[0]
@@ -55,6 +67,7 @@ function ModalAddPost ({ open, setOpenModal }) {
     }
   }
 
+  // post
   const handlePost = async () => {
     if (!description && !photo) return
     try {
@@ -96,7 +109,16 @@ function ModalAddPost ({ open, setOpenModal }) {
                 <CloseIcon />
               </Button>
             </CustomTooltip>
-            <Box sx={{ display: 'flex', width: '100%', pl: 2, pr: 2, pt: 1, gap: 1 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                width: '100%',
+                pl: 2,
+                pr: 2,
+                pt: 1,
+                gap: 1
+              }}
+            >
               <AdaptiveAvatar
                 src={userData?.avatar}
                 alt={`${userData?.firstName} ${userData?.lastName}`}
