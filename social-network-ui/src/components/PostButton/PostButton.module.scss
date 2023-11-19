@@ -1,4 +1,5 @@
 .postButton {
+  align-self: end !important;
   min-width: 36px !important;
   height: 38px !important;
   padding-right: 20px !important;
@@ -8,7 +9,7 @@
   color: #fff !important;
   font-weight: 700 !important;
   text-transform: capitalize !important;
-  align-self: end !important;
+
   &:disabled {
     background-color: #90caf9 !important;
     color: rgb(255, 255, 255) !important;
