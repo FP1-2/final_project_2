@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Button,
-  Modal,
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-  ImageListItem
+	Button,
+	Modal,
+	Box,
+	Typography,
+	Card,
+	CardContent,
+	CardActions,
+	ImageListItem,
 } from '@mui/material'
 import { PropTypes } from 'prop-types'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -27,7 +27,7 @@ import getUserId from '../../utils/getUserId'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow';
+import CommentWriteWindow from './../CommentWriteWindow/CommentWriteWindow'
 import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
 const style = {
@@ -45,34 +45,34 @@ const style = {
 }
 
 function AnotherPost({
-  post,
-  setComments,
-  hasCommentWriteWindow,
-  deletedCommentsCount,
-  setDeletedCommentsCount
+	post,
+	setComments,
+	hasCommentWriteWindow,
+	deletedCommentsCount,
+	setDeletedCommentsCount,
 }) {
-  const isRepost = post?.typePost === 'REPOST'
-  const isComment = post?.typePost === 'COMMENT'
-  let thisPost
-  isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
-  const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
-  const [likes, setLikes] = useState(thisPost?.countLikes)
-  const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost)
-  const [reposts, setReposts] = useState(thisPost?.countRepost)
-  const [countComments, setCountComments] = useState(thisPost?.countComments)
-  const [error, setError] = useState(null)
-  const [openCommentModal, setOpenCommentModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [postIsDeleted, setPostIsDeleted] = useState(false)
-  const { token } = UseUserToken()
-  const url = process.env.REACT_APP_SERVER_URL
-  const postDate = formatPostDate(thisPost?.createdDate)
-  const userId = getUserId()
-  const followings = useSelector(state => state.user.followings) || []
-  const dispatch = useDispatch()
-  const isMinePost = thisPost?.user?.id == userId
-  const isFollow = followings.includes(thisPost?.user?.id)
-  const navigate = useNavigate()
+	const isRepost = post?.typePost === 'REPOST'
+	const isComment = post?.typePost === 'COMMENT'
+	let thisPost
+	isRepost ? (thisPost = post?.originalPost) : (thisPost = post)
+	const [isLiked, setIsLiked] = useState(thisPost?.hasMyLike)
+	const [likes, setLikes] = useState(thisPost?.countLikes)
+	const [isReposted, setIsReposted] = useState(thisPost?.hasMyRepost)
+	const [reposts, setReposts] = useState(thisPost?.countRepost)
+	const [countComments, setCountComments] = useState(thisPost?.countComments)
+	const [error, setError] = useState(null)
+	const [openCommentModal, setOpenCommentModal] = useState(false)
+	const [openDeleteModal, setOpenDeleteModal] = useState(false)
+	const [postIsDeleted, setPostIsDeleted] = useState(false)
+	const { token } = UseUserToken()
+	const url = process.env.REACT_APP_SERVER_URL
+	const postDate = formatPostDate(thisPost?.createdDate)
+	const userId = getUserId()
+	const followings = useSelector(state => state.user.followings) || []
+	const dispatch = useDispatch()
+	const isMinePost = thisPost?.user?.id == userId
+	const isFollow = followings.includes(thisPost?.user?.id)
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (deletedCommentsCount !== undefined && deletedCommentsCount !== 0) {
@@ -232,193 +232,205 @@ function AnotherPost({
 		}
 	}
 
-  return postIsDeleted ? null : (
-    <>
-      <Card variant='outlined'>
-        {isRepost && (
-          <Box sx={{ pl: 1 }}>
-            <Link to={'/profile/' + post.user.id} className={styles.link}>
-              <Typography
-                variant='p'
-                sx={{ display: 'flex', alignItems: 'center', color: 'grey' }}
-              >
-                <AutorenewRoundedIcon />
-                {post.user?.firstName} {post.user?.lastName} has reposted
-              </Typography>
-            </Link>
-          </Box>
-        )}
-        <CardContent
-          sx={{ display: 'flex', alignItems: 'center', gap: 1, pt: 1, pb: 0 }}
-        >
-          <Link to={'/user/' + thisPost?.user?.id}>
-            <Box
-              sx={{
-                position: 'relative',
-                '&:before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  m: '-2px',
-                  borderRadius: '50%'
-                }
-              }}
-            >
-              <AdaptiveAvatar size='3rem' src={thisPost?.user?.avatar} alt={`${thisPost?.user?.firstName} ${thisPost?.user?.lastName}`} firstName={thisPost?.user?.firstName || '?'} />
-            </Box>
-          </Link>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1,
-              flexWrap: 'wrap',
-              alignItems: 'center'
-            }}
-          >
-            <Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
-              <Typography
-                variant='h6'
-                sx={{ display: 'flex', alignItems: 'center' }}
-              >
-                {thisPost?.user?.firstName} {thisPost?.user?.lastName}
-              </Typography>
-            </Link>
-            <Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
-              <Typography sx={{ display: 'flex', alignItems: 'center' }}>
-                @{thisPost?.user?.username}
-              </Typography>
-            </Link>
-            <Typography>
-              ●{' '}
-              <Link to={'/post/' + thisPost?.id} className={styles.link}>
-                {postDate}
-              </Link>
-            </Typography>
-          </Box>
-        </CardContent>
-        <CardContent className={styles.cardContent}>
-          {isComment && (
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
-                <Typography sx={{ color: 'grey' }}>Comment to</Typography>
-              </Link>
-              <Link
-                to={'/profile/' + thisPost?.originalPost?.user?.id}
-                className={styles.profileLink}
-              >
-                <Typography>
-                  @{thisPost?.originalPost?.user?.username}
-                </Typography>
-              </Link>
-            </Box>
-          )}
-          <Link to={'/post/' + thisPost?.id} className={styles.postLink}>
-            <Typography paragraph={true} sx={{ wordWrap: 'break-word', mb: 0 }}>
-              {thisPost?.description}
-            </Typography>
-            {thisPost?.photo != '' ? (
-              <ImageListItem>
-                <img src={thisPost?.photo}></img>
-              </ImageListItem>
-            ) : null}
-          </Link>
-          <CardActions>
-            <CustomTooltip title='Add comment'>
-              <Button onClick={() => comment()}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <MapsUgcRoundedIcon sx={{ color: 'grey' }} />
-                  <Typography sx={{ color: 'grey', ml: 1 }}>
-                    {countComments || null}
-                  </Typography>
-                </Box>
-              </Button>
-            </CustomTooltip>
-            <CustomTooltip title='Repost'>
-              <Button onClick={() => repost()}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <AutorenewRoundedIcon
-                    sx={{ color: isReposted ? 'green' : 'grey' }}
-                  />
-                  <Typography
-                    sx={{ color: isReposted ? 'green' : 'grey', ml: 1 }}
-                  >
-                    {reposts || null}
-                  </Typography>
-                </Box>
-              </Button>
-            </CustomTooltip>
-            <CustomTooltip title='Like'>
-              <Button onClick={() => like()}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  {isLiked ? (
-                    <FavoriteIcon sx={{ color: 'red' }} />
-                  ) : (
-                    <FavoriteBorderIcon sx={{ color: 'grey' }} />
-                  )}
-                  <Typography sx={{ color: isLiked ? 'red' : 'grey', ml: 1 }}>
-                    {likes || null}
-                  </Typography>
-                </Box>
-              </Button>
-            </CustomTooltip>
-            {isMinePost ? (
-              <CustomTooltip title='Delete post'>
-                <Button
-                  onClick={() => setOpenDeleteModal(true)}
-                  className={styles.button}
-                >
-                  <DeleteForeverOutlinedIcon sx={{ color: 'grey' }} />
-                </Button>
-              </CustomTooltip>
-            ) : !isFollow ? (
-              <CustomTooltip title='Follow'>
-                <Button onClick={toggleFollow} className={styles.button}>
-                  <PersonAddOutlinedIcon sx={{ color: 'grey' }} />
-                </Button>
-              </CustomTooltip>
-            ) : (
-              <CustomTooltip title='Unfollow'>
-                <Button onClick={toggleFollow} className={styles.button}>
-                  <VerifiedOutlinedIcon sx={{ color: 'primal' }} />
-                </Button>
-              </CustomTooltip>
-            )}
-          </CardActions>
-          {hasCommentWriteWindow && (
-        <CommentWriteWindow
-          postId={thisPost.id}
-          setCommentsCount={setCountComments}
-          setComments={setComments}
-        />
-      )}
-          <Typography sx={{ color: 'red' }}> {error}</Typography>
-        </CardContent>
-      </Card>
-      <ModalComment
-        post={thisPost}
-        open={openCommentModal}
-        setOpenModal={setOpenCommentModal}
-        setCommentsCount={setCountComments}
-        setComments={setComments}
-      />
-      <Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
-        <Box sx={style}>
-          <Typography>Delete this post?</Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-            <Button onClick={() => setOpenDeleteModal(false)}>
-              <Typography>CANCEL</Typography>
-            </Button>
-            <Button onClick={() => deletePost()}>
-              <Typography sx={{ fontWeight: 500 }}>DELETE</Typography>
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
-    </>
-  )
+	return postIsDeleted ? null : (
+		<>
+			<Card variant='outlined'>
+				{isRepost && (
+					<Box sx={{ pl: 1 }}>
+						<Link to={'/profile/' + post.user.id} className={styles.link}>
+							<Typography
+								variant='p'
+								sx={{ display: 'flex', alignItems: 'center', color: 'grey' }}
+							>
+								<AutorenewRoundedIcon />
+								{post.user?.firstName} {post.user?.lastName} has reposted
+							</Typography>
+						</Link>
+					</Box>
+				)}
+				<CardContent
+					sx={{ display: 'flex', alignItems: 'center', gap: 1, pt: 1, pb: 0 }}
+				>
+					<Box
+						component={Link}
+						sx={{
+							textDecoration: 'none',
+						}}
+						to={'/user/' + thisPost?.user?.id}
+					>
+						<Box
+							sx={{
+								position: 'relative',
+								'&:before': {
+									content: '""',
+									position: 'absolute',
+									top: 0,
+									left: 0,
+									bottom: 0,
+									right: 0,
+									m: '-2px',
+									borderRadius: '50%',
+								},
+							}}
+						>
+							<AdaptiveAvatar
+								size='3rem'
+								src={thisPost?.user?.avatar}
+								alt={`${thisPost?.user?.firstName} ${thisPost?.user?.lastName}`}
+								firstName={thisPost?.user?.firstName || '?'}
+								font={'2rem'}
+							/>
+						</Box>
+					</Box>
+					<Box
+						sx={{
+							display: 'flex',
+							gap: 1,
+							flexWrap: 'wrap',
+							alignItems: 'center',
+						}}
+					>
+						<Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
+							<Typography
+								variant='h6'
+								sx={{ display: 'flex', alignItems: 'center' }}
+							>
+								{thisPost?.user?.firstName} {thisPost?.user?.lastName}
+							</Typography>
+						</Link>
+						<Link to={'/profile/' + thisPost?.user?.id} className={styles.link}>
+							<Typography sx={{ display: 'flex', alignItems: 'center' }}>
+								@{thisPost?.user?.username}
+							</Typography>
+						</Link>
+						<Typography>
+							●{' '}
+							<Link to={'/post/' + thisPost?.id} className={styles.link}>
+								{postDate}
+							</Link>
+						</Typography>
+					</Box>
+				</CardContent>
+				<CardContent className={styles.cardContent}>
+					{isComment && (
+						<Box sx={{ display: 'flex', gap: 1 }}>
+							<Link to={'/post/' + thisPost?.id} className={styles.postLink}>
+								<Typography sx={{ color: 'grey' }}>Comment to</Typography>
+							</Link>
+							<Link
+								to={'/profile/' + thisPost?.originalPost?.user?.id}
+								className={styles.profileLink}
+							>
+								<Typography>
+									@{thisPost?.originalPost?.user?.username}
+								</Typography>
+							</Link>
+						</Box>
+					)}
+					<Link to={'/post/' + thisPost?.id} className={styles.postLink}>
+						<Typography paragraph={true} sx={{ wordWrap: 'break-word', mb: 0 }}>
+							{thisPost?.description}
+						</Typography>
+						{thisPost?.photo != '' ? (
+							<ImageListItem>
+								<img src={thisPost?.photo}></img>
+							</ImageListItem>
+						) : null}
+					</Link>
+					<CardActions>
+						<CustomTooltip title='Add comment'>
+							<Button onClick={() => comment()}>
+								<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+									<MapsUgcRoundedIcon sx={{ color: 'grey' }} />
+									<Typography sx={{ color: 'grey', ml: 1 }}>
+										{countComments || null}
+									</Typography>
+								</Box>
+							</Button>
+						</CustomTooltip>
+						<CustomTooltip title='Repost'>
+							<Button onClick={() => repost()}>
+								<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+									<AutorenewRoundedIcon
+										sx={{ color: isReposted ? 'green' : 'grey' }}
+									/>
+									<Typography
+										sx={{ color: isReposted ? 'green' : 'grey', ml: 1 }}
+									>
+										{reposts || null}
+									</Typography>
+								</Box>
+							</Button>
+						</CustomTooltip>
+						<CustomTooltip title='Like'>
+							<Button onClick={() => like()}>
+								<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+									{isLiked ? (
+										<FavoriteIcon sx={{ color: 'red' }} />
+									) : (
+										<FavoriteBorderIcon sx={{ color: 'grey' }} />
+									)}
+									<Typography sx={{ color: isLiked ? 'red' : 'grey', ml: 1 }}>
+										{likes || null}
+									</Typography>
+								</Box>
+							</Button>
+						</CustomTooltip>
+						{isMinePost ? (
+							<CustomTooltip title='Delete post'>
+								<Button
+									onClick={() => setOpenDeleteModal(true)}
+									className={styles.button}
+								>
+									<DeleteForeverOutlinedIcon sx={{ color: 'grey' }} />
+								</Button>
+							</CustomTooltip>
+						) : !isFollow ? (
+							<CustomTooltip title='Follow'>
+								<Button onClick={toggleFollow} className={styles.button}>
+									<PersonAddOutlinedIcon sx={{ color: 'grey' }} />
+								</Button>
+							</CustomTooltip>
+						) : (
+							<CustomTooltip title='Unfollow'>
+								<Button onClick={toggleFollow} className={styles.button}>
+									<VerifiedOutlinedIcon sx={{ color: 'primal' }} />
+								</Button>
+							</CustomTooltip>
+						)}
+					</CardActions>
+					{hasCommentWriteWindow && (
+						<CommentWriteWindow
+							postId={thisPost.id}
+							setCommentsCount={setCountComments}
+							setComments={setComments}
+						/>
+					)}
+					<Typography sx={{ color: 'red' }}> {error}</Typography>
+				</CardContent>
+			</Card>
+			<ModalComment
+				post={thisPost}
+				open={openCommentModal}
+				setOpenModal={setOpenCommentModal}
+				setCommentsCount={setCountComments}
+				setComments={setComments}
+			/>
+			<Modal open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
+				<Box sx={style}>
+					<Typography>Delete this post?</Typography>
+					<Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+						<Button onClick={() => setOpenDeleteModal(false)}>
+							<Typography>CANCEL</Typography>
+						</Button>
+						<Button onClick={() => deletePost()}>
+							<Typography sx={{ fontWeight: 500 }}>DELETE</Typography>
+						</Button>
+					</Box>
+				</Box>
+			</Modal>
+		</>
+	)
 }
 
 AnotherPost.propTypes = {
