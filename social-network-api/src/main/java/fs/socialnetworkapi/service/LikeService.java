@@ -5,6 +5,7 @@ import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
+import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.LikeRepo;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
@@ -50,7 +51,8 @@ public class LikeService {
 
   public String likePost(Long postId) {
     User user = getUser();
-    User current = userRepo.findByUsername(user.getUsername());
+    User current = userRepo.findById(user.getId())
+      .orElseThrow(() -> new UserNotFoundException("No such user"));
     Post post = postRepo.findPostWithUser(postId);
     Optional<Like> like = likeRepo.findByPostIdAndUserId(postId, user.getId());
     if (like.isPresent()) {
