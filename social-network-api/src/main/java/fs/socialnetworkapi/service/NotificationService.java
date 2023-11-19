@@ -44,7 +44,7 @@ public class NotificationService {
 
   public boolean markNotificationAsRead(Long notificationId) {
     Notification notification = notificationRepo.findById(notificationId)
-            .orElseThrow(() -> new NotificationNotFoundException("No such notification"));
+      .orElseThrow(() -> new NotificationNotFoundException("No such notification"));
     if (notification.isActive()) {
       notification.setActive(false);
       notificationRepo.save(notification);

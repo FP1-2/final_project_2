@@ -36,25 +36,12 @@ public class UserDtoOut {
     }
     UserDtoOut that = (UserDtoOut) obj;
     return Objects.equals(id, that.id)
-            && Objects.equals(username, that.username)
-            && Objects.equals(firstName, that.firstName)
-            && Objects.equals(lastName, that.lastName)
             && Objects.equals(email, that.email)
-            && Objects.equals(birthday, that.birthday)
-            && Objects.equals(address, that.address)
-            && Objects.equals(avatar, that.avatar)
-            && Objects.equals(createdDate, that.createdDate)
-            && Objects.equals(userDescribe, that.userDescribe)
-            && Objects.equals(bgProfileImage, that.bgProfileImage)
-            && Objects.equals(userLink, that.userLink)
-            && Objects.equals(userTweetCount, that.userTweetCount)
-            && Objects.equals(userFollowersCount, that.userFollowersCount)
-            && Objects.equals(userFollowingCount, that.userFollowingCount)
-            && Objects.equals(userFollowers, that.userFollowers);
+            && Objects.equals(createdDate, that.createdDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, firstName, lastName, email, birthday, avatar, address);
+    return Objects.hash(id, email, createdDate);
   }
 }

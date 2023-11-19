@@ -142,8 +142,8 @@ public class UserService implements UserDetailsService {
   }
 
   public void subscribe(Long userId) {
-    User follower = userRepo.findByUsername(getUser().getUsername());
-
+    User follower = userRepo.findById(getUser().getId())
+      .orElseThrow(() -> new UserNotFoundException("No such user"));
     User following = findById(userId);
     notificationCreator.subscriberNotification(follower, following);
     following.getFollowers().add(follower);
