@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react'
+// other libraries
+import { debounce } from 'lodash'
+// components
 import TwitterWriteWindow from '../../components/HomePage/TwitterWriteWindow/TwitterWriteWindow'
 import PostWrapper from '../../components/HomePage/PostWrapper/PostWrapper'
+// hooks
 import UseUserToken from '../../hooks/useUserToken'
+// api
 import getAllPosts from './../../api/getAllPosts'
 import getFollowingsPosts from './../../api/getFollowingsPosts'
-import Box from '@mui/material/Box'
+// MUI
+import { Button, Typography, Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
+// styles
 import { style } from '../../styles/circularProgressStyle'
-import { Button, Typography } from '@mui/material'
-import { debounce } from 'lodash'
 
 const Home = () => {
+  // states
   const [tweetPosts, setTweetPost] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -20,13 +26,13 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true)
   // q-ty of posts on page for pagination
   const size = 5
-
+  // other hooks
   const { token } = UseUserToken()
   const containerRef = useRef()
+  // ref main container for button scrolling
   const container = containerRef.current
 
-  console.log(page)
-
+  // tabs selection AllPosts / Following
   const handleAllPosts = () => {
     !showAllPosts && setTweetPost([])
     setHasMore(true)
@@ -43,6 +49,7 @@ const Home = () => {
     container.scrollTo(0, 0)
   }
 
+  // getPosts
   useEffect(() => {
     async function getPosts () {
       try {
@@ -69,7 +76,9 @@ const Home = () => {
     hasMore && getPosts()
   }, [page, showAllPosts])
 
+  // scroll effect for pagination
   useEffect(() => {
+    // focus for button scrolling
     const container = containerRef.current
     container.focus()
 
@@ -85,6 +94,7 @@ const Home = () => {
 
     container.addEventListener('scroll', handleScroll)
 
+    // scroll for pagination with buttons
     const handleKeyDown = event => {
       switch (event.key) {
         case 'PageDown':

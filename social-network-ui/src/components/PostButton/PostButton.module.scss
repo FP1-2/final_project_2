@@ -1,0 +1,17 @@
+.postButton {
+  align-self: end !important;
+  min-width: 36px !important;
+  height: 38px !important;
+  padding-right: 20px !important;
+  padding-left: 20px !important;
+  border-radius: 36px !important;
+  background-color: rgb(29, 155, 240) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-transform: capitalize !important;
+
+  &:disabled {
+    background-color: #90caf9 !important;
+    color: rgb(255, 255, 255) !important;
+  }
+}

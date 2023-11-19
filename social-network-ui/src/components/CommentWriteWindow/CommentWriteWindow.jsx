@@ -1,32 +1,42 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+// components
 import ImageInput from '../HomePage/ImageInput/ImageInput'
 import MultilineTextFields from '../HomePage/WriteInput/MultilineTextFields'
-import Box from '@mui/material/Box'
+import PostButton from '../PostButton/PostButton'
+import CustomTooltip from '../Custom Tooltip/CustomTooltip'
+import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
+// other libraries
 import PropTypes from 'prop-types'
-import { Image } from 'cloudinary-react'
-import UseUserToken from './../../hooks/useUserToken'
-import getUserId from '../../utils/getUserId'
 import axios from 'axios'
+// Cloudinary
+import { Image } from 'cloudinary-react'
+// hooks
+import UseUserToken from './../../hooks/useUserToken'
+// utils
+import getUserId from '../../utils/getUserId'
+// MUI
+import Box from '@mui/material/Box'
 import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import PostButton from '../PostButton/PostButton'
-import { useNavigate } from 'react-router-dom'
-import CustomTooltip from '../Custom Tooltip/CustomTooltip'
-import { useSelector } from 'react-redux'
 import CircularProgress from '@mui/material/CircularProgress'
-import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
 
 function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
-  const { token } = UseUserToken()
-  const userId = getUserId()
+  // states
   const [description, setDescription] = useState('')
   const [photo, setPhoto] = useState('')
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
   const [photoLoading, setPhotoLoading] = useState(null)
+  // other hooks
   const navigate = useNavigate()
   const userData = useSelector(state => state.user.userData)
+  const { token } = UseUserToken()
+  // other
+  const userId = getUserId()
 
+  // handle succesfull comment
   const handleModalComment = () => {
     setSuccess('Comment sent. Click to open the post')
     setTimeout(() => {
@@ -34,11 +44,13 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
     }, 3000)
   }
 
+  // input cleanup
   const handleComment = () => {
     setPhoto('')
     setDescription('')
   }
 
+  // photo input
   const handlePhotoInput = async event => {
     try {
       const selectedFile = event.target.files[0]
@@ -61,6 +73,7 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
     }
   }
 
+  // post a comment
   const handlePost = async () => {
     if (!description && !photo) return
     try {
