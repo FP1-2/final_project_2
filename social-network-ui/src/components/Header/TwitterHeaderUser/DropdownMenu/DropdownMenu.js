@@ -19,6 +19,7 @@ const DropdownMenu = ({ onLogout, username }) => {
 			}}
 		>
 			<Box
+				onClick={onLogout}
 				sx={{
 					width: '90%',
 					margin: '0 auto',
@@ -48,7 +49,7 @@ const DropdownMenu = ({ onLogout, username }) => {
 				>
 					Log out
 				</Typography>
-				<Typography variant='p' sx={{}} onClick={onLogout}>
+				<Typography variant='p' sx={{}}>
 					@{username}
 				</Typography>
 			</Box>

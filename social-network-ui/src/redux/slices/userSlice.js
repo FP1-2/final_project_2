@@ -18,6 +18,7 @@ const userSlice = createSlice({
 		},
 		logOut: state => {
 			state.isAuthenticated = false
+			state.userData = null
 			localStorage.removeItem('userId')
 		},
 		setUserData: (state, action) => {
