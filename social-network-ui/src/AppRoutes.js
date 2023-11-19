@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage/HomePage'
 import AuthPage from './pages/AuthPage/AuthPage'
 import LoginPage from './pages/LoginPage/LoginPage'
@@ -16,46 +16,55 @@ import ExplorePage from './pages/ExplorePage/ExplorePage'
 import NotificationPage from './pages/NotificationPage/NotificationPage'
 
 const AppRoutes = () => {
-	const dispatch = useDispatch()
-	const { token } = UseUserToken()
-	const userId = useSelector(state => state.user?.userId)
+  const dispatch = useDispatch()
+  const { token } = UseUserToken()
+  const userId = useSelector(state => state.user?.userId)
 
-	useEffect(() => {
-		if (token && userId) {
-			dispatch(fetchUserFollowings({ token, userId })).then(followings => {
-				dispatch(setFollowings(followings.payload))
-			})
-		}
-	}, [dispatch, userId])
-	if (token)
-		return (
-			<Routes>
-				{/* Public Routes */}
-				<Route path='/' element={<HomePage />} />
-				<Route path='/home' element={<HomePage />} />
-				<Route path='/explore' element={<ExplorePage />} />
-				<Route path='/favourites' element={<FavPage />} />
-				<Route path='/notifications' element={<NotificationPage />} />
-				<Route path='/messages' element={<MessagePage />} />
-				{/* Profile Routes */}
-				<Route path='/profile/:userId' element={<ProfilePage />} />
-				{/* Post Routes */}
-				<Route path='/post/:postId' element={<PostPage />} />
-				{/* Error Path */}
-				<Route path='*' element={<h1>error</h1>} />
-			</Routes>
-		)
-	if (!token)
-		return (
-			<Routes>
-				{/* Public Routes */}
-				<Route path='/' element={<AuthPage />} />
-				{/* Auth Routes */}
-				<Route path='/signIn' element={<LoginPage />} />
-				{/* Error Path */}
-				<Route path='*' element={<h1>error</h1>} />
-			</Routes>
-		)
+  useEffect(() => {
+    if (token && userId) {
+      dispatch(fetchUserFollowings({ token, userId })).then(followings => {
+        dispatch(setFollowings(followings.payload))
+      })
+    }
+  }, [dispatch, userId])
+  if (token)
+    return (
+      <Routes>
+        {/* Public Routes */}
+        <Route path='/' element={<HomePage />} />
+        <Route path='/home' element={<HomePage />} />
+        <Route path='/explore' element={<ExplorePage />} />
+        <Route path='/favourites' element={<FavPage />} />
+        <Route path='/notifications' element={<NotificationPage />} />
+        <Route path='/messages' element={<MessagePage />} />
+        {/* Profile Routes */}
+        <Route path='/profile/:userId' element={<ProfilePage />} />
+        {/* Post Routes */}
+        <Route path='/post/:postId' element={<PostPage />} />
+        {/* Error Path */}
+        <Route path='*' element={<h1>error</h1>} />
+      </Routes>
+    )
+  if (!token)
+    return (
+      <Routes>
+        {/* Public Routes */}
+        <Route path='/' element={<AuthPage />} />
+        <Route path='/home' element={<Navigate to='/' />} />
+        <Route path='/explore' element={<Navigate to='/' />} />
+        <Route path='/favourites' element={<Navigate to='/' />} />
+        <Route path='/notifications' element={<Navigate to='/' />} />
+        <Route path='/messages' element={<Navigate to='/' />} />
+        {/* Profile Routes */}
+        <Route path='/profile/:userId' element={<Navigate to='/' />} />
+        {/* Post Routes */}
+        <Route path='/post/:postId' element={<Navigate to='/' />} />
+        {/* Auth Routes */}
+        <Route path='/signIn' element={<LoginPage />} />
+        {/* Error Path */}
+        <Route path='*' element={<h1>error: page is not found</h1>} />
+      </Routes>
+    )
 }
 
 export default AppRoutes
