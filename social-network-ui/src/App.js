@@ -41,6 +41,7 @@ function App() {
 	const dispatch = useDispatch()
 	const isAuth = useSelector(state => state.user?.isAuthenticated)
 	const userData = useSelector(state => state.user?.userData)
+	const userId = useSelector(state => state.user?.userId)
 
 	useEffect(() => {
 		//save userId && token after auth

@@ -19,6 +19,7 @@ const DropdownMenu = ({ onLogout, username }) => {
 			}}
 		>
 			<Box
+				onClick={onLogout}
 				sx={{
 					width: '90%',
 					margin: '0 auto',
@@ -28,6 +29,9 @@ const DropdownMenu = ({ onLogout, username }) => {
 					fontSize: '14px',
 					cursor: 'pointer',
 					transition: 'all 0.2s',
+					textOverflow: 'ellipsis',
+					overflow: 'hidden',
+					whiteSpace: 'nowrap',
 
 					'&:hover': {
 						bgcolor: '#D3D3D3',
@@ -35,8 +39,18 @@ const DropdownMenu = ({ onLogout, username }) => {
 					},
 				}}
 			>
-				<Typography variant='p' onClick={onLogout}>
-					Log out @{username}
+				<Typography
+					variant='p'
+					sx={{
+						display: 'block',
+						fontWeight: 'bold',
+						mb: 1,
+					}}
+				>
+					Log out
+				</Typography>
+				<Typography variant='p' sx={{}}>
+					@{username}
 				</Typography>
 			</Box>
 		</Box>

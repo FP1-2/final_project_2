@@ -74,12 +74,12 @@ const TwitterHeaderUser = () => {
 							to={`/profile/${userId}`}
 							sx={{
 								display: 'flex',
-								width: screen === 'desktop' ? '100%' : '60%',
+								width: screen === 'desktop' ? '90%' : '80%',
 								alignItems: 'center',
 								justifyContent:
 									screen === 'desktop' ? 'center' : 'space-between',
 								textDecoration: 'none',
-								gap: 0.5,
+								gap: 1,
 							}}
 						>
 							<AdaptiveAvatar
@@ -93,14 +93,15 @@ const TwitterHeaderUser = () => {
 									display: 'flex',
 									flexDirection: 'column',
 									justifyContent: 'center',
-									alignItems: 'flex-start',
+									alignItems: screen === 'desktop' ? 'flex-start' : 'center',
+									width: '70%',
 									gap: 0.5,
 								}}
 							>
 								<Typography
 									sx={{
 										color: 'black',
-										fontSize: 16,
+										fontSize: 14,
 										textOverflow: 'ellipsis',
 										overflow: 'hidden',
 										whiteSpace: 'nowrap',
@@ -108,7 +109,16 @@ const TwitterHeaderUser = () => {
 									variant='p'
 								>{`${userData.firstName}`}</Typography>
 								{screen === 'desktop' && (
-									<UserTag maxWidth='20' userTag={userData.username} />
+									<Box
+										sx={{
+											width: '100%',
+											textOverflow: 'ellipsis',
+											overflow: 'hidden',
+											whiteSpace: 'nowrap',
+										}}
+									>
+										<UserTag maxWidth='20' userTag={userData.username} />
+									</Box>
 								)}
 							</Box>
 						</Box>
@@ -117,7 +127,7 @@ const TwitterHeaderUser = () => {
 								setIsActive(prev => !prev)
 							}}
 							sx={{
-								fontSize: '28px',
+								fontSize: '20px',
 								cursor: 'pointer',
 								color: isActive ? '#42a5f5' : 'black',
 							}}
