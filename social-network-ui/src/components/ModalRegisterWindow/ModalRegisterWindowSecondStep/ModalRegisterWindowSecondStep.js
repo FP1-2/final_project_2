@@ -29,6 +29,7 @@ import { Form, Formik } from 'formik'
 import PropTypes from 'prop-types'
 import * as Yup from 'yup'
 import axios from 'axios'
+import AdaptiveAvatar from '../../AdaptiveAvatar/AdaptiveAvatar'
 
 const VisuallyHiddenInput = styled('input')`
 	clip: rect(0 0 0 0);
@@ -226,18 +227,11 @@ const ModalRegisterWindowSecondStep = ({
 								justifyContent: 'center',
 							}}
 						>
-							{imageUrl === '' ? (
-								<AvatarWithoutImg userName={registerName} />
-							) : (
-								<Avatar
-									sx={{
-										width: '6rem',
-										height: '6rem',
-										mb: 1,
-									}}
-									src={imageUrl}
-								></Avatar>
-							)}
+							<AdaptiveAvatar
+								src={imageUrl}
+								size={'6rem'}
+								firstName={registerName}
+							/>
 							<Button
 								component='label'
 								variant='contained'
