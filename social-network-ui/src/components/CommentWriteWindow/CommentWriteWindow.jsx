@@ -22,7 +22,7 @@ import { Button, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import CircularProgress from '@mui/material/CircularProgress'
 
-function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
+function CommentWriteWindow ({ postId, close, setCommentsCount, setComments, inputName }) {
   // states
   const [description, setDescription] = useState('')
   const [photo, setPhoto] = useState('')
@@ -164,9 +164,9 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments }) {
               <CircularProgress />
             ) : (
               <ImageInput
-                file={photo}
-                onChange={handlePhotoInput}
-                inputName='TweetButtonInput'
+                    file={photo}
+                    onChange={handlePhotoInput}
+                    inputName={inputName || 'CommentInput'}
               />
             )}
           </>
@@ -182,5 +182,6 @@ CommentWriteWindow.propTypes = {
   postId: PropTypes.number.isRequired,
   close: PropTypes.func,
   setCommentsCount: PropTypes.func.isRequired,
-  setComments: PropTypes.func
+  setComments: PropTypes.func,
+  inputName: PropTypes.string
 }
