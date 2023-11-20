@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = process.env.REACT_APP_SERVER_URL
+const url = process.env.REACT_APP_SERVER_URL || ''
 
 const getLikedPosts = async (token, userId, page, size) => {
 	try {
@@ -15,6 +15,7 @@ const getLikedPosts = async (token, userId, page, size) => {
 		)
 		return data
 	} catch (error) {
+		console.error(error);
 		throw error
 	}
 }

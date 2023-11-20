@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 // components
 import AnotherPost from '../AnotherPost/AnotherPost'
@@ -9,7 +10,7 @@ import UseUserToken from '../../hooks/useUserToken'
 // other libraries
 import { debounce } from 'lodash'
 // MUI
-import Box from '@mui/material/Box'
+import { Box, Typography } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 // styles
 import { style } from '../../styles/circularProgressStyle'
@@ -26,6 +27,7 @@ function Favourites () {
   const userId = useSelector(state => state.user.userId)
   const { token } = UseUserToken()
   const containerRef = useRef()
+  const navigate = useNavigate()
   // q-ty of posts on page for pagination
   const size = 5
 
@@ -40,11 +42,14 @@ function Favourites () {
       } catch (error) {
         if (error.response) {
           setError(`Error ${error.response?.status}: ${error.response?.data}`)
-        }
-        if (error.request) {
+          // const forbidden =
+          //   error.response?.status === 401 || error.response?.status === 403
+          // forbidden && navigate('/')
+        } else if (error.request) {
           setError('Error: no response')
+        } else {
+          setError(`Error: ${error?.message}`)
         }
-        setError(`Error: ${error?.message}`)
       } finally {
         setLoading(false)
       }
@@ -117,7 +122,21 @@ function Favourites () {
       {!error &&
         favourites.map(post => <AnotherPost key={post.id} post={post} />)}
 
-      <Box sx={style}>{loading && <CircularProgress />}</Box>
+      <Box sx={style}>
+        {loading && <CircularProgress />}
+        {!hasMore && (
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: '36px',
+              color: 'gray',
+              opacity: 0.5
+            }}
+          >
+            No Favourites Available
+          </Typography>
+        )}
+      </Box>
     </Box>
   )
 }
