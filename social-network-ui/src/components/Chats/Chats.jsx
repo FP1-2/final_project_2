@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UseUserToken from "../../hooks/useUserToken";
 import ChatMembers from "../ChatMembers/ChatMembers";
-import { setChatId, setMessages } from "../../redux/slices/chatSlice";
+import { setChatId, setMessages,setCurrentPage } from "../../redux/slices/chatSlice";
 import { getChatMessages } from "../../api/getChatMessages";
 import { Box } from "@mui/material";
 import { fetchChats } from "../../redux/thunks/chatThunk";
@@ -22,6 +22,7 @@ function Chats() {
 
     dispatch(setMessages(data));
     dispatch(setChatId(chatId));
+    dispatch(setCurrentPage(1));
   }
   	const theme = createTheme({
 		typography: {

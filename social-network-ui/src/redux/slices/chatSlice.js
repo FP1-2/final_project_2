@@ -12,6 +12,7 @@ const initialState = {
   error: null,
   messages: null,
   chatId: null,
+    currentPage: 0,
   newChatMembers: null,
   modalProps: {
 		isOpen: false,
@@ -37,6 +38,9 @@ export const chatSlice = createSlice({
     },
     setChatId: (state, action) => {
       return { ...state, chatId: action.payload };
+    },
+      setCurrentPage: (state, action) => {
+      return { ...state, currentPage: action.payload };
     },
     addChatMember: (state, action) => {
       return { ...state, newChatMembers: action.payload };
@@ -64,6 +68,6 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { setChats, setError, setMessages, setChatId,openChatModal,closeChatModal,addChatMember,removeChatMember,setUsers } = chatSlice.actions;
+export const { setChats, setError, setMessages, setChatId,setCurrentPage,openChatModal,closeChatModal,addChatMember,removeChatMember,setUsers } = chatSlice.actions;
 
 export default chatSlice.reducer;
