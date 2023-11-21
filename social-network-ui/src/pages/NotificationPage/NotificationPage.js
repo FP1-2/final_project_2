@@ -64,7 +64,7 @@ const NotificationPage = () => {
 				}}
 			>
 				<NotificationList notifications={userNotifications} />
-				{!isFull && (
+				{!isFull && userNotifications.length !== 0 && (
 					<Box
 						sx={{
 							position: 'relative',
