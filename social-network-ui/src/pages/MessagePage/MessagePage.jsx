@@ -184,22 +184,13 @@ function MessagePage() {
 					<Box
 						sx={{
 							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'flex-start',
+							flexDirection: 'column',
+							alignItems: 'center',
+							justifyContent: 'flex-start',
 							width: '50%',
 							margin: '10px',
 						}}
 					>
-						{isLoading && (
-							<CircularProgress
-								sx={{
-									width: '100%',
-									height: '100%',
-									mt: 10,
-								}}
-								size='5rem'
-							/>
-						)}
 						{chats.length !== 0 && <Chats />}
 						{!isLoading && chats.length === 0 && (
 							<Typography
@@ -216,6 +207,16 @@ function MessagePage() {
 							>
 								No Messages Available
 							</Typography>
+						)}
+						{isLoading && (
+							<CircularProgress
+								sx={{
+									width: '100%',
+									height: '100%',
+									mt: 10,
+								}}
+								size='5rem'
+							/>
 						)}
 					</Box>
 					<Box
