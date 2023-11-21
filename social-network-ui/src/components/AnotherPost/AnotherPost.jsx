@@ -404,6 +404,7 @@ function AnotherPost({
 							postId={thisPost.id}
 							setCommentsCount={setCountComments}
 							setComments={setComments}
+							inputName='postPageInput'
 						/>
 					)}
 					<Typography sx={{ color: 'red' }}> {error}</Typography>

@@ -193,6 +193,21 @@ const Home = () => {
           <CircularProgress />
         </Box>
       )}
+      {!hasMore && (
+        <Box sx={{textAlign: 'center'}}>
+          {' '}
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: '36px',
+              color: 'gray',
+              opacity: 0.5
+            }}
+          >
+            No Posts Available
+          </Typography>
+        </Box>
+      )}
     </Box>
   )
 }
