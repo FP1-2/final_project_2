@@ -8,8 +8,11 @@ import { Box, CircularProgress } from '@mui/material'
 import { fetchChats } from '../../redux/thunks/chatThunk'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import useScreenSize from '../../hooks/useScreenSize'
+
 function Chats() {
 	const { token } = UseUserToken()
+
 	const dispatch = useDispatch()
 	const chats = useSelector(state => state.chat.chats)
 	const error = useSelector(state => state.chat.error)
@@ -20,6 +23,7 @@ function Chats() {
 
 	async function fetchMessages(chatId) {
 		const data = await getChatMessages(chatId, token)
+		console.log(data)
 		dispatch(setMessages(data))
 		dispatch(setChatId(chatId))
 	}

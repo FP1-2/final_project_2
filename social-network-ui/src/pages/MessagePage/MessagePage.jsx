@@ -136,6 +136,15 @@ function MessagePage() {
 								borderRadius: '0.7rem',
 								border: 'none',
 								background: 'rgba(0, 0, 0, 0.03)',
+								'@media (max-width: 1000px)': {
+									px: 2,
+								},
+								'@media (max-width: 900px)': {
+									px: 1,
+								},
+								'@media (max-width: 768px)': {
+									px: 3,
+								},
 								'&:hover': {
 									background: 'rgba(0, 0, 0, 0.08)',
 								},
@@ -143,6 +152,21 @@ function MessagePage() {
 									color: 'rgb(19, 151, 232)',
 									opacity: 0.8,
 									textAlign: 'center',
+									'@media (max-width: 1300px)': {
+										fontSize: '20px',
+									},
+									'@media (max-width: 1200px)': {
+										fontSize: '18px',
+									},
+									'@media (max-width: 1100px)': {
+										fontSize: '16px',
+									},
+									'@media (max-width: 1000px)': {
+										fontSize: '14px',
+									},
+									'@media (max-width: 768px)': {
+										fontSize: '22px',
+									},
 								},
 							}}
 							component='input'
@@ -199,7 +223,7 @@ function MessagePage() {
 							width: '50%',
 						}}
 					>
-						{messages ? (
+						{messages !== null ? (
 							<Message />
 						) : (
 							<Box

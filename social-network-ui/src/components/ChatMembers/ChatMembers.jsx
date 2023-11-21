@@ -3,9 +3,13 @@ import PropTypes from 'prop-types'
 import { Avatar, Box, Typography } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import AdaptiveAvatar from '../AdaptiveAvatar/AdaptiveAvatar'
+import useScreenSize from '../../hooks/useScreenSize'
 
 function ChatMembers({ chatmembers, fetchMessages }) {
+	const screenSize = useScreenSize()
+
 	const lastMessage = chatmembers.lastMessage
+
 	const theme = createTheme({
 		typography: {
 			p: {
@@ -77,15 +81,17 @@ function ChatMembers({ chatmembers, fetchMessages }) {
 									>
 										{lastMessage.user.firstName}
 									</Typography>
-									<Typography
-										sx={{
-											fontSize: '12px',
-											opacity: '0.3',
-											mr: 1.2,
-										}}
-									>
-										@{lastMessage.user.username}
-									</Typography>
+									{screenSize !== 'tablet' && (
+										<Typography
+											sx={{
+												fontSize: '12px',
+												opacity: '0.3',
+												mr: 1.2,
+											}}
+										>
+											@{lastMessage.user.username}
+										</Typography>
+									)}
 								</Box>
 								<Typography
 									sx={{
@@ -93,9 +99,14 @@ function ChatMembers({ chatmembers, fetchMessages }) {
 										textOverflow: 'ellipsis',
 										overflow: 'hidden',
 										whiteSpace: 'nowrap',
+										fontSize: !lastMessage.text && '12px',
+										textAlign: !lastMessage.text && 'center',
+										opacity: !lastMessage.text && 0.6,
+										fontWeight: !lastMessage.text && 700,
 									}}
 								>
 									{lastMessage.text}
+									{!lastMessage.text && 'Empty Dialog'}
 								</Typography>
 							</Box>
 						</Box>

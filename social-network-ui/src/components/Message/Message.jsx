@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import MessageItem from './MessageItem'
 import InputCreatMessage from '../InputCreateMessage/InputCreateMessage'
 import { useState } from 'react'
+import { Typography } from '@mui/material'
 
 function Message() {
 	const [messageArray, setMessageArray] = useState([])
+	const [isEmpty, setIsEmpty] = useState(null)
 
 	const messages = useSelector(state => state.chat.messages)
 	const chatId = useSelector(state => state.chat.chatId)
@@ -18,6 +20,10 @@ function Message() {
 		if (messages.length) {
 			const reversedMessages = [...messages].reverse()
 			setMessageArray(reversedMessages)
+			setIsEmpty(false)
+		} else {
+			setMessageArray([])
+			setIsEmpty(true)
 		}
 	}, [messages])
 
@@ -35,8 +41,7 @@ function Message() {
 					width: '100%',
 					display: 'flex',
 					flexDirection: 'column',
-					maxHeight: '80vh',
-					mb: 5,
+					height: '72vh',
 					overflowY: 'auto',
 					'&::-webkit-scrollbar': {
 						width: '0',
@@ -57,16 +62,32 @@ function Message() {
 							<MessageItem message={message} />
 						</div>
 					))}
+					{isEmpty && (
+						<Typography
+							sx={{
+								width: '95%',
+								px: 1,
+								mt: 10,
+								textAlign: 'center',
+								fontWeight: 700,
+								fontSize: '36px',
+								color: 'gray',
+								opacity: 0.5,
+							}}
+						>
+							Empty Dialog
+						</Typography>
+					)}
 				</Box>
-				<Box
-					sx={{
-						position: 'fixed',
-						width: '24.927%',
-						bottom: 0,
-					}}
-				>
-					<InputCreatMessage chatId={chatId} />
-				</Box>
+			</Box>
+			<Box
+				sx={{
+					height: '5vh',
+					width: '100%',
+					bottom: 0,
+				}}
+			>
+				<InputCreatMessage chatId={chatId} />
 			</Box>
 		</>
 	)

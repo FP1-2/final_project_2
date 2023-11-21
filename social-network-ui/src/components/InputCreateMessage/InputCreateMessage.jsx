@@ -13,6 +13,7 @@ function InputCreatMessage({ chatId }) {
 	const [inputText, setInputText] = useState('')
 
 	async function sendMessage() {
+		if (!inputText.length) return
 		try {
 			const messageData = {
 				chatId: chatId,
@@ -48,7 +49,7 @@ function InputCreatMessage({ chatId }) {
 				justifyContent: 'space-between',
 				alignItems: 'center',
 				width: '100%',
-				px: 2,
+				px: 0.7,
 				py: 1,
 				bgcolor: 'white',
 			}}
