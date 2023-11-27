@@ -36,8 +36,8 @@ public class UserService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
   private final PostRepo postRepo;
 
-//  @Autowired
-//  private final NotificationCreator notificationCreator;
+  //  @Autowired
+  //  private final NotificationCreator notificationCreator;
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
