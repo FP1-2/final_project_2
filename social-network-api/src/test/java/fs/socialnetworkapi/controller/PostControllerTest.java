@@ -3,6 +3,7 @@ package fs.socialnetworkapi.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.dto.post.PostDtoIn;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
@@ -44,6 +45,9 @@ public class PostControllerTest {
     private SecurityService securityService;
     @MockBean
     private PostService postService;
+
+    @MockBean
+    protected NotificationCreator notificationCreator;
     private String token;
     private UserDtoOut userDtoOut1;
     private PostDtoOut postDtoOut1;

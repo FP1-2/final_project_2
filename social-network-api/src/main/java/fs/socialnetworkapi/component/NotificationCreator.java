@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.component;
 
+import fs.socialnetworkapi.dto.notification.NotificationDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Notification;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,7 +28,8 @@ public class NotificationCreator {
 
   @Autowired
   private ModelMapper mapper;
-
+  @Autowired
+  private SimpMessagingTemplate messagingTemplate;
   @Autowired
   private NotificationService notificationService;
 
@@ -44,6 +47,7 @@ public class NotificationCreator {
     notification.setText(String.format("User %s liked your post", like.getUser().getUsername()));
     notification.setNotifyingUser(like.getPost().getUser());
     notificationService.createNewNotification(notification);
+    sendNotificationToWebSocket(notification);
   }
 
   public void sendPostNotification(Post postToSave, TypePost typePost, List<UserDtoOut> followers) {
@@ -128,4 +132,8 @@ public class NotificationCreator {
       );
   }
 
+  private void sendNotificationToWebSocket(Notification notification) {
+    messagingTemplate.convertAndSend(String.format("/topic/notifications/%d",notification.getNotifyingUser().getId()),
+            mapper.map(notification, NotificationDtoOut.class));
+  }
 }
