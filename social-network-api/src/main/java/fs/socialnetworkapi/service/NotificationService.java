@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.service;
 
+import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.dto.notification.NotificationDtoOut;
 import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class NotificationService {
 
   private final NotificationRepo notificationRepo;
+  private final SimpMessagingTemplate messagingTemplate;
   private final ModelMapper mapper;
 
   private User getUser() {
@@ -26,7 +29,8 @@ public class NotificationService {
   }
 
   public void createNewNotification(Notification notification) {
-    notificationRepo.save(notification);
+
+    sendNotificationToWebSocket(notificationRepo.save(notification));
   }
 
   public List<NotificationDtoOut> getAllNotifications(Integer page, Integer size) {
@@ -61,6 +65,11 @@ public class NotificationService {
         n.setActive(false);
         notificationRepo.save(n);
       });
+  }
+
+  private void sendNotificationToWebSocket(Notification notification) {
+    messagingTemplate.convertAndSend(String.format("/topic/notifications/%d",notification.getNotifyingUser()),
+            mapper.map(notification, NotificationDtoOut.class));
   }
 
 }

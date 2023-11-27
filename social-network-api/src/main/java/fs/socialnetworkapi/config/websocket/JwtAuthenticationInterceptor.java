@@ -34,7 +34,6 @@ public class JwtAuthenticationInterceptor implements ChannelInterceptor {
     if (StompCommand.CONNECT.equals(accessor.getCommand())
         || StompCommand.SEND.equals(accessor.getCommand()) ) {
 
-      System.out.println("preSend");
       Optional<String> token = extractTokenFromStompHeaders(accessor);
 
       Optional<SecurityService.verificationResult> verificationResult = token.map(tokenService::check);
