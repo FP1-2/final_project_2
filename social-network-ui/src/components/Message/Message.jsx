@@ -5,16 +5,24 @@ import MessageItem from './MessageItem'
 import InputCreatMessage from '../InputCreateMessage/InputCreateMessage'
 import { useState } from 'react'
 import { Typography } from '@mui/material'
+//WS
+import SockJS from 'sockjs-client'
+import { Stomp } from '@stomp/stompjs'
+import UseUserToken from '../../hooks/useUserToken'
 
 function Message() {
 	const [messageArray, setMessageArray] = useState([])
 	const [isEmpty, setIsEmpty] = useState(null)
+	const [stompClient, setStompClient] = useState(null)
 
 	const messages = useSelector(state => state.chat.messages)
 	const chatId = useSelector(state => state.chat.chatId)
+	const userId = useSelector(state => state.user?.userId)
 
 	const scrollContainerRef = useRef(null)
 	const lastMessageRef = useRef(null)
+
+	const { token } = UseUserToken()
 
 	useEffect(() => {
 		if (messages.length) {
@@ -25,13 +33,69 @@ function Message() {
 			setMessageArray([])
 			setIsEmpty(true)
 		}
-	}, [messages])
+	}, [])
 
 	useEffect(() => {
 		if (lastMessageRef.current) {
 			lastMessageRef.current.scrollIntoView({ behavior: 'smooth' })
 		}
 	}, [messages, lastMessageRef.current])
+
+	useEffect(() => {
+		const socket = new SockJS('http://localhost:4000/api/ws')
+		const stomp = Stomp.over(socket)
+		setStompClient(stomp)
+
+		return () => {
+			if (stomp.connected) {
+				stomp.disconnect()
+			}
+		}
+	}, [chatId])
+
+	useEffect(() => {
+		const subscribeToMessages = () => {
+			if (stompClient) {
+				console.log('123')
+
+				if (!stompClient.connected) {
+					stompClient.connect({ Authorization: token }, () => {
+						stompClient.subscribe(`/topic/user-messages/${userId}`, message => {
+							const receivedMessage = JSON.parse(message.body)
+							console.log(receivedMessage)
+							setMessageArray(prevMessages => [
+								...prevMessages,
+								receivedMessage,
+							])
+						})
+					})
+				}
+			}
+		}
+
+		subscribeToMessages()
+
+		return () => {
+			if (stompClient?.connected) {
+				stompClient.disconnect()
+			}
+		}
+	}, [stompClient, chatId, token])
+
+	const handleSendMessage = async newMessage => {
+		if (chatId && newMessage) {
+			try {
+				stompClient.send(
+					'/app/chat',
+					{ Authorization: token },
+					JSON.stringify(newMessage)
+				)
+			} catch (error) {
+				console.error(error)
+			}
+		}
+	}
+
 	return (
 		<>
 			<Box
@@ -87,7 +151,10 @@ function Message() {
 					bottom: 0,
 				}}
 			>
-				<InputCreatMessage chatId={chatId} />
+				<InputCreatMessage
+					chatId={chatId}
+					handleSendMessage={handleSendMessage}
+				/>
 			</Box>
 		</>
 	)

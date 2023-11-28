@@ -21,7 +21,7 @@ export const fetchChats = createAsyncThunk(
 				userId = Number(userId)
 
 				if (data.length > 0) {
-					lastMessage = data[data.length - 1]
+					lastMessage = data[0]
 				} else {
 					lastMessage = { text: '', user: chatMembers[0] }
 				}

@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import static java.lang.System.currentTimeMillis;
+import lombok.Data;
+@Data
 
 @Setter
 @Getter

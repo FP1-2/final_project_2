@@ -53,6 +53,7 @@ function Chats() {
 					maxHeight: '80vh',
 					overflowY: 'auto',
 					overflowX: 'hidden',
+					
 				}}
 			>
 				{chats?.map(chat => (
