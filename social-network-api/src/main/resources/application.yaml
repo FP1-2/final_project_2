@@ -1,11 +1,10 @@
 MAIN_EMAIL:
 MAIN_EMAIL_PASSWORD:
-DB_URL: jdbc:postgresql://db-final-project-2.cx0wpt1wnne4.us-east-1.rds.amazonaws.com:5432/twitter
-DB_USER: postgres
-DB_PASSWORD: z7a2z%8G
-
+DB_URL:
+DB_USER:
+DB_PASSWORD:
 server:
-  port: 4000
+  port: 5000
 
 spring:
   profiles:
