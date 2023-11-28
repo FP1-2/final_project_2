@@ -36,8 +36,8 @@ public class UserService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
   private final PostRepo postRepo;
 
-  @Autowired
-  private final NotificationCreator notificationCreator;
+  //  @Autowired
+  //  private final NotificationCreator notificationCreator;
 
   @Value("${myapp.baseUrl}")
   private String baseUrl;
@@ -145,7 +145,7 @@ public class UserService implements UserDetailsService {
     User follower = userRepo.findById(getUser().getId())
       .orElseThrow(() -> new UserNotFoundException("No such user"));
     User following = findById(userId);
-    notificationCreator.subscriberNotification(follower, following);
+    //notificationCreator.subscriberNotification(follower, following);
     following.getFollowers().add(follower);
     saveUser(following);
   }
