@@ -11,6 +11,7 @@ import { openChatModal, setChats, setUsers } from '../../redux/slices/chatSlice'
 import { fetchChats } from '../../redux/thunks/chatThunk'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { getAllUsers } from '../../api/getAllUsers'
+
 function MessagePage() {
 	const dispatch = useDispatch()
 	const [username, setUsername] = useState('')
