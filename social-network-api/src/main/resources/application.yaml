@@ -3,7 +3,6 @@ MAIN_EMAIL_PASSWORD:
 DB_URL:
 DB_USER:
 DB_PASSWORD:
-
 server:
   port: 5000
 
@@ -53,9 +52,9 @@ spring:
     password: sa
     driverClassName: org.h2.Driver
 
-#    url: jdbc:postgresql://localhost:5432/twitter
-#    username: postgres
-#    password: pg123456
+  #    url: jdbc:postgresql://localhost:5432/twitter
+  #    username: postgres
+  #    password: pg123456
   data:
     jpa:
       repositories:
@@ -97,3 +96,4 @@ spring:
     properties:
       hibernate:
         format_sql: true
+      

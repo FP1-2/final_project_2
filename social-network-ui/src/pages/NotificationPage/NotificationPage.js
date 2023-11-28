@@ -8,6 +8,9 @@ import NotificationList from '../../components/NotificationList/NotificationList
 import getUserNotifications from '../../api/getUserNotifications'
 //Custom hooks
 import UseUserToken from '../../hooks/useUserToken'
+//WS
+import SockJS from 'sockjs-client'
+import { Stomp } from '@stomp/stompjs'
 
 const theme = createTheme({
 	typography: {
@@ -22,6 +25,7 @@ const NotificationPage = () => {
 	const [userNotifications, setUserNotifications] = useState([])
 	const [page, setPage] = useState(1)
 	const [isFull, setIsFull] = useState(false)
+	// const [stompClient, setStompClient] = useState(null) //ws
 
 	//custom hooks
 	const { token } = UseUserToken()
@@ -48,6 +52,49 @@ const NotificationPage = () => {
 			}
 		})()
 	}, [page])
+
+	// useEffect(() => {
+	// 	const socket = new SockJS(
+	// 		`${process.env.REACT_APP_SERVER_URL}`
+	// 	)
+	// 	const stomp = Stomp.over(socket)
+	// 	setStompClient(stomp)
+
+	// 	return () => {
+	// 		if (stomp.connected) {
+	// 			stomp.disconnect()
+	// 		}
+	// 	}
+	// }, [])
+
+	// useEffect(() => {
+	// 	const subscribeToNotifications = () => {
+	// 		if (stompClient) {
+	// 			console.log(stompClient)
+	// 			stompClient.connect({ Authorization: token }, () => {
+	// 				stompClient.subscribe(
+	// 					'/api/v1/notifications/all?page=1&size=10',
+	// 					message => {
+	// 						console.log(JSON.parse(message.body))
+	// 						setUserNotifications(prevNotifications => [
+	// 							...prevNotifications,
+	// 							JSON.parse(message.body),
+	// 						])
+	// 					},
+	// 					{ Authorization: token }
+	// 				)
+	// 			})
+	// 		}
+	// 	}
+
+	// 	subscribeToNotifications()
+
+	// 	return () => {
+	// 		if (stompClient?.connected) {
+	// 			stompClient.disconnect()
+	// 		}
+	// 	}
+	// }, [stompClient, token])
 	return (
 		<ThemeProvider theme={theme}>
 			<Box

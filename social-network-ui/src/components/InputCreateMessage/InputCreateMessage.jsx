@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import UseUserToken from '../../hooks/useUserToken'
 import { useDispatch } from 'react-redux'
 import SendIcon from '@mui/icons-material/Send'
-function InputCreatMessage({ chatId }) {
+function InputCreatMessage({ chatId, handleSendMessage }) {
 	const { token } = UseUserToken()
 	const dispatch = useDispatch()
 	const [inputText, setInputText] = useState('')
@@ -19,11 +19,10 @@ function InputCreatMessage({ chatId }) {
 				chatId: chatId,
 				text: inputText,
 			}
-
-			await createMessage(messageData, token)
-
-			const updatedMessages = await getChatMessages(chatId, token)
-			dispatch(setMessages(updatedMessages))
+			handleSendMessage(messageData)
+			// await createMessage(messageData, token)
+			// const updatedMessages = await getChatMessages(chatId, token)
+			// dispatch(setMessages(updatedMessages))
 			setInputText('')
 		} catch (error) {
 			if (error.response) {
@@ -96,5 +95,6 @@ function InputCreatMessage({ chatId }) {
 }
 InputCreatMessage.propTypes = {
 	chatId: PropTypes.number,
+	handleSendMessage: PropTypes.func,
 }
 export default InputCreatMessage
