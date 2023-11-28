@@ -42,7 +42,9 @@ function Message() {
 	}, [messages, lastMessageRef.current])
 
 	useEffect(() => {
-		const socket = new SockJS('http://localhost:4000/api/ws')
+		const socket = new SockJS(
+			`${process.env.REACT_APP_SERVER_URL}/api/ws`
+		)
 		const stomp = Stomp.over(socket)
 		setStompClient(stomp)
 
