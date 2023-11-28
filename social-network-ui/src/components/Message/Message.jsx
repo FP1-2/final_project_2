@@ -43,7 +43,7 @@ function Message() {
 
 	useEffect(() => {
 		const socket = new SockJS(
-			`${process.env.REACT_APP_SERVER_URL || ''}/api/ws`
+			`${process.env.REACT_APP_SERVER_URL}/api/ws`
 		)
 		const stomp = Stomp.over(socket)
 		setStompClient(stomp)
