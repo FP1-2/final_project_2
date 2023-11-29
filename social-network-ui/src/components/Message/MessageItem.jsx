@@ -41,6 +41,7 @@ function MessageItem({ message }) {
 						gap: 1,
 						textDecoration: 'none',
 						color: 'black',
+						width: '65%',
 					}}
 				>
 					<AdaptiveAvatar
@@ -56,6 +57,9 @@ function MessageItem({ message }) {
 							fontWeight: isYou && '700',
 							color: isYou && 'rgb(19, 151, 232)',
 							cursor: isYou && 'default',
+							textOverflow: 'ellipsis',
+							overflow: 'hidden',
+							whiteSpace: 'nowrap',
 						}}
 					>
 						{isYou && isYou ? 'You' : `@${message.user.username}`}
@@ -65,6 +69,9 @@ function MessageItem({ message }) {
 					sx={{
 						fontSize: '12px',
 						opacity: 0.4,
+						textOverflow: 'ellipsis',
+						overflow: 'hidden',
+						whiteSpace: 'nowrap',
 					}}
 				>
 					{formatDistanceToNow(addHours(new Date(message.createdDate), 2))} ago

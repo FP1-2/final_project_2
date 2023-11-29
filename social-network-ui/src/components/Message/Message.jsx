@@ -9,11 +9,15 @@ import { Typography } from '@mui/material'
 import SockJS from 'sockjs-client'
 import { Stomp } from '@stomp/stompjs'
 import UseUserToken from '../../hooks/useUserToken'
+import { debounce } from 'lodash'
+import { getChatMessages } from '../../api/getChatMessages'
 
 function Message() {
-	const [messageArray, setMessageArray] = useState([])
+	const [messageArray, setMessageArray] = useState(null)
 	const [isEmpty, setIsEmpty] = useState(null)
 	const [stompClient, setStompClient] = useState(null)
+	const [page, setPage] = useState(1)
+	const [isFull, setIsFull] = useState(false)
 
 	const messages = useSelector(state => state.chat.messages)
 	const chatId = useSelector(state => state.chat.chatId)
@@ -26,22 +30,34 @@ function Message() {
 
 	useEffect(() => {
 		if (messages.length) {
-			const reversedMessages = [...messages].reverse()
+			const reversedMessages = [...messages].sort((a, b) => {
+				const dateA = new Date(a.createdDate)
+				const dateB = new Date(b.createdDate)
+				if (dateA < dateB) {
+					return -1
+				}
+				if (dateA > dateB) {
+					return 1
+				}
+				return 0
+			})
+
 			setMessageArray(reversedMessages)
 			setIsEmpty(false)
 		} else {
 			setMessageArray([])
 			setIsEmpty(true)
 		}
-	}, [])
+	}, [messages])
 
 	useEffect(() => {
 		if (lastMessageRef.current) {
 			lastMessageRef.current.scrollIntoView({ behavior: 'smooth' })
 		}
-	}, [messages, lastMessageRef.current])
+	}, [messages, lastMessageRef.current, messageArray])
 
 	useEffect(() => {
+		setIsFull(false)
 		const socket = new SockJS(
 			`${process.env.REACT_APP_SERVER_URL || ''}/api/ws`
 		)
@@ -84,6 +100,54 @@ function Message() {
 		}
 	}, [stompClient, chatId, token])
 
+	useEffect(() => {
+		const handleWheel = debounce(() => {
+			if (
+				scrollContainerRef.current &&
+				scrollContainerRef.current.scrollTop === 0 &&
+				messages.length === 10
+			) {
+				setPage(prevPage => prevPage + 1)
+			}
+		}, 300)
+
+		if (!isFull) {
+			scrollContainerRef.current.addEventListener('wheel', handleWheel)
+		} else {
+			scrollContainerRef.current.removeEventListener('wheel', handleWheel)
+		}
+
+		return () => {
+			handleWheel.cancel()
+			scrollContainerRef.current.removeEventListener('wheel', handleWheel)
+		}
+	}, [messages, isFull])
+
+	useEffect(() => {
+		console.log(page)
+		if (page !== 1) {
+			;(async () => {
+				const data = await getChatMessages(chatId, token, page)
+				if (data.length !== 10) {
+					console.log('111111')
+					setIsFull(true)
+				}
+				const newMsg = data.sort((a, b) => {
+					const dateA = new Date(a.createdDate)
+					const dateB = new Date(b.createdDate)
+					if (dateA < dateB) {
+						return -1
+					}
+					if (dateA > dateB) {
+						return 1
+					}
+					return 0
+				})
+				setMessageArray(prev => [...newMsg, ...prev])
+			})()
+		}
+	}, [page])
+
 	const handleSendMessage = async newMessage => {
 		if (chatId && newMessage) {
 			try {
@@ -122,7 +186,7 @@ function Message() {
 				>
 					{messageArray?.map((message, index) => (
 						<div
-							key={message.id}
+							key={`${message.id}+${message.createdDate}`}
 							ref={index === messages.length - 1 ? lastMessageRef : null}
 						>
 							<MessageItem message={message} />
