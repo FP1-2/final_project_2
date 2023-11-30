@@ -43,6 +43,7 @@ import axios from 'axios'
 import { format } from 'date-fns'
 import { debounce } from 'lodash'
 import AdaptiveAvatar from '../../components/AdaptiveAvatar/AdaptiveAvatar'
+import { addFollowing, removeFollowing } from '../../redux/slices/userSlice'
 
 const theme = createTheme({
 	typography: {
@@ -210,7 +211,10 @@ const ProfilePage = () => {
 				}
 			)
 			console.log(`user is ${follow ? 'subscribe' : 'unsubscribe'}`)
-			setUserFollowersCountState(prev => (follow ? prev + 1 : prev - 1))
+			// setUserFollowersCountState(prev => (follow ? prev + 1 : prev - 1))
+			follow
+				? dispatch(addFollowing(Number(userId)))
+				: dispatch(removeFollowing(Number(userId)))
 		} catch (error) {
 			console.error(error)
 		} finally {
@@ -561,9 +565,7 @@ const ProfilePage = () => {
 												onClick={() => dispatch(openFollowModal('followings'))}
 											>
 												<Typography variant='p' sx={{ fontWeight: 700 }}>
-													{notEqual
-														? followingsCount.length
-														: userFollowingCountState}
+													{followingsCount.length}
 												</Typography>
 												<Typography sx={{ opacity: 0.6 }} variant='p'>
 													Following

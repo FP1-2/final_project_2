@@ -23,7 +23,7 @@ const theme = createTheme({
 const NotificationPage = () => {
 	//states
 	const [userNotifications, setUserNotifications] = useState([])
-	const [page, setPage] = useState(1)
+	const [page, setPage] = useState(0)
 	const [isFull, setIsFull] = useState(false)
 	// const [stompClient, setStompClient] = useState(null) //ws
 
@@ -36,16 +36,16 @@ const NotificationPage = () => {
 			try {
 				if (token) {
 					const res = await getUserNotifications(token, page)
-					if (!res.length) {
+					if (res.length !== 10) {
 						setIsFull(true)
-					} else {
-						const newArray = [...userNotifications, ...res]
-						const sortedRes = newArray.sort((a, b) => {
-							//sort user notifys active -> !active
-							return a.active === b.active ? 0 : a.active ? -1 : 1
-						})
-						setUserNotifications([...newArray])
 					}
+
+					const newArray = [...userNotifications, ...res]
+					const sortedRes = newArray.sort((a, b) => {
+						//sort user notifys active -> !active
+						return a.active === b.active ? 0 : a.active ? -1 : 1
+					})
+					setUserNotifications([...newArray])
 				}
 			} catch (error) {
 				console.log(error)

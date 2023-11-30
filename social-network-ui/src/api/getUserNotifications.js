@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default async function getUserNotifications(token, page = 1, size = 10) {
+export default async function getUserNotifications(token, page = 0, size = 10) {
 	try {
 		const { data } = await axios.get(
 			`${

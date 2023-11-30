@@ -1,5 +1,5 @@
 import axios from 'axios'
-export async function getChatMessages(chatID, token, page = 1, size = 10) {
+export async function getChatMessages(chatID, token, page = 0, size = 10) {
 	try {
 		const { data } = await axios.get(
 			`${
