@@ -1,19 +1,19 @@
-import axios from "axios";
-export async function getChatMessages(chatID, token) {
-  try {
-    const { data } = await axios.get(
-      `${
-        process.env.REACT_APP_SERVER_URL || ""
-      }/api/v1/get-messages-chat/${chatID}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
+import axios from 'axios'
+export async function getChatMessages(chatID, token, page = 1, size = 10) {
+	try {
+		const { data } = await axios.get(
+			`${
+				process.env.REACT_APP_SERVER_URL || ''
+			}/api/v1/get-messages-chat/${chatID}?page=${page}&size=${size}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		)
+		console.log(data)
+		return data
+	} catch (error) {
+		throw error
+	}
 }

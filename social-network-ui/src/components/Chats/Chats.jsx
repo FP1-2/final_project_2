@@ -23,7 +23,6 @@ function Chats() {
 
 	async function fetchMessages(chatId) {
 		const data = await getChatMessages(chatId, token)
-		console.log(data)
 		dispatch(setMessages(data))
 		dispatch(setChatId(chatId))
 	}
@@ -53,7 +52,6 @@ function Chats() {
 					maxHeight: '80vh',
 					overflowY: 'auto',
 					overflowX: 'hidden',
-					
 				}}
 			>
 				{chats?.map(chat => (
