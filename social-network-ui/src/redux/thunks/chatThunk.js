@@ -16,6 +16,7 @@ export const fetchChats = createAsyncThunk(
 			const chatsIDs = await getChats(userId, token)
 			const chatPromises = chatsIDs.map(async chatId => {
 				const data = await getChatMessages(chatId, token)
+				console.log(data)
 				const chatMembers = await getChatMembers(chatId, token)
 				let lastMessage = null
 				userId = Number(userId)

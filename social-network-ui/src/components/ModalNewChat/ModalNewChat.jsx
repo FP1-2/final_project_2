@@ -159,6 +159,7 @@ function ModalNewChat() {
 									margin: '0 auto',
 									height: '65%',
 									width: '50%',
+									maxHeight: '55%',
 									overflow: 'scroll',
 									border: users.length && '2px solid rgb(19, 151, 232)',
 									borderRadius: '2rem',

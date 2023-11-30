@@ -36,6 +36,7 @@ const ModalFollowListItem = ({ item }) => {
 		if (item.id && userId) {
 			setLoadIsDone(true)
 			const isFollow = followings.includes(Number(item.id))
+			console.log(isFollow)
 			setIsFollowing(isFollow)
 			if (Number(userId) === Number(item.id)) {
 				setIsMe(true)

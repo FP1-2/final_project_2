@@ -114,39 +114,39 @@ function Message() {
 		if (!isFull) {
 			scrollContainerRef.current.addEventListener('wheel', handleWheel)
 		} else {
-			scrollContainerRef.current.removeEventListener('wheel', handleWheel)
+			scrollContainerRef?.current?.removeEventListener('wheel', handleWheel)
 		}
 
 		return () => {
 			handleWheel.cancel()
-			scrollContainerRef.current.removeEventListener('wheel', handleWheel)
+			scrollContainerRef?.current?.removeEventListener('wheel', handleWheel)
 		}
 	}, [messages, isFull])
 
-	useEffect(() => {
-		console.log(page)
-		if (page !== 1) {
-			;(async () => {
-				const data = await getChatMessages(chatId, token, page)
-				if (data.length !== 10) {
-					console.log('111111')
-					setIsFull(true)
-				}
-				const newMsg = data.sort((a, b) => {
-					const dateA = new Date(a.createdDate)
-					const dateB = new Date(b.createdDate)
-					if (dateA < dateB) {
-						return -1
-					}
-					if (dateA > dateB) {
-						return 1
-					}
-					return 0
-				})
-				setMessageArray(prev => [...newMsg, ...prev])
-			})()
-		}
-	}, [page])
+	// useEffect(() => {
+	// 	console.log(page)
+	// 	if (page !== 1) {
+	// 		;(async () => {
+	// 			const data = await getChatMessages(chatId, token, page)
+	// 			if (data.length !== 10) {
+	// 				console.log('111111')
+	// 				setIsFull(true)
+	// 			}
+	// 			const newMsg = data.sort((a, b) => {
+	// 				const dateA = new Date(a.createdDate)
+	// 				const dateB = new Date(b.createdDate)
+	// 				if (dateA < dateB) {
+	// 					return -1
+	// 				}
+	// 				if (dateA > dateB) {
+	// 					return 1
+	// 				}
+	// 				return 0
+	// 			})
+	// 			setMessageArray(prev => [...newMsg, ...prev])
+	// 		})()
+	// 	}
+	// }, [page])
 
 	const handleSendMessage = async newMessage => {
 		if (chatId && newMessage) {
