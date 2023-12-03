@@ -8,16 +8,17 @@ import fs.socialnetworkapi.dto.user.UserDtoOut;
 import fs.socialnetworkapi.service.AuthorizationService;
 import fs.socialnetworkapi.service.PasswordResetService;
 import fs.socialnetworkapi.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -87,14 +88,14 @@ public class UserController {
   }
 
   @GetMapping("activate/{code}")
-  public ResponseEntity<String> activate(Model model, @PathVariable String code) {
+  public ResponseEntity<String> activate(HttpServletResponse response, @PathVariable String code) throws IOException {
     boolean isActivated = userService.activateUser(code);
     if (isActivated) {
-      model.addAttribute("message", "User successfully activated");
+      response.sendRedirect("/signIn");
     } else {
-      model.addAttribute("message", "Activation code is not found!");
+      response.sendRedirect("/");
     }
-    return ResponseEntity.ok(model.toString());
+    return ResponseEntity.ok().build();
   }
 
   @PostMapping("reset/request")
@@ -115,5 +116,4 @@ public class UserController {
   public List<UserDtoOut> findPopularUser() {
     return userService.findPopularUser();
   }
-
 }
