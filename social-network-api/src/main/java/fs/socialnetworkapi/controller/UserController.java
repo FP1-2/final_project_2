@@ -91,7 +91,7 @@ public class UserController {
   public ResponseEntity<String> activate(HttpServletResponse response, @PathVariable String code) throws IOException {
     boolean isActivated = userService.activateUser(code);
     if (isActivated) {
-      response.sendRedirect("/#/signIn");
+      response.sendRedirect("/signIn");
     } else {
       response.sendRedirect("/");
     }
