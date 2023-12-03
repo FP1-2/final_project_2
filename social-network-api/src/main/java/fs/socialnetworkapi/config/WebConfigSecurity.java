@@ -35,6 +35,7 @@ public class WebConfigSecurity {
         authorizeHttpRequests
 
           .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+          .requestMatchers(HttpMethod.GET,"/*").permitAll()
           .requestMatchers(HttpMethod.POST,"/api/v1/registration").permitAll()
           .requestMatchers(HttpMethod.POST,"/api/v1/login").permitAll()
           .requestMatchers(HttpMethod.GET,"/api/v1/activate/**").permitAll()
@@ -63,7 +64,6 @@ public class WebConfigSecurity {
       .requestMatchers(new AntPathRequestMatcher("/*.js"))
       .requestMatchers(new AntPathRequestMatcher("/*.json"))
       .requestMatchers(new AntPathRequestMatcher("/*.ico"))
-      .requestMatchers(new AntPathRequestMatcher("/#/**"))
       .requestMatchers(new AntPathRequestMatcher("/api/ws/**"))
       ;
   }

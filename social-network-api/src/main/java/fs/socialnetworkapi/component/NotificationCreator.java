@@ -43,7 +43,7 @@ public class NotificationCreator {
     Notification notification = new Notification();
     notification.setFromUser(like.getUser());
     notification.setType(NotificationType.LIKE);
-    notification.setLink(String.format("%s/#/post/%d", baseUrl, like.getPost().getId()));
+    notification.setLink(String.format("%s/post/%d", baseUrl, like.getPost().getId()));
     notification.setText(String.format("User %s liked your post", like.getUser().getUsername()));
     notification.setNotifyingUser(like.getPost().getUser());
     notificationService.createNewNotification(notification);
@@ -66,7 +66,7 @@ public class NotificationCreator {
   }
 
   public void featuredNotification(Post post, List<UserDtoOut> followers) {
-    String link = String.format("%s/#/post/%d", baseUrl, post.getId());
+    String link = String.format("%s/post/%d", baseUrl, post.getId());
     String text = String.format("Your featured user %s has new post", post.getUser().getUsername());
 
     followers.forEach(user -> {
@@ -84,7 +84,7 @@ public class NotificationCreator {
     Notification notification = new Notification();
     notification.setFromUser(post.getUser());
     notification.setType(NotificationType.REPOST);
-    notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
+    notification.setLink(String.format("%s/post/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s reposted your post", post.getUser().getUsername()));
     notification.setNotifyingUser(post.getOriginalPost().getUser());
     notificationService.createNewNotification(notification);
@@ -94,7 +94,7 @@ public class NotificationCreator {
     Notification notification = new Notification();
     notification.setFromUser(post.getUser());
     notification.setType(NotificationType.COMMENT);
-    notification.setLink(String.format("%s/#/post/%d", baseUrl, post.getId()));
+    notification.setLink(String.format("%s/post/%d", baseUrl, post.getId()));
     notification.setText(String.format("User %s commented your post", post.getUser().getUsername()));
     notification.setNotifyingUser(post.getOriginalPost().getUser());
     notificationService.createNewNotification(notification);
@@ -104,14 +104,14 @@ public class NotificationCreator {
     Notification notification = new Notification();
     notification.setFromUser(follower);
     notification.setType(NotificationType.SUBSCRIBER);
-    notification.setLink(String.format("%s/#/profile/%d", baseUrl, follower.getId()));
+    notification.setLink(String.format("%s/profile/%d", baseUrl, follower.getId()));
     notification.setText(String.format("User %s subscribed to your account", follower.getUsername()));
     notification.setNotifyingUser(following);
     notificationService.createNewNotification(notification);
   }
 
   public void messageNotification(Message message) {
-    String link = String.format("%s/#/messages", baseUrl);
+    String link = String.format("%s/messages", baseUrl);
     String text = String.format("User %s sent you new message", message.getUser().getUsername());
 
     message.getChat()
