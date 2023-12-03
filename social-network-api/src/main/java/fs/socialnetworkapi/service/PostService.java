@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,8 @@ public class PostService {
 
   public List<PostDtoOut> getAllPost(Integer page, Integer size) {
 
-    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    Pageable pageRequest = getPageRequest(page, size);
+
     List<Post> allPosts = postRepo.findByTypePost(TypePost.POST, pageRequest).stream().toList();
 
     return mapListPostToListPostDtoOut(allPosts);
@@ -53,7 +55,7 @@ public class PostService {
 
     User user = userService.findById(userId);
 
-    PageRequest pageRequest = getPageRequest(page, size);
+    Pageable pageRequest = getPageRequest(page, size);
 
     List<Post> allPosts = postRepo.findByUser(user, pageRequest).stream().toList();
 
@@ -63,7 +65,7 @@ public class PostService {
   public List<PostDtoOut> getProfilePostByType(Long userId, TypePost typePost, Integer page, Integer size ) {
     User user = userService.findById(userId);
 
-    PageRequest pageRequest = getPageRequest(page, size);
+    Pageable pageRequest = getPageRequest(page, size);
 
     List<Post> allPosts = postRepo.findByUserAndTypePost(user, typePost, pageRequest).stream().toList();
 
@@ -76,7 +78,7 @@ public class PostService {
 
     Set<User> followings = userService.getFollowings(user.getId());
     List<User> users = followings.stream().sorted((user1, user2) -> (int) (user1.getId() - user2.getId())).toList();
-    PageRequest pageRequest = getPageRequest(page, size);
+    Pageable pageRequest = getPageRequest(page, size);
 
     List<Post> allPosts = postRepo.findByUserInAndTypePost(users, TypePost.POST, pageRequest).stream().toList();
 
@@ -187,7 +189,7 @@ public class PostService {
     Post post = postRepo.findById(postId)
             .orElseThrow(() -> new PostNotFoundException(String.format("Post with id: %d not found", postId)));
 
-    PageRequest pageRequest = getPageRequest(page, size);
+    Pageable pageRequest = getPageRequest(page, size);
     List<Post> allPosts = postRepo.findByOriginalPostAndTypePost(post, TypePost.COMMENT, pageRequest).stream().toList();
 
     return mapListPostToListPostDtoOut(allPosts);

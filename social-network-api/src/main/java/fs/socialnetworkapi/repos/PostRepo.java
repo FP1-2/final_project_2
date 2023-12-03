@@ -6,7 +6,6 @@ import fs.socialnetworkapi.entity.Post;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.enums.TypePost;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,9 +27,9 @@ public interface PostRepo extends JpaRepository<Post, Long> {
 
   List<Post> findByOriginalPost(Post originalPost);
 
-  Page<Post> findByOriginalPostAndTypePost(Post post, TypePost comment, PageRequest pageRequest);
+  Page<Post> findByOriginalPostAndTypePost(Post post, TypePost comment, Pageable pageRequest);
 
-  Page<Post> findByTypePost(TypePost post, PageRequest pageRequest);
+  Page<Post> findByTypePost(TypePost post, Pageable pageRequest);
 
   List<Post> findByLikesIn(List<Like> likes);
 

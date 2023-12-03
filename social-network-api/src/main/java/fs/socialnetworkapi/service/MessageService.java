@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -110,7 +111,7 @@ public class MessageService {
   public List<MessageDtoOut> getMessagesChat(Long chatId, Integer page, Integer size) {
 
     Chat chat = findById(chatId);
-    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+    Pageable pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
     Page<Message>  allMessage = messageRepo.findByChat(chat, pageRequest);
     return allMessage
