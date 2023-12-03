@@ -88,7 +88,7 @@ public class UserController {
   }
 
   @GetMapping("activate/{code}")
-  public ResponseEntity<?> activate(HttpServletResponse response, @PathVariable String code) throws IOException {
+  public ResponseEntity<String> activate(HttpServletResponse response, @PathVariable String code) throws IOException {
     boolean isActivated = userService.activateUser(code);
     if (isActivated) {
       response.sendRedirect("/#/signIn");
