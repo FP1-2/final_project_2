@@ -1,6 +1,5 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.component.NotificationCreator;
 import fs.socialnetworkapi.dto.post.PostDtoOut;
 import fs.socialnetworkapi.dto.user.UserDtoIn;
 import fs.socialnetworkapi.dto.user.UserDtoOut;
@@ -9,7 +8,6 @@ import fs.socialnetworkapi.exception.UserNotFoundException;
 import fs.socialnetworkapi.repos.PostRepo;
 import fs.socialnetworkapi.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -52,7 +50,7 @@ public class UserService implements UserDetailsService {
   }
 
   public User findByEmail(String email) {
-    return userRepo.findByEmail(email);
+    return userRepo.findByEmail(email.toLowerCase());
   }
 
   public User findByActivationCode(String activationCode) {
