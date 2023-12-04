@@ -1,5 +1,6 @@
 package fs.socialnetworkapi.advice;
 
+import fs.socialnetworkapi.exception.NotificationNotFoundException;
 import fs.socialnetworkapi.exception.PostNotFoundException;
 import fs.socialnetworkapi.exception.UserNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,9 +26,12 @@ public class ApplicationExceptionHandler {
     return errorMap;
   }
 
-  @ExceptionHandler(PostNotFoundException.class)
+  @ExceptionHandler(value = {UserNotFoundException.class,
+          PostNotFoundException.class,
+          EntityNotFoundException.class,
+          NotificationNotFoundException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Map<String, Object> handelBusinessEx(PostNotFoundException ex) {
+  public Map<String, Object> handelBusinessEx(RuntimeException ex) {
 
     Map<String, Object> errorMap = new HashMap<>();
 
@@ -35,23 +39,4 @@ public class ApplicationExceptionHandler {
     return errorMap;
   }
 
-  @ExceptionHandler(UserNotFoundException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Map<String, Object> handelBusinessEx(UserNotFoundException ex) {
-
-    Map<String, Object> errorMap = new HashMap<>();
-
-    errorMap.put("errorMessage", ex.getMessage());
-    return errorMap;
-  }
-
-  @ExceptionHandler(EntityNotFoundException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Map<String, Object> handelBusinessEx(EntityNotFoundException ex) {
-
-    Map<String, Object> errorMap = new HashMap<>();
-
-    errorMap.put("errorMessage", ex.getMessage());
-    return errorMap;
-  }
 }

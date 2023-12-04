@@ -3,7 +3,7 @@ package fs.socialnetworkapi.repos;
 import fs.socialnetworkapi.entity.Like;
 import fs.socialnetworkapi.entity.Post;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface LikeRepo extends JpaRepository<Like, Long> {
   List<Like> findByUserId(Long userId);
 
-  Page<Like> findByUserId(Long userId, PageRequest pageRequest);
+  Page<Like> findByUserId(Long userId, Pageable pageRequest);
 
   Optional<Like> findByPostIdAndUserId(Long postId, Long userId);
 

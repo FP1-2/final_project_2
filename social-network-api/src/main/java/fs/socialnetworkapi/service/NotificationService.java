@@ -1,17 +1,15 @@
 package fs.socialnetworkapi.service;
 
-import fs.socialnetworkapi.dto.message.MessageDtoOut;
 import fs.socialnetworkapi.dto.notification.NotificationDtoOut;
 import fs.socialnetworkapi.entity.Notification;
 import fs.socialnetworkapi.entity.User;
 import fs.socialnetworkapi.exception.NotificationNotFoundException;
 import fs.socialnetworkapi.repos.NotificationRepo;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +33,7 @@ public class NotificationService {
 
   public List<NotificationDtoOut> getAllNotifications(Integer page, Integer size) {
 
-    PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+    Pageable pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
     List<Notification> notifications = notificationRepo.findAllByNotifyingUserId(getUser().getId(), pageRequest);
     return notifications.stream()
       .map(n -> mapper.map(n, NotificationDtoOut.class))
