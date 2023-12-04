@@ -54,7 +54,7 @@ class UserDtoInTest {
   @Test
   void setEmail() {
     userTest1.setEmail("Petro@gmail.com");
-    assertEquals("Petro@gmail.com", userTest1.getEmail());
+    assertEquals(("Petro@gmail.com").toLowerCase(), userTest1.getEmail());
   }
 
   @Test
