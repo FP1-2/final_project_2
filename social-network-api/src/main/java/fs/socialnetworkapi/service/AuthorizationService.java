@@ -23,9 +23,9 @@ public class AuthorizationService {
   private final PasswordEncoder passwordEncoder;
 
   public LoginDtoOut tokenGenerate(@RequestBody LoginDtoIn loginDtoIn) {
-    User userByEmail = userService.findByEmail(loginDtoIn.getEmail());
+    User userByEmail = userService.findByEmail(loginDtoIn.getEmail().toLowerCase());
     if (passwordEncoder.matches(loginDtoIn.getPassword(), userByEmail.getPassword()) & userByEmail.isActive()) {
-      TokenDetails tokenDetails = securityService.authenticate(loginDtoIn.getEmail());
+      TokenDetails tokenDetails = securityService.authenticate(loginDtoIn.getEmail().toLowerCase());
       return LoginDtoOut
         .builder()
         .id(tokenDetails.getUserId())

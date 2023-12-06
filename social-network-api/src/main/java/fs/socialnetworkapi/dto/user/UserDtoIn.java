@@ -57,4 +57,8 @@ public class UserDtoIn {
     return (this.username == null) ? (String.format("%s_%s_%d",this.firstName,this.lastName,currentTimeMillis()))
       : (this.username);
   }
+
+  public String getEmail() {
+    return String.format("%s", this.email.toLowerCase());
+  }
 }
