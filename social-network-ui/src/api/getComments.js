@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = process.env.REACT_APP_SERVER_URL
+const url = process.env.REACT_APP_SERVER_URL || "";
 
 const getComments = async (postId, token, page, size) => {
   try {
