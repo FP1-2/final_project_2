@@ -1,0 +1,9 @@
+.customFileInput {
+  display: none;
+}
+
+.customFileLabel {
+  display: inline-block;
+  padding: 5px;
+  cursor: pointer;
+}/*# sourceMappingURL=ImageInput.module.css.map */

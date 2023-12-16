@@ -1,0 +1,42 @@
+.root {
+  position: relative;
+}
+.root .input {
+  width: 100%;
+  margin-bottom: 2.5rem;
+  padding: 1.25rem 1.15rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.375rem;
+  outline: none;
+  font-size: 1.125rem;
+}
+.root .input::-moz-placeholder {
+  color: rgba(0, 0, 0, 0.6);
+}
+.root .input::placeholder {
+  color: rgba(0, 0, 0, 0.6);
+}
+.root .input:focus {
+  border: 1px solid rgb(13, 118, 184);
+}
+.root .error {
+  position: absolute;
+  top: 70%;
+  left: 0;
+  color: red;
+  font-size: 0.975rem;
+}
+.root .errorIcon {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.15rem;
+  color: rgba(255, 0, 0, 0.822);
+  font-size: 1.45rem;
+}
+.root .successIcon {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.15rem;
+  color: rgb(13, 118, 184);
+  font-size: 1.45rem;
+}/*# sourceMappingURL=CustomInput.module.css.map */

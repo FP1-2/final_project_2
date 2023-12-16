@@ -1,0 +1,12 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a.active {
+  font-size: 1.1rem;
+}
+a.active svg {
+  font-size: 1.8rem;
+}/*# sourceMappingURL=index.css.map */
