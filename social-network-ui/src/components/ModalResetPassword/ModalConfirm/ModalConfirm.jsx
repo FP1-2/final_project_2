@@ -1,19 +1,20 @@
 import Box from '@mui/material/Box'
 import { PropTypes } from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {closeResetModal, openResetModal} from '../../../redux/slices/modalResetSlice'
-import {Form, Formik} from "formik";
-import Modal from '@mui/material/Modal';
-import CustomInput from "../../CustomInput/CustomInput";
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	closeResetModal,
+	openResetModal,
+} from '../../../redux/slices/modalResetSlice'
+import { Form, Formik } from 'formik'
+import Modal from '@mui/material/Modal'
+import CustomInput from '../../CustomInput/CustomInput'
 import IconTwitter from '../../IconTwitter/IconTwitter'
 import { createTheme } from '@mui/material/styles'
-import {Button, ThemeProvider, } from "@mui/material";
-import * as Yup from "yup";
+import { Button, ThemeProvider } from '@mui/material'
+import * as Yup from 'yup'
 import { Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-
-
 
 const style = {
 	position: 'absolute',
@@ -62,8 +63,7 @@ const theme = createTheme({
 })
 
 const validationSchema = Yup.object({
-	activationCode: Yup.string()
-		.required('Activation code is required'),
+	activationCode: Yup.string().required('Activation code is required'),
 	newPassword: Yup.string()
 		.required('Password is required')
 		.min(6, 'Password is too short'),
@@ -71,44 +71,38 @@ const validationSchema = Yup.object({
 
 const initialValues = {
 	activationCode: '',
-	newPassword: ''
+	newPassword: '',
 }
 
-function ModalConfirm({setIsEmailSend}) {
+function ModalConfirm({ setIsEmailSend }) {
 	const dispatch = useDispatch()
-	const [resetModal, setResetModal] = useState(true);
+	const [resetModal, setResetModal] = useState(true)
 	const handleClose = () => {
 		dispatch(closeResetModal())
 	}
 	const handleBackReset = () => {
 		setIsEmailSend(0)
-	};
+	}
 
-	const navigate   = useNavigate();
-	const onSubmit = async(values) => {
+	const navigate = useNavigate()
+	const onSubmit = async values => {
 		try {
 			const response = await axios.post(
 				`${process.env.REACT_APP_SERVER_URL || ''}/api/v1/reset/confirm`,
 				values
-			);
-			
+			)
+
 			if (response.status === 200) {
 				setTimeout(() => {
 					// navigate('/signIn');
-					handleClose();
-				}, 1000);
+					handleClose()
+				}, 1000)
 			}
-			console.log("send", values);
-
-			resetForm();
-
-			console.log("send", values);
+			resetForm()
 		} catch (error) {
-			ErrorMessage('Error:', error);
+			ErrorMessage('Error:', error)
 		}
 	}
-
-
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -116,29 +110,29 @@ function ModalConfirm({setIsEmailSend}) {
 				<Box sx={style}>
 					<Box
 						sx={{
-							position: "relative",
+							position: 'relative',
 						}}
 					>
 						<Box
 							sx={{
-								display: "flex",
-								flexDirection: "column",
-								justifyContent: "center",
-								alignItems: "center",
-								width: "100%",
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+								width: '100%',
 							}}
 						>
 							<IconTwitter
 								style={{
-									margin: "0 auto",
+									margin: '0 auto',
 								}}
 							/>
 							<Box
 								sx={{
 									margin: 1,
 									fontWeight: 400,
-									fontSize: "1rem",
-									textAlign: "center",
+									fontSize: '1rem',
+									textAlign: 'center',
 								}}
 							>
 								We have sent you the code Check if you have received a
@@ -155,37 +149,37 @@ function ModalConfirm({setIsEmailSend}) {
 								{({ isValid, isSubmitting, dirty }) => (
 									<Form
 										style={{
-											width: "100%",
+											width: '100%',
 										}}
 									>
 										<CustomInput
-											name="activationCode"
-											type="text"
-											label="Activation Code"
-											placeholder="Code "
-											error="true"
+											name='activationCode'
+											type='text'
+											label='Activation Code'
+											placeholder='Code '
+											error='true'
 										/>
 										<CustomInput
-											name="newPassword"
-											type="text"
-											label="New Password"
-											placeholder="New Password "
-											error="true"
+											name='newPassword'
+											type='text'
+											label='New Password'
+											placeholder='New Password '
+											error='true'
 										/>
 
 										<Button
-											type="submit"
-											variant="contained"
+											type='submit'
+											variant='contained'
 											fullWidth
-											margin="normal"
+											margin='normal'
 											sx={{
-												marginBottom: "1.3rem",
-												padding: "1.1rem 0",
-												borderRadius: "2rem",
-												fontSize: "1rem",
+												marginBottom: '1.3rem',
+												padding: '1.1rem 0',
+												borderRadius: '2rem',
+												fontSize: '1rem',
 												fontWeight: 700,
-												textTransform: "none",
-												backgroundColor: "#1DA1F2",
+												textTransform: 'none',
+												backgroundColor: '#1DA1F2',
 											}}
 											disabled={!(dirty && isValid) || isSubmitting}
 										>
@@ -194,17 +188,17 @@ function ModalConfirm({setIsEmailSend}) {
 
 										<Button
 											onClick={handleBackReset}
-											variant="contained"
+											variant='contained'
 											fullWidth
-											margin="normal"
+											margin='normal'
 											sx={{
-												marginBottom: "1.3rem",
-												padding: "1.1rem 0",
-												borderRadius: "2rem",
-												fontSize: "1rem",
+												marginBottom: '1.3rem',
+												padding: '1.1rem 0',
+												borderRadius: '2rem',
+												fontSize: '1rem',
 												fontWeight: 700,
-												textTransform: "none",
-												backgroundColor: "#1DA1F2",
+												textTransform: 'none',
+												backgroundColor: '#1DA1F2',
 											}}
 										>
 											Back to
@@ -216,20 +210,19 @@ function ModalConfirm({setIsEmailSend}) {
 
 						<Box
 							sx={{
-								display: "flex",
-								width: "100%",
-								fontWeight: "400",
-								fontSize: "1rem",
+								display: 'flex',
+								width: '100%',
+								fontWeight: '400',
+								fontSize: '1rem',
 							}}
-						>
-						</Box>
+						></Box>
 					</Box>
 				</Box>
 			</Modal>
 		</ThemeProvider>
-	);
+	)
 }
 ModalConfirm.propTypes = {
-	setIsEmailSend: PropTypes.func.isRequired
+	setIsEmailSend: PropTypes.func.isRequired,
 }
 export default ModalConfirm

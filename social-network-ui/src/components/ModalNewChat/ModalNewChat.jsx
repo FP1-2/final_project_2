@@ -39,8 +39,6 @@ function ModalNewChat() {
 		}
 		const username = event.target.value
 		const users = await getAllUsers(username, token)
-		console.log(users)
-
 		dispatch(setUsers(users))
 	}
 	async function sendChat() {
@@ -58,8 +56,6 @@ function ModalNewChat() {
 				const chatData = {
 					membersChat: [chatMember],
 				}
-				console.log(chatData)
-
 				chatId = await createChat(chatData, token)
 			}
 

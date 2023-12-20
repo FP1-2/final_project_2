@@ -164,7 +164,7 @@ const NotificationPage = () => {
 							textAlign: 'center',
 						}}
 					>
-						No Notifications Available
+						No More Notifications
 					</Typography>
 				)}
 			</Box>

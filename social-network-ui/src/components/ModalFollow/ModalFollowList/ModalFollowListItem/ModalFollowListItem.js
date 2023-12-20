@@ -36,7 +36,6 @@ const ModalFollowListItem = ({ item }) => {
 		if (item.id && userId) {
 			setLoadIsDone(true)
 			const isFollow = followings.includes(Number(item.id))
-			console.log(isFollow)
 			setIsFollowing(isFollow)
 			if (Number(userId) === Number(item.id)) {
 				setIsMe(true)
@@ -56,7 +55,6 @@ const ModalFollowListItem = ({ item }) => {
 					},
 				}
 			)
-			console.log(`user is ${follow ? 'subscribe' : 'unsubscribe'}`)
 			dispatch(follow ? addFollowing(userId) : removeFollowing(userId))
 		} catch (error) {
 			console.error(error)

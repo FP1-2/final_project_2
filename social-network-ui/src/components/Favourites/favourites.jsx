@@ -133,7 +133,7 @@ function Favourites () {
               opacity: 0.5
             }}
           >
-            No Favourites Available
+            No More Favourites
           </Typography>
         )}
       </Box>

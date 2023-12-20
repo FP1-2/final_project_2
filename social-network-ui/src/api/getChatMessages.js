@@ -11,7 +11,6 @@ export async function getChatMessages(chatID, token, page = 0, size = 10) {
 				},
 			}
 		)
-		console.log(data)
 		return data
 	} catch (error) {
 		throw error

@@ -41,7 +41,6 @@ const userSlice = createSlice({
 
 		addFollowing: (state, action) => {
 			state.followings.push(action.payload)
-			console.log(state.followings.length)
 		},
 
 		removeFollowing: (state, action) => {

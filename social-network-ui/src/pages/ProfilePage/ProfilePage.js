@@ -134,7 +134,6 @@ const ProfilePage = () => {
 			;(async () => {
 				if (isFrstLoad) setIsLoading(true)
 				const userData = await getUserData(params.userId, token)
-				console.log(userData)
 				setUser(userData)
 				setUserFollowersCountState(userData.userFollowersCount)
 				setUserFollowingCountState(userData.userFollowingCount)
@@ -210,7 +209,6 @@ const ProfilePage = () => {
 					},
 				}
 			)
-			console.log(`user is ${follow ? 'subscribe' : 'unsubscribe'}`)
 			// setUserFollowersCountState(prev => (follow ? prev + 1 : prev - 1))
 			follow
 				? dispatch(addFollowing(Number(userId)))
@@ -623,7 +621,7 @@ const ProfilePage = () => {
 								opacity: 0.5,
 							}}
 						>
-							No Posts Available
+							No More Posts
 						</Typography>
 					)}
 					{isLoadingMoreFull && !isLoadingPosts && (
@@ -635,7 +633,7 @@ const ProfilePage = () => {
 								opacity: 0.5,
 							}}
 						>
-							No Posts Available
+							No More Posts
 						</Typography>
 					)}
 				</Box>
