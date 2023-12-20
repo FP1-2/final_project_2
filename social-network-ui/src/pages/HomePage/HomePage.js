@@ -204,7 +204,7 @@ const Home = () => {
               opacity: 0.5
             }}
           >
-            No Posts Available
+            No More Posts
           </Typography>
         </Box>
       )}

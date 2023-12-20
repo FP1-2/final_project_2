@@ -623,7 +623,7 @@ const ProfilePage = () => {
 								opacity: 0.5,
 							}}
 						>
-							No Posts Available
+							No More Posts
 						</Typography>
 					)}
 					{isLoadingMoreFull && !isLoadingPosts && (
@@ -635,7 +635,7 @@ const ProfilePage = () => {
 								opacity: 0.5,
 							}}
 						>
-							No Posts Available
+							No More Posts
 						</Typography>
 					)}
 				</Box>

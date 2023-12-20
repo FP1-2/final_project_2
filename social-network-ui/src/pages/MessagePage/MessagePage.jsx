@@ -206,7 +206,7 @@ function MessagePage() {
 									opacity: 0.5,
 								}}
 							>
-								No Messages Available
+								No More Messages
 							</Typography>
 						)}
 						{isLoading && (
