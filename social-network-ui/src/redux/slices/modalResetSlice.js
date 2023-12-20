@@ -11,8 +11,6 @@ const modalResetSlice = createSlice({
 	initialState,
 	reducers: {
 		openResetModal: (state, action) => {
-
-			console.log(state.modalProps.isOpenReset)
 			state.modalProps.isOpenReset = true
 		},
 		closeResetModal: state => {

@@ -99,7 +99,6 @@ function CommentWriteWindow ({ postId, close, setCommentsCount, setComments, inp
         setError(null)
         setCommentsCount(prev => prev + 1)
         setComments && setComments(prev => [response.data, ...prev])
-        console.log(response.data)
         close ? handleModalComment() : handleComment()
       } else {
         setError(`Error ${response.status}: ${response.data}`)

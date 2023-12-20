@@ -9,7 +9,6 @@ function ChatMembers({ chatmembers, fetchMessages }) {
 	const screenSize = useScreenSize()
 
 	const lastMessage = chatmembers.lastMessage
-	console.log(chatmembers.id)
 	const theme = createTheme({
 		typography: {
 			p: {

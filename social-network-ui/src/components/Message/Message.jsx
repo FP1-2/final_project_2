@@ -74,13 +74,10 @@ function Message() {
 	useEffect(() => {
 		const subscribeToMessages = () => {
 			if (stompClient) {
-				console.log('123')
-
 				if (!stompClient.connected) {
 					stompClient.connect({ Authorization: token }, () => {
 						stompClient.subscribe(`/topic/user-messages/${userId}`, message => {
 							const receivedMessage = JSON.parse(message.body)
-							console.log(receivedMessage)
 							setMessageArray(prevMessages => [
 								...prevMessages,
 								receivedMessage,

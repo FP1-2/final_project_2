@@ -96,7 +96,6 @@ const ModalEdit = ({ user, setUser }) => {
 				if (type === 'avatar') {
 					setImageUrl(uploadedImageUrl)
 				} else if (type === 'background') {
-					console.log('123')
 					setBackgroundImageUrl(uploadedImageUrl)
 				}
 				setError('')
